@@ -67,6 +67,9 @@
 			width: 15px;
 			height: 15px;
 			fill: #212b36;
+			&.icon-profile {
+				fill: #a8b0b9;
+			}
 		}
 	}
 
@@ -127,9 +130,25 @@
 		transition: 0.2s;
 	}
 
+	.icon {
+		display: none;
+		width: 25px;
+		height: 25px;
+		fill: $blue;
+	}
+
 	&:hover {
 		span {
 			background-color: $blue;
+		}
+	}
+
+	&._edit {
+		span {
+			display: none;
+		}
+		.icon {
+			display: block;
 		}
 	}
 }

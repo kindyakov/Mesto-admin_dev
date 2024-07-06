@@ -1,4 +1,4 @@
 {
-  "useExistingRepo": false,
+  "useExistingRepo": true,
   "repoUrl": "https://github.com/kindyakov/Mesto-admin_dev"
 }
