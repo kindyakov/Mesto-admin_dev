@@ -1,0 +1,130 @@
+.main {
+	flex: 1 1 auto;
+	position: relative;
+
+	// &__container {}
+
+	&__body {
+		width: 100%;
+	}
+
+	&__content {
+		display: none;
+		flex-direction: column;
+		gap: 30px;
+		&._active {
+			display: flex;
+		}
+	}
+
+	&__filter {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		@include adaptiv-value('gap', 20, 10, 1);
+		flex-wrap: wrap;
+	}
+
+	&__date-filter {
+		position: relative;
+		min-width: 240px;
+		.icon {
+			width: 16px;
+			height: 16px;
+			fill: #a8b0b9;
+			position: absolute;
+			top: 50%;
+			left: 15px;
+			transform: translate(0, -50%);
+		}
+
+		input {
+			background-color: #fff;
+			border: 1px solid #e1e8f0;
+			border-radius: 4px;
+			padding: 10px 15px;
+			cursor: pointer;
+			cursor: pointer;
+			font-weight: 400;
+			font-size: 13px;
+			color: #0c1116;
+			width: 100%;
+			padding-left: 35px;
+		}
+
+		@media (max-width: $md5) {
+			width: 100%;
+		}
+	}
+
+	&__selects-filter {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		@media (max-width: $md5) {
+			width: 100%;
+			.select-filter-main {
+				width: 100%;
+			}
+		}
+	}
+}
+
+.widgets {
+	display: grid;
+	gap: 30px;
+	@include adaptiv-value('gap', 30, 10, 1);
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+	&__item {
+		border: 1px solid #e1e8f0;
+		border-radius: 5px;
+		background-color: #fff;
+		padding: 20px 25px;
+		display: flex;
+		align-items: center;
+		gap: 20px;
+
+		@media (max-width: $md1) {
+			padding: 20px 15px;
+		}
+
+		&_img {
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			overflow: hidden;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			img {
+				max-width: 100%;
+				max-height: 100%;
+				object-fit: cover;
+			}
+		}
+
+		&_content {
+			display: flex;
+			flex-direction: column;
+
+			.value {
+				font-weight: 700;
+				font-size: 24px;
+				line-height: 142%;
+				color: #1c2434;
+				font-family: $second-family;
+				sup {
+					font-size: 50%;
+				}
+			}
+
+			.name {
+				font-weight: 500;
+				font-size: 14px;
+				line-height: 157%;
+				color: #64748b;
+			}
+		}
+	}
+}

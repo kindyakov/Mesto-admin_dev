@@ -1,0 +1,105 @@
+.mySelect {
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 100%;
+	color: #0c1116;
+	position: relative;
+	user-select: none;
+
+	select {
+		display: none;
+	}
+
+	&._disabled {
+		opacity: 0.6;
+		.mySelect__input {
+			cursor: auto;
+		}
+	}
+
+	&._select {
+		.mySelect__input {
+			.icon-arrow {
+				transform: rotate(0);
+			}
+		}
+
+		.mySelect__list {
+			opacity: 1;
+			visibility: visible;
+		}
+
+		.mySelect__option {
+		}
+	}
+
+	&__input {
+		border: 1px solid #e1e8f0;
+		border-radius: 4px;
+		padding: 12px 15px;
+		background-color: #fff;
+		text-align: left;
+		width: 100%;
+		cursor: pointer;
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 10px;
+
+		.icon-arrow {
+			width: 12px;
+			height: 8px;
+			fill: #a8b0b9;
+			transition: 0.2s;
+			transform: rotate(180deg);
+		}
+
+		.placeholder {
+			opacity: 0.6;
+		}
+	}
+
+	&__list {
+		position: absolute;
+		display: flex;
+		flex-direction: column;
+		background-color: #fff;
+		border: 1px solid #e1e8f0;
+		border-radius: 4px;
+		top: 100%;
+		z-index: 1;
+		left: 0;
+		right: 0;
+		transform: translate(0, 0);
+		transition: 0.3s;
+		box-sizing: content-box;
+		max-height: 0;
+		visibility: hidden;
+		opacity: 0;
+		overflow: hidden;
+		will-change: max-height;
+	}
+
+	&__option {
+		text-align: left;
+		cursor: pointer;
+		padding: 12px 15px;
+
+		text-align: left;
+		transition: 0.2s;
+		border-bottom: 1px solid #e1e8f0;
+		&:last-child {
+			border-bottom: none;
+		}
+		&:hover {
+			background-color: #e1edfd;
+		}
+		&._option-list {
+			border-bottom: none;
+		}
+		&._none {
+			display: none;
+		}
+	}
+}

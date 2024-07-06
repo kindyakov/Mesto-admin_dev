@@ -1,0 +1,162 @@
+//====================================================================================================
+.modal {
+	-webkit-overflow-scrolling: touch;
+	z-index: 10;
+	padding: 30px 10px;
+	position: fixed;
+	top: 0px;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	transition: visibility 0.8s ease 0s;
+	visibility: hidden;
+	&::before {
+		content: '';
+		background-color: rgba(0, 0, 0, 0.7);
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		opacity: 0;
+		transition: opacity 0.8s ease 0s;
+	}
+	&._show {
+		visibility: visible;
+		overflow: auto;
+		&::before {
+			opacity: 1;
+		}
+		.modal_body {
+			transform: scale(1);
+		}
+	}
+	&._active {
+		overflow: auto;
+		visibility: visible;
+		&::before {
+			opacity: 1;
+		}
+		.modal__body {
+			transition: all 0.2s ease 0.2s;
+			transform: scale(1);
+		}
+	}
+	// .modal__content
+	&__content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		min-height: 100%;
+		flex: 1 1 auto;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	// .modal__body
+	&__body {
+		transform: scale(0);
+		transition: all 0.3s ease 0s;
+		background-color: #fff;
+		padding: 50px;
+		width: 100%;
+		max-width: 800px;
+	}
+	// .modal__close
+	&__close {
+		width: 30px;
+		height: 30px;
+		position: absolute;
+		top: 0;
+		right: 0;
+		cursor: pointer;
+		border: 2px solid rgb(117, 117, 117);
+		background-color: #dfdfdfd2;
+		border-radius: 8px;
+		transition: 0.2s;
+		transform: translate(50%, -50%);
+		span {
+			display: block;
+			position: absolute;
+			width: 50%;
+			height: 2px;
+			background-color: rgb(85, 83, 83);
+			transition: 0.2s;
+			left: 50%;
+			&:first-child {
+				transform: translateX(-50%) rotate(45deg);
+				top: 12px;
+			}
+			&:last-child {
+				transform: translateX(-50%) rotate(-45deg);
+				top: 12px;
+			}
+		}
+
+		&:hover {
+			border: 2px solid red;
+			span {
+				background-color: red;
+			}
+		}
+	}
+}
+//====================================================================================================
+
+.modal-auth {
+	transition: 0s;
+	&::before {
+		transition: 0s;
+		background-color: #1c2434;
+	}
+
+	.modal__body {
+		transition: 0s;
+		padding: 50px;
+		max-width: 530px;
+		border-radius: 2px;
+		border: 1px solid #e2e8f0;
+		h2 {
+			font-weight: 700;
+			font-size: 33px;
+			line-height: 135%;
+			color: #212b36;
+		}
+	}
+
+	.form-authorization {
+		margin-top: 30px;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+	}
+
+	.form-item {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		> span {
+			font-weight: 500;
+			font-size: 16px;
+			color: #1c2434;
+		}
+	}
+
+	.wp-input {
+		width: 100%;
+	}
+
+	.input {
+		border-radius: 8px;
+	}
+
+	.button {
+		width: 100%;
+		margin-top: 10px;
+		border-radius: 8px;
+	}
+}
+//====================================================================================================
