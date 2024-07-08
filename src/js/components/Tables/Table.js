@@ -18,8 +18,15 @@ class Table {
       rowData: [],
       pagination: true,
       paginationPageSize: 5,
-      paginationPageSizeSelector: [5, 10, 20, 31],
+      paginationPageSizeSelector: [5, 10, 20],
       getLocaleText: this.getLocaleText,
+      suppressRowClickSelection: true, // Отключение выбора строки при клике на ячейку
+      rowSelection: 'multiple', // Включение множественного выбора строк
+      onCellClicked: (params) => {
+        if (params.column.colId === 'checkboxSelection') {
+          params.node.setSelected(!params.node.isSelected());
+        }
+      },
       rowHeight: 60,
       domLayout: 'normal',
       onGridReady: (params) => {

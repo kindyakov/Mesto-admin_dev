@@ -1,7 +1,6 @@
-import { getCookie } from "../utils/getCookie.js";
-
 export class Modal {
-  static eventHandlersInitialized = false;
+  static eventHandlersInitialized = false
+  static currentModalInstance = null
 
   constructor(options) {
     let defaultoptions = {
@@ -11,6 +10,7 @@ export class Modal {
       isClose: true,
       isAnimation: false,
       unique: null,
+      isOpen: false,
       onOpen: () => { },
       onClose: () => { }
     }
@@ -27,17 +27,31 @@ export class Modal {
     this.onOpen = this.options.onOpen
     this.onClose = this.options.onClose
 
-    if (!Modal.eventHandlersInitialized) {
-      this.initializeGlobalEventHandlers();
-      Modal.eventHandlersInitialized = true;
+    // if (!Modal.eventHandlersInitialized) {
+    //   this.initializeGlobalEventHandlers();
+    //   Modal.eventHandlersInitialized = true;
+    // }
+
+    this.init()
+  }
+
+  init() {
+    if (this.options.unique) {
+      this.modal = document.querySelector(`[data-special-modal="${this.options.unique}"]`)
+      this.modalBody = this.modal.querySelector(`.modal__body`)
+      if (this.options.isOpen) {
+        this.open(`.${this.options.unique}`)
+      }
     }
+
+    this.initializeGlobalEventHandlers()
   }
 
   initializeGlobalEventHandlers() {
-    document.addEventListener('click', this.handleDocumentClick.bind(this));
-    document.addEventListener('mousedown', this.handleDocumentMouseDown.bind(this));
-    document.addEventListener('mouseup', this.handleDocumentMouseUp.bind(this));
-    window.addEventListener('keyup', this.handleDocumentKeyUp.bind(this));
+    document.addEventListener('click', (e) => this.handleDocumentClick(e));
+    document.addEventListener('mousedown', (e) => this.handleDocumentMouseDown(e));
+    document.addEventListener('mouseup', (e) => this.handleDocumentMouseUp(e));
+    window.addEventListener('keyup', (e) => this.handleDocumentKeyUp(e));
   }
 
   handleDocumentClick(e) {
@@ -45,17 +59,13 @@ export class Modal {
       e.preventDefault();
       const btn = e.target.closest('[data-modal]');
       const modalSelector = btn.getAttribute('data-modal');
-      const uniqueAttr = btn.getAttribute('data-special-modal');
 
       if (!modalSelector) {
         console.error('У кнопки не задан селектор модального окна:', btn);
         return;
       }
 
-      const modalInstance = Modal.instances.find(instance => instance.options.unique === uniqueAttr);
-      if (modalInstance) {
-        modalInstance.open(modalSelector, e);
-      }
+      this.open(modalSelector, e);
     }
 
     if (e.target.closest(this.options.modalBtnClose) && this.isOpen) {
@@ -84,15 +94,16 @@ export class Modal {
     if (!this.modalActive) return;
     this.isOpen = false;
     this.modalActive.classList.remove(this.options.classActive);
-    this.onClose(this);
-    this.enableScroll();
     this.modalActive = null;
+    Modal.currentModalInstance = null
+    this.enableScroll();
+    this.onClose(this);
   }
 
   open(modalSelector, e) {
     if (!modalSelector) {
       if (this.options.unique) {
-        this.modalActive = document.querySelector(`[data-special-modal="${this.options.unique}"]`);
+        this.modalActive = document.querySelector(`[data-special-modal="${this.options.unique}"]`)
       } else {
         console.error('Модальное окно не найдено, передайте селектор или укажите значение атрибута [data-special-modal]');
         return
@@ -106,17 +117,18 @@ export class Modal {
       return;
     }
 
-    if (this.options.unique && this.options.unique !== this.modalActive.getAttribute('data-special-modal')) {
-      return;
-    }
+    // if (this.options.unique && this.options.unique !== this.modalActive.getAttribute('data-special-modal')) {
+    //   return;
+    // }
 
-    setTimeout(() => {
-      this.modalActive.classList.add(this.options.classActive);
-      this.disableScroll();
+    // setTimeout(() => {
+    this.modalActive.classList.add(this.options.classActive);
+    this.disableScroll();
 
-      this.isOpen = true;
-      this.onOpen(e);
-    }, 0);
+    this.isOpen = true;
+    Modal.currentModalInstance = this
+    this.onOpen(e);
+    // }, 0);
   }
 
   disableScroll() {

@@ -1,4 +1,8 @@
-export function getFormattedDate(format = 'DD.MM.YYYY', date = new Date()) {
+export function getFormattedDate(date = new Date(), format = 'DD.MM.YYYY') {
+  if (typeof date === 'string') {
+    date = new Date(Date.parse(date));
+  }
+
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();

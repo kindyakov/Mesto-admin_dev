@@ -53,3 +53,24 @@
 		background-color: #edf6ff;
 	}
 }
+
+.button-text {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 155%;
+	color: #212b36;
+
+	.icon {
+		stroke: currentColor;
+		width: 16px;
+		height: 16px;
+	}
+
+	&.blue {
+		color: $blue;
+	}
+}

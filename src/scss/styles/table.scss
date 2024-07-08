@@ -49,6 +49,13 @@
 		color: #212b36;
 	}
 
+	.ag-cell:focus,
+	.ag-cell:focus-within {
+		outline: none;
+		box-shadow: none;
+		border-color: transparent !important;
+	}
+
 	.table-span-price {
 		color: $green;
 		font-weight: 500;
@@ -143,6 +150,12 @@
 		}
 	}
 
+	&._active {
+		span {
+			background-color: $blue;
+		}
+	}
+
 	&._edit {
 		span {
 			display: none;
@@ -214,10 +227,4 @@
 			color: #fff;
 		}
 	}
-}
-.button-arrow {
-}
-.btn-pagination-prev {
-}
-.btn-page {
 }

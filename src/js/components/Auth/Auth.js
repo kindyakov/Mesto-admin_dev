@@ -20,7 +20,7 @@ class Auth {
 
     this.validator = validate(this.form)
 
-    this.modal = new Modal({ unique: 'modal-auth', isClose: false })
+    this.modal = new Modal({ unique: 'modal-auth', isClose: false, isOpen: true })
     this.loader = new Loader(document.querySelector('.modal-auth .modal__body'))
     this.mainLoader = document.querySelector('.body-loader')
 

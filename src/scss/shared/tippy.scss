@@ -1,0 +1,62 @@
+.tippy {
+}
+.tippy-button {
+}
+
+.table-tippy-client {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	width: 100%;
+	border: 1px solid #e2e8f0;
+	border-radius: 2px;
+	box-shadow: 0 8px 13px -3px rgba(0, 0, 0, 0.07);
+	background: #fff;
+	padding: 10px;
+
+	&__button {
+		width: 100%;
+		height: 35px;
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		padding: 5px 10px;
+
+		font-weight: 500;
+		font-size: 14px;
+		color: #212b36;
+
+		transition: 0.2s;
+
+		.icon {
+			width: 15px;
+			height: 15px;
+			stroke: currentColor;
+		}
+
+		&:hover {
+			background-color: #f1f5f9;
+		}
+	}
+}
+
+.tippy-info-span {
+	border: 2px solid #e2e8f0;
+	border-radius: 4px;
+	background-color: #fff;
+	font-weight: 400;
+	font-size: 12px;
+	text-align: justify;
+	color: #212b36;
+	padding: 4px 10px;
+	position: relative;
+	&::before {
+		content: '';
+		position: absolute;
+		top: 100%;
+		left: 10%;
+		border-width: 6px;
+		border-style: solid;
+		border-color: #e2e8f0 transparent transparent transparent; /* Цвет стрелки */
+	}
+}

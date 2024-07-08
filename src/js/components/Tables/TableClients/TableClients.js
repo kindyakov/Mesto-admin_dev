@@ -1,37 +1,24 @@
 import Table from '../Table.js';
 import { formattingPrice, formatPhoneNumber } from '../../../utils/formattingPrice.js';
 import { declOfNum } from '../../../utils/declOfNum.js';
+import { actions } from './actions.js';
 
+import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
+import { cellRendererInput } from '../utils/cellRenderer.js';
 
-function addPrefixToNumbers(input) {
-  // Разделяем строку по запятой и удаляем лишние пробелы
-  let numbers = input.split(',').map(num => num.trim());
-  // Добавляем префикс "№" к каждому числу
-  let prefixedNumbers = numbers.map(num => `№${num}`);
-  // Объединяем обратно в строку через запятую
-  return prefixedNumbers.join(', ');
-}
+import modalClient from '../../Modals/ModalClient/ModalClient.js';
 
-class ClientsTable extends Table {
+class TableClients extends Table {
   constructor(selector, options, params) {
     const defaultOptions = {
       columnDefs: [
-        { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false },
+        { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
         {
-          headerName: 'ФИО', field: 'fullname', flex: 1.5, editable: params => this.isCellEditable(params),
-          cellRenderer: params => {
-            const p = document.createElement('p')
-            p.classList.add('table-p')
-            p.innerHTML = `
-            <svg class='icon icon-profile'>
-              <use xlink:href='img/svg/sprite.svg#profile'></use>
-            </svg>
-            <span>${params.value ? `${params.value} ${declOfNum(Math.abs(params.value), ['День', 'Дня', 'Дней'])}` : 'Нет'}</span>`
-            return p
-          }
+          headerName: 'ФИО', field: 'fullname', flex: 1.5,
+          cellRenderer: params => cellRendererInput(params, undefined, 'profile')
         },
-        { headerName: 'Телефон', field: 'username', flex: 0.8, editable: params => this.isCellEditable(params), valueFormatter: params => formatPhoneNumber(params.value) },
-        { headerName: 'Почта', field: 'email', flex: 1.2, sortable: false, editable: params => this.isCellEditable(params) },
+        { headerName: 'Телефон', field: 'username', flex: 0.8, cellRenderer: params => cellRendererInput(params, formatPhoneNumber) },
+        { headerName: 'Почта', field: 'email', flex: 1.2, sortable: false, cellRenderer: params => cellRendererInput(params) },
         { headerName: 'Ячейки', field: 'rooms', flex: 0.5, sortable: false, valueFormatter: params => params.value ? addPrefixToNumbers(params.value) : 'нет' },
         {
           headerName: 'Платеж в мес.', field: 'month_payment', flex: 0.5,
@@ -60,7 +47,6 @@ class ClientsTable extends Table {
           cellRenderer: params => this.actionCellRenderer(params), resizable: false, sortable: false
         }
       ],
-      rowSelection: 'multiple', // Включение множественного выбора строк
     };
 
     const mergedOptions = Object.assign({}, defaultOptions, options);
@@ -80,15 +66,22 @@ class ClientsTable extends Table {
   }
 
   actionCellRenderer(params) {
+    const { user_id, user_type } = params.data
     const button = document.createElement('button');
     button.classList.add('button-table-actions');
-    button.innerHTML = `<span></span><span></span><span></span><svg class='icon icon-check'>
-  <use xlink:href='img/svg/sprite.svg#check'></use>
-</svg>`;
-    button.addEventListener('click', () => {
-      this.enableEditing(params.node)
-      button.classList.toggle('_edit')
+    button.setAttribute('data-user-id', user_id)
+    button.setAttribute('data-user-type', user_type)
+    button.innerHTML = `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`;
+
+    const tippyInstance = actions(button, { ...params.data, modalClient }, {
+      onEdit: (instance) => {
+        // Проверять валидацию, если валидация верная то instance.isEdit = false и instance.toggleEdit(button) и выключить редактирование полей
+      },
+      onEnableEdit: () => {
+        // Включить редактирование полей добавить валидацию полей
+      },
     })
+
     return button;
   }
 
@@ -104,8 +97,9 @@ class ClientsTable extends Table {
     const { clients, cnt_pages, page } = data;
     this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', clients)
+    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 20, clients.length])
   }
 }
 
-export default ClientsTable
+export default TableClients
 

@@ -75,6 +75,11 @@ body {
 	fill: #000;
 }
 
+// shared
+@import 'shared/input';
+@import 'shared/button';
+@import 'shared/tippy';
+
 // components
 @import 'components/sidebar';
 @import 'components/header';
@@ -89,10 +94,6 @@ body {
 @import 'modules/output_info';
 @import 'modules/loader';
 @import 'modules/flatpickr';
-
-// shared
-@import 'shared/input';
-@import 'shared/button';
 
 //<ОСНОВНОЙ БЛОК>
 @import 'styles/main';

@@ -1,5 +1,4 @@
 export const translations = {
-  pageSizeSelectorLabel: 'Показывать по',
   ariaRowSelectAll: "Нажмите Пробел, чтобы выбрать все строки",
   ariaRowToggleSelection: "Нажмите Пробел, чтобы переключить выбор строки",
   ariaSortableColumn: "Нажмите ENTER для сортировки",

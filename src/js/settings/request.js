@@ -11,3 +11,14 @@ export async function getClients(params = '') {
     throw error
   }
 }
+
+export async function getClientTotal(userId) {
+  try {
+    const response = await api.get(`/_get_client_total_/${userId}/`)
+    if (response.status !== 200) return null
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}

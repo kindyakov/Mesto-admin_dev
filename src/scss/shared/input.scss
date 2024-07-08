@@ -17,6 +17,7 @@
 	}
 }
 
+// Input
 .input {
 	width: 100%;
 	color: #64748b;
@@ -39,4 +40,132 @@
 	&.just-validate-error-field {
 		border-color: $red;
 	}
+
+	&.edit {
+		background-color: #eff4fb;
+	}
+
+	&.not-edit {
+		border-color: #e2e8f0;
+	}
+}
+
+.wp-input-cell {
+	width: 100%;
+	position: relative;
+	.just-validate-error-label {
+		display: none;
+	}
+
+	.icon {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		transform: translate(0, -50%);
+	}
+
+	&.is-icon {
+		.input-cell {
+			padding-left: 25px;
+		}
+	}
+}
+
+// Input для ячеек в таблице
+.input-cell {
+	width: 100%;
+	font-weight: 400;
+	font-size: 14px;
+	color: #212b36;
+	border-bottom: 1px solid #212b36;
+	padding: 8px 0;
+	background-color: transparent;
+	transition: 0.2s;
+
+	&::placeholder {
+		opacity: 0.5;
+	}
+
+	&:focus {
+		border-color: $blue;
+	}
+
+	&.just-validate-error-field {
+		border-color: $red;
+	}
+
+	&.not-edit {
+		border-color: transparent;
+	}
+}
+
+// Input для паспорта
+.input-passport {
+	width: 100%;
+	border-radius: 3px;
+	padding: 5px 9px;
+	height: 30px;
+	background: #eee;
+
+	font-weight: 500;
+	font-size: 14px;
+	color: #212b36;
+}
+
+.wp-status {
+	width: 100%;
+	border-radius: 3px;
+	&.not-confirmed {
+		.status.not-confirmed {
+			display: flex;
+		}
+	}
+
+	&.confirmed {
+		.status.confirmed {
+			display: flex;
+		}
+	}
+}
+
+.status {
+	display: none;
+	align-items: center;
+	gap: 5px;
+	padding: 7px 10px;
+	width: 100%;
+	font-weight: 500;
+	font-size: 14px;
+	height: 30px;
+
+	&.not-confirmed {
+		color: $red;
+		background-color: $red-light;
+		.icon {
+			stroke: $red;
+			height: 10px;
+			width: 10px;
+		}
+	}
+
+	&.confirmed {
+		color: $green;
+		background-color: $green-light;
+		.icon {
+			stroke: $green;
+			height: 15px;
+			width: 15px;
+		}
+	}
+}
+
+.not-confirmed {
+}
+
+.confirmed {
+}
+
+.item-num {
+}
+.item-info {
 }

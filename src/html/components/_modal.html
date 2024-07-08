@@ -26,3 +26,163 @@
 		</div>
 	</div>
 </div>
+
+<div class='modal modal-client' data-special-modal='modal-client'>
+	<div class='modal__content'>
+		<div class='modal__body'>
+			<div class="modal__header">
+				<div class="modal__header_auto">
+					<h3 class="modal__title">Клиент №<span data-render="user_id">250</span></h3>
+				</div>
+				<button class="button-text blue btn-old-data">
+					<span>Старые данные</span>
+					<svg class='icon icon-arrow-right-circle'>
+						<use xlink:href='img/svg/sprite.svg#arrow-right-circle'></use>
+					</svg>
+				</button>
+			</div>
+			<div class="modal__block">
+
+				<div class="modal__block_item">
+					<div class="modal__block_top">
+						<h4 class="modal__sub-title">О клиенте:</h4>
+						<button class="button-text btn-old-data">
+							<span>Редактировать</span>
+							<svg class='icon edit'>
+								<use xlink:href='img/svg/sprite.svg#edit'></use>
+							</svg>
+						</button>
+					</div>
+					<form class="modal__form">
+						<div class="modal__form_item">
+							<span>ФИО</span>
+							<div class="modal__form_wp-input wp-input">
+								<input type="text" class="modal__form_input input not-edit" name="fullname" readonly="true"
+									data-render="fullname" autocomplete="off">
+							</div>
+						</div>
+						<div class="modal__form_item">
+							<span>Дата рождения</span>
+							<div class="modal__form_wp-input wp-input">
+								<input type="text" class="modal__form_input input not-edit" name="birthday" readonly="true"
+									data-render="birthday" autocomplete="off">
+							</div>
+						</div>
+						<div class="modal__form_item">
+							<span>Номер телефона</span>
+							<div class="modal__form_wp-input wp-input">
+								<input type="tel" class="modal__form_input input not-edit" name="username" readonly="true"
+									data-render="username" autocomplete="off" inputmode="tel">
+							</div>
+						</div>
+						<div class="modal__form_item">
+							<span>Email</span>
+							<div class="modal__form_wp-input wp-input">
+								<input type="email" class="modal__form_input input not-edit" name="email" readonly="true"
+									data-render="email" autocomplete="off">
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<div class="modal__block_item">
+					<div class="modal__block_top">
+						<h4 class="modal__sub-title">Паспорт</h4>
+						<button class="button-text blue">
+							<span>Открыть</span>
+							<svg class='icon arrow-right-circle'>
+								<use xlink:href='img/svg/sprite.svg#arrow-right-circle'></use>
+							</svg>
+						</button>
+					</div>
+					<div class="modal__passport">
+						<div class="modal__passport-content">
+							<form class="modal__passport-form">
+								<div class="modal__passport-form_item">
+									<span>Номер:</span>
+									<div class="modal__passport-form_wp-input wp-input">
+										<input type="text" name="no" class="modal__passport-form_input-passport input-passport"
+											data-render="no" inputmode="tel" readonly="true">
+									</div>
+								</div>
+								<div class="modal__passport-form_item">
+									<span>Серия:</span>
+									<div class="modal__passport-form_wp-input wp-input">
+										<input type="text" name="series" class="modal__passport-form_input-passport input-passport"
+											data-render="series" inputmode="tel" readonly="true">
+									</div>
+								</div>
+								<div class="modal__passport-form_item">
+									<span>Дата выдачи:</span>
+									<div class="modal__passport-form_wp-input wp-input">
+										<input type="text" name="issue_date" class="modal__passport-form_input-passport input-passport"
+											data-render="issue_date" readonly="true">
+									</div>
+								</div>
+								<div class="modal__passport-form_item">
+									<span>Статус:</span>
+									<div class="modal__passport-form_wp-status wp-status  confirmed">
+										<div class="modal__passport-form_status status not-confirmed">
+											<svg class='icon icon-cross'>
+												<use xlink:href='img/svg/sprite.svg#cross'></use>
+											</svg>
+											<span>Не подтвержден</span>
+										</div>
+										<div class="modal__passport-form_status status confirmed">
+											<svg class='icon icon-check-2'>
+												<use xlink:href='img/svg/sprite.svg#"check-2'></use>
+											</svg>
+											<span>Подтвержден</span>
+										</div>
+									</div>
+								</div>
+								<div class="modal__passport-form_item">
+									<span>Кем выдан:</span>
+									<div class="modal__passport-form_wp-input wp-input">
+										<input type="text" name="issued_by" class="modal__passport-form_input-passport input-passport"
+											data-render="issued_by" readonly="true">
+									</div>
+								</div>
+								<div class="modal__passport-form_item">
+									<span>Код подразделения:</span>
+									<div class="modal__passport-form_wp-input wp-input">
+										<input type="text" name="subdivision" class="modal__passport-form_input-passport input-passport"
+											data-render="subdivision" inputmode="tel" readonly="true">
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="modal__passport-photo">
+							<img src="" alt="Фото паспорта" data-render="passp_photo_link">
+						</div>
+					</div>
+				</div>
+
+				<div class="modal__block_item">
+					<div class="modal__block_top">
+						<h4 class="modal__sub-title">Договоры:</h4>
+					</div>
+					<div class="modal__block_grid modal-content-agreements">
+
+						<div class="modal__block_grid-item">
+							<span class="item-num">№486</span>
+							<p class="item-info">14 дней до окончания</p>
+							<button class="item-more-detailed"><span>Подробнее</span></button>
+						</div>
+						<div class="modal__block_grid-item">
+							<span class="item-num">№486</span>
+							<p class="item-info">14 дней до окончания</p>
+							<button class="item-more-detailed"><span>Подробнее</span></button>
+						</div>
+						<div class="modal__block_grid-item">
+							<span class="item-num">№486</span>
+							<p class="item-info">14 дней до окончания</p>
+							<button class="item-more-detailed"><span>Подробнее</span></button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
