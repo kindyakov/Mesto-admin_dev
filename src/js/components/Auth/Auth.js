@@ -106,8 +106,16 @@ class Auth {
 
   logout() {
     deleteCookie('token');
+    this.allClose()
     this.modal.open()
     this.isAuth = false
+  }
+
+  allClose() {
+    const modalsOpen = document.querySelectorAll('.modal._active')
+    modalsOpen.length && modalsOpen.forEach(modal => {
+      modal.classList.remove('_active')
+    })
   }
 
   async auth(formData) {

@@ -157,6 +157,27 @@ export class Select {
     this.onClose(select)
   }
 
+  setValue(optionValue) {
+    this.selectsCustom.length && this.selectsCustom.forEach(select => {
+      const selectInput = select.querySelector(this.options.selectInput)
+      const selectInputSpan = select.querySelector(`${this.options.selectInput} span`)
+
+      const option = select.querySelector(`[data-value="${optionValue}"]`)
+      if (!option) return console.log(optionValue, 'Такого значения нет в:', select)
+      const optionText = option.textContent
+
+      selectInputSpan.classList.remove('placeholder')
+      selectInputSpan.innerText = optionText
+      selectInput.setAttribute('data-value', optionValue)
+
+      this.disableSelectedOption(select)
+      this.changeSelectOption(select, optionValue)
+      this.close(select)
+
+      // this.onChange(option, select, optionValue)
+    })
+  }
+
   disableSelectedOption(select) {
     const selectedOptionValue = select.querySelector(this.options.selectInput).getAttribute('data-value')
     const options = select.querySelectorAll(this.options.selectOption)

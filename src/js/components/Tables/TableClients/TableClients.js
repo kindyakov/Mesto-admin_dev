@@ -1,8 +1,9 @@
 import Table from '../Table.js';
+import { actions } from './actions.js';
+import { validateRow } from './validate.js';
+
 import { formattingPrice, formatPhoneNumber } from '../../../utils/formattingPrice.js';
 import { declOfNum } from '../../../utils/declOfNum.js';
-import { actions } from './actions.js';
-
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
 
@@ -67,6 +68,7 @@ class TableClients extends Table {
 
   actionCellRenderer(params) {
     const { user_id, user_type } = params.data
+    const row = params.eGridCell.closest('.ag-row')
     const button = document.createElement('button');
     button.classList.add('button-table-actions');
     button.setAttribute('data-user-id', user_id)
@@ -76,21 +78,62 @@ class TableClients extends Table {
     const tippyInstance = actions(button, { ...params.data, modalClient }, {
       onEdit: (instance) => {
         // Проверять валидацию, если валидация верная то instance.isEdit = false и instance.toggleEdit(button) и выключить редактирование полей
+        this.validatorRow.revalidate().then(isValid => {
+          console.log(isValid)
+
+        })
       },
       onEnableEdit: () => {
-        // Включить редактирование полей добавить валидацию полей
+        const form = document.createElement('form')
+        const inputs = this.enableEditing(row)
+        inputs.forEach(input => {
+          const inputClone = input.cloneNode(true);
+          inputClone.value = input.value; // Установить начальное значение
+          form.appendChild(inputClone);
+
+          // Обработчик событий для синхронизации значений
+          input.addEventListener('input', () => {
+            inputClone.value = input.value;
+            this.validatorRow?.revalidateField(inputClone).then(isValid => {
+              if (!isValid) {
+                input.classList.add('just-validate-error-field')
+                if (inputClone.name === 'username') {
+                  input.value = inputClone.value
+                }
+              } else {
+                input.classList.remove('just-validate-error-field')
+              }
+            })
+          });
+        });
+
+        this.validatorRow = validateRow(form)
       },
     })
 
     return button;
   }
 
-  enableEditing(node) {
-    // Установить editableField в true для разрешения редактирования
-    node.data.editableField = true
+  enableEditing(row) {
+    if (!row) return []
+    const inputs = row.querySelectorAll('.cell-input')
 
-    // Обновить редактируемые поля
-    this.gridApi.refreshCells({ rowNodes: [node], columns: ['fullname', 'username', 'email'], force: true });
+    inputs.length && inputs.forEach(input => {
+      input.classList.remove('not-edit')
+      input.removeAttribute('readonly')
+    })
+
+    return inputs
+  }
+
+  disableEditing(row) {
+    if (!row) return
+    const inputs = row.querySelectorAll('.cell-input')
+
+    inputs.length && inputs.forEach(input => {
+      input.classList.add('not-edit')
+      input.setAttribute('readonly', true)
+    })
   }
 
   render(data) {

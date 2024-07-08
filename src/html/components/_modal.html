@@ -46,14 +46,18 @@
 				<div class="modal__block_item">
 					<div class="modal__block_top">
 						<h4 class="modal__sub-title">О клиенте:</h4>
-						<button class="button-text btn-old-data">
-							<span>Редактировать</span>
-							<svg class='icon edit'>
+						<button class="button-text btn-edit-client-data">
+							<span class="span-edit">Редактировать</span>
+							<span class="span-save">Сохранить</span>
+							<svg class='icon icon-edit'>
 								<use xlink:href='img/svg/sprite.svg#edit'></use>
+							</svg>
+							<svg class='icon icon-save'>
+								<use xlink:href='img/svg/sprite.svg#save'></use>
 							</svg>
 						</button>
 					</div>
-					<form class="modal__form">
+					<form class="modal__form form-client-data">
 						<div class="modal__form_item">
 							<span>ФИО</span>
 							<div class="modal__form_wp-input wp-input">
@@ -121,7 +125,7 @@
 								</div>
 								<div class="modal__passport-form_item">
 									<span>Статус:</span>
-									<div class="modal__passport-form_wp-status wp-status  confirmed">
+									<div class="modal__passport-form_wp-status wp-status not-confirmed" data-render="approved">
 										<div class="modal__passport-form_status status not-confirmed">
 											<svg class='icon icon-cross'>
 												<use xlink:href='img/svg/sprite.svg#cross'></use>
@@ -129,8 +133,9 @@
 											<span>Не подтвержден</span>
 										</div>
 										<div class="modal__passport-form_status status confirmed">
-											<svg class='icon icon-check-2'>
-												<use xlink:href='img/svg/sprite.svg#"check-2'></use>
+											<svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg"
+												class="icon" style="fill: none;">
+												<path d="M1 6L5.66667 10.5L15 1.5" stroke-width="2" />
 											</svg>
 											<span>Подтвержден</span>
 										</div>
@@ -163,22 +168,6 @@
 						<h4 class="modal__sub-title">Договоры:</h4>
 					</div>
 					<div class="modal__block_grid modal-content-agreements">
-
-						<div class="modal__block_grid-item">
-							<span class="item-num">№486</span>
-							<p class="item-info">14 дней до окончания</p>
-							<button class="item-more-detailed"><span>Подробнее</span></button>
-						</div>
-						<div class="modal__block_grid-item">
-							<span class="item-num">№486</span>
-							<p class="item-info">14 дней до окончания</p>
-							<button class="item-more-detailed"><span>Подробнее</span></button>
-						</div>
-						<div class="modal__block_grid-item">
-							<span class="item-num">№486</span>
-							<p class="item-info">14 дней до окончания</p>
-							<button class="item-more-detailed"><span>Подробнее</span></button>
-						</div>
 					</div>
 				</div>
 			</div>
