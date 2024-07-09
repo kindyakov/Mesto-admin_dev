@@ -1,13 +1,9 @@
-import JustValidate from "just-validate";
 import Inputmask from "inputmask";
+import { createValidator } from "../../settings/createValidator.js";
 
-export function validate(form) {
+export function validate(form, options) {
   if (!form) return
-  const validator = new JustValidate(form, {
-    errorLabelStyle: {
-      color: '#FF0505'
-    }
-  });
+  const validator = createValidator(form, options)
 
   const inputPhone = form.querySelector('input[name="username"]')
   Inputmask.default("+7 (999) 999-99-99").mask(inputPhone)

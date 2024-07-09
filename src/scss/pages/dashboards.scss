@@ -4,6 +4,14 @@
 		flex-direction: column;
 		width: 100%;
 		gap: 30px;
+
+		&._open {
+			.dashboards__table-toggle {
+				.icon {
+					transform: rotate(0);
+				}
+			}
+		}
 	}
 
 	&__table-toggle {
@@ -14,12 +22,13 @@
 		line-height: 120%;
 		color: #373f47;
 		gap: 10px;
-    
+
 		.icon {
 			fill: #717d8a;
 			width: 10px;
 			height: 5px;
 			transition: 0.2s;
+			transform: rotate(180deg);
 		}
 
 		&._active {

@@ -69,6 +69,22 @@
 			padding-left: 25px;
 		}
 	}
+
+	&.is-dop-content {
+		.dop-el-content {
+			display: none;
+		}
+
+		&.not-edit {
+			.input-cell {
+				display: none;
+			}
+
+			.dop-el-content {
+				display: inline-block;
+			}
+		}
+	}
 }
 
 // Input для ячеек в таблице

@@ -15,6 +15,7 @@ export class Accordion {
       anim: height => [{ maxHeight: 0 }, { maxHeight: height + 'px' }],
       duration: 300,
       easing: 'ease-in-out',
+      isOpen: false,
       onOpen: () => { },
       onInit: () => { },
       onEvent: () => { },

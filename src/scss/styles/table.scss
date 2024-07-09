@@ -66,6 +66,16 @@
 		line-height: 100%;
 	}
 
+	.table-span-agrid {
+		font-weight: 500;
+		font-size: 14px;
+		line-height: 100%;
+		color: #212b36;
+		border-radius: 22px;
+		padding: 6px 10px;
+		background-color: #eee;
+	}
+
 	.table-p {
 		display: flex;
 		align-items: center;
@@ -94,6 +104,8 @@
 	}
 
 	&__form {
+		display: flex;
+		gap: 10px;
 		flex: 1 1 auto;
 		.wp-input {
 			.icon-search {

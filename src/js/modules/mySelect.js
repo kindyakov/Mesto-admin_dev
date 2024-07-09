@@ -28,6 +28,10 @@ export class Select {
       isDev: false,
       isDisabled: false,
       inputHtml: '',
+      selectMinWidth: true,
+      selectMaxWidth: null,
+      maxHeightList: null,
+      childrenEl: null,
       onInit: () => { },
       onChange: () => { },
       onOpen: () => { },
@@ -38,7 +42,9 @@ export class Select {
     this.options = Object.assign(defaultOptions, options)
 
     if (this.options.uniqueName) {
-      this.selects = document.querySelectorAll(`select[data-special-select="${this.options.uniqueName}"]`)
+      const wp = this.options.childrenEl ? this.options.childrenEl : document
+
+      this.selects = wp.querySelectorAll(`select[data-special-select="${this.options.uniqueName}"]`)
     } else {
       this.selects = document.querySelectorAll(`select${this.options.initSelect}:not([data-special-select])`)
     }
@@ -73,6 +79,7 @@ export class Select {
       const isDisabled = select.getAttribute('data-disabled') != null ? true : this.options.isDisabled
       const inputHtml = select.getAttribute('data-input-html') || this.options.inputHtml
       const selectMinWidth = select.getAttribute('data-select-min-width') || this.options.selectMinWidth
+      const selectMaxWidth = select.getAttribute('data-select-max-width') || this.options.selectMaxWidth
 
       const customSelect = this.customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder, isDisabled, inputHtml })
       const b479 = window.matchMedia(`(min-width: 479px)`)
@@ -80,9 +87,13 @@ export class Select {
       select.insertAdjacentElement('afterend', customSelect)
       select.style.display = 'none'
 
-      if (b479.matches && selectMinWidth !== 'false') {
+      if (b479.matches && selectMinWidth) {
         const maxWidth = getMaxWidth(customSelect.querySelectorAll('.mySelect__option'));
         customSelect.style.minWidth = `${maxWidth + 5}px`
+      }
+
+      if (selectMaxWidth) {
+        customSelect.style.maxWidth = selectMaxWidth + 'px'
       }
 
       this.selectsCustom.push(customSelect)
@@ -141,11 +152,16 @@ export class Select {
   }
 
   open(select) {
+    const maxHeightList = select.getAttribute('data-select-maw-height-list') || this.options.maxHeightList
+
     const selectList = select.querySelector(this.options.selectList)
 
     this.selectsCustom.forEach(_select => this.close(_select))
     select.classList.add(this.options.classActive)
-    selectList.style.maxHeight = selectList.scrollHeight + 'px'
+    selectList.style.maxHeight = maxHeightList ? maxHeightList + 'px' : selectList.scrollHeight + 'px'
+    if (maxHeightList) {
+      selectList.style.overflowY = 'auto'
+    }
 
     this.onOpen(select)
   }

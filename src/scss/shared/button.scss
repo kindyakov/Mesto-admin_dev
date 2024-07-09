@@ -52,6 +52,21 @@
 	&:active {
 		background-color: #edf6ff;
 	}
+
+	&.btn-table-upload-excel[data-count] {
+		span {
+			order: 0;
+		}
+
+		&::after {
+			content: attr(data-count);
+			order: 1;
+		}
+
+		.icon {
+			order: 2;
+		}
+	}
 }
 
 .button-text {
@@ -99,4 +114,13 @@
 			}
 		}
 	}
+}
+
+.button-icon-search {
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	height: 100%;
+	width: 50px;
 }

@@ -26,7 +26,7 @@ class ModalClient {
   init() {
     if (!this.modalBody) return
     this.formClientData = this.modalBody.querySelector('.form-client-data')
-
+    this.validatorClient = validateClient(this.formClientData)
     this.events()
   }
 
@@ -46,16 +46,15 @@ class ModalClient {
           const formData = new FormData(this.formClientData)
           formData.set('username', formData.get('username').replace(/[+() -]/g, ''))
 
-          this.changeData(formData).finally(() => {
-            btn.classList.remove('_is-edit')
-            this.disableEditInput(this.formClientData)
-          })
+          // this.changeData(formData).finally(() => {
+          btn.classList.remove('_is-edit')
+          this.disableEditInput(this.formClientData)
+          // })
         }
       })
     } else {
       btn.classList.add('_is-edit')
       this.enableEditInput(this.formClientData)
-      this.validatorClient = this.validatorClient || validateClient(this.formClientData)
     }
   }
 
@@ -70,6 +69,7 @@ class ModalClient {
           el.value = formatPhoneNumber(value)
         } else if (el.name === 'birthday') {
           el.value = getFormattedDate(value)
+          this.validatorClient?.calendarBirthday.setDate(getFormattedDate(value), true, "d.m.Y")
         } else {
           el.value = value
         }
@@ -98,6 +98,8 @@ class ModalClient {
       input.classList.add('edit')
       input.classList.remove('not-edit')
     })
+
+    this.validatorClient?.calendarBirthday.set('clickOpens', true)
   }
 
   disableEditInput(form, arr = []) {

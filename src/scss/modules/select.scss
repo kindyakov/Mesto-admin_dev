@@ -79,6 +79,11 @@
 		opacity: 0;
 		overflow: hidden;
 		will-change: max-height;
+
+		&::-webkit-scrollbar {
+			width: 2px;
+			height: 2px;
+		}
 	}
 
 	&__option {

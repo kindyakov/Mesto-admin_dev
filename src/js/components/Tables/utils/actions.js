@@ -1,15 +1,15 @@
 import tippy from 'tippy.js';
-import { tippyTableActionsHtml } from './html.js';
+import { tippyTableActionsHtml } from '../html.js';
 
 let defaultOptions = {
   tippyInstance: null,
   isEdit: false,
   onEdit: () => { },
   onEnableEdit: () => { },
-  onOpenModal: () => { }
+  onOpen: () => { }
 }
 
-export function actions(button, { modalClient, user_id }, opt = {}) {
+export function actions(button, opt = {}) {
   const options = Object.assign({ toggleEdit, toggleActive }, defaultOptions, opt)
 
   const instance = tippy(button, {
@@ -29,8 +29,7 @@ export function actions(button, { modalClient, user_id }, opt = {}) {
 
       wrapper.querySelector('.btn-open-row-table').addEventListener('click', () => {
         options.tippyInstance.hide() // Закрывает всплывающее окно
-        modalClient.userId = user_id
-        modalClient.open()
+        options.onOpen()
       });
 
       return wrapper;
@@ -64,6 +63,8 @@ export function actions(button, { modalClient, user_id }, opt = {}) {
   function toggleActive(button) {
     button.classList.toggle('_active');
   }
+
+  instance.options = options
 
   return instance
 }

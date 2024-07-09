@@ -1,6 +1,6 @@
-import JustValidate from "just-validate";
 import Inputmask from "inputmask";
-import { createCalendar } from "../../createCalendar.js";
+import { createCalendar } from "../../../settings/createCalendar.js";
+import { createValidator } from "../../../settings/createValidator.js";
 
 const getMinDate = () => {
   const today = new Date();
@@ -8,13 +8,9 @@ const getMinDate = () => {
   return minDate;
 };
 
-export function validateClient(form) {
+export function validateClient(form, options) {
   if (!form) return
-  const validator = new JustValidate(form, {
-    errorLabelStyle: {
-      color: '#FF0505'
-    },
-  });
+  const validator = createValidator(form, options)
 
   const inputBirthday = form.querySelector('input[name="birthday"]')
   inputBirthday.classList.add('input-client-birthday-modal')

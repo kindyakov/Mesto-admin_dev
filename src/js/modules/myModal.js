@@ -44,6 +44,10 @@ export class Modal {
       }
     }
 
+    this.modals.length && this.modals.forEach(modal => {
+      this.modalBtnClose = modal.getAttribute('data-modal-close') || this.options.modalBtnClose
+    })
+
     this.initializeGlobalEventHandlers()
   }
 
@@ -68,8 +72,10 @@ export class Modal {
       this.open(modalSelector, e);
     }
 
-    if (e.target.closest(this.options.modalBtnClose) && this.isOpen) {
-      this.options.isClose && this.close();
+    if (e.target.closest(this.modalBtnClose)) {
+      if (e.target.closest('.modal')?.classList.contains('_active')) {
+        this.options.isClose && this.close();
+      }
     }
   }
 
@@ -78,8 +84,10 @@ export class Modal {
   }
 
   handleDocumentMouseUp(e) {
-    if (this.mouseDownTarget && this.mouseDownTarget === e.target && !e.target.closest(`.${this.options.modalContent}`) && !e.target.closest('.flatpickr-calendar') && this.isOpen) {
-      this.options.isClose && this.close(e);
+    if (this.mouseDownTarget && this.mouseDownTarget === e.target && !e.target.closest(`.${this.options.modalContent}`) && !e.target.closest('.flatpickr-calendar')) {
+      if (e.target.closest('.modal')?.classList.contains('_active')) {
+        this.options.isClose && this.close(e);
+      }
     }
     this.mouseDownTarget = null;
   }
@@ -127,7 +135,9 @@ export class Modal {
 
     this.isOpen = true;
     Modal.currentModalInstance = this
-    this.onOpen(e);
+    if (this.options.unique && this.options.unique === this.modalActive.getAttribute('data-special-modal')) {
+      this.onOpen(e);
+    }
     // }, 0);
   }
 
