@@ -29,7 +29,7 @@ class Dashboards {
     if (this.formFilter) {
       this.selectFilter = new Select({
         uniqueName: 'select-filter-main',
-        childrenEl: this.wrapper
+        parentEl: this.wrapper
       })
       this.calendars = createCalendar(`[data-content="dashboards/${page}"] .input-date-filter`, {
         mode: "range",
@@ -49,7 +49,7 @@ class Dashboards {
   }
 
   events() {
-    this.actionsTables(table => {
+    this.tables.length && this.actionsTables(table => {
       table.onPageChange = page => this.renderTable(table, { page })
       table.onChangeTypeUser = ({ e, select, optionValue }) => this.renderTable(table, { user_type: optionValue })
       table.onValueInputSearch = value => {
@@ -100,7 +100,7 @@ class Dashboards {
         this.renderWidgets(dataDashboard)
       }
 
-      if (this.table && dataEntities) {
+      if (this.tables.length && dataEntities) {
         this.actionsTables(table => table.render(dataEntities))
       }
     } catch (error) {

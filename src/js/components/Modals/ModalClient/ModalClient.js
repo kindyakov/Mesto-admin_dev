@@ -79,7 +79,11 @@ class ModalClient {
         el.classList.remove('confirmed', 'not-confirmed')
         el.classList.add(`${value ? 'confirmed' : 'not-confirmed'}`)
       } else {
-        el.textContent = value
+        if (renderName === 'user_id') {
+          el.setAttribute('data-user-id', client[renderName])
+        } else {
+          el.textContent = value
+        }
       }
     })
 
@@ -141,6 +145,8 @@ class ModalClient {
   }
 
   async handleOpen() {
+    console.log(this.modal)
+    
     try {
       this.loader.enable()
       const data = await getClientTotal(this.userId)

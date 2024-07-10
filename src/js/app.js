@@ -11,13 +11,19 @@ import { burger } from "./utils/header.js";
 const nav = new Navigation();
 const auth = new Auth()
 
+let isFirstLoad = false
+
 function appInit() {
-  nav.init();
+  if (!isFirstLoad) {
+    useDynamicAdapt()
+    burger({ selectorNav: '.sidebar' })
 
-  useDynamicAdapt()
-  burger({ selectorNav: '.sidebar' })
+    new Accordion({ isAccordion: false })
 
-  new Accordion({ isAccordion: false })
+    nav.init()
+  }
+
+  isFirstLoad = true
 }
 
 if (auth.isAuth) {

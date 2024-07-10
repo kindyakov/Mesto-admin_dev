@@ -1,5 +1,5 @@
 import Dashboards from "../Dashboards.js";
-
+import { getDashboardMarketing } from "../../../settings/request.js";
 
 class Marketing extends Dashboards {
   constructor({ loader }) {
@@ -11,7 +11,7 @@ class Marketing extends Dashboards {
   }
 
   async getDashboardData(data = {}) {
-    return []
+    return getDashboardMarketing(data)
   }
 }
 

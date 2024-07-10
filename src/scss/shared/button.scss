@@ -17,6 +17,18 @@
 
 	&:active {
 		transform: scaleX(0.95);
+		box-shadow: 0 2px 4px rgba(147, 165, 247, 0.3);
+	}
+
+	&.transparent {
+		background-color: transparent;
+		color: #1c2434;
+		border: 1px solid #eaecee;
+		padding: 10px 25px;
+		&:hover {
+			opacity: 1;
+			border-color: $blue;
+		}
 	}
 }
 

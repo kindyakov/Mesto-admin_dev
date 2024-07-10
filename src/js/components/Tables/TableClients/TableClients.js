@@ -56,7 +56,7 @@ class TableClients extends Table {
     };
 
     const defaultParams = {
-      selectTypeUser: true,
+      selectTypeUser: false,
       onChangeTypeUser: () => { },
     }
 
@@ -69,14 +69,12 @@ class TableClients extends Table {
 
     this.onChangeTypeUser = this.params.onChangeTypeUser
 
-    if (this.params.selectTypeUser) {
-      this.selectTypeUser = new Select({
-        uniqueName: 'select-filter-table-client',
-        onChange: this.onChangeTypeUser
-      })
-    } else {
-      this.wpTable.querySelector('[data-special-select="select-filter-table-client"]').remove()
-    }
+    // if (this.params.selectTypeUser) {
+    //   this.selectTypeUser = new Select({
+    //     uniqueName: 'select-filter-table-client',
+    //     onChange: this.onChangeTypeUser
+    //   })
+    // } 
   }
 
   actionCellRenderer(params) {

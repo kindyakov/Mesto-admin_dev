@@ -4,7 +4,7 @@ export class Modal {
 
   constructor(options) {
     let defaultoptions = {
-      modalBtnClose: '.modal__close',
+      modalBtnClose: '.modal-close',
       classActive: '_active',
       modalContent: 'modal__body',
       isClose: true,
@@ -74,7 +74,8 @@ export class Modal {
 
     if (e.target.closest(this.modalBtnClose)) {
       if (e.target.closest('.modal')?.classList.contains('_active')) {
-        this.options.isClose && this.close();
+        const modal = e.target.closest('.modal')
+        this.options.isClose && this.close(modal);
       }
     }
   }
@@ -98,10 +99,10 @@ export class Modal {
     }
   }
 
-  close() {
-    if (!this.modalActive) return;
+  close(modal = this.modalActive) {
+    if (!modal) return;
     this.isOpen = false;
-    this.modalActive.classList.remove(this.options.classActive);
+    modal.classList.remove(this.options.classActive);
     this.modalActive = null;
     Modal.currentModalInstance = null
     this.enableScroll();

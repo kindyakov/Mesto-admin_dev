@@ -31,7 +31,7 @@ export class Select {
       selectMinWidth: true,
       selectMaxWidth: null,
       maxHeightList: null,
-      childrenEl: null,
+      parentEl: null,
       onInit: () => { },
       onChange: () => { },
       onOpen: () => { },
@@ -42,7 +42,7 @@ export class Select {
     this.options = Object.assign(defaultOptions, options)
 
     if (this.options.uniqueName) {
-      const wp = this.options.childrenEl ? this.options.childrenEl : document
+      const wp = this.options.parentEl ? this.options.parentEl : document
 
       this.selects = wp.querySelectorAll(`select[data-special-select="${this.options.uniqueName}"]`)
     } else {

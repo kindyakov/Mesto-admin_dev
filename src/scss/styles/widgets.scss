@@ -1,0 +1,146 @@
+.widgets {
+	display: grid;
+	gap: 30px;
+	@include adaptiv-value('gap', 30, 10, 1);
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+	&__item {
+		border: 1px solid #e1e8f0;
+		border-radius: 5px;
+		background-color: #fff;
+		padding: 20px 25px;
+		display: flex;
+		align-items: center;
+		gap: 20px;
+
+		@media (max-width: $md1) {
+			padding: 20px 15px;
+		}
+
+		&_img {
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			overflow: hidden;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			img {
+				max-width: 100%;
+				max-height: 100%;
+				object-fit: cover;
+			}
+		}
+
+		&_circle {
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			position: relative;
+
+			&::after {
+				content: '';
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				left: 0;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				border-radius: 50%;
+				animation: pulse 1.5s infinite;
+			}
+
+			&::before {
+				content: '';
+				position: absolute;
+				width: 50%;
+				height: 50%;
+				border-radius: 50%;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				z-index: 1;
+			}
+
+			&.green {
+				&::after {
+					background-color: $green-light;
+					animation-delay: 0s;
+				}
+
+				&::before {
+					background-color: #10b981;
+				}
+			}
+
+			&.blue {
+				&::after {
+					background-color: $blue-light;
+					animation-delay: 0.2s;
+				}
+				&::before {
+					background-color: $blue;
+				}
+			}
+
+			&.red {
+				&::after {
+					background-color: $red-light;
+					animation-delay: 0.4s;
+				}
+				&::before {
+					background-color: $red;
+				}
+			}
+
+			&.yellow {
+				&::after {
+					background-color: $yellow-light;
+					animation-delay: 0.6s;
+				}
+				&::before {
+					background-color: $yellow;
+				}
+			}
+		}
+
+		&_content {
+			display: flex;
+			flex-direction: column;
+
+			.value {
+				font-weight: 700;
+				font-size: 24px;
+				line-height: 142%;
+				color: #1c2434;
+				font-family: $second-family;
+				sup {
+					font-size: 50%;
+				}
+			}
+
+			.name {
+				font-weight: 500;
+				font-size: 14px;
+				line-height: 157%;
+				color: #64748b;
+			}
+		}
+	}
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	50% {
+		transform: scale(1.1);
+		opacity: 0.7;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}

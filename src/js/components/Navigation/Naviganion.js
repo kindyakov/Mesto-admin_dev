@@ -44,7 +44,6 @@ class Navigation {
     } else {
       const defaultPath = Object.keys(this.pages)[0];
       window.location.hash = defaultPath;
-      this.loadContent(defaultPath);
     }
   }
 

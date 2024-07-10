@@ -30,6 +30,12 @@ export const getDashboardMarketing = getCreate('/_dashboard_marketing_')
 
 export const getFuturePayments = getCreate('/_get_future_payments_')
 
+export const getRooms = getCreate('/_main_rooms_/')
+
+export const getWarehousesInfo = getCreate('/_get_warehouses_info_for_admin_')
+
+export const getOldClient = getCreate('/_get_old_client_data_')
+
 export async function getClientTotal(userId) {
   try {
     const response = await api.get(`/_get_client_total_/${userId}/`)
