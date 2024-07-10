@@ -1,12 +1,13 @@
 .output-info {
 	position: fixed;
 	top: 0;
+	left: 50%;
+	transform: translate(-50%, -100%);
+	width: 100%;
 	visibility: hidden;
 	opacity: 0;
 	z-index: 15;
-	left: 50%;
-	top: 0;
-	transform: translate(-50%, -100%);
+
 	user-select: none;
 
 	&._active {
@@ -40,6 +41,39 @@
 		&._warning {
 			background-color: $yellow-light;
 			color: $yellow;
+		}
+
+		&.is-confirm {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			> div {
+				display: flex;
+				justify-content: center;
+				gap: 10px;
+				button {
+					border-radius: 4px;
+					padding: 10px 20px;
+					font-size: 16px;
+					background-color: #fff;
+					transition: 0.1s;
+					box-shadow: 0 2px 3px #ccc;
+
+					&.confirm-yes {
+						background-color: $blue;
+						color: #fff;
+					}
+
+					&:hover {
+						box-shadow: 0 3px 3px #ccc;
+						opacity: 0.8;
+					}
+
+					&:active {
+						transform: translate(0, 1px);
+					}
+				}
+			}
 		}
 	}
 

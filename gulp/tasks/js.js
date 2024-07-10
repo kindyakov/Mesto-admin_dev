@@ -10,23 +10,6 @@ const js = () => {
           message: 'Error: <%= error.message %>'
         })
       ))
-      // .pipe(app.plugins.if(app.isDev, prettier({
-      //   "trailingComma": "none",
-      //   "tabWidth": 2,
-      //   "useTabs": true,
-      //   "semi": false,
-      //   "singleQuote": true,
-      //   "jsxSingleQuote": true,
-      //   "arrowParens": "avoid",
-      //   "importOrder": [
-      //     "<THIRD_PARTY_MODULES>",
-      //     "/modules/",
-      //     "^../(.*)",
-      //     "^./(.*)"
-      //   ],
-      //   "importOrderSeparation": false,
-      //   "importOrderSortSpecifiers": true
-      // })))
       .pipe(webpack({
         mode: app.isBuild ? 'production' : 'development',
         output: {
@@ -37,6 +20,45 @@ const js = () => {
             {
               test: /\.css$/,
               use: ['style-loader', 'css-loader']
+            },
+            {
+              test: /\.html$/,
+              use: [
+                {
+                  loader: 'html-loader',
+                  options: {
+                    sources: {
+                      list: [
+                        '...',
+                        {
+                          tag: 'img',
+                          attribute: 'src',
+                          type: 'src',
+                          filter: (tag, attribute, attributes, resourcePath) => {
+                            return false;
+                          }
+                        },
+                        {
+                          tag: 'a',
+                          attribute: 'href',
+                          type: 'src',
+                          filter: (tag, attribute, attributes, resourcePath) => {
+                            return false;
+                          }
+                        },
+                        {
+                          tag: 'use',
+                          attribute: 'xlink:href',
+                          type: 'src',
+                          filter: (tag, attribute, attributes, resourcePath) => {
+                            return false;
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
             }
           ]
         },

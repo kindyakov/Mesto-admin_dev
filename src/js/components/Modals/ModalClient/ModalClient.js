@@ -1,5 +1,5 @@
-import { Modal } from "../../../modules/myModal.js";
-import { Loader } from "../../../modules/myLoader.js";
+import BaseModal from "../BaseModal.js";
+import content from './content.html'
 
 import { agreementHtml } from "./html.js";
 import { validateClient } from "./validate.js";
@@ -10,16 +10,15 @@ import { formatPhoneNumber } from "../../../utils/formattingPrice.js";
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
 import { outputInfo } from "../../../utils/outputinfo.js";
 
-class ModalClient {
-  constructor(options) {
-    this.modal = new Modal({ unique: 'modal-client' })
-    this.modalBody = this.modal.modalBody
-    this.loader = new Loader(this.modalBody)
+class ModalClient extends BaseModal {
+  constructor(options = {}) {
+    super(content, {
+      cssClass: ['modal-client'],
+      ...options
+    })
     this.userId = null
-    this.open = this.modal.open.bind(this.modal)
-    this.close = this.modal.close.bind(this.modal)
-    this.modal.onOpen = this.handleOpen.bind(this)
-    this.modal.onClose = this.onCloseModal.bind(this)
+    this.isEdit = false
+
     this.init()
   }
 
@@ -48,12 +47,14 @@ class ModalClient {
 
           // this.changeData(formData).finally(() => {
           btn.classList.remove('_is-edit')
+          this.isEdit = false
           this.disableEditInput(this.formClientData)
           // })
         }
       })
     } else {
       btn.classList.add('_is-edit')
+      this.isEdit = true
       this.enableEditInput(this.formClientData)
     }
   }
@@ -79,7 +80,7 @@ class ModalClient {
         el.classList.remove('confirmed', 'not-confirmed')
         el.classList.add(`${value ? 'confirmed' : 'not-confirmed'}`)
       } else {
-        if (renderName === 'user_id') {
+        if (renderName === 'user_id' && el.tagName === 'BUTTON') {
           el.setAttribute('data-user-id', client[renderName])
         } else {
           el.textContent = value
@@ -124,10 +125,29 @@ class ModalClient {
     }
   }
 
-  onCloseModal() {
+  onClose() {
     this.disableEditInput(this.formClientData, [
       { el: this.modalBody.querySelector('.btn-edit-client-data'), delClass: '_is-edit' }
     ])
+  }
+
+  beforeClose() {
+    if (this.isEdit) {
+      outputInfo({
+        msg: 'У вас есть несохраненные изменения.</br>Вы уверены, что хотите закрыть окно?',
+        msg_type: 'warning',
+        isConfirm: true
+      }, isConfirm => {
+        if (isConfirm) {
+          this.isEdit = false
+          this.close()
+        }
+      });
+
+      return false;
+    } else {
+      return true;
+    }
   }
 
   async changeData(formData) {
@@ -144,9 +164,7 @@ class ModalClient {
     }
   }
 
-  async handleOpen() {
-    console.log(this.modal)
-    
+  async onOpen() {
     try {
       this.loader.enable()
       const data = await getClientTotal(this.userId)

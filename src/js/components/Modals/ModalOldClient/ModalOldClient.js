@@ -1,4 +1,6 @@
-import { Modal } from "../../../modules/myModal.js";
+import BaseModal from "../BaseModal.js";
+import content from './content.html'
+
 import { Loader } from "../../../modules/myLoader.js";
 
 import { api } from "../../../settings/api.js";
@@ -7,24 +9,13 @@ import { getFormattedDate } from "../../../utils/getFormattedDate.js";
 import { outputInfo } from "../../../utils/outputinfo.js";
 import { getOldClient } from "../../../settings/request.js";
 
-import { validateClient } from "./validate.js";
-
-class ModalOldClient {
-  constructor(options) {
-    this.modal = new Modal({ unique: 'modal-old-client' })
-    this.modalBody = this.modal.modalBody
+class ModalOldClient extends BaseModal {
+  constructor(options = {}) {
+    super(content, {
+      cssClass: ['modal-old-client'],
+      ...options
+    })
     this.loader = new Loader(this.modalBody)
-    this.open = this.modal.open.bind(this.modal)
-    this.close = this.modal.close.bind(this.modal)
-    this.modal.onOpen = this.handleOpen.bind(this)
-    this.init()
-  }
-  init() {
-    if (!this.modalBody) return
-    this.formClientData = this.modalBody.querySelector('.form-client-data')
-    this.validatorClient = validateClient(this.formClientData)
-
-    this.events()
   }
 
   renderModal({ client }) {
@@ -38,7 +29,6 @@ class ModalOldClient {
           el.value = formatPhoneNumber(value)
         } else if (el.name === 'birthday') {
           el.value = getFormattedDate(value)
-          this.validatorClient?.calendarBirthday.setDate(getFormattedDate(value), true, "d.m.Y")
         } else {
           el.value = value
         }
@@ -53,20 +43,23 @@ class ModalOldClient {
     })
   }
 
-  async handleOpen(e) {
-    try {
-      this.loader.enable()
-      console.log(e)
-      
-      // const data = await getOldClient({ user_id: this.userId })
-      // this.renderModal(data)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      this.loader.disable()
-    }
+  async onOpen() {
+    // try {
+    //   this.loader.enable()
+    //   const btn = e.target.closest('[data-modal]')
+    //   // const userId = btn.getAttribute('data-user-id')
+    //   // const data = await getOldClient({ user_id: userId })
+    //   // if (data) {
+    //   // this.renderModal(data)
+    //   // }
+    // } catch (error) {
+    //   console.error(error)
+    // } finally {
+    //   this.loader.disable()
+    // }
   }
 }
 
 const modalOldClient = new ModalOldClient()
+
 export default modalOldClient

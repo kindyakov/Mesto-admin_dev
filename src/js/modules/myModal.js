@@ -87,7 +87,7 @@ export class Modal {
   handleDocumentMouseUp(e) {
     if (this.mouseDownTarget && this.mouseDownTarget === e.target && !e.target.closest(`.${this.options.modalContent}`) && !e.target.closest('.flatpickr-calendar')) {
       if (e.target.closest('.modal')?.classList.contains('_active')) {
-        this.options.isClose && this.close(e);
+        this.options.isClose && this.close(e.target.closest('.modal'));
       }
     }
     this.mouseDownTarget = null;

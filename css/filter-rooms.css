@@ -1,0 +1,75 @@
+.filter-rooms {
+  max-width: 300px;
+  width: 100%;
+  border: 1px solid #eaecee;
+  border-radius: 4px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.15);
+}
+.filter-rooms__content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px 20px 20px 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.filter-rooms__block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.filter-rooms__block_name {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 155%;
+  color: #212b36;
+}
+.filter-rooms__block_content {
+  width: 100%;
+  display: flex;
+}
+.filter-rooms__wp-input {
+  flex: 1 1 50%;
+  position: relative;
+}
+.filter-rooms__wp-input .pref {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translate(0, -50%);
+  font-weight: 400;
+  font-size: 15px;
+  color: #64748b;
+}
+.filter-rooms__wp-input input {
+  border: 1px solid #e2e8f0;
+}
+.filter-rooms__wp-input:nth-child(1) input {
+  border-radius: 4px 0 0 4px;
+}
+.filter-rooms__wp-input:nth-child(2) input {
+  border-radius: 0 4px 4px 0;
+  border-left: none;
+}
+.filter-rooms__input {
+  padding-left: 35px;
+  height: 45px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #212b36;
+  width: 100%;
+}
+.filter-rooms__footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+.filter-rooms__button {
+  width: 100%;
+}

@@ -51,6 +51,7 @@
     "gulp-webp-html-nosvg": "^1.1.1",
     "gulp-webpcss": "^1.1.1",
     "gulp-zip": "^5.1.0",
+    "html-loader": "^5.0.0",
     "prettier": "^3.3.0",
     "sass": "^1.66.1",
     "simple-git": "^3.24.0",

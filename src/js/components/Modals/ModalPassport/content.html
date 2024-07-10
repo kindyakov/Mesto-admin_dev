@@ -1,0 +1,85 @@
+<div class='modal__body'>
+  <div class="modal__header">
+    <div class="modal__header_auto">
+      <button class="modal__header_button-prev btn-open-prev-modal modal-close" data-modal=".modal-client">
+        <svg class='icon icon-arrow-right-circle'>
+          <use xlink:href='img/svg/sprite.svg#arrow-right-circle'></use>
+        </svg>
+      </button>
+      <h3 class="modal__title">Паспорт</h3>
+    </div>
+  </div>
+  <div class="modal__block">
+    <div class="modal__block_item">
+      <div class="modal__block_top">
+        <h4 class="modal__sub-title">Данные:</h4>
+        <button class="button-text btn-edit-client-data">
+          <span class="span-edit">Редактировать</span>
+          <span class="span-save">Сохранить</span>
+          <svg class='icon icon-edit'>
+            <use xlink:href='img/svg/sprite.svg#edit'></use>
+          </svg>
+          <svg class='icon icon-save'>
+            <use xlink:href='img/svg/sprite.svg#save'></use>
+          </svg>
+        </button>
+      </div>
+      <form class="modal__form form-client-data">
+        <div class="modal__form_item">
+          <span>Номер:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="no" readonly="true" data-render="no"
+              autocomplete="off" inputmode="tel">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Серия:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="series" readonly="true"
+              data-render="series" autocomplete="off" inputmode="tel">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Дата выдачи:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="tel" class="modal__form_input input not-edit" name="issue_date" readonly="true"
+              data-render="issue_date" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Статус:</span>
+          <div class="modal__form_wp-input wp-input">
+            <select name="approved" data-render="approved" class="init-custom-select"
+              data-special-select="select-passport">
+              <option value="1">Подтвержден</option>
+              <option value="0">Не подтвержден</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Кем выдан:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="email" class="modal__form_input input not-edit" name="issued_by" readonly="true"
+              data-render="issued_by" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Код подразделения:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="email" class="modal__form_input input not-edit" name="subdivision" readonly="true"
+              data-render="subdivision" autocomplete="off">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal__block_item">
+      <div class="modal__block_img">
+        <img src="" alt="Фото паспорта">
+      </div>
+    </div>
+  </div>
+  <div class="modal__footer">
+    <button class="button modal-close" data-modal=".modal-change-photo-passport"><span>Заменить
+        фотографию</span></button>
+  </div>
+</div>

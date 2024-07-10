@@ -474,3 +474,25 @@
 	}
 }
 //====================================================================================================
+.tingle-modal {
+	background: rgba(0, 0, 0, 0.3);
+	z-index: 14;
+
+	&.modal-auth {
+		background: #1c2434;
+	}
+
+	.tingle-modal-box {
+		width: 100%;
+		max-width: 630px;
+	}
+
+	.tingle-modal-box__content {
+		padding: 0;
+	}
+
+	.modal__body {
+		transform: scale(1);
+		max-width: none;
+	}
+}

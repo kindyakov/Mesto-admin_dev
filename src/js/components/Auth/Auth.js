@@ -1,8 +1,8 @@
+import modalAuth from "../Modals/ModalAuth/ModalAuth.js"
 import { validate } from "./validate.js"
 import { outputInfo } from "../../utils/outputinfo.js"
 import { api } from "../../settings/api.js"
 import { Loader } from "../../modules/myLoader.js"
-import { Modal } from "../../modules/myModal.js"
 import { getCookie, deleteCookie } from "../../utils/getCookie.js"
 
 class Auth {
@@ -14,13 +14,14 @@ class Auth {
     }
 
     this.options = Object.assign(defaultOptions, options)
+    this.modal = modalAuth
 
-    this.form = document.querySelector('.form-authorization')
+    this.form = this.modal.modalBody.querySelector('.form-authorization')
+
     if (!this.form) return
 
     this.validator = validate(this.form)
 
-    this.modal = new Modal({ unique: 'modal-auth', isClose: false, isOpen: true })
     this.loader = new Loader(document.querySelector('.modal-auth .modal__body'))
     this.mainLoader = document.querySelector('.body-loader')
 

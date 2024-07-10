@@ -1,0 +1,28 @@
+.dashboards__table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 30px;
+}
+.dashboards__table._open .dashboards__table-toggle .icon {
+  transform: rotate(0);
+}
+.dashboards__table-toggle {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 120%;
+  color: #373f47;
+  gap: 10px;
+}
+.dashboards__table-toggle .icon {
+  fill: #717d8a;
+  width: 10px;
+  height: 5px;
+  transition: 0.2s;
+  transform: rotate(180deg);
+}
+.dashboards__table-toggle._active .icon {
+  transform: rotate(180deg);
+}

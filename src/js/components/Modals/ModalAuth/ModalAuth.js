@@ -1,14 +1,16 @@
 import BaseModal from "../BaseModal.js";
 import content from './content.html'
-class ModalAddClient extends BaseModal {
+
+class ModalAuth extends BaseModal {
   constructor(options = {}) {
     super(content, {
-      cssClass: ['modal-add-client'],
+      cssClass: ['modal-auth'],
+      closeMethods: [],
       ...options
     })
   }
 }
 
-const modalAddClient = new ModalAddClient()
+const modalAuth = new ModalAuth()
 
-export default modalAddClient
+export default modalAuth

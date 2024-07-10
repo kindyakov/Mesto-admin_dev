@@ -1,14 +1,15 @@
 import BaseModal from "../BaseModal.js";
 import content from './content.html'
-class ModalAddClient extends BaseModal {
+
+class ModalPassport extends BaseModal {
   constructor(options = {}) {
     super(content, {
-      cssClass: ['modal-add-client'],
+      cssClass: ['modal-passport'],
       ...options
     })
   }
 }
 
-const modalAddClient = new ModalAddClient()
+const modalPassport = new ModalPassport()
 
-export default modalAddClient
+export default modalPassport
