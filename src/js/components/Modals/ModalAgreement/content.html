@@ -1,0 +1,114 @@
+<div class='modal__body'>
+  <div class="modal__header">
+    <div class="modal__header_auto">
+      <h3 class="modal__title">Детали договора (№<span data-render="agrid,text"></span>):</h3>
+    </div>
+    <span>Предстоящий платеж: <b data-render="future_payment_date,date">02.03.2024</b></span>
+  </div>
+  <div class="modal__block">
+
+    <div class="modal__block_item">
+      <div class="modal__block_top">
+        <h4 class="modal__sub-title">О клиенте:</h4>
+        <button class="button-text btn-edit-client-data">
+          <span class="span-edit">Редактировать</span>
+          <span class="span-save">Сохранить</span>
+          <svg class='icon icon-edit'>
+            <use xlink:href='img/svg/sprite.svg#edit'></use>
+          </svg>
+          <svg class='icon icon-save'>
+            <use xlink:href='img/svg/sprite.svg#save'></use>
+          </svg>
+        </button>
+      </div>
+      <form class="modal__form form-agreement-data">
+        <div class="modal__form_item" style="grid-column: span 2;">
+          <span>ФИО</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="fullname" readonly="true"
+              data-render="fullname,text" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Менеджер</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="manager_name" readonly="true"
+              data-render="manager_name,text" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Дата начала аренды</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="agrbegdate" readonly="true"
+              data-render="agrbegdate,date" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Плановая дата окончания</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="agrplanenddate" readonly="true"
+              data-render="agrplanenddate,date" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Дата закрытия договора</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="agrenddate" readonly="true"
+              data-render="agrenddate,date" autocomplete="off">
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal__block_item">
+      <div class="modal__block_grid-50">
+        <div class="modal__box">
+          <h4 class="modal__sub-title">Платежи:</h4>
+          <div class="modal__box_content">
+            <div class="modal__box_list payments-list">
+
+            </div>
+            <div class="modal__box_footer">
+              <button class="button-text blue" data-modal="modal-add-payment">
+                <span>Добавить</span>
+                <svg class='icon icon-circle-plus' style="fill: none;">
+                  <use xlink:href='img/svg/sprite.svg#circle-plus'></use>
+                </svg>
+              </button>
+              <button class="button-show-all"><span>Показать все</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal__box">
+          <h4 class="modal__sub-title">Возвраты по договору:</h4>
+          <div class="modal__box_content">
+            <div class="modal__box_list returns-list">
+
+            </div>
+            <div class="modal__box_footer">
+              <button class="button-text blue" data-modal="modal-add-return">
+                <span>Добавить</span>
+                <svg class='icon icon-circle-plus' style="fill: none;">
+                  <use xlink:href='img/svg/sprite.svg#circle-plus'></use>
+                </svg>
+              </button>
+              <button class="button-show-all"><span>Показать все</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal__block_item">
+      <div class="modal__block_top">
+        <h4 class="modal__sub-title">Ячейки:</h4>
+      </div>
+      <div class="modal__block_grid modal-content-rooms">
+      </div>
+    </div>
+  </div>
+  <div class="modal__footer">
+    <button class="button btn-complete-agreement"><span>Завершить договор</span></button>
+  </div>
+</div>

@@ -175,13 +175,133 @@
 	}
 }
 
-.not-confirmed {
+.textarea {
+	resize: none;
+	transition: 0.2s;
+	height: 190px;
+	width: 100%;
+	border: 1px solid #e2e8f0;
+	border-radius: 4px;
+	padding: 15px 20px;
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 150%;
+
+	&::placeholder {
+		color: #64748b;
+	}
+
+	&:focus {
+		border-color: $blue;
+	}
+
+	&.just-validate-error-field {
+		border-color: $red;
+	}
+
+	&.edit {
+		background-color: #eff4fb;
+	}
+
+	&.not-edit {
+		border-color: #e2e8f0;
+	}
 }
 
-.confirmed {
+.custom-input {
+	width: 100%;
+	color: #64748b;
+	font-weight: 400;
+	font-size: 16px;
+	padding: 7px;
+	height: 50px;
+	border: 1px solid #e2e8f0;
+	border-radius: 4px;
+	background-color: #fff;
+	transition: 0.2s;
+	cursor: pointer;
+
+	display: flex;
+	align-items: center;
+	gap: 5px;
+
+	overflow-x: auto;
+	overflow-y: hidden;
+
+	&::-webkit-scrollbar {
+		width: 2px;
+		height: 2px;
+	}
+
+	&__item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: auto;
+		border: 0.5px solid #e2e8f0;
+		border-radius: 3px;
+		padding: 6px 10px;
+		height: 36px;
+		background-color: #eff4fb;
+
+		font-weight: 400;
+		font-size: 16px;
+		color: #637381;
+
+		button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 5px;
+			.icon-close {
+				width: 10px;
+				height: 10px;
+				fill: #637381;
+			}
+		}
+	}
+
+	&:hover {
+		-webkit-box-shadow: 0px 0px 8px 0px rgba(60, 80, 224, 0.2) inset;
+		-moz-box-shadow: 0px 0px 8px 0px rgba(60, 80, 224, 0.2) inset;
+		box-shadow: 0px 0px 8px 0px rgba(60, 80, 224, 0.2) inset;
+	}
+
+	&._focus {
+		border-color: $blue;
+	}
+
+	&.just-validate-error-field {
+		border-color: $red;
+	}
 }
 
-.item-num {
+.input-checkbox {
+	display: none;
+	&:checked + .label-checkbox {
+		border-color: $blue;
+		.icon {
+			opacity: 1;
+		}
+	}
 }
-.item-info {
+
+.label-checkbox {
+	width: 20px;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: 0.2s;
+	cursor: pointer;
+	border: 1px solid #64748b;
+	border-radius: 4px;
+	user-select: none;
+	.icon {
+		width: 12px;
+		height: 12px;
+		stroke: $blue;
+		fill: $blue;
+		opacity: 0;
+	}
 }

@@ -12,9 +12,17 @@
 		display: none;
 		flex-direction: column;
 		gap: 30px;
+
 		&._active {
 			display: flex;
 		}
+	}
+
+	&__title {
+		font-weight: 700;
+		font-size: 28px;
+		line-height: 140%;
+		color: #212b36;
 	}
 
 	&__filter {

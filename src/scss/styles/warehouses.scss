@@ -141,6 +141,7 @@
 	}
 
 	&__svg-cell {
+		cursor: pointer;
 		&[data-rented='0'] {
 			rect {
 				fill: $green-light;

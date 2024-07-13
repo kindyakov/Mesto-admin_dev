@@ -9,10 +9,11 @@ const defaultOptions = {
   gap: 10,
   isConfirm: false, // Новая опция для подтверждения
   animateShow: [
-    { transform: 'translate(-50%, -100%) scale(0.5)', opacity: '0', visibility: 'hidden' },
+    { transform: 'translate(-50%, -100%) scale(0)', opacity: '0', visibility: 'hidden' },
+    { transform: 'translate(-50%, 20px) scale(1.1)', opacity: '1', visibility: 'visible', offset: 0.7 },
     { transform: 'translate(-50%, 20px) scale(1)', opacity: '1', visibility: 'visible' }
   ],
-  throttleTime: 1000 // Добавляем время троттлинга в миллисекундах
+  throttleTime: 500 // Добавляем время троттлинга в миллисекундах
 }
 
 let lastCallTime = 0;
@@ -28,7 +29,7 @@ export const outputInfo = (options, callback) => {
 
   const body = document.body
 
-  const { msg, msg_type, animateShow, duration, removeTime, gap, isConfirm } = Object.assign(defaultOptions, options)
+  const { msg, msg_type, animateShow, duration, removeTime, gap, isConfirm } = Object.assign({}, defaultOptions, options)
 
   let outputInfo = document.querySelector('.output-info')
   let spanArr = []
@@ -68,7 +69,7 @@ export const outputInfo = (options, callback) => {
 
   const spanHeight = span.getBoundingClientRect().height
 
-  const anim = span.animate(animateShow, { duration: duration });
+  const anim = span.animate(animateShow, { duration: duration, easing: 'ease-in-out' });
   anim.addEventListener('finish', () => finishAnim(isConfirm));
 
   addGap()

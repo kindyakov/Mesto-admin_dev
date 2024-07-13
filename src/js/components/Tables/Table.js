@@ -23,7 +23,7 @@ class Table {
       rowData: [],
       pagination: true,
       paginationPageSize: 5,
-      paginationPageSizeSelector: [5, 10, 20],
+      paginationPageSizeSelector: [5, 10, 15, 20],
       getLocaleText: this.getLocaleText,
       suppressRowClickSelection: true, // Отключение выбора строки при клике на ячейку
       rowSelection: 'multiple', // Включение множественного выбора строк
@@ -58,8 +58,8 @@ class Table {
     this.gridOptions = Object.assign(defaultoptions, options)
 
     this.columnDefs = []
-    this.grid = createGrid(document.querySelector(selector), this.gridOptions);
-    this.table = document.querySelector(selector)
+    this.grid = createGrid(this.gridOptions.wrapper.querySelector(selector), this.gridOptions);
+    this.table = this.gridOptions.wrapper.querySelector(selector)
 
     this.onPageChange = this.params.onPageChange
     this.onSubmitSearch = this.params.onSubmitSearch
@@ -190,18 +190,29 @@ class Table {
   }
 
   // Срабатывает при change у checkbox
-  onRowSelected(params) {
-    this.selectedRows = this.gridApi.getSelectedRows();
+  onRowSelected(currentData) {
+    this.selectedRows = this.gridApi.getSelectedRows()
     this.btnTableUploadExcel.setAttribute('data-count', this.selectedRows.length ? `(${this.selectedRows.length})` : '')
+    this.handleRowSelected(currentData, this.selectedRows)
   }
 
   // Обработчик клика по кнопке "Выгрузить в excel"
   handleBtnUploadExcel() {
-    if (this.selectedRows.length) {
-      // ? Выполнить запрос на скачивание excel файла
-    } else {
-      outputInfo({ msg: 'Выберите в таблице строчку', msg_type: 'warning' })
-    }
+    // if (this.selectedRows.length) {
+    // ? Выполнить запрос на скачивание excel файла
+    this.download(this.selectedRows)
+    this.gridApi.deselectAll()
+    // } else {
+    // outputInfo({ msg: 'Выберите в таблице строчку', msg_type: 'warning' })
+    // }
+  }
+
+  handleRowSelected() {
+
+  }
+
+  async download() {
+
   }
 
   enableEditing(row) {

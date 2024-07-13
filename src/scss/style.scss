@@ -63,6 +63,7 @@ body {
 
 ._container {
 	min-width: 100%;
+	min-height: 100%;
 	padding: 45px;
 	@media (max-width: $md1) {
 		padding: 20px;
@@ -104,3 +105,7 @@ body {
 @import 'styles/filter-rooms';
 
 @import 'pages/dashboards';
+
+._none {
+	display: none;
+}

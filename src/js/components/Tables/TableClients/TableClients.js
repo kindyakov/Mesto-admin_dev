@@ -3,7 +3,6 @@ import Inputmask from "inputmask";
 import Table from '../Table.js';
 import { validateRow } from './validate.js';
 
-import modalClient from '../../Modals/ModalClient/ModalClient.js';
 import { api } from "../../../settings/api.js";
 
 import { actions } from '../utils/actions.js';
@@ -68,13 +67,6 @@ class TableClients extends Table {
     this.enableEditing = this.enableEditing.bind(this)
 
     this.onChangeTypeUser = this.params.onChangeTypeUser
-
-    // if (this.params.selectTypeUser) {
-    //   this.selectTypeUser = new Select({
-    //     uniqueName: 'select-filter-table-client',
-    //     onChange: this.onChangeTypeUser
-    //   })
-    // } 
   }
 
   actionCellRenderer(params) {
@@ -82,28 +74,28 @@ class TableClients extends Table {
     const row = params.eGridCell.closest('.ag-row')
     const button = document.createElement('button');
     button.classList.add('button-table-actions');
-    button.setAttribute('data-user-id', user_id)
-    button.setAttribute('data-user-type', user_type)
     button.innerHTML = `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`;
     let form
 
     const tippyInstance = actions(button, {
       onOpen: () => {
-        modalClient.userId = user_id
-        modalClient.open()
-      }
+        // modalClient.userId = user_id
+        // modalClient.open()
+      },
+      attrModal: 'modal-client',
+      data: params.data
     })
 
     tippyInstance.options.onEdit = instance => {
       this.validatorRow?.revalidate().then(isValid => {
         if (isValid) {
           const formData = new FormData(form)
-          let data = {}
+          let data = { user_id }
 
           formData.set('username', formData.get('username').replace(/[+() -]/g, ''))
           Array.from(formData).forEach(obj => data[obj[0]] = obj[1])
 
-          this.editClient(data).finally(() => {
+          this.editClient({ client: data }).finally(() => {
             instance.toggleEdit(button)
             instance.isEdit = false
 
@@ -147,10 +139,11 @@ class TableClients extends Table {
   }
 
   render(data) {
-    const { clients, cnt_pages, page } = data;
+    const { clients, cnt_pages, page } = data
     this.setPage(page, cnt_pages)
+
     this.gridApi.setGridOption('rowData', clients)
-    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 20, clients.length])
+    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, clients.length])
   }
 
   async editClient(data) {

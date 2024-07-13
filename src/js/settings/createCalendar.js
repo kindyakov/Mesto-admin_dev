@@ -5,7 +5,7 @@ import { Select } from "../modules/mySelect.js";
 const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'октябрь', 'Ноябрь', 'Декабрь',]
 
 export const createCalendar = (input, options = {}) => {
-  let customSelect, uniqueId = Date.now()
+  let customSelect, uniqueId = Math.random()
 
   function handleClickMonthNav(customSelect, instance) {
     customSelect.setValue(instance.currentMonth);

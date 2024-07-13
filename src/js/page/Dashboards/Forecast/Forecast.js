@@ -8,6 +8,8 @@ class Forecast extends Dashboards {
   constructor({ loader }) {
     super({ loader, page: 'forecast' });
     this.warehouseScheme = new Scheme()
+
+    this.currentRented = null
   }
 
   init() {
@@ -40,6 +42,7 @@ class Forecast extends Dashboards {
     btn.classList.add('_active')
     btnActive?.classList.remove('_active')
 
+    this.currentRented = rented
     this.warehouseScheme.filterCell(rented)
   }
 
@@ -67,7 +70,13 @@ class Forecast extends Dashboards {
       this.loader.enable()
       const data = await getRooms(params)
       if (data) {
-        this.warehouseScheme.render(data)
+
+        if (this.currentRented) {
+          this.warehouseScheme.setNumRooms(data.plan_rooms)
+          this.warehouseScheme.filterCell(this.currentRented)
+        } else {
+          this.warehouseScheme.render(data)
+        }
       }
     } catch (error) {
       console.error(error)

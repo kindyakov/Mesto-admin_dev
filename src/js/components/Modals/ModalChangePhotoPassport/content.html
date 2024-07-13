@@ -1,7 +1,7 @@
 <div class='modal__body'>
   <div class="modal__header">
     <div class="modal__header_auto">
-      <button class="modal__header_button-prev btn-open-prev-modal modal-close" data-modal=".modal-client">
+      <button class="modal__header_button-prev btn-open-prev-modal modal-close" data-modal="modal-client">
         <svg class='icon icon-arrow-right-circle'>
           <use xlink:href='img/svg/sprite.svg#arrow-right-circle'></use>
         </svg>
@@ -21,13 +21,15 @@
           <p class="text">
             <span>Нажмите, чтобы загрузить</span><br>или перетащите файл
           </p>
-          <input type="file" name="file" class="input-file">
+          <input type="file" name="file" class="input-file" multiple="false" accept=".png,.jpg,.jpeg" autocomplete="off"
+            style="display: none;">
+          <img src="" class="img">
         </label>
       </div>
     </div>
   </div>
   <div class="modal__footer">
-    <button class="button transparent modal-close" data-modal=".modal-client"><span>Назад</span></button>
+    <button class="button transparent modal-close" data-modal="modal-client"><span>Назад</span></button>
     <button class="button btn-save"><span>Сохранить</span></button>
   </div>
 </div>

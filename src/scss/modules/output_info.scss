@@ -46,7 +46,12 @@
 		&.is-confirm {
 			display: flex;
 			flex-direction: column;
+			color: #000;
+			padding: 10px 20px;
 			gap: 10px;
+			background-color: #fff;
+			box-shadow: 0 3px 10px rgba(128, 128, 128, 0.4);
+
 			> div {
 				display: flex;
 				justify-content: center;

@@ -3,6 +3,7 @@ import { validateRow } from './validate.js';
 
 import { Select } from "../../../modules/mySelect.js";
 import { api } from "../../../settings/api.js";
+import { downloadPayments } from "../../../settings/request.js";
 
 import { actions } from '../utils/actions.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
@@ -69,7 +70,7 @@ class TablePayments extends Table {
   }
 
   actionCellRenderer(params) {
-    const { agrid, user_type } = params.data
+    const { agrid, user_type, payment_id } = params.data
     const row = params.eGridCell.closest('.ag-row')
     const button = document.createElement('button');
     button.classList.add('button-table-actions');
@@ -84,7 +85,7 @@ class TablePayments extends Table {
       this.validatorRow?.revalidate().then(isValid => {
         if (isValid) {
           const formData = new FormData(form)
-          let data = {}
+          let data = { payment_id }
           formData.set('payment_date', getFormattedDate(formData.get('payment_date'), 'YYYY-MM-DD'))
           Array.from(formData).forEach(obj => data[obj[0]] = obj[1])
 
@@ -134,7 +135,7 @@ class TablePayments extends Table {
     const { payments, cnt_pages, page } = data;
     this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', payments)
-    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 20, payments.length])
+    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, payments.length])
   }
 
   async editPayment(data) {
@@ -143,6 +144,27 @@ class TablePayments extends Table {
       const response = await api.post('/_edit_payment_', data)
       if (response.status !== 200) return
       outputInfo(response.data)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loader.disable()
+    }
+  }
+
+  async download(data) {
+    try {
+      this.loader.enable()
+      let reqData = {}
+
+      if (data.length) {
+        const payment_ids = data.map(obj => obj.payment_id)
+        reqData.all_payments = 0
+        reqData.payment_ids = payment_ids
+      } else {
+        reqData.all_payments = 1
+      }
+
+      const res = await downloadPayments(reqData)
     } catch (error) {
       console.error(error)
     } finally {

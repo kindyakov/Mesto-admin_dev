@@ -1,6 +1,17 @@
-class Users {
-  constructor() {
-    console.log('Users')
+import Page from "../Page.js"
+
+
+class Users extends Page {
+  constructor({ loader }) {
+    super({
+      loader,
+      tables: [],
+      page: 'users'
+    });
+  }
+
+  async getData(data = {}) {
+    return []
   }
 }
 

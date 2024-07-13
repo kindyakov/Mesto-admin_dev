@@ -1,3 +1,39 @@
 <div class="main__content content-main" data-content="list-clients">
-  list-clients
+  <h2 class="main__title">Клиенты</h2>
+
+  <div class="table" style="height: 850px;">
+    <div class="table__top">
+      <form class="table__form form-table-search">
+        <select name="user_type" class="init-custom-select" data-special-select="select-filter-table-client"
+          data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
+          <option value="f">Физ.лицо</option>
+          <option value="u">Юр.лицо</option>
+          <option value="f/u">Все</option>
+        </select>
+        <div class="wp-input wp-input-search">
+          <input type="text" name="search_str" placeholder="Поиск" class="input input-table-search" autocomplete="off">
+          <button type="submit" class="button-icon-search">
+            <svg class='icon icon-search'>
+              <use xlink:href='img/svg/sprite.svg#search'></use>
+            </svg>
+          </button>
+        </div>
+      </form>
+      <div class="table__buttuns">
+        <button class="table__button button-table btn-table-add" data-modal="modal-add-client">
+          <span>Добавить</span>
+          <svg class='icon icon-plus'>
+            <use xlink:href='img/svg/sprite.svg#plus'></use>
+          </svg>
+        </button>
+        <button class="table__button button-table btn-table-upload-excel" data-count>
+          <span>Выгрузить в Excel</span>
+          <svg class='icon icon-dow'>
+            <use xlink:href='img/svg/sprite.svg#dow'></use>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="table__content table-clients ag-theme-quartz" style="height: 100%;"></div>
+  </div>
 </div>

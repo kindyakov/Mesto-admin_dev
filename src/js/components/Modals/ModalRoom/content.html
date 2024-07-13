@@ -1,0 +1,76 @@
+<div class='modal__body'>
+  <div class="modal__header">
+    <div class="modal__header_auto">
+      <h3 class="modal__title">Ячейка (№<span data-render="room_id,text"></span>):</h3>
+    </div>
+  </div>
+  <div class="modal__block">
+
+    <div class="modal__block_item">
+      <form class="modal__form form-agreement-data">
+        <div class="modal__form_item">
+          <span>Номер ячейки</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="room_id" readonly="true"
+              data-render="room_id,text" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Склад, этаж</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="warehouse_name" readonly="true"
+              data-render="warehouse_name,text" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Площадь</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="area" readonly="true"
+              data-render="area,area" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Размеры</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="dimensions" readonly="true"
+              data-render="dimensions,text" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Срок аренды</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="days_left" readonly="true"
+              data-render="days_left,day" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Дата начала аренды</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="rentstartdate" readonly="true"
+              data-render="rentstartdate,date" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Плановая дата окончания аренды</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="rentplanenddate" readonly="true"
+              data-render="rentplanenddate,date" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Дата выезда</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="rentenddate" readonly="true"
+              data-render="rentenddate,date" autocomplete="off">
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+  <div class="modal__footer">
+    <button class="button transparent" data-modal="modal-financial-information"><span>Финансовая
+        информация</span></button>
+    <button class="button btn-complete-rent" data-modal="modal-complete-rent"><span>Завершить аренду</span></button>
+  </div>
+</div>

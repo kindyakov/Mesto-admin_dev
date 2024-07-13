@@ -43,13 +43,15 @@ class ModalClient extends BaseModal {
       this.validatorClient.revalidate().then(isValid => {
         if (isValid) {
           const formData = new FormData(this.formClientData)
+          let data = { user_id: this.userId }
           formData.set('username', formData.get('username').replace(/[+() -]/g, ''))
+          Array.from(formData).forEach(obj => data[obj[0]] = obj[1])
 
-          // this.changeData(formData).finally(() => {
-          btn.classList.remove('_is-edit')
-          this.isEdit = false
-          this.disableEditInput(this.formClientData)
-          // })
+          this.editClient({ client: data }).finally(() => {
+            btn.classList.remove('_is-edit')
+            this.isEdit = false
+            this.disableEditInput(this.formClientData)
+          })
         }
       })
     } else {
@@ -61,6 +63,12 @@ class ModalClient extends BaseModal {
 
   renderModal({ client, agreements }) {
     this.renderElements = this.modalBody.querySelectorAll('[data-render]')
+    this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
+
+    this.attrsModal.length && this.attrsModal.forEach(el => {
+      el.setAttribute('data-json', JSON.stringify(client))
+    })
+
     this.renderElements.length && this.renderElements.forEach(el => {
       const renderName = el.getAttribute('data-render')
       const value = client[renderName] ? client[renderName] : ''
@@ -80,11 +88,7 @@ class ModalClient extends BaseModal {
         el.classList.remove('confirmed', 'not-confirmed')
         el.classList.add(`${value ? 'confirmed' : 'not-confirmed'}`)
       } else {
-        if (renderName === 'user_id' && el.tagName === 'BUTTON') {
-          el.setAttribute('data-user-id', client[renderName])
-        } else {
-          el.textContent = value
-        }
+        el.textContent = value
       }
     })
 
@@ -150,13 +154,12 @@ class ModalClient extends BaseModal {
     }
   }
 
-  async changeData(formData) {
+  async editClient(data) {
     try {
       this.loader.enable()
-      const response = await api.post('/_edit_client_by_client_', formData)
-      if (response.status !== 200) return null
+      const response = await api.post('/_edit_client_', data)
+      if (response.status !== 200) return
       outputInfo(response.data)
-      return response.data
     } catch (error) {
       console.error(error)
     } finally {
@@ -164,11 +167,16 @@ class ModalClient extends BaseModal {
     }
   }
 
-  async onOpen() {
+  async onOpen(params = null) {
+    if (!params) return
     try {
       this.loader.enable()
-      const data = await getClientTotal(this.userId)
-      this.renderModal(data)
+      const extractData = this.extractData(params)
+      if (!extractData) return
+      const data = await getClientTotal(extractData.user_id + '/')
+      if (data) {
+        this.renderModal(data)
+      }
     } catch (error) {
       console.error(error)
     } finally {

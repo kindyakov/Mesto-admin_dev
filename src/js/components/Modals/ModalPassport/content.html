@@ -1,7 +1,7 @@
 <div class='modal__body'>
   <div class="modal__header">
     <div class="modal__header_auto">
-      <button class="modal__header_button-prev btn-open-prev-modal modal-close" data-modal=".modal-client">
+      <button class="modal__header_button-prev btn-open-prev-modal modal-close" data-modal="modal-client">
         <svg class='icon icon-arrow-right-circle'>
           <use xlink:href='img/svg/sprite.svg#arrow-right-circle'></use>
         </svg>
@@ -24,7 +24,7 @@
           </svg>
         </button>
       </div>
-      <form class="modal__form form-client-data">
+      <form class="modal__form form-passport-data">
         <div class="modal__form_item">
           <span>Номер:</span>
           <div class="modal__form_wp-input wp-input">
@@ -42,15 +42,15 @@
         <div class="modal__form_item">
           <span>Дата выдачи:</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="tel" class="modal__form_input input not-edit" name="issue_date" readonly="true"
+            <input type="text" class="modal__form_input input not-edit" name="issue_date" readonly="true"
               data-render="issue_date" autocomplete="off">
           </div>
         </div>
         <div class="modal__form_item">
           <span>Статус:</span>
-          <div class="modal__form_wp-input wp-input">
+          <div class="modal__form_wp-input">
             <select name="approved" data-render="approved" class="init-custom-select"
-              data-special-select="select-passport">
+              data-special-select="select-passport" disabled>
               <option value="1">Подтвержден</option>
               <option value="0">Не подтвержден</option>
             </select>
@@ -59,14 +59,14 @@
         <div class="modal__form_item">
           <span>Кем выдан:</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="email" class="modal__form_input input not-edit" name="issued_by" readonly="true"
+            <input type="text" class="modal__form_input input not-edit" name="issued_by" readonly="true"
               data-render="issued_by" autocomplete="off">
           </div>
         </div>
         <div class="modal__form_item">
           <span>Код подразделения:</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="email" class="modal__form_input input not-edit" name="subdivision" readonly="true"
+            <input type="text" class="modal__form_input input not-edit" name="subdivision" readonly="true"
               data-render="subdivision" autocomplete="off">
           </div>
         </div>
@@ -74,12 +74,12 @@
     </div>
     <div class="modal__block_item">
       <div class="modal__block_img">
-        <img src="" alt="Фото паспорта">
+        <img src="" alt="Фото паспорта" data-render="passp_photo_link">
       </div>
     </div>
   </div>
   <div class="modal__footer">
-    <button class="button modal-close" data-modal=".modal-change-photo-passport"><span>Заменить
+    <button class="button modal-close" data-modal="modal-change-photo-passport"><span>Заменить
         фотографию</span></button>
   </div>
 </div>

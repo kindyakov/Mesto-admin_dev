@@ -5,7 +5,7 @@ export function initializeModalTriggers(modalMap) {
       const modalClass = button.getAttribute('data-modal');
       const modalInstance = modalMap[modalClass];
       if (modalInstance) {
-        modalInstance.open();
+        modalInstance.open(button);
       }
     }
   });

@@ -20,6 +20,12 @@ class ModalOldClient extends BaseModal {
 
   renderModal({ client }) {
     this.renderElements = this.modalBody.querySelectorAll('[data-render]')
+    this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
+
+    this.attrsModal.length && this.attrsModal.forEach(el => {
+      el.setAttribute('data-json', JSON.stringify(client))
+    })
+
     this.renderElements.length && this.renderElements.forEach(el => {
       const renderName = el.getAttribute('data-render')
       const value = client[renderName] ? client[renderName] : ''
@@ -43,20 +49,21 @@ class ModalOldClient extends BaseModal {
     })
   }
 
-  async onOpen() {
-    // try {
-    //   this.loader.enable()
-    //   const btn = e.target.closest('[data-modal]')
-    //   // const userId = btn.getAttribute('data-user-id')
-    //   // const data = await getOldClient({ user_id: userId })
-    //   // if (data) {
-    //   // this.renderModal(data)
-    //   // }
-    // } catch (error) {
-    //   console.error(error)
-    // } finally {
-    //   this.loader.disable()
-    // }
+  async onOpen(params) {
+    if (!params) return
+    try {
+      this.loader.enable()
+      const extractData = this.extractData(params)
+      if (!extractData) return
+      const data = await getOldClient({ user_id: extractData.user_id })
+      if (data) {
+        this.renderModal(data)
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loader.disable()
+    }
   }
 }
 

@@ -10,7 +10,7 @@ export function agreementHtml(data) {
   innerContainer.innerHTML = `
     <span class="item-num">${data.agrid ? '№' + data.agrid : ''}</span>
     <p class="item-info">${data.days_left ? data.days_left + ` ${declOfNum(+data.days_left, ['день', 'дня', 'дней'])} до окончания` : ''}</p>
-    <button class="item-more-detailed" data-agr-id="${data.agrid ? data.agrid : ''}"><span>Подробнее</span></button>
+    <button class="item-more-detailed" data-agr-id="${data.agrid ? data.agrid : ''}" data-json="${JSON.stringify(data)}"><span>Подробнее</span></button>
   `;
 
   const itemInfo = innerContainer.querySelector('.item-info');

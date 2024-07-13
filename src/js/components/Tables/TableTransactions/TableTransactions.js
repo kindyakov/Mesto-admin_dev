@@ -148,7 +148,7 @@ class TableTransactions extends Table {
     const { agreements, cnt_pages, page } = data;
     this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', agreements)
-    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 20, agreements.length])
+    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length])
   }
 }
 

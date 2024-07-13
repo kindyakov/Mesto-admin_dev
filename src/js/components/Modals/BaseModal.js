@@ -24,14 +24,26 @@ class BaseModal {
     this.modal.setContent(content);
     this.modalBody = this.modal.modal.querySelector('.modal__body')
     this.loader = new Loader(this.modalBody)
-    const closeButton = this.modal.modal.querySelector('.tingle-modal__close');
+    const closeButton = this.modal.modal.querySelector('.tingle-modal__close')
+
     if (closeButton) {
       closeButton.remove();
     }
+
+    this.modalBody.addEventListener('click', e => {
+      const button = e.target.closest('[data-modal]');
+
+      if (button && button.getAttribute('data-modal')) {
+        this.close()
+      }
+    })
   }
 
-  open() {
-    this.modal.open();
+  open(button = null) {
+    this.modal.open()
+    if (button) {
+      this.onOpen(button)
+    }
   }
 
   close() {
@@ -39,15 +51,20 @@ class BaseModal {
   }
 
   onOpen() {
-    console.log('Modal opened');
   }
 
   onClose() {
-    console.log('Modal closed');
   }
 
   beforeClose() {
     return true;
+  }
+
+  extractData(params) {
+    const isElement = (params instanceof Element);
+    const isObject = (params && typeof params === 'object' && !Array.isArray(params) && params !== null && !(params instanceof Element));
+    if (!isElement && !isObject) return null
+    return isElement ? JSON.parse(params.getAttribute('data-json')) : params
   }
 }
 

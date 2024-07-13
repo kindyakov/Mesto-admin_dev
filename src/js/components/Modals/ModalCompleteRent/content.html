@@ -1,0 +1,47 @@
+<div class='modal__body'>
+  <div class="modal__header">
+    <button class="modal__header_button-prev btn-open-prev-modal modal-close" data-modal="modal-room">
+      <svg class='icon icon-arrow-right-circle'>
+        <use xlink:href='img/svg/sprite.svg#arrow-right-circle'></use>
+      </svg>
+    </button>
+    <div class="modal__header_auto">
+      <h3 class="modal__title">Завершение аренды</h3>
+    </div>
+  </div>
+  <div class="modal__block">
+
+    <div class="modal__block_item">
+      <form class="modal__form form-complete-rent">
+        <div class="modal__form_item" style="grid-column: span 2;">
+          <span>Дата завершения аренды</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="leave_date" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item" style="grid-column: span 2;">
+          <span>Причина завершения</span>
+          <div class="modal__form_wp-input wp-input">
+            <select name="account_article" class="init-custom-select" data-special-select="select-modal-complete-rent">
+              <option value="Высокая цена">Высокая цена</option>
+              <option value="Переезд">Переезд</option>
+              <option value="Больше нет потребности в услуге">Больше нет потребности в услуге</option>
+              <option value="Другая">Другая причина</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal__form_item item-comment _none" style="grid-column: span 2;">
+          <span>Комментарий</span>
+          <div class="modal__form_wp-input wp-input">
+            <textarea name="comment" placeholder="Комментарий" class="textarea"></textarea>
+          </div>
+        </div>
+        <button type="submit" style="display: none;"></button>
+      </form>
+    </div>
+
+  </div>
+  <div class="modal__footer">
+    <button class="button btn-complete-rent"><span>Завершить аренду</span></button>
+  </div>
+</div>

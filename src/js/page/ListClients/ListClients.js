@@ -1,6 +1,27 @@
-class ListClients {
-  constructor() {
-    console.log('ListClients');
+import Page from "../Page.js";
+import TableClients from "../../components/Tables/TableClients/TableClients.js";
+import { getClients } from "../../settings/request.js";
+
+class ListClients extends Page {
+  constructor({ loader }) {
+    super({
+      loader,
+      tables: [
+        {
+          tableSelector: '.table-clients',
+          TableComponent: TableClients,
+          options: {
+            paginationPageSize: 15
+          }
+        }
+      ],
+      page: 'list-clients'
+    });
+
+  }
+
+  async getData(data = {}) {
+    return getClients(data);
   }
 }
 

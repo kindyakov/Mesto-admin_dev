@@ -4,13 +4,11 @@ import Table from '../Table.js';
 import { api } from "../../../settings/api.js";
 
 import { actions } from '../utils/actions.js';
-import { formattingPrice, formatPhoneNumber } from '../../../utils/formattingPrice.js';
-import { declOfNum } from '../../../utils/declOfNum.js';
+import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
-import { outputInfo } from "../../../utils/outputinfo.js";
-import { Select } from "../../../modules/mySelect.js";
 import { getFormattedDate } from '../../../utils/getFormattedDate.js';
+import { downloadAgreement } from '../../../settings/request.js';
 
 
 class TableAgreements extends Table {
@@ -69,6 +67,7 @@ class TableAgreements extends Table {
 
     const mergedOptions = Object.assign({}, defaultOptions, options);
     const mergedParams = Object.assign({}, defaultParams, params);
+
     super(selector, mergedOptions, mergedParams);
 
     this.actionCellRenderer = this.actionCellRenderer.bind(this)
@@ -82,15 +81,15 @@ class TableAgreements extends Table {
     const row = params.eGridCell.closest('.ag-row')
     const button = document.createElement('button');
     button.classList.add('button-table-actions');
-    button.setAttribute('data-user-id', user_id)
-    button.setAttribute('data-user-type', user_type)
     button.innerHTML = `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`;
     let form
 
     const tippyInstance = actions(button, {
       onOpen: () => {
 
-      }
+      },
+      attrModal: 'modal-agreement',
+      data: params.data
     })
 
     // tippyInstance.options.onEdit = instance => {
@@ -149,7 +148,28 @@ class TableAgreements extends Table {
     const { agreements, cnt_pages, page } = data;
     this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', agreements)
-    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 20, agreements.length])
+    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length])
+  }
+
+  async download(data) {
+    try {
+      this.loader.enable()
+      let reqData = {}
+
+      if (data.length) {
+        const agrIds = data.map(obj => obj.agrid)
+        reqData.all_agrs = 0
+        reqData.agrids = agrIds
+      } else {
+        reqData.all_agrs = 1
+      }
+
+      const res = await downloadAgreement(reqData)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loader.disable()
+    }
   }
 }
 

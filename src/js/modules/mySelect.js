@@ -27,7 +27,7 @@ export class Select {
       placeholder: '',
       isDev: false,
       isDisabled: false,
-      inputHtml: '',
+      inputHtml: `<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>`,
       selectMinWidth: true,
       selectMaxWidth: null,
       maxHeightList: null,

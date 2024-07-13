@@ -12,8 +12,9 @@ class Dashboards {
 
     if (tables.length) {
       tables.forEach(table => {
-        const { TableComponent, tableSelector } = table
-        this.table = new TableComponent(tableSelector)
+        const { TableComponent, tableSelector, options = {}, params = {}
+        } = table
+        this.table = new TableComponent(tableSelector, { ...options, wrapper: this.wrapper }, params)
         this.tables.push(this.table)
       })
     }

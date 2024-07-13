@@ -1,4 +1,8 @@
 export function getFormattedDate(date = new Date(), format = 'DD.MM.YYYY') {
+  if (!date) {
+    return ''
+  }
+
   if (typeof date === 'string') {
     date = new Date(Date.parse(date));
   }

@@ -1,5 +1,6 @@
 import BaseModal from "../BaseModal.js";
 import content from './content.html'
+
 class ModalAddClient extends BaseModal {
   constructor(options = {}) {
     super(content, {

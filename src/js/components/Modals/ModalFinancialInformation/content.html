@@ -1,0 +1,76 @@
+<div class='modal__body'>
+  <div class="modal__header">
+    <button class="modal__header_button-prev btn-open-prev-modal modal-close" data-modal="modal-room">
+      <svg class='icon icon-arrow-right-circle'>
+        <use xlink:href='img/svg/sprite.svg#arrow-right-circle'></use>
+      </svg>
+    </button>
+    <div class="modal__header_auto">
+      <h3 class="modal__title">Фин. информация ячейки (№<span data-render="room_id,text"></span>):</h3>
+    </div>
+  </div>
+  <div class="modal__block">
+
+    <div class="modal__block_item">
+      <form class="modal__form form-agreement-data">
+        <div class="modal__form_item">
+          <span>Баланс ячейки</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="balance" readonly="true"
+              data-render="balance,price" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Осталось дней</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="days_left" readonly="true"
+              data-render="days_left,day" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Аренда</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="price" readonly="true"
+              data-render="price,price" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Депозит</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="deposit" readonly="true"
+              data-render="deposit,price" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Сумма идексикации</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="last_index_sum" readonly="true"
+              data-render="last_index_sum,price" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Дата последней индексации</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="last_index_date" readonly="true"
+              data-render="last_index_date,date" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Сумма будущей индексации</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="future_index_sum" readonly="true"
+              data-render="future_index_sum,price" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Дата будущей индексации</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="future_index_date" readonly="true"
+              data-render="future_index_date,date" autocomplete="off">
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

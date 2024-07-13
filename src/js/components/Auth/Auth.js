@@ -6,7 +6,7 @@ import { Loader } from "../../modules/myLoader.js"
 import { getCookie, deleteCookie } from "../../utils/getCookie.js"
 
 class Auth {
-  constructor(options) {
+  constructor(options = {}) {
     let defaultOptions = {
       redirect: null,
       onAuth: () => { },
@@ -110,6 +110,7 @@ class Auth {
     this.allClose()
     this.modal.open()
     this.isAuth = false
+    this.options.modalMap.length && this.options.modalMap.forEach(modal => modal.close())
   }
 
   allClose() {

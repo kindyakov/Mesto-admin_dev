@@ -1,3 +1,33 @@
 <div class="main__content content-main" data-content="payments">
-  payments
+  <h2 class="main__title">Платежи</h2>
+
+  <div class="table" style="height: 850px;">
+    <div class="table__top">
+      <form class="table__form form-table-search">
+        <div class="wp-input wp-input-search">
+          <input type="text" name="search_str" placeholder="Поиск" class="input input-table-search" autocomplete="off">
+          <button type="submit" class="button-icon-search">
+            <svg class='icon icon-search'>
+              <use xlink:href='img/svg/sprite.svg#search'></use>
+            </svg>
+          </button>
+        </div>
+      </form>
+      <div class="table__buttuns">
+        <button class="table__button button-table btn-table-add" data-modal="">
+          <span>Добавить</span>
+          <svg class='icon icon-plus'>
+            <use xlink:href='img/svg/sprite.svg#plus'></use>
+          </svg>
+        </button>
+        <button class="table__button button-table btn-table-upload-excel" data-count>
+          <span>Выгрузить в Excel</span>
+          <svg class='icon icon-dow'>
+            <use xlink:href='img/svg/sprite.svg#dow'></use>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="table__content table-payments ag-theme-quartz" style="height: 100%;"></div>
+  </div>
 </div>

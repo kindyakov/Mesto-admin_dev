@@ -24,13 +24,16 @@ class Scheme {
 
   filterCell(rented) {
     this.actionsCell(({ cell, cellId }) => {
-      const roomRented = this.numRooms[cellId].rented
-      if (+rented === -1) {
-        cell.setAttribute('data-rented', roomRented)
+      const roomRented = this.numRooms[cellId]?.rented
+
+      if (roomRented === undefined) {
+        cell.removeAttribute('data-rented')
         return
       }
 
-      if (+rented === +roomRented) {
+      if (+rented === -1) {
+        cell.setAttribute('data-rented', roomRented)
+      } else if (+rented === +roomRented) {
         cell.setAttribute('data-rented', roomRented)
       } else {
         cell.removeAttribute('data-rented')
@@ -48,9 +51,8 @@ class Scheme {
   render(data) {
     if (!this.schemes.length) return
     const { plan_rooms } = data
-    this.numRooms = {}
-    plan_rooms.forEach(room => this.numRooms[room.room_id] = room)
 
+    this.setNumRooms(plan_rooms)
     this.actionsCell(({ cell, cellId }) => {
       if (this.numRooms[cellId]) {
         cell.setAttribute('data-rented', this.numRooms[cellId].rented)
@@ -58,6 +60,11 @@ class Scheme {
         cell.removeAttribute('data-rented')
       }
     })
+  }
+
+  setNumRooms(rooms) {
+    this.numRooms = {}
+    rooms.forEach(room => this.numRooms[room.room_id] = room)
   }
 }
 

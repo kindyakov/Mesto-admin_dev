@@ -60,3 +60,165 @@
 		border-color: #e2e8f0 transparent transparent transparent; /* Цвет стрелки */
 	}
 }
+
+.confirmation-modal {
+	width: 100%;
+	max-width: 450px;
+	border-radius: 2px;
+	background-color: #fff;
+	border: 1px solid #e2e8f0;
+	box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.3);
+
+	&__content {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		text-align: center;
+		padding: 20px 50px;
+		@media (max-width: $md5) {
+			padding: 20px 20px;
+		}
+	}
+
+	&__title {
+		font-weight: 700;
+		@include adaptiv-font(24, 18, 1);
+		line-height: 125%;
+		text-align: center;
+		color: #1c2434;
+	}
+
+	&__text {
+		font-weight: 500;
+		font-size: 16px;
+		line-height: 155%;
+		color: #64748b;
+		> span {
+			color: #212b36;
+		}
+	}
+
+	&__rooms {
+		display: flex;
+		justify-content: center;
+		gap: 5px;
+	}
+
+	&__room {
+		padding: 10px !important;
+		font-size: 12px;
+	}
+
+	&__footer {
+		padding: 20px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-top: 1px solid #e2e8f0;
+		gap: 20px;
+	}
+}
+
+.search-modal {
+	max-width: 300px;
+	width: 100%;
+	border: 1px solid #eaecee;
+	border-radius: 4px;
+	background-color: #fff;
+	box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.3);
+
+	display: flex;
+	flex-direction: column;
+
+	&__header {
+		padding: 10px 20px;
+		border-bottom: 1px solid #e2e8f0;
+	}
+
+	&__title {
+		font-weight: 700;
+		font-size: 16px;
+		line-height: 150%;
+		color: #1c2434;
+	}
+
+	&__body {
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+
+		> span {
+			font-weight: 500;
+			font-size: 13px;
+			line-height: 155%;
+			color: #212b36;
+		}
+
+		.wp-input {
+		}
+
+		.input {
+			height: 40px;
+			padding: 10px;
+		}
+	}
+
+	&__content {
+		height: 130px;
+		max-height: 130px;
+		overflow-y: auto;
+
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+
+		&::-webkit-scrollbar {
+			width: 4px;
+			height: 4px;
+		}
+
+		&:has(.not-data) {
+			position: relative;
+		}
+
+		.not-data {
+			position: absolute;
+			top: 0;
+			right: 0;
+			left: 0;
+			bottom: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			text-align: center;
+			font-size: 14px;
+			color: #64748b;
+			line-height: 150%;
+			font-weight: 400;
+			text-align: center;
+		}
+	}
+
+	&__item {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		user-select: none;
+
+		> span {
+			font-weight: 500;
+			font-size: 14px;
+			line-height: 150%;
+			color: #64748b;
+		}
+	}
+
+	&__footer {
+		padding: 10px 20px;
+		.button {
+			width: 100%;
+		}
+	}
+}

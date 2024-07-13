@@ -15,7 +15,7 @@ export class Modal {
       onClose: () => { }
     }
 
-    this.options = Object.assign(defaultoptions, options)
+    this.options = Object.assign({}, defaultoptions, options)
     this.modals = document.querySelectorAll('.modal')
     this.speed = 300
     this.isOpen = false
