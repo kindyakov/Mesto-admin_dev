@@ -1,18 +1,18 @@
 import BaseModal from "../BaseModal.js"
-import content from './content.html'
+import content from "./content.html"
 import { itemHtml } from "../utils/html.js"
 import { validate } from "./validate.js"
 import SearchRoom from "../../SearchRoom/SearchRoom.js"
 
-class ModalBookRoom extends BaseModal {
+class ModalGetGuestAccess extends BaseModal {
   constructor(options = {}) {
     super(content, {
-      cssClass: ['modal-book-room'],
+      cssClass: ['modal-get-guest-access'],
       ...options
     })
 
     this.roomIds = []
-
+    
     this.init()
   }
 
@@ -20,9 +20,9 @@ class ModalBookRoom extends BaseModal {
     if (!this.modalBody) return
     this.electRoomId = this.modalBody.querySelector('.select-room-id')
     this.searchRoom = new SearchRoom(this.electRoomId)
-    this.form = this.modalBody.querySelector('.form-book-room')
+    this.form = this.modalBody.querySelector('.form')
     this.validator = validate(this.form)
-    this.button = this.modalBody.querySelector('.btn-book')
+    this.button = this.modalBody.querySelector('.btn-form')
 
     this.events()
   }
@@ -81,6 +81,6 @@ class ModalBookRoom extends BaseModal {
   }
 }
 
-const modalBookRoom = new ModalBookRoom()
+const modalGetGuestAccess = new ModalGetGuestAccess()
 
-export default modalBookRoom
+export default modalGetGuestAccess

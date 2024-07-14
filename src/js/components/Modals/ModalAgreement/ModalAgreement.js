@@ -10,6 +10,7 @@ import { validate } from "./validate.js";
 import { outputInfo } from "../../../utils/outputinfo.js";
 import { api } from "../../../settings/api.js";
 import { createElement } from "../../../settings/createElement.js";
+import { renderForm } from "../utils/renderForm.js";
 
 class ModalAgreement extends BaseModal {
   constructor(options = {}) {
@@ -41,21 +42,7 @@ class ModalAgreement extends BaseModal {
       el.setAttribute('data-json', JSON.stringify(agreement))
     })
 
-    this.renderElements.length && this.renderElements.forEach(el => {
-      const [name, type] = el.getAttribute('data-render').split(',')
-      const value = agreement[name] ? agreement[name] : ''
-
-      if (el.tagName === 'INPUT') {
-        if (type === 'date') {
-          el.value = getFormattedDate(value)
-        } else {
-          el.value = value
-        }
-      }
-      else {
-        el.textContent = value
-      }
-    })
+    this.renderElements.length && this.renderElements.forEach(el => renderForm(el, agreement))
 
     this.validator = validate(this.form)
 

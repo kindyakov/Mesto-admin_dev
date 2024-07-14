@@ -1,0 +1,73 @@
+<div class='modal__body'>
+  <div class="modal__header">
+    <div class="modal__header_auto">
+      <h3 class="modal__title">Подтверждение выезда</h3>
+    </div>
+    <button class="button-text blue" data-modal="modal-photo-room">
+      <span>Фото ячейки</span>
+      <svg class="icon icon-arrow-right-circle">
+        <use xlink:href="img/svg/sprite.svg#arrow-right-circle"></use>
+      </svg>
+    </button>
+  </div>
+  <div class="modal__block">
+
+    <div class="modal__block_item">
+      <form class="modal__form form">
+        <div class="modal__form_item">
+          <span>ФИО:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="fullname" autocomplete="off"
+              readonly="true" data-render="fullname,text">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Номер:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="tel" class="modal__form_input input not-edit" name="username" autocomplete="off"
+              inputmode="tel" readonly="true"  data-render="username,text">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Дата въезда:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="rentstartdate" autocomplete="off" inputmode="tel"
+              readonly="true" data-render="rentstartdate,date">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Дата выезда:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="rentenddate" autocomplete="off" inputmode="tel"
+              readonly="true" data-render="rentenddate,date">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Ячейка:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="room_id" autocomplete="off" inputmode="tel"
+              readonly="true" data-render="room_id,text">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Склад:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="warehouse_name" autocomplete="off" inputmode="tel"
+              readonly="true" data-render="warehouse_name,text">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Сумма депозита:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="deposit" autocomplete="off" inputmode="tel"
+              readonly="true" data-render="deposit,price">
+          </div>
+        </div>
+        <button type="submit" style="display: none;"></button>
+      </form>
+    </div>
+  </div>
+  <div class="modal__footer">
+    <button class="button btn-confirm"><span>Подтвердить</span></button>
+  </div>
+</div>

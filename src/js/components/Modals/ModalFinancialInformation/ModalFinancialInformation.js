@@ -3,6 +3,7 @@ import content from './content.html'
 import { formattingPrice } from "../../../utils/formattingPrice.js"
 import { getFormattedDate } from "../../../utils/getFormattedDate.js"
 import { declOfNum } from "../../../utils/declOfNum.js"
+import { renderForm } from "../utils/renderForm.js"
 
 class ModalFinancialInformation extends BaseModal {
   constructor(options = {}) {
@@ -20,25 +21,7 @@ class ModalFinancialInformation extends BaseModal {
       el.setAttribute('data-json', JSON.stringify(room))
     })
 
-    this.renderElements.length && this.renderElements.forEach(el => {
-      const [name, type] = el.getAttribute('data-render').split(',')
-      const value = room[name] ? room[name] : ''
-
-      if (el.tagName === 'INPUT') {
-        if (type === 'date') {
-          el.value = getFormattedDate(value)
-        } else if (type === 'price') {
-          el.value = formattingPrice(+value)
-        } else if (type === 'day') {
-          el.value = !!value ? `${value} ${declOfNum(Math.abs(+value), ['день', 'дня', 'дней'])}` : ''
-        } else {
-          el.value = value
-        }
-      }
-      else {
-        el.textContent = value
-      }
-    })
+    this.renderElements.length && this.renderElements.forEach(el => renderForm(el, room))
   }
 
   onOpen(params = null) {

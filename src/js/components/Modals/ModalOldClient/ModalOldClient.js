@@ -8,6 +8,7 @@ import { formatPhoneNumber } from "../../../utils/formattingPrice.js";
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
 import { outputInfo } from "../../../utils/outputinfo.js";
 import { getOldClient } from "../../../settings/request.js";
+import { renderForm } from "../utils/renderForm.js";
 
 class ModalOldClient extends BaseModal {
   constructor(options = {}) {
@@ -26,27 +27,7 @@ class ModalOldClient extends BaseModal {
       el.setAttribute('data-json', JSON.stringify(client))
     })
 
-    this.renderElements.length && this.renderElements.forEach(el => {
-      const renderName = el.getAttribute('data-render')
-      const value = client[renderName] ? client[renderName] : ''
-
-      if (el.tagName === 'INPUT') {
-        if (el.name === 'username') {
-          el.value = formatPhoneNumber(value)
-        } else if (el.name === 'birthday') {
-          el.value = getFormattedDate(value)
-        } else {
-          el.value = value
-        }
-      } else if (el.tagName === 'IMG') {
-        el.src = value
-      } else if (el.classList.contains('wp-status')) {
-        el.classList.remove('confirmed', 'not-confirmed')
-        el.classList.add(`${value ? 'confirmed' : 'not-confirmed'}`)
-      } else {
-        el.textContent = value
-      }
-    })
+    this.renderElements.length && this.renderElements.forEach(el => renderForm(el, client))
   }
 
   async onOpen(params) {

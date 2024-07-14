@@ -9,6 +9,7 @@ import { api } from "../../../settings/api.js";
 
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
 import { outputInfo } from "../../../utils/outputinfo.js";
+import { renderForm } from "../utils/renderForm.js";
 
 class ModalPassport extends BaseModal {
   constructor(options = {}) {
@@ -17,7 +18,7 @@ class ModalPassport extends BaseModal {
       ...options
     })
 
-    this.selects = new Select({ uniqueName: 'select-passport' })
+    this.selects = new Select({ uniqueName: 'select-passport', disable: true })
     this.init()
   }
 
@@ -121,25 +122,10 @@ class ModalPassport extends BaseModal {
     this.attrsModal.length && this.attrsModal.forEach(el => {
       el.setAttribute('data-json', JSON.stringify(client))
     })
-    this.renderElements.length && this.renderElements.forEach(el => {
-      const renderName = el.getAttribute('data-render')
-      const value = client[renderName] ? client[renderName] : ''
 
-      if (el.tagName === 'INPUT') {
-        if (el.name === 'issue_date') {
-          el.value = getFormattedDate(value)
-        } else {
-          el.value = value
-        }
-      } else if (el.tagName === 'IMG') {
-        el.src = value
-      } else if (el.classList.contains('wp-status')) {
-        el.classList.remove('confirmed', 'not-confirmed')
-        el.classList.add(`${value ? 'confirmed' : 'not-confirmed'}`)
-      } else {
-        el.textContent = value
-      }
-    })
+    this.renderElements.length && this.renderElements.forEach(el => renderForm(el, client))
+
+    this.selects.setValue(client.approved)
   }
 
   async editClient(data) {

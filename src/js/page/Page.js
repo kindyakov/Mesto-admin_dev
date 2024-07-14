@@ -65,6 +65,8 @@ class Page {
       if (this.tables.length && dataEntities) {
         this.actionsTables(table => table.render(dataEntities))
       }
+
+      this.onRender(dataEntities)
     } catch (error) {
       console.error(error)
     } finally {

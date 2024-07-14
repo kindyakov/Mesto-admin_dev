@@ -1,14 +1,13 @@
 import BaseModal from "../BaseModal.js"
-import content from './content.html'
+import content from "./content.html"
 import { itemHtml } from "../utils/html.js"
-import { validate } from "./validate.js"
 import SearchRoom from "../../SearchRoom/SearchRoom.js"
 
-class ModalBookRoom extends BaseModal {
+class ModalCreateAgreement extends BaseModal {
   constructor(options = {}) {
     super(content, {
-      cssClass: ['modal-book-room'],
-      ...options
+      cssClass: ['modal-create-agreement'],
+      ...options,
     })
 
     this.roomIds = []
@@ -20,9 +19,9 @@ class ModalBookRoom extends BaseModal {
     if (!this.modalBody) return
     this.electRoomId = this.modalBody.querySelector('.select-room-id')
     this.searchRoom = new SearchRoom(this.electRoomId)
-    this.form = this.modalBody.querySelector('.form-book-room')
-    this.validator = validate(this.form)
-    this.button = this.modalBody.querySelector('.btn-book')
+    this.form = this.modalBody.querySelector('.form')
+    this.validator = null
+    this.button = this.modalBody.querySelector('.btn-form')
 
     this.events()
   }
@@ -71,16 +70,9 @@ class ModalBookRoom extends BaseModal {
       this.electRoomId.classList.add('just-validate-error-field')
       return
     }
-
-    this.validator.revalidate(isValid => {
-      console.log(this.roomIds)
-      if (!isValid) return
-      const formData = new FormData(this.form)
-      let data = { room_ids: this.roomIds }
-    })
   }
 }
 
-const modalBookRoom = new ModalBookRoom()
+const modalCreateAgreement = new ModalCreateAgreement()
 
-export default modalBookRoom
+export default modalCreateAgreement

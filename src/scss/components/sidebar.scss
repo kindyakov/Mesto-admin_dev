@@ -23,7 +23,7 @@
 	min-height: 100vh;
 	overflow-y: auto;
 
-	@media (max-width: $md3) {
+	@media (max-width: $md2) {
 		position: fixed;
 		top: 70px;
 		min-height: calc(100vh - 70px);

@@ -11,5 +11,5 @@ export function formatPhoneNumber(phoneNumber) {
     return `+${match[1]} (${match[2]}) ${match[3]}-${match[4]}-${match[5]}`;
   }
 
-  return null; // В случае некорректного формата возвращаем null или можно вернуть исходную строку.
+  return ''
 }

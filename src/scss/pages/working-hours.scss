@@ -1,0 +1,150 @@
+.working-hours {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+
+	&__row {
+		width: 100%;
+		display: grid;
+		align-items: center;
+		grid-template-columns: repeat(4, 1fr);
+		border: 1px solid #e1e8f0;
+		border-radius: 5px;
+		background-color: #fff;
+		padding: 40px;
+		gap: 10px;
+		position: relative;
+
+		@media (max-width: $md1) {
+			padding: 20px;
+		}
+
+		@media (max-width: $md3) {
+			grid-template-columns: repeat(3, 1fr);
+		}
+
+		@media (max-width: $md4) {
+			grid-template-columns: repeat(1, 1fr);
+		}
+	}
+
+	&__date {
+		position: absolute;
+		bottom: 100%;
+		left: 0;
+		background-color: #fff;
+		padding: 5px 10px;
+		transform: translate(0, -1px);
+		font-size: 14px;
+		border-radius: 4px 4px 0 0;
+		font-weight: 500;
+		color: #6f7d90;
+	}
+
+	&__item {
+		display: flex;
+		flex-direction: column;
+
+		gap: 5px;
+
+		&:nth-child(2) {
+			flex-direction: row;
+			gap: 20px;
+			align-items: center;
+
+			> span {
+				font-size: 20px;
+				@media (max-width: $md1) {
+					font-size: 14px;
+				}
+			}
+		}
+
+		&:nth-child(3),
+		&:nth-child(4) {
+			position: relative;
+			padding-left: 20px;
+			&::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				top: 0;
+				bottom: 0;
+				width: 2px;
+				height: 100%;
+				background-color: #e2e8f0;
+			}
+			@media (max-width: $md4) {
+				padding-left: 0;
+				padding-top: 10px;
+				&::before {
+					bottom: auto;
+					right: 0;
+					width: 100%;
+					height: 2px;
+				}
+			}
+		}
+
+		&:last-child {
+			align-items: flex-end;
+			gap: 10px;
+			@media (max-width: $md4) {
+				align-items: flex-start;
+				position: relative;
+				padding-top: 15px;
+				&::before {
+					content: '';
+					position: absolute;
+					left: 0;
+					top: 0;
+					right: 0;
+					width: 100%;
+					height: 2px;
+					background-color: #e2e8f0;
+				}
+			}
+		}
+	}
+
+	&__time {
+		font-weight: 700;
+		font-size: 28px;
+		line-height: 120%;
+
+		&.time-now {
+			font-size: 60px;
+			color: #373f47;
+		}
+
+		&.time-start {
+			color: #0b704e;
+		}
+
+		&.time-end {
+			color: #ff7628;
+		}
+
+		@media (max-width: $md1) {
+			font-size: 24px;
+			&.time-now {
+				font-size: 40px;
+			}
+		}
+	}
+
+	&__text {
+		font-weight: 500;
+		font-size: 16px;
+		line-height: 120%;
+		color: #6f7d90;
+		@media (max-width: $md1) {
+			font-size: 12px;
+		}
+	}
+
+	.button {
+		white-space: nowrap;
+	}
+}

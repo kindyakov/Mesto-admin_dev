@@ -68,6 +68,7 @@
     "flatpickr": "^4.6.13",
     "inputmask": "^5.0.8",
     "just-validate": "^4.3.0",
-    "tippy.js": "^6.3.7"
+    "tippy.js": "^6.3.7",
+    "uuid": "^10.0.0"
   }
 }
