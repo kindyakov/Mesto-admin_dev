@@ -17,7 +17,6 @@ class ListClients extends Page {
       ],
       page: 'list-clients'
     });
-
   }
 
   async getData(data = {}) {

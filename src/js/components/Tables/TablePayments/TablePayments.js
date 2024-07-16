@@ -18,8 +18,27 @@ class TablePayments extends Table {
       columnDefs: [
         { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
         {
+          headerName: 'Договор', field: 'agrid', flex: 0.2,
+          cellRenderer: params => {
+            const span = document.createElement('span')
+            span.classList.add('table-span-agrid')
+            span.textContent = params.value ? addPrefixToNumbers(params.value) : 'нет'
+            return cellRendererInput(params, undefined, null, span)
+          }
+        },
+        {
+          headerName: 'ФИО', field: 'fullname', flex: 0.8,
+          cellRenderer: params => cellRendererInput(params, undefined, 'profile')
+        },
+        {
           headerName: 'Дата платежа', field: 'payment_date', flex: 0.5,
           cellRenderer: params => cellRendererInput(params, getFormattedDate, 'calendar')
+        },
+        {
+          headerName: 'Вид поступления', field: 'type', flex: 0.5,
+        },
+        {
+          headerName: 'Статья учета', field: 'account_article', flex: 0.5,
         },
         {
           headerName: 'Сумма', field: 'amount', flex: 0.5,
@@ -31,20 +50,7 @@ class TablePayments extends Table {
           }
         },
         {
-          headerName: 'ФИО', field: 'fullname', flex: 1,
-          cellRenderer: params => cellRendererInput(params, undefined, 'profile')
-        },
-        {
-          headerName: 'Договор', field: 'agrid', flex: 0.5,
-          cellRenderer: params => {
-            const span = document.createElement('span')
-            span.classList.add('table-span-agrid')
-            span.textContent = params.value ? addPrefixToNumbers(params.value) : 'нет'
-            return cellRendererInput(params, undefined, null, span)
-          }
-        },
-        {
-          headerName: 'Вид поступления', field: 'type', flex: 0.5,
+          headerName: 'Сотрудник', field: 'manager_name', flex: 0.5,
         },
         {
           headerName: 'Физ./Юр.', field: 'user_type', flex: 0.5,

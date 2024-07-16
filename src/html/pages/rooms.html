@@ -1,3 +1,124 @@
 <div class="main__content content-main" data-content="rooms">
-  rooms
+  <div class="warehouse">
+    <div class="warehouse__header">
+      <div class="warehouse__types">
+        <button class="warehouse__type btn-filter-scheme" data-rented="0">
+          <span class="circle"></span>
+          <span class="name">Свободные</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.4">
+          <span class="circle"></span>
+          <span class="name">Неоплаченные</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.25">
+          <span class="circle"></span>
+          <span class="name">Гостевые</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.5">
+          <span class="circle"></span>
+          <span class="name">Забронированные</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="1">
+          <span class="circle"></span>
+          <span class="name">Занятые</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.75">
+          <span class="circle"></span>
+          <span class="name">Освобождающиеся</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme _active" data-rented="-1">
+          <span class="name">Все</span>
+        </button>
+      </div>
+
+      <div class="warehouse__filters">
+        <select name="floors" class="init-custom-select" data-special-select="select-warehouse-floors"
+          data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
+          <option value="1">1 этаж</option>
+          <option value="2">2 этаж</option>
+        </select>
+        <button class="warehouse__button button-table btn-set-filters">
+          <span>Фильтры</span>
+          <svg class='icon icon-filter'>
+            <use xlink:href='img/svg/sprite.svg#filter'></use>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="warehouse__select-rooms selects-rooms">
+
+    </div>
+
+    <div class="warehouse__schemes">
+      <div class="warehouse__wrap-scheme wrap-scheme _active">
+        @@include('../schemes/scheme-1.html',{'pathPrefix':'@@webRoot/'})
+      </div>
+      <div class="warehouse__wrap-scheme wrap-scheme">
+        @@include('../schemes/scheme-2.html',{'pathPrefix':'@@webRoot/'})
+      </div>
+    </div>
+
+    <div class="warehouse__body">
+      <div class="warehouse__body_top">
+        <button class="warehouse__body_tab button-tab _active _my-tab-btn room-tabs"
+          data-tab-btn='room-tab,1'><span>Ячейки</span></button>
+        <button class="warehouse__body_tab button-tab _my-tab-btn room-tabs"
+          data-tab-btn='room-tab,2'><span>Таблица</span></button>
+        <button class="warehouse__body_tab button-tab _my-tab-btn room-tabs tab-confirmation"
+          data-tab-btn='room-tab,3'><span>Подтверждение</span></button>
+      </div>
+
+      <div class="warehouse__body_content _my-tab-content _active room-tabs" data-tab-content='room-tab,1'>
+        <form class="warehouse__body_form form-filter-room">
+          <div class="warehouse__button button-table btn-set-filters" style="cursor: pointer;">
+            <span>Фильтры</span>
+            <svg class="icon icon-filter">
+              <use xlink:href="img/svg/sprite.svg#filter"></use>
+            </svg>
+          </div>
+          <div class="wp-input wp-input-search">
+            <input type="text" name="search_str" placeholder="Поиск" class="input input-table-search"
+              autocomplete="off">
+            <button type="submit" class="button-icon-search">
+              <svg class="icon icon-search">
+                <use xlink:href="img/svg/sprite.svg#search"></use>
+              </svg>
+            </button>
+          </div>
+        </form>
+        <div class="warehouse__body_rooms rooms">
+
+        </div>
+      </div>
+      <div class="warehouse__body_content _my-tab-content room-tabs" data-tab-content='room-tab,2'>
+        <div class="warehouse__table table-rooms table ag-theme-quartz" style="height: 710px;">
+
+        </div>
+      </div>
+      <div class="warehouse__body_content _my-tab-content room-tabs" data-tab-content='room-tab,3'>
+        <div class="warehouse__confirmation">
+          <div class="warehouse__confirmation_block">
+            <h3 class="warehouse__confirmation_title">Подтверждение выезда</h3>
+            <div class="warehouse__confirmation_content content-confirmation-departure">
+              <div class="warehouse__confirmation_row">
+                <p class="name">Гизатулина Марина Артемовна</p>
+                <span class="span">Выезд:<b>17.05.2024</b></span>
+                <button class="button table-button" data-modal="modal-confirmation-departure"><span>Подтвердить</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="warehouse__confirmation_block">
+            <h3 class="warehouse__confirmation_title">Подтверждение паспорта</h3>
+            <div class="warehouse__confirmation_content content-confirmation-client">
+              <div class="warehouse__confirmation_row">
+                <p class="name">Гизатулина Марина Артемовна</p>
+                <button class="button table-button" data-modal="modal-confirmation-client"><span>Подтвердить</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

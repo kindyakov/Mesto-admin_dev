@@ -84,6 +84,9 @@ export const getWarehousesInfo = getCreate('/_get_warehouses_info_for_admin_')
 
 export const getOldClient = getCreate('/_get_old_client_data_')
 
+export const getMovingOutClients = getCreate('/_get_moving_out_clients_')
+
+export const getNonApprovedClients = getCreate('/_get_nonapproved_clients_')
 // ============================================================================>
 
 export const getClientTotal = getCreateTotal('/_get_client_total_')

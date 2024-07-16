@@ -1,6 +1,7 @@
 class Scheme {
-  constructor() {
-    this.schemes = document.querySelectorAll('.scheme')
+  constructor(wrapper) {
+    this.wrapper = wrapper
+    this.schemes = wrapper.querySelectorAll('.scheme')
     this.numRooms = {}
 
     this.init()
@@ -8,7 +9,7 @@ class Scheme {
 
   init() {
     if (!this.schemes.length) return
-    this.cells = document.querySelectorAll('.warehouse__svg-cell')
+    this.cells = this.wrapper.querySelectorAll('.warehouse__svg-cell')
   }
 
   changeActive(floor) {

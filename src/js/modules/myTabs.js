@@ -156,7 +156,7 @@ export class Tabs {
     let [tabName] = e.currentTarget.getAttribute('data-tab-btn').split(',')
     let prevTabBtn = null
 
-    prevTabBtn = document.querySelector(`${this.options.btnSelector}[data-tab-name="${tabName}"]._tab-btn-active`)
+    prevTabBtn = document.querySelector(`${this.options.btnSelector}[data-tab-name="${tabName}"].${this.options.classBtnActive}`)
 
     if (e.currentTarget !== prevTabBtn) {
       this.switchTabs(e.currentTarget, prevTabBtn)
@@ -173,7 +173,7 @@ export class Tabs {
     })
   }
 
-  switchTabs(nextTabBtn, prevTabBtn = document.querySelector(`${this.options.btnSelector}[data-tab-name="${nextTabBtn.getAttribute('data-tab-name')}"]._tab-btn-active`)) {
+  switchTabs(nextTabBtn, prevTabBtn = document.querySelector(`${this.options.btnSelector}[data-tab-name="${nextTabBtn.getAttribute('data-tab-name')}"].${this.options.classBtnActive}`)) {
     if (!nextTabBtn || !prevTabBtn) return
 
     const [tabName, nextTabId] = nextTabBtn.getAttribute('data-tab-btn').split(',')

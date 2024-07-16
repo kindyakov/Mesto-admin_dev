@@ -43,7 +43,7 @@ class TableAgreements extends Table {
           }
         },
         {
-          headerName: 'Ячейки', field: 'room_ids', flex: 0.5, sortable: false,
+          headerName: 'Ячейки', field: 'room_ids', flex: 0.5,
           valueFormatter: params => params.value ? addPrefixToNumbers(params.value) : 'нет'
         },
         {

@@ -3,6 +3,8 @@ import content from "./content.html"
 import { itemHtml } from "../utils/html.js"
 import { validate } from "./validate.js"
 import SearchRoom from "../../SearchRoom/SearchRoom.js"
+import { api } from "../../../settings/api.js"
+import { outputInfo } from "../../../utils/outputinfo.js"
 
 class ModalGetGuestAccess extends BaseModal {
   constructor(options = {}) {
@@ -12,14 +14,14 @@ class ModalGetGuestAccess extends BaseModal {
     })
 
     this.roomIds = []
-    
+
     this.init()
   }
 
   init() {
     if (!this.modalBody) return
     this.electRoomId = this.modalBody.querySelector('.select-room-id')
-    this.searchRoom = new SearchRoom(this.electRoomId)
+    this.searchRoom = new SearchRoom(this.electRoomId, {}, { isOne: true })
     this.form = this.modalBody.querySelector('.form')
     this.validator = validate(this.form)
     this.button = this.modalBody.querySelector('.btn-form')
@@ -72,12 +74,48 @@ class ModalGetGuestAccess extends BaseModal {
       return
     }
 
-    this.validator.revalidate(isValid => {
-      console.log(this.roomIds)
+    this.validator.revalidate().then(isValid => {
       if (!isValid) return
       const formData = new FormData(this.form)
-      let data = { room_ids: this.roomIds }
+      let data = { room_id: this.roomIds[0] }
+
+      formData.set('username', formData.get('username').replace(/[+() -]/g, ''))
+      Array.from(formData).forEach(obj => data[obj[0]] = obj[1])
+
+      this.testRoomAdmin(data)
     })
+  }
+
+  beforeClose() {
+    for (const el of this.form.elements) {
+      if (el.value !== '') {
+        outputInfo({
+          msg: 'У вас есть несохраненные изменения.</br>Вы уверены, что хотите закрыть окно?',
+          msg_type: 'warning',
+          isConfirm: true
+        }, isConfirm => {
+          if (isConfirm) {
+            this.close()
+          }
+        })
+        return false
+      }
+    }
+
+    return true;
+  }
+
+  async testRoomAdmin(data) {
+    try {
+      this.loader.enable()
+      const response = await api.post('/_test_room_by_admin_', data)
+      if (response.status !== 200) return
+      outputInfo(response.data)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loader.disable()
+    }
   }
 }
 

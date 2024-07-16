@@ -29,7 +29,7 @@
 			max-height: 100%;
 			object-fit: contain;
 		}
-		@media (min-width: $md3) {
+		@media (min-width: $md2) {
 			display: none;
 		}
 	}
@@ -260,7 +260,7 @@
 			}
 		}
 	}
-	@media (max-width: $md3) {
+	@media (max-width: $md2) {
 		display: flex;
 	}
 }

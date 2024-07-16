@@ -7,7 +7,8 @@ import { FilterRooms } from "../../../components/FilterRooms/FilterRooms.js";
 class Forecast extends Dashboards {
   constructor({ loader }) {
     super({ loader, page: 'forecast' });
-    this.warehouseScheme = new Scheme()
+    
+    this.warehouseScheme = new Scheme(this.wrapper)
 
     this.currentRented = null
   }

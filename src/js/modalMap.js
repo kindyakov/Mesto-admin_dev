@@ -15,6 +15,9 @@ import modalConfirmationDeparture from "./components/Modals/ModalConfirmationDep
 import modalCreateAgreement from "./components/Modals/ModalCreateAgreement/ModalCreateAgreement.js";
 import modalDownloadPhotoWh from "./components/Modals/ModalDownloadPhotoWh/ModalDownloadPhotoWh.js";
 import modalShowPhotoWh from "./components/Modals/ModalShowPhotoWh/ModalShowPhotoWh.js";
+import modalConfirmationClient from "./components/Modals/ModalConfirmationClient/ModalConfirmationClient.js";
+
+import modalConfirmOpenRoom from "./components/Modals/Confirmation/ModalConfirmOpenRoom/ModalConfirmOpenRoom.js";
 
 function getClassModal({ modal }) {
   return modal.opts.cssClass[0]
@@ -39,4 +42,6 @@ export const modalMap = {
   [getClassModal(modalCreateAgreement)]: modalCreateAgreement,
   [getClassModal(modalDownloadPhotoWh)]: modalDownloadPhotoWh,
   [getClassModal(modalShowPhotoWh)]: modalShowPhotoWh,
+  [getClassModal(modalConfirmationClient)]: modalConfirmationClient,
+  [getClassModal(modalConfirmOpenRoom)]: modalConfirmOpenRoom,
 }

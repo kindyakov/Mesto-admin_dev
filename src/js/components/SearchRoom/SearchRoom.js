@@ -15,8 +15,11 @@ const defaultOptions = {
 }
 
 class SearchRoom {
-  constructor(el, options = {}) {
+  constructor(el, options = {}, params = {}) {
     this.options = Object.assign({}, defaultOptions, options)
+    this.params = Object.assign({}, {
+      isOne: false
+    }, params)
 
     this.tippy = tippy(el, { ...this.options, content: this.content })
     this.timer = null
@@ -37,6 +40,11 @@ class SearchRoom {
     this.inputSearch.addEventListener('input', this.handleInput.bind(this))
     this.btn.addEventListener('click', this.handleClick.bind(this))
     this.modal.addEventListener('change', this.handleChange.bind(this))
+    window.addEventListener('keyup', (e) => {
+      if (e.key === 'Escape') {
+        this.tippy.hide()
+      }
+    })
   }
 
   content(reference) {
@@ -62,13 +70,18 @@ class SearchRoom {
 
   handleChange(e) {
     const inputCheckbox = e.target.closest('.input-checkbox')
+    if (!inputCheckbox) return
+    const value = +inputCheckbox.value
 
-    if (inputCheckbox) {
+    if (this.params.isOne) {
       if (inputCheckbox.checked) {
-        this.roomIds.push(+inputCheckbox.value)
+        this.roomIds = [value]
+      }
+    } else {
+      if (inputCheckbox.checked) {
+        this.roomIds.push(value)
       } else {
-        const index = this.roomIds.findIndex(id => id === +inputCheckbox.value)
-        this.roomIds.splice(index, 1)
+        this.roomIds = this.roomIds.filter(id => id !== value)
       }
     }
   }
@@ -96,7 +109,7 @@ class SearchRoom {
   async searchRoomId(str) {
     try {
       this.loader.enable()
-      const response = await api.get(`/_search_room_id_?search_str=${str}`)
+      const response = await api.get(`/_get_free_room_ids_?search_str=${str}`)
       if (response.status !== 200) return
       const { room_ids = [] } = response.data
 
@@ -104,16 +117,16 @@ class SearchRoom {
 
       if (room_ids.length) {
         this.roomIds.length && this.roomIds.forEach(id => {
-          this.contentSearch.insertAdjacentHTML('beforeend', itemHtml(id, true))
+          this.contentSearch.insertAdjacentHTML('beforeend', itemHtml(id, true, this.params.isOne ? 'radio' : 'checkbox'))
         })
 
         room_ids.forEach(obj => {
-          this.contentSearch.insertAdjacentHTML('beforeend', itemHtml(obj.room_id))
+          this.contentSearch.insertAdjacentHTML('beforeend', itemHtml(obj.room_id, undefined, this.params.isOne ? 'radio' : 'checkbox'))
         })
       } else {
         if (this.roomIds.length) {
           this.roomIds.length && this.roomIds.forEach(id => {
-            this.contentSearch.insertAdjacentHTML('beforeend', itemHtml(id, true))
+            this.contentSearch.insertAdjacentHTML('beforeend', itemHtml(id, true, this.params.isOne ? 'radio' : 'checkbox'))
           })
         } else {
           this.contentSearch.innerHTML = `<div class="not-data"><span>Не найдено</span></div>`

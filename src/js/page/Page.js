@@ -1,3 +1,5 @@
+import { getFormattedDate } from "../utils/getFormattedDate.js"
+
 class Page {
   constructor({ loader, tables = [], page }) {
     this.loader = loader
@@ -18,6 +20,10 @@ class Page {
     this.init(page)
   }
 
+  onRender() {
+
+  }
+
   init(page) {
 
     this.events()
@@ -25,29 +31,40 @@ class Page {
 
   events() {
     this.tables.length && this.actionsTables(table => {
-      table.onPageChange = page => this.renderTable(table, { page })
-      table.onChangeTypeUser = ({ e, select, optionValue }) => this.renderTable(table, { user_type: optionValue })
+      table.onPageChange = page => this.changeQueryParams(table, { page })
       table.onValueInputSearch = value => {
+        let data = {}
+
         if (value !== '') {
-          this.renderTable(table, { search_str: value })
+          data = { search_str: value }
         } else {
-          this.renderTable(table)
+          data = {}
+        }
+
+        this.changeQueryParams(table, data)
+      }
+      table.selects.onChange = (e, select, value) => {
+        const name = select.getAttribute('data-name')
+        this.changeQueryParams(table, { [name]: value })
+      }
+
+      if (table.calendar) {
+        table.calendar.methods.onChange = (selectedDates, dateStr, instance) => {
+          if (selectedDates.length === 2) {
+            const [start, end] = instance.element.name.split(',')
+            this.changeQueryParams(table, {
+              [start]: getFormattedDate(selectedDates[0], 'YYYY-MM-DD'),
+              [end]: getFormattedDate(selectedDates[1], 'YYYY-MM-DD'),
+            })
+          }
         }
       }
     })
-
-    if (this.selectFilter) {
-      this.selectFilter.onChange = (e, select, optionValue) => {
-        const name = select.getAttribute('data-name')
-        const data = { [name]: optionValue }
-        this.changeQueryParams(data)
-      }
-    }
   }
 
-  changeQueryParams(data) {
+  changeQueryParams(table, data) {
     this.queryParams = { ...this.queryParams, ...data }
-    this.renderDashboard(data)
+    this.renderTable(table, this.queryParams)
   }
 
   actionsTables(callback = () => { }) {
@@ -60,7 +77,7 @@ class Page {
   async render() {
     try {
       this.loader.enable()
-      const [dataEntities] = await Promise.all([this.getData()])
+      const dataEntities = await this.getData()
 
       if (this.tables.length && dataEntities) {
         this.actionsTables(table => table.render(dataEntities))

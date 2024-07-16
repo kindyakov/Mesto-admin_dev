@@ -5,6 +5,11 @@ import { Select } from "../modules/mySelect.js";
 const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'октябрь', 'Ноябрь', 'Декабрь',]
 
 export const createCalendar = (input, options = {}) => {
+  if (!input) return
+  const methods = {
+    onChange: () => {}
+  }
+
   let customSelect, uniqueId = Math.random()
 
   function handleClickMonthNav(customSelect, instance) {
@@ -33,7 +38,9 @@ export const createCalendar = (input, options = {}) => {
       });
     },
     onMonthChange: (selectedDates, dateStr, instance) => handleClickMonthNav(customSelect, instance),
-    onChange: () => { },
+    onChange: (selectedDates, dateStr, instance) => {
+      methods.onChange(selectedDates, dateStr, instance)
+    },
   };
 
   const mergedOptions = { ...defaultOptions, ...options };
@@ -47,5 +54,5 @@ export const createCalendar = (input, options = {}) => {
     throw new Error("Недопустимый ввод: должно быть, это строка выбора или элемент DOM");
   }
 
-  return flatpickr(element, mergedOptions)
+  return { methods, ...flatpickr(element, mergedOptions) }
 };

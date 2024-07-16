@@ -32,11 +32,11 @@ class Auth {
     this.onAuth = this.options.onAuth
     this.onInit = this.options.onInit
 
-
     this.init()
   }
 
   init() {
+    this.btnExit = document.querySelector('.btn-exit')
     this.isAuth = this.checkAuth()
     this.events()
     this.onInit(this.isAuth)
@@ -44,6 +44,7 @@ class Auth {
 
   events() {
     this.form && this.form.addEventListener('submit', this.submit.bind(this))
+    this.btnExit.addEventListener('click', this.logout.bind(this))
   }
 
   submit() {
@@ -110,7 +111,14 @@ class Auth {
     this.allClose()
     this.modal.open()
     this.isAuth = false
-    this.options.modalMap.length && this.options.modalMap.forEach(modal => modal.close())
+
+    const modalMap = this.options.modalMap
+
+    if (modalMap.length) {
+      for (const key in modalMap) {
+        modalMap[key]?.modal.close()
+      }
+    }
   }
 
   allClose() {

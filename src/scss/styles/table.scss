@@ -132,6 +132,12 @@
 	// &__button {	}
 
 	// &__content {}
+	.table-buttons {
+		display: flex;
+		gap: 10px;
+		justify-content: flex-end;
+		margin-left: auto;
+	}
 }
 
 .button-table-actions {

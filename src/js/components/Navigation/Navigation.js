@@ -101,8 +101,8 @@ class Navigation {
           this.sidebarAccordion.open(accordion);
         }
       } else {
-        content.classList.remove('_active');
-        link.classList.remove('_active');
+        content?.classList.remove('_active');        
+        link?.classList.remove('_active');
       }
     });
   }

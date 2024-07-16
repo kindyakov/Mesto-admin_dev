@@ -1,9 +1,21 @@
 <div class="main__content content-main" data-content="agreements">
   <h2 class="main__title">Договоры</h2>
-  
+
   <div class="table" style="height: 850px;">
     <div class="table__top">
       <form class="table__form form-table-search">
+        <select name="active" class="init-custom-select" data-special-select="select-filter-table"
+          data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
+          <option value="1">Активные</option>
+          <option value="-1">Неактивные</option>
+          <option value="0">Все</option>
+        </select>
+        <select name="user_type" class="init-custom-select" data-special-select="select-filter-table"
+          data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
+          <option value="f">Физ.лицо</option>
+          <option value="u">Юр.лицо</option>
+          <option value="0">Все</option>
+        </select>
         <div class="wp-input wp-input-search">
           <input type="text" name="search_str" placeholder="Поиск" class="input input-table-search" autocomplete="off">
           <button type="submit" class="button-icon-search">
@@ -14,12 +26,12 @@
         </div>
       </form>
       <div class="table__buttuns">
-        <button class="table__button button-table btn-table-add" data-modal="">
+        <!-- <button class="table__button button-table btn-table-add" data-modal="">
           <span>Добавить</span>
           <svg class='icon icon-plus'>
             <use xlink:href='img/svg/sprite.svg#plus'></use>
           </svg>
-        </button>
+        </button> -->
         <button class="table__button button-table btn-table-upload-excel" data-count>
           <span>Выгрузить в Excel</span>
           <svg class='icon icon-dow'>

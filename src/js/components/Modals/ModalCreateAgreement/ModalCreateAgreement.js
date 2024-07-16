@@ -71,6 +71,8 @@ class ModalCreateAgreement extends BaseModal {
       return
     }
   }
+
+  // / _send_link_to_form_agreement_
 }
 
 const modalCreateAgreement = new ModalCreateAgreement()

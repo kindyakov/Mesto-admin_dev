@@ -24,7 +24,6 @@
 		background-color: transparent;
 		color: #1c2434;
 		border: 1px solid #eaecee;
-		padding: 10px 25px;
 		&:hover {
 			opacity: 1;
 			border-color: $blue;
@@ -135,4 +134,31 @@
 	bottom: 0;
 	height: 100%;
 	width: 50px;
+}
+
+.button-tab {
+	padding: 10px;
+	font-size: 14px;
+	color: #212b36;
+	font-weight: 500;
+	white-space: nowrap;
+	background-color: #fff;
+	border: 1px solid #e1e8f0;
+	border-radius: 4px;
+	transition: 0.2s;
+
+	&:hover {
+		background-color: #eff4fb;
+	}
+
+	&._active {
+		color: #fff;
+		background-color: $blue;
+	}
+}
+
+.table-button {
+	font-size: 14px;
+	padding: 4px 10px;
+	height: 30px;
 }

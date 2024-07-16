@@ -3,8 +3,9 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { translations } from './translations.js';
 import { paginationHtml } from './html.js';
-import { outputInfo } from '../../utils/outputinfo.js';
 import { Loader } from '../../modules/myLoader.js';
+import { Select } from '../../modules/mySelect.js';
+import { createCalendar } from '../../settings/createCalendar.js';
 
 class Table {
   constructor(selector, options, params) {
@@ -75,7 +76,6 @@ class Table {
 
     this.init()
     this.events()
-
   }
 
   init() {
@@ -91,6 +91,12 @@ class Table {
   events() {
     if (!this.table) return
 
+    this.selects = new Select({ uniqueName: 'select-filter-table', parentEl: this.wpTable })
+    this.calendar = createCalendar(this.wpTable.querySelector('.input-date-filter'), {
+      mode: "range",
+      dateFormat: "d. M, Y",
+    })
+
     this.table.addEventListener('click', e => {
       if (e.target.closest('.btn-pagination-prev') && this.params.isPagination) {
         this.prevPage()
@@ -105,7 +111,9 @@ class Table {
       }
     })
 
-    this.btnTableUploadExcel.addEventListener('click', this.handleBtnUploadExcel.bind(this))
+    if (this.btnTableUploadExcel) {
+      this.btnTableUploadExcel.addEventListener('click', this.handleBtnUploadExcel.bind(this))
+    }
 
     if (this.formTableSearch) {
       let timerSearch

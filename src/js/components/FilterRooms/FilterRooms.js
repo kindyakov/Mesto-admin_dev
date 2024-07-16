@@ -56,9 +56,20 @@ export function FilterRooms(button, options = {}, methods = {}) {
 
   instance = { ...instance, ...instanceTippy }
 
-  const inputs = instance.popper.querySelectorAll('.input-filter-rooms')
-  const btnApply = instance.popper.querySelector('.btn-filter-apply')
-  const btnClear = instance.popper.querySelector('.btn-filter-clear')
+  let inputs = [], btnApply = [], btnClear = [], isSync = false
+
+  if (button.length) {
+    for (let i = 0; i < button.length; i++) {
+      inputs.push(...instance[i].popper.querySelectorAll('.input-filter-rooms'))
+      btnApply.push(instance[i].popper.querySelector('.btn-filter-apply'))
+      btnClear.push(instance[i].popper.querySelector('.btn-filter-clear'))
+    }
+    isSync = true
+  } else {
+    inputs = [...instance.popper.querySelectorAll('.input-filter-rooms')]
+    btnApply = [instance.popper.querySelector('.btn-filter-apply')]
+    btnClear = [instance.popper.querySelector('.btn-filter-clear')]
+  }
 
   inputs.length && inputs.forEach(input => {
     const [name, type] = input.name.split('_')
@@ -67,8 +78,8 @@ export function FilterRooms(button, options = {}, methods = {}) {
     input.addEventListener('keydown', (event) => handleArrowKeys(input, event, [name, type]))
   })
 
-  btnApply.addEventListener('click', handleBtnApply)
-  btnClear.addEventListener('click', handleBtnClear)
+  btnApply.length && btnApply.forEach(btn => btn.addEventListener('click', handleBtnApply))
+  btnClear.length && btnClear.forEach(btn => btn.addEventListener('click', handleBtnClear))
 
   function handleInput(input, [name, type]) {
     validateAndCorrect(input, [name, type])
@@ -95,7 +106,11 @@ export function FilterRooms(button, options = {}, methods = {}) {
   }
 
   function handleBtnApply() {
-    instance.hide()
+    if (isSync) {
+      forInstance(inst => inst.hide())
+    } else {
+      instance.hide()
+    }
     instance.onApply(filterParams)
   }
 
@@ -109,7 +124,7 @@ export function FilterRooms(button, options = {}, methods = {}) {
 
   function fractionalNumber(input, maxValue) {
     let value = input.value;
-    const regex = /^\d+(\.\d{0,1})?$/; // Регулярное выражение для проверки дробного числа с одной цифрой после запятой
+    const regex = /^\d+(\.\d)?$/; // Регулярное выражение для проверки дробного числа с одной цифрой после запятой
 
     // Если значение не соответствует требованиям, корректируем его
     if (!regex.test(value)) {
@@ -142,11 +157,25 @@ export function FilterRooms(button, options = {}, methods = {}) {
       }
     }
 
+    isSync && syncFilters(input)
     changeParams(input, input.value)
   }
 
   function changeParams(input, value) {
     filterParams[input.name] = +value
+  }
+
+  function forInstance(func = () => { }) {
+    for (let i = 0; i < button.length; i++) {
+      func(instance[i])
+    }
+  }
+
+  function syncFilters(input) {
+    const cloneInputs = inputs.filter(_input => _input !== input && _input.name === input.name)
+    cloneInputs.length && cloneInputs.forEach(_input => {
+      _input.value = input.value
+    })
   }
 
   instance.changeParams = changeParams

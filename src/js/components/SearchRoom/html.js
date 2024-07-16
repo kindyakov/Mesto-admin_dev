@@ -21,10 +21,10 @@ export function searchModalHtml() {
 `
 }
 
-export function itemHtml(room_id, isChecked = false) {
+export function itemHtml(room_id, isChecked = false, type = 'checkbox') {
   return `
             <label class="search-modal__item">
-              <input type="checkbox" class="input-checkbox" id="input-checkbox-${room_id}" value="${room_id}" ${isChecked ? 'checked' : ''}>
+              <input type="${type}" class="input-checkbox" name="room_id" id="input-checkbox-${room_id}" value="${room_id}" ${isChecked ? 'checked' : ''}>
               <label for="input-checkbox-${room_id}" class="label-checkbox">
                 <svg class='icon icon-check-3'>
                   <use xlink:href='img/svg/sprite.svg#check-3'></use>

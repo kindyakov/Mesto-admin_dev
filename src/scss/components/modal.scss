@@ -632,6 +632,20 @@
 	z-index: 14;
 	padding: 25px 10px;
 	overflow-y: auto;
+	&.modal-confirmation {
+		.tingle-modal-box {
+			max-width: 450px;
+		}
+		.modal__title {
+			line-height: 125%;
+			text-align: center;
+			padding: 30px 20px;
+		}
+		.modal__footer {
+			padding: 20px;
+			justify-content: center;
+		}
+	}
 
 	&.modal-auth {
 		background: #1c2434;

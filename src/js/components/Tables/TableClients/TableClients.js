@@ -24,7 +24,7 @@ class TableClients extends Table {
         },
         { headerName: 'Телефон', field: 'username', flex: 0.8, cellRenderer: params => cellRendererInput(params, formatPhoneNumber) },
         { headerName: 'Почта', field: 'email', flex: 1, sortable: false, cellRenderer: params => cellRendererInput(params) },
-        { headerName: 'Ячейки', field: 'rooms', flex: 0.5, sortable: false, valueFormatter: params => params.value ? addPrefixToNumbers(params.value) : 'нет' },
+        { headerName: 'Ячейки', field: 'rooms', flex: 0.5, valueFormatter: params => params.value ? addPrefixToNumbers(params.value) : 'нет' },
         {
           headerName: 'Платеж в мес.', field: 'month_payment', flex: 0.5,
           cellRenderer: params => {
