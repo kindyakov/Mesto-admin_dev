@@ -19,14 +19,14 @@ class TableClients extends Table {
       columnDefs: [
         { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
         {
-          headerName: 'ФИО', field: 'fullname', flex: 1.3,
+          headerName: 'ФИО', field: 'fullname', minWidth: 300, flex: 1,
           cellRenderer: params => cellRendererInput(params, undefined, 'profile')
         },
-        { headerName: 'Телефон', field: 'username', flex: 0.8, cellRenderer: params => cellRendererInput(params, formatPhoneNumber) },
-        { headerName: 'Почта', field: 'email', flex: 1, sortable: false, cellRenderer: params => cellRendererInput(params) },
-        { headerName: 'Ячейки', field: 'rooms', flex: 0.5, valueFormatter: params => params.value ? addPrefixToNumbers(params.value) : 'нет' },
+        { headerName: 'Телефон', field: 'username', minWidth: 170, flex: 0.5, cellRenderer: params => cellRendererInput(params, formatPhoneNumber) },
+        { headerName: 'Почта', field: 'email', minWidth: 260, flex: 0.5, sortable: false, cellRenderer: params => cellRendererInput(params) },
+        { headerName: 'Ячейки', field: 'rooms', minWidth: 100, flex: 0.5, valueFormatter: params => params.value ? addPrefixToNumbers(params.value) : 'нет' },
         {
-          headerName: 'Платеж в мес.', field: 'month_payment', flex: 0.5,
+          headerName: 'Платеж в мес.', field: 'month_payment', minWidth: 100, flex: 0.5,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-price')
@@ -35,7 +35,7 @@ class TableClients extends Table {
           }
         },
         {
-          headerName: 'До платежа', field: 'days_left', flex: 0.5,
+          headerName: 'До платежа', field: 'days_left', minWidth: 100, flex: 0.5,
           cellRenderer: params => {
             const p = document.createElement('p')
             p.classList.add('table-p')
@@ -48,7 +48,7 @@ class TableClients extends Table {
           }
         },
         {
-          headerName: 'Действия', field: 'actions', flex: 0.4,
+          headerName: 'Действия', field: 'actions', width: 90,
           cellRenderer: params => this.actionCellRenderer(params), resizable: false, sortable: false
         }
       ],

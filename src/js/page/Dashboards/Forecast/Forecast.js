@@ -1,13 +1,13 @@
 import Dashboards from "../Dashboards.js";
 import Scheme from "../../../components/Scheme/Scheme.js";
-import { getRooms, getWarehousesInfo } from "../../../settings/request.js";
+import FilterRooms from "../../../components/Filters/FilterRooms/FilterRooms.js";
+import { getRooms, } from "../../../settings/request.js";
 import { Select } from "../../../modules/mySelect.js";
-import { FilterRooms } from "../../../components/FilterRooms/FilterRooms.js";
 
 class Forecast extends Dashboards {
   constructor({ loader }) {
     super({ loader, page: 'forecast' });
-    
+
     this.warehouseScheme = new Scheme(this.wrapper)
 
     this.currentRented = null
@@ -16,7 +16,7 @@ class Forecast extends Dashboards {
   init() {
     if (!this.wrapper) return
     this.selectWarehouseFloors = new Select({ uniqueName: 'select-warehouse-floors', parentEl: this.wrapper })
-    this.filterRooms = FilterRooms(this.wrapper.querySelector('.btn-set-filters'))
+    this.filterRooms = new FilterRooms(this.wrapper.querySelector('.btn-set-filters'))
 
     this.events()
   }
@@ -50,11 +50,7 @@ class Forecast extends Dashboards {
   async render() {
     try {
       this.loader.enable()
-      const [dataWarehouses, dataRooms] = await Promise.all([getWarehousesInfo(), getRooms()])
-
-      if (dataWarehouses) {
-        console.log(dataWarehouses)
-      }
+      const [data, dataRooms] = await Promise.all([[], getRooms()])
 
       if (dataRooms) {
         this.warehouseScheme.render(dataRooms)

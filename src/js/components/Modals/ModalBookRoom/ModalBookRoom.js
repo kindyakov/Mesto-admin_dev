@@ -3,6 +3,7 @@ import content from './content.html'
 import { itemHtml } from "../utils/html.js"
 import { validate } from "./validate.js"
 import SearchRoom from "../../SearchRoom/SearchRoom.js"
+import { outputInfo } from "../../../utils/outputinfo.js"
 
 class ModalBookRoom extends BaseModal {
   constructor(options = {}) {
@@ -72,12 +73,51 @@ class ModalBookRoom extends BaseModal {
       return
     }
 
-    this.validator.revalidate(isValid => {
+    this.validator.revalidate().then(isValid => {
       console.log(this.roomIds)
       if (!isValid) return
       const formData = new FormData(this.form)
       let data = { room_ids: this.roomIds }
     })
+  }
+
+  checkValue() {
+    const inputs = this.form.querySelectorAll('input')
+    let isValue = false
+    inputs.length && inputs.forEach(input => {
+      if (input.value !== '') {
+        isValue = true
+      }
+    })
+    return isValue
+  }
+
+  beforeClose() {
+    if (this.checkValue()) {
+      outputInfo({
+        msg: 'У вас есть несохраненные изменения.</br>Вы уверены, что хотите закрыть окно?',
+        msg_type: 'warning',
+        isConfirm: true
+      }, isConfirm => {
+        if (isConfirm) {
+          this.clearForm()
+          this.close()
+        }
+      });
+
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  clearForm() {
+    this.form.reset()
+    this.validator.refresh()
+  }
+
+  onClose() {
+    this.clearForm()
   }
 }
 

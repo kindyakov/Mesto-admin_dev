@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from "../Page.js"
+import TableEmployee from '../../components/Tables/TableEmployee/TableEmployee.js';
 import { api } from "../../settings/api.js";
 import { rowHtml } from "./html.js";
 import { outputInfo } from "../../utils/outputinfo.js"
@@ -10,7 +11,15 @@ class WorkingHours extends Page {
   constructor({ loader }) {
     super({
       loader,
-      tables: [],
+      tables: [
+        {
+          tableSelector: '.table-employee',
+          TableComponent: TableEmployee,
+          options: {
+            paginationPageSize: 15
+          }
+        }
+      ],
       page: 'working-hours'
     });
 

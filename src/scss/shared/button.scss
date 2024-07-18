@@ -161,4 +161,7 @@
 	font-size: 14px;
 	padding: 4px 10px;
 	height: 30px;
+	&.transparent {
+		background-color: #eff4fb;
+	}
 }

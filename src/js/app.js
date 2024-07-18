@@ -1,5 +1,6 @@
 import Navigation from "./components/Navigation/Navigation.js";
 import Auth from "./components/Auth/Auth.js";
+import WarehousesSelect from "./components/WarehousesSelect/WarehousesSelect.js";
 import { initializeModalTriggers } from "./components/initializeModalTriggers.js";
 
 import { Accordion } from "./modules/myAccordion.js"
@@ -11,20 +12,23 @@ import { modalMap } from "./modalMap.js";
 
 const nav = new Navigation();
 const auth = new Auth({ modalMap })
+const warehousesSelect = new WarehousesSelect()
 
-let isFirstLoad = false
+let isFirstLoad = true
 
 function appInit() {
-  if (!isFirstLoad) {
+  if (isFirstLoad) {
     useDynamicAdapt()
     burger({ selectorNav: '.sidebar' })
     initializeModalTriggers(modalMap)
 
     new Accordion({ isAccordion: false })
-    nav.init()
+    warehousesSelect.render().then(warehouse => {
+      nav.init(warehouse)
+    })
   }
 
-  isFirstLoad = true
+  isFirstLoad = false
 }
 
 if (auth.isAuth) {

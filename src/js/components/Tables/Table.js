@@ -27,6 +27,7 @@ class Table {
       paginationPageSizeSelector: [5, 10, 15, 20],
       getLocaleText: this.getLocaleText,
       suppressRowClickSelection: true, // Отключение выбора строки при клике на ячейку
+      suppressHorizontalScroll: false,
       rowSelection: 'multiple', // Включение множественного выбора строк
       onCellClicked: (params) => {
         if (params.column.colId === 'checkboxSelection') {
@@ -120,7 +121,7 @@ class Table {
 
       this.formTableSearch.addEventListener('submit', this.submitFormSearch.bind(this))
 
-      this.inputTableSearch.addEventListener('input', e => {
+      this.inputTableSearch && this.inputTableSearch.addEventListener('input', e => {
         let value = e.target.value
 
         clearTimeout(timerSearch);

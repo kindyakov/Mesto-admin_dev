@@ -27,7 +27,10 @@ class Navigation {
     this.modulesCache = {};  // Добавляем кэш для загруженных модулей
   }
 
-  init() {
+  init(warehouse) {
+    // Сохраняю склад
+    this.warehouse = warehouse
+
     // Добавляем обработчики событий на ссылки навигации
     this.navLinks.forEach(link => {
       link.addEventListener('click', this.navigate.bind(this));
@@ -77,7 +80,7 @@ class Navigation {
       import(`../../page/${this.pages[path]}`)
         .then(module => {
           this.loader.disable();
-          const page = new module.default({ loader: this.loader });
+          const page = new module.default({ loader: this.loader, warehouse: this.warehouse });
           this.modulesCache[path] = page;  // Сохраняем модуль в кэш
           page.render();
         })
@@ -101,7 +104,7 @@ class Navigation {
           this.sidebarAccordion.open(accordion);
         }
       } else {
-        content?.classList.remove('_active');        
+        content?.classList.remove('_active');
         link?.classList.remove('_active');
       }
     });

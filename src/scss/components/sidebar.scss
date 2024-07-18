@@ -90,6 +90,37 @@
 		padding-left: 15px;
 	}
 
+	.mySelect {
+		&._select {
+			.mySelect__input {
+				border-radius: 4px 4px 0 0;
+			}
+		}
+
+		&__input {
+			background-color: #333a48;
+			border: none;
+			font-weight: 500;
+			font-size: 16px;
+			color: #dee4ee;
+		}
+
+		&__list {
+			border-radius: 0 0 4px 4px;
+			border: none;
+			background-color: #465064;
+			color: #dee4ee;
+		}
+
+		&__option {
+			border: none;
+
+			&:hover {
+				background-color: #55617a;
+			}
+		}
+	}
+
 	&__list {
 		width: 100%;
 		display: flex;

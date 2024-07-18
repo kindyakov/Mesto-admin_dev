@@ -1,12 +1,12 @@
 import Page from "../Page.js"
 import Scheme from "../../components/Scheme/Scheme.js";
 import TableRooms from "../../components/Tables/TableRooms/TableRooms.js";
-import { getRooms, getWarehousesInfo, getMovingOutClients, getNonApprovedClients } from "../../settings/request.js";
+import FilterRooms from "../../components/Filters/FilterRooms/FilterRooms.js";
+import { getRooms, getMovingOutClients, getNonApprovedClients } from "../../settings/request.js";
 
 import { Select } from "../../modules/mySelect.js";
 import { Tabs } from "../../modules/myTabs.js"
 
-import { FilterRooms } from "../../components/FilterRooms/FilterRooms.js";
 import { roomHtml, rowHtml, row2Html } from "./html.js";
 import { createElement } from "../../settings/createElement.js";
 
@@ -38,7 +38,7 @@ class Rooms extends Page {
 
     this.warehouseScheme = new Scheme(this.wrapper)
     this.selectWarehouseFloors = new Select({ uniqueName: 'select-warehouse-floors', parentEl: this.wrapper })
-    this.filterRooms = FilterRooms([...this.wrapper.querySelectorAll('.btn-set-filters')])
+    this.filterRooms = new FilterRooms([...this.wrapper.querySelectorAll('.btn-set-filters')])
     this.tabs = new Tabs({
       classBtnActive: '_active',
       classContentActive: '_active',
@@ -63,6 +63,10 @@ class Rooms extends Page {
       }
       if (e.target.closest('.warehouse__svg-cell[data-rented]')) {
         this.handleClickCell(e)
+      }
+
+      if (e.target.closest('.btn-remove-room')) {
+        this.handleClickRemoveRoom(e)
       }
     })
 
@@ -120,12 +124,25 @@ class Rooms extends Page {
     const cellNum = +cell.getAttribute('data-cell-num')
     const [currentRoom] = this.planRooms.filter(room => room.room_id == cellNum)
 
-    this.changeSelectRooms('add', currentRoom)
+    if (cell.classList.contains('_selected')) {
+      cell.classList.remove('_selected')
+      this.changeSelectRooms('remove', currentRoom)
+    } else {
+      cell.classList.add('_selected')
+      this.changeSelectRooms('add', currentRoom)
+    }
+  }
+
+  handleClickRemoveRoom(e) {
+    const btn = e.target.closest('.btn-remove-room')
+    const roomId = +btn.getAttribute('data-room-id')
+    const [currentRoom] = this.planRooms.filter(room => room.room_id == roomId)
+    this.changeSelectRooms('remove', currentRoom)
   }
 
   changeSelectRooms(type, room) {
     const renderRooms = () => {
-      const html = this.selectRooms.map(_room => roomHtml(_room)).join('')
+      const html = this.selectRooms.map(_room => roomHtml({ ..._room, remove: true })).join('')
       const div = createElement('div', ['wrap-scroll'], html)
       this.selectsRoomsContent.innerHTML = div.outerHTML
       this.selectsRoomsContent.scrollIntoView({ block: "center", behavior: "smooth" })
@@ -134,24 +151,14 @@ class Rooms extends Page {
 
     const actions = {
       add: room => {
-        if (!this.selectRooms.length) {
-          // this.selectsRoomsContent.style.height = '370px'
-        }
-
         this.selectRooms.push(room)
         renderRooms()
       },
       remove: room => {
         this.selectRooms = this.selectRooms.filter(_room => +_room.room_id !== +room.room_id)
-
-        if (!this.selectRooms.length) {
-          // this.selectsRoomsContent.style.height = '0px'
-        }
-
         renderRooms()
       }
     }
-
 
     actions[type]?.(room)
   }

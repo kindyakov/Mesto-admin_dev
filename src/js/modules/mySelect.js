@@ -80,8 +80,9 @@ export class Select {
       const inputHtml = select.getAttribute('data-input-html') || this.options.inputHtml
       const selectMinWidth = select.getAttribute('data-select-min-width') || this.options.selectMinWidth
       const selectMaxWidth = select.getAttribute('data-select-max-width') || this.options.selectMaxWidth
+      const prefix = select.getAttribute('data-prefix') || ''
 
-      const customSelect = this.customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder, isDisabled, inputHtml })
+      const customSelect = this.customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder, isDisabled, inputHtml, prefix })
       const b479 = window.matchMedia(`(min-width: 479px)`)
 
       select.insertAdjacentElement('afterend', customSelect)
@@ -123,10 +124,10 @@ export class Select {
           const option = e.target.closest(this.options.selectOption)
 
           const optionValue = option.getAttribute('data-value')
-          const optionText = option.innerText
+          const optionContent = option.innerHTML
 
           selectInputSpan.classList.remove('placeholder')
-          selectInputSpan.innerText = optionText
+          selectInputSpan.innerHTML = optionContent
           selectInput.setAttribute('data-value', optionValue)
 
           this.disableSelectedOption(select)
@@ -167,8 +168,12 @@ export class Select {
   }
 
   close(select) {
-    select.classList.remove(this.options.classActive)
-    select.querySelector(this.options.selectList).style.maxHeight = null
+    if (select) {
+      select.classList.remove(this.options.classActive)
+      if (select.querySelector(this.options.selectList)) {
+        select.querySelector(this.options.selectList).style.maxHeight = null
+      }
+    }
 
     this.onClose(select)
   }
@@ -223,7 +228,7 @@ export class Select {
     }
   }
 
-  customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder, isDisabled, inputHtml }) {
+  customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder, isDisabled, inputHtml, prefix }) {
     const mySelect = document.createElement("div")
 
     mySelect.classList.add('mySelect')
@@ -231,10 +236,12 @@ export class Select {
     isDisabled && mySelect.classList.add('_disabled')
     mySelect.setAttribute('data-name', selectName)
 
-    mySelect.innerHTML = `<div class="mySelect__input" data-value="${placeholder.length ? '' : options[activeIndex].value}">${placeholder.length ? `<span class="placeholder">${placeholder}</span>` : `<span>${options[activeIndex].textContent}</span>`} ${inputHtml.length ? inputHtml : ''}</div>
+    if (options.length) {
+      mySelect.innerHTML = `<div class="mySelect__input" data-value="${placeholder.length ? '' : options[activeIndex].value}">${placeholder.length ? `<span class="placeholder">${placeholder}</span>` : `<span>${prefix ? `<span class="prefix">${prefix}</span>` : ''}${options[activeIndex].innerHTML}</span>`} ${inputHtml.length ? inputHtml : ''}</div>
     <ul class="mySelect__list">
-    ${Array.from(options).map(option => `<li class="mySelect__option ${options[activeIndex].value === option.value && !placeholder ? '_none' : ''}" data-value="${option.value}">${option.textContent}</li>`).join('')}
+    ${Array.from(options).map(option => `<li class="mySelect__option ${options[activeIndex].value === option.value && !placeholder ? '_none' : ''}" data-value="${option.value}">${prefix ? `<span class="prefix">${prefix}</span>` : ''}${option.innerHTML}</li>`).join('')}
     </ul>`
+    }
 
     return mySelect
   }

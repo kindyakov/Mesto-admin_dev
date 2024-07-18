@@ -36,6 +36,7 @@ export function roomHtml(data) {
   <div class="warehouse__body_room room">
             <div class="room__top">
               <span>Ячейка: №${data.room_id ? data.room_id : ''}</span>
+              ${data.remove ? `<button class="room__remove btn-remove-room" data-room-id="${data.room_id}"></button>` : ''}
             </div>
             <div class="room__content">
               <div class="room__content_prices">
@@ -61,7 +62,7 @@ export function roomHtml(data) {
                       <use xlink:href='img/svg/sprite.svg#phone'></use>
                     </svg>
                     <span>${formatPhoneNumber(data.username)}</span>
-                    ${data.rented == 0.4 ? '<button data-json="${dataStr(data)}" class="button-text blue"><span>Позвонить</span></button>' : ''}
+                    ${data.rented == 0.4 ? `<button data-json="${dataStr(data)}" class="button-text blue"><span>Позвонить</span></button>` : ''}
                   </p>` : ''}
                 </div>
               `}  

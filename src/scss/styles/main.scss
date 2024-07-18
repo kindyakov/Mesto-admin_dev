@@ -3,7 +3,7 @@
 	position: relative;
 
 	// &__container {}
-
+	// :first-letter
 	&__body {
 		width: 100%;
 	}
@@ -15,6 +15,14 @@
 
 		&._active {
 			display: flex;
+		}
+		&[data-content='charging-locks'] {
+			.mySelect__input {
+				.prefix {
+					margin-right: 3px;
+					color: #64748b;
+				}
+			}
 		}
 	}
 

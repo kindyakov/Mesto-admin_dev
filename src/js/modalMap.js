@@ -16,6 +16,7 @@ import modalCreateAgreement from "./components/Modals/ModalCreateAgreement/Modal
 import modalDownloadPhotoWh from "./components/Modals/ModalDownloadPhotoWh/ModalDownloadPhotoWh.js";
 import modalShowPhotoWh from "./components/Modals/ModalShowPhotoWh/ModalShowPhotoWh.js";
 import modalConfirmationClient from "./components/Modals/ModalConfirmationClient/ModalConfirmationClient.js";
+import modalPhotoRoom from "./components/Modals/ModalPhotoRoom/ModalPhotoRoom.js";
 
 import modalConfirmOpenRoom from "./components/Modals/Confirmation/ModalConfirmOpenRoom/ModalConfirmOpenRoom.js";
 
@@ -44,4 +45,5 @@ export const modalMap = {
   [getClassModal(modalShowPhotoWh)]: modalShowPhotoWh,
   [getClassModal(modalConfirmationClient)]: modalConfirmationClient,
   [getClassModal(modalConfirmOpenRoom)]: modalConfirmOpenRoom,
+  [getClassModal(modalPhotoRoom)]: modalPhotoRoom,
 }

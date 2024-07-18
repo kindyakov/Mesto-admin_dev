@@ -64,6 +64,7 @@ class ModalGetGuestAccess extends BaseModal {
         this.searchRoom.tippy.show()
       }
     }
+
   }
 
   handleSubmit(e) {
@@ -95,6 +96,7 @@ class ModalGetGuestAccess extends BaseModal {
           isConfirm: true
         }, isConfirm => {
           if (isConfirm) {
+            this.clearForm()
             this.close()
           }
         })
@@ -103,6 +105,11 @@ class ModalGetGuestAccess extends BaseModal {
     }
 
     return true;
+  }
+
+  clearForm() {
+    this.form.reset()
+    this.validator.refresh()
   }
 
   async testRoomAdmin(data) {

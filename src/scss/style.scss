@@ -80,6 +80,8 @@ body {
 @import 'shared/input';
 @import 'shared/button';
 @import 'shared/tippy';
+@import 'shared/slider';
+@import 'shared/filter';
 
 // components
 @import 'components/sidebar';
@@ -101,11 +103,11 @@ body {
 @import 'styles/charts';
 @import 'styles/table';
 @import 'styles/widgets';
-@import 'styles/filter-rooms';
 
 @import 'pages/dashboards';
 @import 'pages/working-hours';
 @import 'pages/warehouses';
+@import 'pages/locks';
 
 ._none {
 	display: none;
