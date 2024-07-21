@@ -1,5 +1,6 @@
 import Dashboards from "../Dashboards.js";
 import TablePayments from "../../../components/Tables/TablePayments/TablePayments.js"
+import ChartMonthlyRevenue from "../../../components/Charts/ChartMonthlyRevenue/ChartMonthlyRevenue.js";
 import { getDashboardFinance, getPayments } from "../../../settings/request.js";
 import { cellRendererInput } from "../../../components/Tables/utils/cellRenderer.js";
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
@@ -57,6 +58,9 @@ class Finance extends Dashboards {
             ]
           }
         }
+      ],
+      charts: [
+        { id: 'chart-monthly-revenue', ChartComponent: ChartMonthlyRevenue },
       ],
       page: 'finance'
     });

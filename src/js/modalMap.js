@@ -17,6 +17,7 @@ import modalDownloadPhotoWh from "./components/Modals/ModalDownloadPhotoWh/Modal
 import modalShowPhotoWh from "./components/Modals/ModalShowPhotoWh/ModalShowPhotoWh.js";
 import modalConfirmationClient from "./components/Modals/ModalConfirmationClient/ModalConfirmationClient.js";
 import modalPhotoRoom from "./components/Modals/ModalPhotoRoom/ModalPhotoRoom.js";
+import modalSelectNextPayment from "./components/Modals/ModalSelectNextPayment/ModalSelectNextPayment.js";
 
 import modalConfirmOpenRoom from "./components/Modals/Confirmation/ModalConfirmOpenRoom/ModalConfirmOpenRoom.js";
 
@@ -28,9 +29,9 @@ export const modalMap = {
   [getClassModal(modalAddClient)]: modalAddClient, // 
   [getClassModal(modalPassport)]: modalPassport, // Паспорт
   [getClassModal(modalChangePhotoPassport)]: modalChangePhotoPassport, // Загрузка фото паспорта
-  [getClassModal(modalClient)]: modalClient,
-  [getClassModal(modalOldClient)]: modalOldClient,
-  [getClassModal(modalPassport)]: modalPassport,
+  [getClassModal(modalClient)]: modalClient, // Клиент
+  [getClassModal(modalOldClient)]: modalOldClient, // Старый клиент
+  [getClassModal(modalPassport)]: modalPassport, // Паспорт
   [getClassModal(modalAgreement)]: modalAgreement,
   [getClassModal(modalAddPayment)]: modalAddPayment,
   [getClassModal(modalRoom)]: modalRoom,
@@ -46,4 +47,5 @@ export const modalMap = {
   [getClassModal(modalConfirmationClient)]: modalConfirmationClient,
   [getClassModal(modalConfirmOpenRoom)]: modalConfirmOpenRoom,
   [getClassModal(modalPhotoRoom)]: modalPhotoRoom,
+  [getClassModal(modalSelectNextPayment)]: modalSelectNextPayment,
 }

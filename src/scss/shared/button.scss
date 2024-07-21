@@ -20,6 +20,12 @@
 		box-shadow: 0 2px 4px rgba(147, 165, 247, 0.3);
 	}
 
+	> span {
+		&:nth-child(2) {
+			display: none;
+		}
+	}
+
 	&.transparent {
 		background-color: transparent;
 		color: #1c2434;
@@ -27,6 +33,19 @@
 		&:hover {
 			opacity: 1;
 			border-color: $blue;
+		}
+	}
+
+	&.shipped {
+		background-color: $green-light;
+		color: $green;
+		> span {
+			&:nth-child(1) {
+				display: none;
+			}
+			&:nth-child(2) {
+				display: inline-block;
+			}
 		}
 	}
 }

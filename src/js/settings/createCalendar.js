@@ -7,7 +7,7 @@ const months = ['Январь', 'Февраль', 'Март', 'Апрель', '�
 export const createCalendar = (input, options = {}) => {
   if (!input) return
   const methods = {
-    onChange: () => {}
+    onChange: () => { }
   }
 
   let customSelect, uniqueId = Math.random()
@@ -22,7 +22,6 @@ export const createCalendar = (input, options = {}) => {
       const selectM = instance.calendarContainer.querySelector('.flatpickr-monthDropdown-months');
       selectM.classList.add('init-custom-select');
       selectM.setAttribute('name', 'flatpickr-month');
-      selectM.setAttribute('data-select-min-width', 'false');
       selectM.setAttribute('data-special-select', `${uniqueId}-select-flatpickr`);
       selectM.setAttribute('data-input-html', '<svg class="icon icon-arrow"><use xlink:href="./img/svg/sprite.svg#arrow"></use></svg>');
       selectM.innerHTML = '';
@@ -34,6 +33,7 @@ export const createCalendar = (input, options = {}) => {
         uniqueName: `${uniqueId}-select-flatpickr`,
         activeIndex: instance.currentMonth,
         maxHeightList: 279,
+        selectMinWidth: 100,
         onChange: (e, select, optionValue) => instance.changeMonth(parseInt(optionValue), false)
       });
     },
@@ -41,6 +41,15 @@ export const createCalendar = (input, options = {}) => {
     onChange: (selectedDates, dateStr, instance) => {
       methods.onChange(selectedDates, dateStr, instance)
     },
+    onOpen: [
+      function (selectedDates, dateStr, instance) {
+        if (instance.config.appendTo?.classList.contains('wp-input')) {
+          setTimeout(() => {
+            instance.calendarContainer.style.cssText = 'top: calc(100% + 5px); left: 0; right: auto;'
+          })
+        }
+      },
+    ],
   };
 
   const mergedOptions = { ...defaultOptions, ...options };

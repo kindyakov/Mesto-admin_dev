@@ -1,7 +1,6 @@
 import Table from "../Table.js";
 import { validateRow } from './validate.js';
 
-import { Select } from "../../../modules/mySelect.js";
 import { api } from "../../../settings/api.js";
 import { downloadPayments } from "../../../settings/request.js";
 
@@ -18,7 +17,7 @@ class TablePayments extends Table {
       columnDefs: [
         { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
         {
-          headerName: 'Договор', field: 'agrid', flex: 0.2,
+          headerName: 'Договор', field: 'agrid', minWidth: 50, flex: 0.3,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-agrid')

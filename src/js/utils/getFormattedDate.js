@@ -20,3 +20,9 @@ export function getFormattedDate(date = new Date(), format = 'DD.MM.YYYY') {
 
   return formattedDate;
 }
+
+export function getMonthName(dateString) {
+  const months = ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сент', 'Окт', 'Нояб', 'Дек'];
+  const [year, month] = dateString.split('-');
+  return months[month - 1];
+}

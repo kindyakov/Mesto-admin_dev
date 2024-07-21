@@ -114,10 +114,8 @@ class Auth {
 
     const modalMap = this.options.modalMap
 
-    if (modalMap.length) {
-      for (const key in modalMap) {
-        modalMap[key]?.modal.close()
-      }
+    for (const key in modalMap) {
+      modalMap[key]?.modal.close()
     }
   }
 

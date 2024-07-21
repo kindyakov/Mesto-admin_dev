@@ -3,12 +3,13 @@ import { createCalendar } from "../../settings/createCalendar.js"
 import { getFormattedDate } from "../../utils/getFormattedDate.js"
 
 class Dashboards {
-  constructor({ loader, tables = [], tableSelector = '', TableComponent = null, page }) {
+  constructor({ loader, tables = [], charts = [], page }) {
     this.loader = loader
     this.wrapper = document.querySelector(`[data-content="dashboards/${page}"]`)
     this.formFilter = this.wrapper.querySelector('.form-filter-dashboards')
 
     this.tables = []
+    this.charts = []
 
     if (tables.length) {
       tables.forEach(table => {
@@ -16,6 +17,15 @@ class Dashboards {
         } = table
         this.table = new TableComponent(tableSelector, { ...options, wrapper: this.wrapper }, params)
         this.tables.push(this.table)
+      })
+    }
+
+    if (charts.length) {
+      charts.forEach(_chart => {
+        const { id, ChartComponent, options = {} } = _chart
+        const ctx = this.wrapper.querySelector(`#${id}`)
+        const chart = new ChartComponent(ctx, options)
+        this.charts.push(chart)
       })
     }
 
@@ -92,6 +102,13 @@ class Dashboards {
     })
   }
 
+  actionsCharts(callback = () => { }) {
+    if (!this.charts.length) return
+    this.charts.forEach(chart => {
+      callback(chart)
+    })
+  }
+
   async render() {
     try {
       this.loader.enable()
@@ -99,6 +116,7 @@ class Dashboards {
 
       if (dataDashboard) {
         this.renderWidgets(dataDashboard)
+        this.actionsCharts(chart => chart.render(dataDashboard))
       }
 
       if (this.tables.length && dataEntities) {

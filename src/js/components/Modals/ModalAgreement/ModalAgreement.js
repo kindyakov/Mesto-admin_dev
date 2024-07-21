@@ -218,7 +218,7 @@ class ModalAgreement extends BaseModal {
     this.disableEditInput(this.form, [
       { el: this.modalBody.querySelector('.btn-edit-client-data'), delClass: '_is-edit' }
     ])
-    this.confirmationModal.hide()
+    this.confirmationModal?.hide()
   }
 
   beforeClose() {

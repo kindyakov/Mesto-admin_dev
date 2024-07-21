@@ -1,87 +1,162 @@
 <div class="main__content content-main" data-content="dashboards/warehouse">
-  <div class="dashboards__table" data-max-height="480">
-    <div class="dashboards__table-toggle btn-toggle-table">
-      <span>Сделки</span>
-    </div>
-    <div class="table" style="height: 480px; max-height: none;">
-      <div class="table__top">
-        <form class="table__form form-table-search">
-          <div class="wp-input">
-            <svg class='icon icon-calendar'>
-              <use xlink:href='img/svg/sprite.svg#calendar'></use>
-            </svg>
-            <input type="text" class="input-date" name="date" placeholder="Дата">
-          </div>
-          <div class="wp-input wp-input-search">
-            <input type="text" name="search_str" placeholder="Поиск" class="input input-table-search"
-              autocomplete="off">
-            <button type="submit" class="button-icon-search">
-              <svg class='icon icon-search'>
-                <use xlink:href='img/svg/sprite.svg#search'></use>
-              </svg>
-            </button>
-          </div>
-        </form>
-        <div class="table__buttuns">
-          <button class="table__button button-table btn-table-add" data-modal="">
-            <span>Добавить</span>
-            <svg class='icon icon-plus'>
-              <use xlink:href='img/svg/sprite.svg#plus'></use>
-            </svg>
-          </button>
-          <button class="table__button button-table btn-table-upload-excel" data-count>
-            <span>Выгрузить в Excel</span>
-            <svg class='icon icon-dow'>
-              <use xlink:href='img/svg/sprite.svg#dow'></use>
-            </svg>
-          </button>
-        </div>
+  <div class="widgets">
+    <div class="widgets__item">
+      <div class="widgets__item_circle green">
       </div>
-      <div class="table__content table-transactions ag-theme-quartz" style="height: 100%;"></div>
+      <div class="widgets__item_content">
+        <span class="value">7,64 % (44)</span>
+        <span class="name">Свободные</span>
+      </div>
+    </div>
+    <div class="widgets__item">
+      <div class="widgets__item_circle blue">
+      </div>
+      <div class="widgets__item_content">
+        <span class="value">0,17 % (1)</span>
+        <span class="name">Забронированные</span>
+      </div>
+    </div>
+    <div class="widgets__item">
+      <div class="widgets__item_circle red">
+      </div>
+      <div class="widgets__item_content">
+        <span class="value">89,76 % (517)</span>
+        <span class="name">Занятые</span>
+      </div>
+    </div>
+    <div class="widgets__item">
+      <div class="widgets__item_circle yellow">
+      </div>
+      <div class="widgets__item_content">
+        <span class="value">2,43 % (14)</span>
+        <span class="name">Освобождающиеся</span>
+      </div>
     </div>
   </div>
 
-  <div class="dashboards__table">
-    <div class="dashboards__table-toggle btn-toggle-table">
-      <span>Договоры</span>
-    </div>
+  <div class="warehouse">
+    <div class="warehouse__header">
+      <div class="warehouse__types">
+        <button class="warehouse__type btn-filter-scheme" data-rented="0">
+          <span class="circle"></span>
+          <span class="name">Свободные</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.4">
+          <span class="circle"></span>
+          <span class="name">Неоплаченные</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.25">
+          <span class="circle"></span>
+          <span class="name">Гостевые</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.5">
+          <span class="circle"></span>
+          <span class="name">Забронированные</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="1">
+          <span class="circle"></span>
+          <span class="name">Занятые</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.75">
+          <span class="circle"></span>
+          <span class="name">Освобождающиеся</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme _active" data-rented="-1">
+          <span class="name">Все</span>
+        </button>
+      </div>
 
-    <div class="charts">
-      <div class="chart" style="flex: 1 1 auto;">
-        <div class="chart__header"></div>
-        <div class="chart__body" id=""></div>
+      <div class="warehouse__filters">
+        <select name="floors" class="init-custom-select" data-special-select="select-warehouse-floors"
+          data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
+          <option value="1">1 этаж</option>
+          <option value="2">2 этаж</option>
+        </select>
+        <button class="warehouse__button button-table btn-set-filters">
+          <span>Фильтры</span>
+          <svg class='icon icon-filter'>
+            <use xlink:href='img/svg/sprite.svg#filter'></use>
+          </svg>
+        </button>
       </div>
     </div>
 
-    <div class="table" style="height: 480px; max-height: none;">
-      <div class="table__top">
-        <form class="table__form form-table-search">
-          <div class="wp-input wp-input-search">
-            <input type="text" name="search_str" placeholder="Поиск" class="input input-table-search"
-              autocomplete="off">
-            <button type="submit" class="button-icon-search">
-              <svg class='icon icon-search'>
-                <use xlink:href='img/svg/sprite.svg#search'></use>
+    <div class="warehouse__schemes">
+      <div class="warehouse__wrap-scheme wrap-scheme _active">
+        @@include('../../schemes/scheme-1.html',{'pathPrefix':'@@webRoot/'})
+      </div>
+      <div class="warehouse__wrap-scheme wrap-scheme">
+        @@include('../../schemes/scheme-2.html',{'pathPrefix':'@@webRoot/'})
+      </div>
+    </div>
+  </div>
+
+  <div class="charts">
+    <div class="chart" style="flex: 1 1 60%;">
+      <div class="chart__top">
+        <div class="chart__header">
+          <h4 class="chart__title" style="display: flex; align-items: center;">
+            Площадь арендованных ячеек: 50 м²
+            <div class="frame up">
+              <span>0,23%</span>
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M3.49967 1.914L0.817673 4.596L0.110674 3.889L3.99967 3.67785e-06L7.88867 3.889L7.18167 4.596L4.49967 1.914L4.49967 8L3.49967 8L3.49967 1.914Z"
+                  fill="white" />
               </svg>
-            </button>
-          </div>
-        </form>
-        <div class="table__buttuns">
-          <button class="table__button button-table btn-table-add" data-modal="">
-            <span>Добавить</span>
-            <svg class='icon icon-plus'>
-              <use xlink:href='img/svg/sprite.svg#plus'></use>
-            </svg>
-          </button>
-          <button class="table__button button-table btn-table-upload-excel" data-count>
-            <span>Выгрузить в Excel</span>
-            <svg class='icon icon-dow'>
-              <use xlink:href='img/svg/sprite.svg#dow'></use>
-            </svg>
-          </button>
+            </div>
+          </h4>
+          <select name="sort" class="init-custom-select" data-special-select="select-chart-area-rented-cells">
+            <option value="planFact">План/Факт</option>
+            <option value="plan">План</option>
+            <option value="fact">Факт</option>
+          </select>
+        </div>
+        <div class="chart__info" style="margin-top: 15px;">
+          <p>
+            <img src="./img/icons/radio.png" alt="Иконка">
+            <span style="color: #3d50e0;">Факт</span>
+          </p>
+          <p>
+            <img src="./img/icons/radio-2.png" alt="Иконка">
+            <span>План</span>
+          </p>
         </div>
       </div>
-      <div class="table__content table-agreements ag-theme-quartz" style="height: 100%;"></div>
+      <div class="chart__body">
+        <canvas id="chart-area-rented-cells" style="max-height: 220px;"></canvas>
+        <div id="tooltip-area-rented-cells" class="chart-tooltip"></div>
+      </div>
+    </div>
+    <div class="chart" style="flex: 1 1 40%;">
+      <div class="chart__header">
+        <h4 class="chart__title">Занятость ячеек</h4>
+        <select name="sort" class="init-custom-select" data-special-select="select-chart-cell-occupancy">
+          <option value="all">Все этажи</option>
+          <option value="2">1 этаж</option>
+          <option value="2">2 этаж</option>
+        </select>
+      </div>
+      <div class="chart__content start between">
+        <ul class="chart__list">
+          <li>
+            <span class="percent" style="background: #3b50e1;">20%</span>
+            <p>Свободные</p>
+          </li>
+          <li>
+            <span class="percent" style="background: #6577f3;">30%</span>
+            <p>Забронированные</p>
+          </li>
+          <li>
+            <span class="percent" style="background: #8fd0ef;">50%</span>
+            <p>Занятые</p>
+          </li>
+        </ul>
+        <div class="chart__body chart-cell-occupancy">
+          <canvas id="chart-cell-occupancy" style="max-height: 240px; max-width: 240px;"></canvas>
+          <p class="count-cells"><b>707</b><span>Ячеек</span></p>
+        </div>
+      </div>
     </div>
   </div>
 </div>

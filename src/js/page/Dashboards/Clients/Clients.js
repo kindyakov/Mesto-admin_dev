@@ -1,5 +1,7 @@
 import Dashboards from "../Dashboards.js";
 import TableClients from "../../../components/Tables/TableClients/TableClients.js";
+import ChartInfluxCustomers from "../../../components/Charts/ChartInfluxCustomers/ChartInfluxCustomers.js";
+import ChartGenderAge from "../../../components/Charts/СhartGenderAge/СhartGenderAge.js";
 import { getClients, getDashboardClient } from "../../../settings/request.js";
 
 class Clients extends Dashboards {
@@ -8,6 +10,10 @@ class Clients extends Dashboards {
       loader,
       tables: [
         { tableSelector: '.table-clients', TableComponent: TableClients, }
+      ],
+      charts: [
+        { id: 'chart-influx-customers', ChartComponent: ChartInfluxCustomers },
+        { id: 'chart-gender-age', ChartComponent: ChartGenderAge },
       ],
       page: 'clients'
     });

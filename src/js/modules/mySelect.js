@@ -89,12 +89,14 @@ export class Select {
       select.style.display = 'none'
 
       if (b479.matches && selectMinWidth) {
-        const maxWidth = getMaxWidth(customSelect.querySelectorAll('.mySelect__option'));
-        customSelect.style.minWidth = `${maxWidth + 5}px`
+        customSelect.style.minWidth = `${selectMinWidth + 5}px`
+      } else {
+        // const maxWidth = getMaxWidth(customSelect.querySelectorAll('.mySelect__option'))
+        // customSelect.style.maxWidth = selectMaxWidth ? selectMaxWidth + 'px' : maxWidth + 'px'
       }
 
       if (selectMaxWidth) {
-        customSelect.style.maxWidth = selectMaxWidth + 'px'
+
       }
 
       this.selectsCustom.push(customSelect)

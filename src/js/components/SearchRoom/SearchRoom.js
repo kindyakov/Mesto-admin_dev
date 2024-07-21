@@ -31,6 +31,7 @@ class SearchRoom {
 
   init() {
     if (!this.tippy.popper) return
+
     this.modal = this.tippy.popper.querySelector('.search-modal')
     this.loader = new Loader(this.modal)
     this.inputSearch = this.modal.querySelector('.input')

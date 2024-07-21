@@ -7,18 +7,17 @@
       <input type="text" class="input-date-filter" name="date" placeholder="Дата">
     </label>
     <div class="main__selects-filter">
-      <select class="init-custom-select" data-special-select="select-filter-main" name="plan"
+      <!-- <select class="init-custom-select" data-special-select="select-filter-main" name="plan"
         data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
         <option value="1">Склад 1</option>
         <option value="2">Склад 2</option>
-        <option value="3">Склад 3</option>
       </select>
       <select class="init-custom-select" data-special-select="select-filter-main" name="month"
         data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
         <option value="month">За месяц</option>
         <option value="2">Option 2</option>
         <option value="3">Option 3</option>
-      </select>
+      </select> -->
     </div>
   </form>
 
@@ -62,13 +61,51 @@
   </div>
 
   <div class="charts">
-    <div class="chart" style="flex: 1 1 66.66%;">
-      <div class="chart__header"></div>
-      <div class="chart__body" id=""></div>
+    <div class="chart" style="flex: 1 1 65%; width: 65%; height: 415px;">
+      <div class="chart__header">
+        <div class="chart__header-flex">
+          <div class="chart__item-info">
+            <img src="./img/icons/radio.png" alt="Иконка">
+            <p>
+              <span class="blue">Приток клиентов (факт)</span>
+              <span>12.04.2022 - 12.05.2022</span>
+            </p>
+          </div>
+          <div class="chart__item-info">
+            <img src="./img/icons/radio-2.png" alt="Иконка">
+            <p>
+              <span class="gray">Приток клиентов (план)</span>
+              <span>12.04.2022 - 12.05.2022</span>
+            </p>
+          </div>
+        </div>
+        <select name="sort" class="init-custom-select" data-special-select="select-chart-influx-customers">
+          <option value="planFact">План/Факт</option>
+          <option value="plan">План</option>
+          <option value="fact">Факт</option>
+        </select>
+      </div>
+      <div class="chart__content">
+        <div class="chart__body">
+          <canvas id="chart-influx-customers"></canvas>
+          <div id="chart-tooltip-influx-customers" class="chart-tooltip"></div>
+        </div>
+
+        <div class="chart__year"><span>2025 год</span></div>
+      </div>
     </div>
-    <div class="chart" style="flex: 1 1 33.33%;">
-      <div class="chart__header"></div>
-      <div class="chart__body" id=""></div>
+    <div class="chart" style="flex: 1 1 35%; width: 35%; height: 415px;">
+      <div class="chart__header flex-col">
+        <h4 class="chart__title">Пол/возраст</h4>
+        <div class="chart__info">
+          <p class="men"><b style="background-color: #3b50e1;"></b><span>Мужчины</span></p>
+          <p class="women"><b style="background-color: #80caed;"></b><span>Женщины</span></p>
+        </div>
+      </div>
+      <div class="chart__body">
+        <canvas id="chart-gender-age"></canvas>
+        <div id="chart-tooltip-gender-age" class="chart-tooltip"></div>
+      </div>
     </div>
   </div>
 

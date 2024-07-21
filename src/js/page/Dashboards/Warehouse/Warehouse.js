@@ -1,28 +1,95 @@
 import Dashboards from "../Dashboards.js";
-import TableAgreements from "../../../components/Tables/TableAgreements/TableAgreements.js";
-import TableTransactions from "../../../components/Tables/TableTransactions/TableTransactions.js";
-import { getAgreements } from "../../../settings/request.js";
+import Scheme from "../../../components/Scheme/Scheme.js";
+import ChartAreaRentedCells from "../../../components/Charts/ChartAreaRentedCells/ChartAreaRentedCells.js";
+import ChartCellOccupancy from "../../../components/Charts/ChartCellOccupancy/ChartCellOccupancy.js";
+import FilterRooms from "../../../components/Filters/FilterRooms/FilterRooms.js";
+import { getRooms, } from "../../../settings/request.js";
+import { Select } from "../../../modules/mySelect.js";
 
 class Warehouse extends Dashboards {
   constructor({ loader }) {
     super({
-      loader,
-      tables: [
-        { tableSelector: '.table-agreements', TableComponent: TableAgreements, },
-        { tableSelector: '.table-transactions', TableComponent: TableTransactions, }
+      loader, page: 'warehouse',
+      charts: [
+        { id: 'chart-area-rented-cells', ChartComponent: ChartAreaRentedCells },
+        { id: 'chart-cell-occupancy', ChartComponent: ChartCellOccupancy },
       ],
-      page: 'warehouse'
     });
 
+    this.warehouseScheme = new Scheme(this.wrapper)
+
+    this.currentRented = null
   }
 
-  async getData(data = {}) {
-    return getAgreements(data)
+  init() {
+    if (!this.wrapper) return
+    this.selectWarehouseFloors = new Select({ uniqueName: 'select-warehouse-floors', parentEl: this.wrapper })
+    this.filterRooms = new FilterRooms(this.wrapper.querySelector('.btn-set-filters'))
+
+    this.events()
   }
 
-  async getDashboardData() {
-    return []
+  events() {
+    this.wrapper.addEventListener('click', e => {
+      if (e.target.closest('.btn-filter-scheme:not(._active)')) {
+        this.handleClickFilterScheme(e)
+      }
+    })
+
+    this.selectWarehouseFloors.onChange = (e, select, value) => {
+      this.warehouseScheme.changeActive(+value)
+    }
+
+    this.filterRooms.onApply = filterParams => this.renderScheme(filterParams)
   }
+
+  handleClickFilterScheme(e) {
+    const btn = e.target.closest('.btn-filter-scheme')
+    const btnActive = this.wrapper.querySelector('.btn-filter-scheme._active')
+    const rented = btn.getAttribute('data-rented')
+
+    btn.classList.add('_active')
+    btnActive?.classList.remove('_active')
+
+    this.currentRented = rented
+    this.warehouseScheme.filterCell(rented)
+  }
+
+  async render() {
+    try {
+      this.loader.enable()
+      const [data, dataRooms] = await Promise.all([[], getRooms()])
+
+      if (dataRooms) {
+        this.warehouseScheme.render(dataRooms)
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loader.disable()
+    }
+  }
+
+  async renderScheme(params = {}) {
+    try {
+      this.loader.enable()
+      const data = await getRooms(params)
+      if (data) {
+
+        if (this.currentRented) {
+          this.warehouseScheme.setNumRooms(data.plan_rooms)
+          this.warehouseScheme.filterCell(this.currentRented)
+        } else {
+          this.warehouseScheme.render(data)
+        }
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loader.disable()
+    }
+  }
+  
 }
 
 export default Warehouse

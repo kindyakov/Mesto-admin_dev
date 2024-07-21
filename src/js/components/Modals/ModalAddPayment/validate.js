@@ -31,6 +31,7 @@ export function validate(form, options) {
 
   const calendar = createCalendar(paymentDate, {
     dateFormat: 'd.m.Y',
+    appendTo: paymentDate.parentElement
   })
 
   const inputAmount = form.querySelector('[name="amount"]')

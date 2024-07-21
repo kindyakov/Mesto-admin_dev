@@ -25,7 +25,7 @@ class ModalAddPayment extends BaseModal {
 
     this.form = this.modalBody.querySelector('.form-add-payment')
     this.btnAddPayment = this.modalBody.querySelector('.btn-add-payment')
-    this.validator = validate(this.form)
+    this.validator = validate(this.form, { container: this.modalBody })
 
     this.events()
   }
@@ -72,7 +72,6 @@ class ModalAddPayment extends BaseModal {
   }
 
   onOpen(params = null) {
-    this.validator?.calendars.forEach(calendar => calendar.redraw())
     if (!params) return
     const extractData = this.extractData(params)
     if (!extractData) return

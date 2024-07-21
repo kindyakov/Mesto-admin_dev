@@ -1,5 +1,12 @@
 .tippy {
 }
+
+.tippy-box {
+	.modal__body {
+		transform: scale(1);
+	}
+}
+
 .tippy-button {
 }
 

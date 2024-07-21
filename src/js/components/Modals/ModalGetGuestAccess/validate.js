@@ -13,6 +13,11 @@ export function validate(form, options) {
       rule: 'required',
       errorMessage: 'Введите фио',
     },
+    {
+      rule: 'customRegexp',
+      value: /^[А-ЯЁа-яё\s]+$/,
+      errorMessage: 'Неверный формат',
+    },
   ]).addField(form.querySelector('input[name="username"]'), [
     {
       rule: 'required',
