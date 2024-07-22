@@ -60,6 +60,8 @@ class Warehouse extends Dashboards {
       this.loader.enable()
       const [data, dataRooms] = await Promise.all([[], getRooms()])
 
+      this.renderWidgets([])
+
       if (dataRooms) {
         this.warehouseScheme.render(dataRooms)
       }

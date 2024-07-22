@@ -1,3 +1,4 @@
+import uniqBy from 'lodash.uniqby'
 import Page from "../Page.js"
 import Scheme from "../../components/Scheme/Scheme.js";
 import TableRooms from "../../components/Tables/TableRooms/TableRooms.js";
@@ -125,10 +126,8 @@ class Rooms extends Page {
     const [currentRoom] = this.planRooms.filter(room => room.room_id == cellNum)
 
     if (cell.classList.contains('_selected')) {
-      cell.classList.remove('_selected')
       this.changeSelectRooms('remove', currentRoom)
     } else {
-      cell.classList.add('_selected')
       this.changeSelectRooms('add', currentRoom)
     }
   }
@@ -149,12 +148,16 @@ class Rooms extends Page {
       this.resizeScrollableContent()
     }
 
+    const currentCell = this.wrapper.querySelector(`[data-cell-num="${room.room_id}"]`)
+
     const actions = {
       add: room => {
         this.selectRooms.push(room)
+        currentCell.classList.add('_selected')
         renderRooms()
       },
       remove: room => {
+        currentCell.classList.remove('_selected')
         this.selectRooms = this.selectRooms.filter(_room => +_room.room_id !== +room.room_id)
         renderRooms()
       }
@@ -180,7 +183,7 @@ class Rooms extends Page {
     if (dataRooms) {
       const { rooms = [], plan_rooms = [] } = dataRooms
 
-      this.planRooms = plan_rooms
+      this.planRooms = uniqBy([...this.planRooms, ...plan_rooms], 'room_id')
       this.warehouseScheme.render(dataRooms)
 
       if (rooms.length) {

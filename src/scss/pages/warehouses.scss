@@ -171,10 +171,15 @@
 		user-select: none;
 		cursor: pointer;
 		font-weight: 700;
-		
+
 		&[data-rented='0'] {
 			rect {
 				fill: $green-light;
+			}
+			&._selected {
+				rect {
+					fill: #00ffae;
+				}
 			}
 		}
 
@@ -182,11 +187,24 @@
 			rect {
 				fill: #f1cfef;
 			}
+			&._selected {
+				rect {
+					fill: #ff00ee;
+				}
+			}
 		}
 
 		&[data-rented='0.25'] {
 			rect {
 				fill: $blue-light;
+			}
+			&._selected {
+				rect {
+					fill: #324afc;
+				}
+				text {
+					fill: #fff;
+				}
 			}
 		}
 
@@ -194,17 +212,32 @@
 			rect {
 				fill: #fab893;
 			}
+			&._selected {
+				rect {
+					fill: #f57227;
+				}
+			}
 		}
 
 		&[data-rented='1'] {
 			rect {
 				fill: $red-light;
 			}
+			&._selected {
+				rect {
+					fill: #ff4242;
+				}
+			}
 		}
 
 		&[data-rented='0.75'] {
 			rect {
 				fill: $yellow-light;
+			}
+			&._selected {
+				rect {
+					fill: rgb(253, 199, 62);
+				}
 			}
 		}
 
@@ -272,7 +305,8 @@
 			display: grid;
 			gap: 25px;
 			width: calc(100% + 6px);
-			grid-template-columns: repeat(auto-fit, minmax(250px, 367px));
+			// grid-template-columns: repeat(auto-fit, minmax(250px, 367px));
+			grid-template-columns: repeat(4, 1fr);
 			overflow-y: auto;
 			max-height: 770px;
 
@@ -300,6 +334,16 @@
 				padding: 10px;
 				border: 1px solid #64748b4b;
 				border-radius: 10px;
+			}
+
+			@media (max-width: $md1) {
+				grid-template-columns: repeat(3, 1fr);
+			}
+			@media (max-width: 1200px) {
+				grid-template-columns: repeat(2, 1fr);
+			}
+			@media (max-width: 680px) {
+				grid-template-columns: repeat(1, 1fr);
 			}
 		}
 
@@ -400,7 +444,7 @@
 }
 
 .room {
-	min-width: 300px;
+	min-width: 280px;
 	display: flex;
 	flex-direction: column;
 	border-radius: 5px;

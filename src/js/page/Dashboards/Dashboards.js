@@ -91,7 +91,11 @@ class Dashboards {
     this.widgets.forEach(widget => {
       const params = widget.getAttribute('data-render-widget')
       const [name, str] = params.split(',')
-      widget.innerHTML = data[name] ? data[name] + `${str ? str : ''}` : 'Нет данных'
+      const value = data[name] ? data[name] + `${str ? str : ''}` : 'В процессе доработки'
+      if (!data[name]) {
+        widget.style.fontSize = '16px'  
+      }
+      widget.innerHTML = value
     });
   }
 
