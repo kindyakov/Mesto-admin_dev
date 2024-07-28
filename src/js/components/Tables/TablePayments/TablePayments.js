@@ -17,7 +17,7 @@ class TablePayments extends Table {
       columnDefs: [
         { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
         {
-          headerName: 'Договор', field: 'agrid', minWidth: 50, flex: 0.3,
+          headerName: 'Договор', field: 'agrid', minWidth: 80, flex: 0.3,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-agrid')
@@ -26,21 +26,21 @@ class TablePayments extends Table {
           }
         },
         {
-          headerName: 'ФИО', field: 'fullname', flex: 0.8,
+          headerName: 'ФИО', field: 'fullname', minWidth: 300, flex: 0.8,
           cellRenderer: params => cellRendererInput(params, undefined, 'profile')
         },
         {
-          headerName: 'Дата платежа', field: 'payment_date', flex: 0.5,
+          headerName: 'Дата платежа', field: 'payment_date', minWidth: 130, flex: 0.5,
           cellRenderer: params => cellRendererInput(params, getFormattedDate, 'calendar')
         },
         {
-          headerName: 'Вид поступления', field: 'type', flex: 0.5,
+          headerName: 'Вид поступления', field: 'type', minWidth: 100, flex: 0.5,
         },
         {
-          headerName: 'Статья учета', field: 'account_article', flex: 0.5,
+          headerName: 'Статья учета', field: 'account_article', minWidth: 80, flex: 0.5,
         },
         {
-          headerName: 'Сумма', field: 'amount', flex: 0.5,
+          headerName: 'Сумма', field: 'amount', minWidth: 90, flex: 0.5,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-price')
@@ -49,14 +49,14 @@ class TablePayments extends Table {
           }
         },
         {
-          headerName: 'Сотрудник', field: 'manager_name', flex: 0.5,
+          headerName: 'Сотрудник', field: 'manager_name', minWidth: 90, flex: 0.5,
         },
         {
-          headerName: 'Физ./Юр.', field: 'user_type', flex: 0.5,
+          headerName: 'Физ./Юр.', field: 'user_type', minWidth: 90, flex: 0.5,
           valueFormatter: params => params.value === 'f' ? 'Физ. лицо' : 'Юр. лицо'
         },
         {
-          headerName: 'Действия', field: 'actions', flex: 0.3, resizable: false, sortable: false,
+          headerName: 'Действия', field: 'actions', minWidth: 80, flex: 0.5, resizable: false, sortable: false,
           cellRenderer: params => this.actionCellRenderer(params),
         }
       ],
@@ -79,12 +79,14 @@ class TablePayments extends Table {
     const row = params.eGridCell.closest('.ag-row')
     const button = document.createElement('button');
     button.classList.add('button-table-actions');
-    button.setAttribute('data-agr-id', agrid)
-    button.setAttribute('data-user-type', user_type)
+
     button.innerHTML = `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`;
     let form
 
-    const tippyInstance = actions(button)
+    const tippyInstance = actions(button, {
+      attrModal: 'modal-agreement',
+      data: params.data
+    })
 
     tippyInstance.options.onEdit = instance => {
       this.validatorRow?.revalidate().then(isValid => {

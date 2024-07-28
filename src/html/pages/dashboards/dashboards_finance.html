@@ -62,10 +62,10 @@
 
   <div class="charts">
     <div class="chart" style="flex: 1 1 auto; width: 100%; height: 380px;">
-      <div class="chart__header">
-        <h4 class="chart__title" style="display: flex; align-items: center;">
+      <div class="chart__header" style="align-items: center;">
+        <h4 class="chart__title">
           Выручка за месяц: 20,2 млн ₽
-          <div class="frame up">
+          <div class="frame up" style="transform: translate(0, -10%);">
             <span>0,23%</span>
             <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -111,7 +111,7 @@
         <form class="table__form form-table-search">
           <div class="wp-input wp-input-search">
             <input type="text" name="search_str" placeholder="Поиск" class="input input-table-search"
-              autocomplete="off">
+              autocomplete="off" inputmode="search">
             <button type="submit" class="button-icon-search">
               <svg class='icon icon-search'>
                 <use xlink:href='img/svg/sprite.svg#search'></use>

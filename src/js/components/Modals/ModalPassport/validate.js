@@ -15,6 +15,8 @@ export function validatePassport(form, options) {
 
   validator.calendar = createCalendar(form.querySelector('input[name="issue_date"]'), {
     dateFormat: 'd.m.Y',
+    appendTo: form.querySelector('input[name="issue_date"]').parentElement
+
   })
 
   validator.addField(form.querySelector('input[name="no"]'), [

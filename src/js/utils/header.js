@@ -28,16 +28,19 @@ function unlockPadding() {
 export const burger = ({ selectorBurger = '.header-burger', selectorNav = '.header__nav' }) => {
   const burger = document.querySelector(selectorBurger)
   const nav = document.querySelector(selectorNav)
+  const main = document.querySelector('.main')
   if (!burger || !nav) return
 
   burger.addEventListener('click', () => {
     if (burger.classList.contains('_active')) {
       burger.classList.remove('_active')
       nav.classList.remove('_active')
+      main.classList.remove('_shadow')
       enableScroll()
     } else {
       burger.classList.add('_active')
       nav.classList.add('_active')
+      main.classList.add('_shadow')
       disableScroll()
     }
   })

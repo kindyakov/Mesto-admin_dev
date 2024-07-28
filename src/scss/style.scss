@@ -104,10 +104,15 @@ body {
 @import 'styles/table';
 @import 'styles/widgets';
 
+// Страницы
 @import 'pages/dashboards';
 @import 'pages/working-hours';
 @import 'pages/warehouses';
 @import 'pages/locks';
+@import 'pages/payments';
+@import 'pages/agreements';
+@import 'pages/list-clients';
+@import 'pages/messages';
 
 ._none {
 	display: none;

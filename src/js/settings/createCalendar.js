@@ -2,7 +2,7 @@ import flatpickr from "flatpickr";
 import { Russian } from "flatpickr/dist/l10n/ru.js"
 import { Select } from "../modules/mySelect.js";
 
-const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'октябрь', 'Ноябрь', 'Декабрь',]
+const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь',]
 
 export const createCalendar = (input, options = {}) => {
   if (!input) return
@@ -18,7 +18,20 @@ export const createCalendar = (input, options = {}) => {
 
   const defaultOptions = {
     locale: Russian,
+    disableMobile: true,
     onReady: (selectedDates, dateStr, instance) => {
+      if (!instance.calendarContainer) return
+
+      document.addEventListener('click', (event) => {
+        if (
+          instance.isOpen &&
+          !instance.calendarContainer.contains(event.target) &&
+          !instance.input.contains(event.target)
+        ) {
+          instance.close();
+        }
+      });
+
       const selectM = instance.calendarContainer.querySelector('.flatpickr-monthDropdown-months');
       selectM.classList.add('init-custom-select');
       selectM.setAttribute('name', 'flatpickr-month');

@@ -1,0 +1,32 @@
+.main__content[data-content='list-clients'] {
+	.table {
+		@media (max-width: $md4) {
+			&__top {
+				flex-direction: column;
+			}
+
+			&__form {
+				flex-direction: column;
+				.wp-input-search {
+					order: 1;
+					max-width: none;
+				}
+				.main__date-filter {
+					order: 2;
+					max-width: none;
+				}
+				.select-filter-table {
+					order: 3;
+				}
+			}
+
+			&__buttuns {
+				width: 100%;
+			}
+
+			&__button {
+				flex: 1 1 auto;
+			}
+		}
+	}
+}

@@ -15,6 +15,9 @@
 		left: 0;
 		color: $red;
 	}
+	.flatpickr-calendar {
+		position: absolute;
+	}
 }
 
 // Input
@@ -47,6 +50,11 @@
 
 	&.not-edit {
 		border-color: #e2e8f0;
+		cursor: text;
+	}
+	@media (max-width: $md6) {
+		font-size: 13px;
+		padding: 10px;
 	}
 }
 

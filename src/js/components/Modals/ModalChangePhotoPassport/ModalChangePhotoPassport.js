@@ -71,6 +71,8 @@ class ModalChangePhotoPassport extends BaseModal {
 
       this.label.classList.add('_is-load');
       this.label.classList.remove('_error');
+
+      this.isSendFile = true
     }
   }
 
@@ -88,7 +90,7 @@ class ModalChangePhotoPassport extends BaseModal {
   }
 
   beforeClose() {
-    if (!this.isSendFile) {
+    if (this.isSendFile) {
       outputInfo({
         msg: 'У вас есть несохраненные изменения.</br>Вы уверены, что хотите закрыть окно?',
         msg_type: 'warning',
@@ -124,7 +126,7 @@ class ModalChangePhotoPassport extends BaseModal {
       this.loader.enable()
       const response = await api.post('/_upload_new_passport_photo_', formData)
       if (response.status !== 200) return
-      this.isSendFile = true
+      this.isSendFile = false
       outputInfo(response.data)
     } catch (error) {
       console.error(error)

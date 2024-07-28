@@ -14,9 +14,10 @@ export function validateClient(form, options) {
 
   const inputBirthday = form.querySelector('input[name="birthday"]')
   inputBirthday.classList.add('input-client-birthday-modal')
-  validator.calendarBirthday = createCalendar('.input-client-birthday-modal', {
+  validator.calendarBirthday = createCalendar(inputBirthday, {
     dateFormat: 'd.m.Y',
-    maxDate: getMinDate()
+    maxDate: getMinDate(),
+    appendTo: inputBirthday.parentElement
   })
 
   const inputPhone = form.querySelector('input[name="username"]')

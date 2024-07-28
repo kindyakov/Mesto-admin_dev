@@ -1,7 +1,11 @@
+// import SchemeMobile from "./SchemeMobile.js"
+
 class Scheme {
   constructor(wrapper) {
     this.wrapper = wrapper
     this.schemes = wrapper.querySelectorAll('.scheme')
+    // this.schemeMobile = new SchemeMobile(wrapper)
+    
     this.numRooms = {}
 
     this.init()

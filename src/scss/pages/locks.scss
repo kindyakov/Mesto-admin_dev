@@ -1,8 +1,41 @@
+.main__content[data-content='charging-locks'] {
+	.mySelect {
+		.prefix {
+			margin-right: 3px;
+			color: #64748b;
+		}
+	}
+	.main__filter {
+		.wp-input {
+			max-width: 580px;
+			width: 100%;
+		}
+		.input {
+			padding: 0 15px;
+			height: 40px;
+		}
+	}
+	.main__selects-filter {
+		@media (max-width: $md4) {
+			.mySelect {
+				flex: 1 1 50%;
+				.prefix {
+					display: none;
+				}
+			}
+			button {
+				flex: 1 1 50%;
+				justify-content: space-between;
+			}
+		}
+	}
+}
+
 .locks {
 	display: grid;
 	gap: 25px;
 	width: calc(100% + 6px);
-	grid-template-columns: repeat(auto-fit, minmax(250px, 367px));
+	grid-template-columns: repeat(4, minmax(230px, 1fr));
 	max-height: 590px;
 	overflow-y: auto;
 
@@ -30,6 +63,27 @@
 		padding: 10px;
 		border: 1px solid #64748b4b;
 		border-radius: 10px;
+	}
+
+	@media (max-width: $md1) {
+		grid-template-columns: repeat(3, minmax(230px, 1fr));
+	}
+
+	@media (max-width: 1100px) {
+		grid-template-columns: repeat(2, minmax(230px, 1fr));
+	}
+
+	@media (max-width: $md2) {
+		grid-template-columns: repeat(3, minmax(230px, 1fr));
+	}
+
+	@media (max-width: $md3) {
+		grid-template-columns: repeat(2, minmax(230px, 1fr));
+		gap: 10px;
+	}
+
+	@media (max-width: $md4) {
+		grid-template-columns: repeat(1, minmax(230px, 1fr));
 	}
 
 	&__card {

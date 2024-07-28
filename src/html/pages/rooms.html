@@ -69,24 +69,25 @@
           data-tab-btn='room-tab,3'><span>Подтверждение</span></button>
       </div>
 
-      <div class="warehouse__body_content _my-tab-content _active room-tabs" data-tab-content='room-tab,1'>
-        <form class="warehouse__body_form form-filter-room">
-          <div class="warehouse__button button-table btn-set-filters" style="cursor: pointer;">
-            <span>Фильтры</span>
-            <svg class="icon icon-filter">
-              <use xlink:href="img/svg/sprite.svg#filter"></use>
+      <form class="warehouse__body_form form-filter-room" style="margin-top: 30px;">
+        <div class="warehouse__button button-table btn-set-filters" style="cursor: pointer;">
+          <span>Фильтры</span>
+          <svg class="icon icon-filter">
+            <use xlink:href="img/svg/sprite.svg#filter"></use>
+          </svg>
+        </div>
+        <div class="wp-input wp-input-search">
+          <input type="text" name="search_str" placeholder="Поиск" class="input input-table-search" autocomplete="off"
+            inputmode="search">
+          <button type="submit" class="button-icon-search">
+            <svg class="icon icon-search">
+              <use xlink:href="img/svg/sprite.svg#search"></use>
             </svg>
-          </div>
-          <div class="wp-input wp-input-search">
-            <input type="text" name="search_str" placeholder="Поиск" class="input input-table-search"
-              autocomplete="off">
-            <button type="submit" class="button-icon-search">
-              <svg class="icon icon-search">
-                <use xlink:href="img/svg/sprite.svg#search"></use>
-              </svg>
-            </button>
-          </div>
-        </form>
+          </button>
+        </div>
+      </form>
+
+      <div class="warehouse__body_content _my-tab-content _active room-tabs" data-tab-content='room-tab,1'>
         <div class="warehouse__body_rooms rooms">
 
         </div>
@@ -104,7 +105,8 @@
               <div class="warehouse__confirmation_row">
                 <p class="name">Гизатулина Марина Артемовна</p>
                 <span class="span">Выезд:<b>17.05.2024</b></span>
-                <button class="button table-button" data-modal="modal-confirmation-departure"><span>Подтвердить</span></button>
+                <button class="button table-button"
+                  data-modal="modal-confirmation-departure"><span>Подтвердить</span></button>
               </div>
             </div>
           </div>
@@ -113,7 +115,8 @@
             <div class="warehouse__confirmation_content content-confirmation-client">
               <div class="warehouse__confirmation_row">
                 <p class="name">Гизатулина Марина Артемовна</p>
-                <button class="button table-button" data-modal="modal-confirmation-client"><span>Подтвердить</span></button>
+                <button class="button table-button"
+                  data-modal="modal-confirmation-client"><span>Подтвердить</span></button>
               </div>
             </div>
           </div>

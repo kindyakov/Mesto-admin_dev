@@ -1,4 +1,5 @@
 import { getFormattedDate } from "../../utils/getFormattedDate.js"
+import { dateFormatter } from "../../settings/dateFormatter.js"
 
 function getTimeNow() {
   const date = new Date()
@@ -17,7 +18,7 @@ export function rowHtml(data = false) {
       <span class="working-hours__date">${data.date ? getFormattedDate(data.date) : ''}</span>
       <div class="working-hours__item">
         <b class="working-hours__time time-now">${getTimeNow()}</b>
-        <span class="working-hours__text">Время<br>сейчас</span>
+        <span class="working-hours__text date-now">${dateFormatter(new Date(), "dd, MMMM yyyy 'г.'")}</span>
       </div>
       <div class="working-hours__item">
         ${data?.time_start ? `

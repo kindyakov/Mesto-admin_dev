@@ -17,7 +17,7 @@ class TableAgreements extends Table {
       columnDefs: [
         { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
         {
-          headerName: 'Договор', field: 'agrid', flex: 0.3,
+          headerName: 'Договор', field: 'agrid', minWidth: 80, flex: 0.3,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-agrid')
@@ -26,15 +26,15 @@ class TableAgreements extends Table {
           }
         },
         {
-          headerName: 'ФИО', field: 'fullname', flex: 1,
+          headerName: 'ФИО', field: 'fullname', minWidth: 300, flex: 1,
           cellRenderer: params => cellRendererInput(params, undefined, 'profile')
         },
         {
-          headerName: 'Дата начала', field: 'agrbegdate', flex: 0.6,
+          headerName: 'Дата начала', field: 'agrbegdate', minWidth: 130, flex: 0.6,
           cellRenderer: params => cellRendererInput(params, getFormattedDate, 'calendar')
         },
         {
-          headerName: 'Платеж в мес.', field: 'price', flex: 0.5,
+          headerName: 'Платеж в мес.', field: 'price', minWidth: 100, flex: 0.5,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-price')
@@ -43,18 +43,18 @@ class TableAgreements extends Table {
           }
         },
         {
-          headerName: 'Ячейки', field: 'room_ids', flex: 0.5,
+          headerName: 'Ячейки', field: 'room_ids', minWidth: 70, flex: 0.5,
           valueFormatter: params => params.value ? addPrefixToNumbers(params.value) : 'нет'
         },
         {
-          headerName: 'Конец договора', field: 'agrplanenddate', flex: 0.5,
+          headerName: 'Конец договора', field: 'agrplanenddate', minWidth: 100, flex: 0.5,
           valueFormatter: params => params.value ? getFormattedDate(params.value) : 'нет'
         },
         {
-          headerName: 'Способ оплаты', field: 'last_payment_type', flex: 0.5,
+          headerName: 'Способ оплаты', field: 'last_payment_type', minWidth: 100, flex: 0.5,
         },
         {
-          headerName: 'Действия', field: 'actions', flex: 0.4,
+          headerName: 'Действия', field: 'actions', width: 80,
           cellRenderer: params => this.actionCellRenderer(params), resizable: false, sortable: false
         }
       ],

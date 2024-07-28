@@ -1,10 +1,12 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from "../Page.js"
-import TableEmployee from '../../components/Tables/TableEmployee/TableEmployee.js';
-import { api } from "../../settings/api.js";
 import { rowHtml } from "./html.js";
-import { outputInfo } from "../../utils/outputinfo.js"
+
+import TableEmployee from '../../components/Tables/TableEmployee/TableEmployee.js';
 import modalDownloadPhotoWh from "../../components/Modals/ModalDownloadPhotoWh/ModalDownloadPhotoWh.js"
+
+import { api } from "../../settings/api.js";
+import { outputInfo } from "../../utils/outputinfo.js"
 import { getCurrentTimeString } from '../../utils/getCurrentTimeString.js';
 
 class WorkingHours extends Page {

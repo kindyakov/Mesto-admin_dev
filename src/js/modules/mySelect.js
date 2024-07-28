@@ -28,7 +28,7 @@ export class Select {
       isDev: false,
       isDisabled: false,
       inputHtml: `<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>`,
-      selectMinWidth: true,
+      selectMinWidth: null,
       selectMaxWidth: null,
       maxHeightList: null,
       parentEl: null,
@@ -89,7 +89,7 @@ export class Select {
       select.style.display = 'none'
 
       if (b479.matches && selectMinWidth) {
-        customSelect.style.minWidth = `${selectMinWidth + 5}px`
+        customSelect.style.minWidth = `${+selectMinWidth}px`
       } else {
         // const maxWidth = getMaxWidth(customSelect.querySelectorAll('.mySelect__option'))
         // customSelect.style.maxWidth = selectMaxWidth ? selectMaxWidth + 'px' : maxWidth + 'px'

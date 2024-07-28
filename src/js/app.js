@@ -16,11 +16,16 @@ const warehousesSelect = new WarehousesSelect()
 
 let isFirstLoad = true
 
+Fancybox.defaults.Hash = false;
+
 function appInit() {
   if (isFirstLoad) {
     useDynamicAdapt()
     burger({ selectorNav: '.sidebar' })
     initializeModalTriggers(modalMap)
+    Fancybox.bind("[data-fancybox]", {
+      // Your custom options
+    });
 
     new Accordion({ isAccordion: false })
     warehousesSelect.render().then(warehouse => {

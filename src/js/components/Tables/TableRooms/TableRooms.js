@@ -39,7 +39,7 @@ class TableRooms extends Table {
     const defaultOptions = {
       columnDefs: [
         {
-          headerName: 'Ячейка', field: 'room_id', flex: 0.3,
+          headerName: 'Ячейка', field: 'room_id', minWidth: 80, flex: 0.3,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-agrid')
@@ -48,7 +48,8 @@ class TableRooms extends Table {
           }
         },
         {
-          headerName: 'Клиент', field: 'fullname', flex: 1,
+          minWidth: 300,
+          headerName: 'Клиент', field: 'fullname', minWidth: 300, flex: 1,
           cellRenderer: params => {
             const span = createElement('p', ['table-p'], `
               <svg class='icon icon-profile'>
@@ -59,14 +60,14 @@ class TableRooms extends Table {
           }
         },
         {
-          headerName: 'Этаж', field: 'floor', flex: 0.3,
+          headerName: 'Этаж', field: 'floor', minWidth: 50, flex: 0.3,
         },
         {
-          headerName: 'Площадь', field: 'area', flex: 0.4,
+          headerName: 'Площадь', field: 'area', minWidth: 80, flex: 0.4,
           valueFormatter: params => params.value ? params.value + ' м²' : '___'
         },
         {
-          headerName: 'Цена', field: 'price', flex: 0.4,
+          headerName: 'Цена', field: 'price', minWidth: 90, flex: 0.4,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-price')
@@ -75,7 +76,7 @@ class TableRooms extends Table {
           }
         },
         {
-          headerName: 'Статус', field: 'rented', flex: 0.3,
+          headerName: 'Статус', field: 'rented', minWidth: 100, flex: 0.3,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-agrid')
@@ -84,15 +85,15 @@ class TableRooms extends Table {
           }
         },
         {
-          headerName: 'Дата след. оплаты', field: 'next_payment_date', flex: 0.5,
+          headerName: 'Дата след. оплаты', field: 'next_payment_date', minWidth: 100, flex: 0.5,
           valueFormatter: params => params.value ? getFormattedDate(params.value) : '___'
         },
         {
-          headerName: 'Дата выезда', field: '', flex: 0.4,
+          headerName: 'Дата выезда', field: '', minWidth: 100, flex: 0.4,
           valueFormatter: params => params.value ? getFormattedDate(params.value) : '___'
         },
         {
-          headerName: '', field: '', flex: 1, sortable: false, resizable: false,
+          headerName: '', field: '', minWidth: 250, flex: 1, sortable: false, resizable: false,
           cellRenderer: params => {
             const div = createElement('div', ['table-buttons'], `${buttonsRoom(params.data)}
             ${+params.data.rented === 0.75

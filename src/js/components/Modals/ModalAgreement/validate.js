@@ -17,16 +17,19 @@ export function validate(form, options) {
 
   const calendarAgrBegDate = createCalendar(agrbegdate, {
     dateFormat: 'd.m.Y',
+    appendTo: agrbegdate.parentElement
   })
   calendarAgrBegDate.setDate(agrbegdate.value, true, "d.m.Y");
 
   const calendarAgrPlanEndDate = createCalendar(agrplanenddate, {
     dateFormat: 'd.m.Y',
+    appendTo: agrbegdate.parentElement
   })
   calendarAgrPlanEndDate.setDate(agrplanenddate.value, true, "d.m.Y");
 
   const calendarAgrEndDate = createCalendar(agrenddate, {
     dateFormat: 'd.m.Y',
+    appendTo: agrbegdate.parentElement
   })
   calendarAgrEndDate.setDate(agrenddate.value, true, "d.m.Y");
 

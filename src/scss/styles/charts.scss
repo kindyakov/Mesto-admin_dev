@@ -1,7 +1,12 @@
 .charts {
 	display: flex;
 	gap: 30px;
+
+	@media (max-width: $md2) {
+		flex-direction: column;
+	}
 }
+
 .chart {
 	border: 1px solid #e1e8f0;
 	border-radius: 5px;
@@ -12,21 +17,41 @@
 	flex-direction: column;
 	gap: 30px;
 
+	@media (max-width: $md2) {
+		width: 100% !important;
+		flex: 1 1 auto !important;
+		padding: 20px;
+	}
+
+	.mySelect {
+		&__input {
+			padding: 10px;
+		}
+
+		&__option {
+			padding: 10px;
+		}
+	}
+
 	&__header {
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
+		align-items: flex-start;
 		gap: 15px;
 		&.flex-col {
 			flex-direction: column;
 			align-items: flex-start;
 		}
+		@media (max-width: $md4) {
+			flex-direction: column;
+			align-items: flex-start !important;
+		}
 	}
 
 	&__title {
 		font-weight: 700;
-		font-size: 22px;
+		@include adaptiv-font(22, 16, 1);
 		line-height: 120%;
 		color: #373f47;
 	}
@@ -63,11 +88,17 @@
 				color: #78849a;
 			}
 		}
+		@media (max-width: $md4) {
+			gap: 10px;
+		}
 	}
 
 	&__header-flex {
 		display: flex;
 		gap: 25px;
+		@media (max-width: $md4) {
+			flex-direction: column;
+		}
 	}
 
 	&__item-info {
@@ -238,5 +269,24 @@
 
 	&.up {
 		background-color: #10b981;
+	}
+}
+
+.chart.chart-cell-occupancy {
+	@media (max-width: $md4) {
+		.chart__header {
+			flex-direction: row;
+		}
+
+		.chart__content {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.chart__list {
+			flex-direction: row;
+			flex-wrap: wrap;
+			gap: 10px;
+		}
 	}
 }

@@ -1,0 +1,35 @@
+.main__content[data-content='payments'] {
+	@media (max-width: $md1) {
+		.main__date-filter {
+			min-width: 0;
+			max-width: 200px;
+			width: 100%;
+		}
+	}
+
+	.table {
+		@media (max-width: $md3) {
+			&__top {
+				flex-direction: column;
+				align-items: flex-end;
+			}
+
+			@media (max-width: $md4) {
+				&__form {
+					flex-direction: column;
+					.wp-input-search {
+						order: 1;
+						max-width: none;
+					}
+					.main__date-filter {
+						order: 2;
+						max-width: none;
+					}
+					.select-filter-table {
+						order: 3;
+					}
+				}
+			}
+		}
+	}
+}

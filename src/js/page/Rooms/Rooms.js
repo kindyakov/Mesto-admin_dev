@@ -81,7 +81,10 @@ class Rooms extends Page {
     this.formFilterRoom.addEventListener('submit', this.handleSubmit.bind(this))
     this.inputSearch.addEventListener('input', this.handleInputSearch.bind(this))
     this.tabs.onChange = ({ nextTabBtn }) => {
+      this.formFilterRoom.classList.remove('_none')
+
       if (nextTabBtn.classList.contains('tab-confirmation')) {
+        this.formFilterRoom.classList.add('_none')
         this.renderConfirmation()
       }
     }
@@ -98,14 +101,10 @@ class Rooms extends Page {
   handleInputSearch(e) {
     const input = e.target
     input.value = extractNumbers(input.value)
-    if (input.value === '') {
-      this.changeQueryParams({ search_str: '' })
-    } else {
-      clearTimeout(this.timerInput)
-      this.timerInput = setTimeout(() => {
-        this.changeQueryParams({ search_str: input.value })
-      }, 500)
-    }
+    clearTimeout(this.timerInput)
+    this.timerInput = setTimeout(() => {
+      this.changeQueryParams({ search_str: input.value })
+    }, 500)
   }
 
   handleClickFilterScheme(e) {

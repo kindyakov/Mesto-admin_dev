@@ -72,6 +72,14 @@ class BaseChart {
     };
 
     this.chart = new Chart(ctx, merge({}, defaultOptions, options));
+
+    window.addEventListener('resize', () => this.resizeChart())
+  }
+
+  resizeChart() {
+    if (this.chart) {
+      this.chart.update('resize')
+    }
   }
 }
 

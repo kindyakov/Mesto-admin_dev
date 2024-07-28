@@ -60,7 +60,7 @@
 		transition: all 0.3s ease 0s;
 		background-color: #fff;
 		width: 100%;
-		max-width: 630px;
+		max-width: $maxWidthModal;
 		border: 1px solid #e2e8f0;
 		border-radius: 2px;
 		box-shadow: 0 8px 13px -3px rgba(0, 0, 0, 0.07);
@@ -112,6 +112,15 @@
 		gap: 10px;
 		padding: 20px 25px;
 		border-bottom: 1px solid #e2e8f0;
+
+		@media (max-width: $mdm1) {
+			flex-wrap: wrap;
+		}
+
+		@media (max-width: $md6) {
+			padding: 10px 20px;
+		}
+
 		&_auto {
 			flex: 1 1 auto;
 			display: flex;
@@ -138,7 +147,7 @@
 
 	&__title {
 		font-weight: 700;
-		font-size: 24px;
+		@include adaptiv-font(24, 20, 1);
 		line-height: 150%;
 		color: #1c2434;
 	}
@@ -158,6 +167,11 @@
 		padding: 25px 0;
 		padding-bottom: 0;
 
+		@media (max-width: $md6) {
+			padding: 15px 0;
+			gap: 15px;
+		}
+
 		&_item {
 			width: 100%;
 			display: flex;
@@ -167,6 +181,10 @@
 			border-bottom: 1px solid #e2e8f0;
 			&:last-child {
 				border-bottom: none;
+			}
+
+			@media (max-width: $md6) {
+				padding: 0 20px 15px 20px;
 			}
 		}
 
@@ -179,7 +197,7 @@
 
 		&_grid {
 			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(150px, 186px));
+			grid-template-columns: repeat(3, 1fr);
 			gap: 10px;
 			max-height: 240px;
 			overflow-y: auto;
@@ -207,6 +225,14 @@
 				font-weight: 400;
 				text-align: center;
 				padding: 10px;
+			}
+
+			@media (max-width: $mdm1) {
+				grid-template-columns: repeat(2, 1fr);
+			}
+
+			@media (max-width: $md6) {
+				grid-template-columns: repeat(1, 1fr);
 			}
 		}
 
@@ -248,6 +274,10 @@
 					text-decoration: none;
 				}
 			}
+
+			@media (max-width: $md6) {
+				padding: 10px 15px;
+			}
 		}
 
 		&_img {
@@ -258,12 +288,12 @@
 			border: 1.5px solid #e2e8f0;
 			border-radius: 4px;
 			padding: 40px 30px;
-			height: 400px;
+			@include adaptiv-value('height', 400, 160, 1);
 		}
 
 		&_grid-50 {
 			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 			gap: 15px;
 		}
 	}
@@ -283,6 +313,12 @@
 				font-size: 14px;
 				color: #212b36;
 			}
+
+			&.grid-column-2 {
+				@media (min-width: $mdm1) {
+					grid-column: span 2;
+				}
+			}
 		}
 
 		&_wp-input {
@@ -292,12 +328,23 @@
 			height: 50px;
 			padding: 10px 20px;
 			color: #212b36;
+			@media (max-width: $md6) {
+				padding: 10px;
+			}
+		}
+		@media (max-width: $mdm1) {
+			grid-template-columns: 1fr;
 		}
 	}
 
 	&__passport {
 		display: flex;
 		gap: 25px;
+
+		@media (max-width: $mdm1) {
+			flex-direction: column;
+		}
+
 		&-content {
 			flex: 1 1 66.66%;
 			padding: 15px 20px;
@@ -310,7 +357,7 @@
 
 		&-form {
 			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 			gap: 10px;
 
 			&_item {
@@ -349,6 +396,10 @@
 				max-width: 100%;
 				max-height: 100%;
 			}
+			@media (max-width: $mdm1) {
+				flex: 1 1 auto;
+				height: 160px;
+			}
 		}
 	}
 
@@ -358,6 +409,10 @@
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
+
+		@media (max-width: $mdm1) {
+			padding: 0 20px;
+		}
 
 		&_button {
 			width: 100%;
@@ -387,6 +442,11 @@
 			&:active {
 				opacity: 0.8;
 			}
+
+			@media (max-width: $mdm1) {
+				padding: 10px 15px;
+				font-size: 14px;
+			}
 		}
 	}
 
@@ -396,10 +456,23 @@
 		padding: 25px;
 		gap: 20px;
 		border-top: 1.5px solid #e2e8f0;
+		@media (max-width: $mdm1) {
+			padding: 10px 20px;
+			gap: 10px;
+			flex-wrap: wrap;
+			justify-content: center;
+			.button {
+				padding: 10px 15px;
+				font-size: 14px;
+			}
+		}
 	}
 
 	&__upload {
 		height: 400px;
+		@media (max-width: $md1) {
+			@include adaptiv-value('height', 400, 200, 1);
+		}
 		&_lable {
 			display: block;
 			width: 100%;
@@ -582,13 +655,16 @@
 		transition: 0s;
 		padding: 50px;
 		max-width: 530px;
-		border-radius: 2px;
+		border-radius: 5px;
 		border: 1px solid #e2e8f0;
 		h2 {
 			font-weight: 700;
 			font-size: 33px;
 			line-height: 135%;
 			color: #212b36;
+		}
+		@media (max-width: $md4) {
+			padding: 25px 20px;
 		}
 	}
 
@@ -649,11 +725,14 @@
 
 	&.modal-auth {
 		background: #1c2434;
+		z-index: 20;
 	}
 
 	.tingle-modal-box {
 		width: 100%;
-		max-width: 630px;
+		max-width: $maxWidthModal;
+		background: transparent;
+		border-radius: 0;
 	}
 
 	.tingle-modal-box__content {
@@ -671,6 +750,9 @@
 			.tippy-box {
 				width: 100%;
 			}
+		}
+		@media (max-width: 540px) {
+			overflow-y: visible;
 		}
 	}
 

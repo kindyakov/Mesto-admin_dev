@@ -19,11 +19,11 @@ class Finance extends Dashboards {
             columnDefs: [
               { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
               {
-                headerName: 'Дата платежа', field: 'payment_date', flex: 0.5,
+                headerName: 'Дата платежа', field: 'payment_date', minWidth: 140, flex: 0.5,
                 cellRenderer: params => cellRendererInput(params, getFormattedDate, 'calendar')
               },
               {
-                headerName: 'Сумма', field: 'amount', flex: 0.5,
+                headerName: 'Сумма', field: 'amount', minWidth: 80, flex: 0.5,
                 cellRenderer: params => {
                   const span = document.createElement('span')
                   span.classList.add('table-span-price')
@@ -32,11 +32,11 @@ class Finance extends Dashboards {
                 }
               },
               {
-                headerName: 'ФИО', field: 'fullname', flex: 1,
+                headerName: 'ФИО', field: 'fullname', minWidth: 350, flex: 1,
                 cellRenderer: params => cellRendererInput(params, undefined, 'profile')
               },
               {
-                headerName: 'Договор', field: 'agrid', flex: 0.5,
+                headerName: 'Договор', field: 'agrid', minWidth: 70, flex: 0.5,
                 cellRenderer: params => {
                   const span = document.createElement('span')
                   span.classList.add('table-span-agrid')
@@ -45,10 +45,10 @@ class Finance extends Dashboards {
                 }
               },
               {
-                headerName: 'Вид поступления', field: 'type', flex: 0.5,
+                headerName: 'Вид поступления', field: 'type', minWidth: 90, flex: 0.5,
               },
               {
-                headerName: 'Физ./Юр.', field: 'user_type', flex: 0.5, resizable: false,
+                headerName: 'Физ./Юр.', field: 'user_type', minWidth: 90, flex: 0.5, resizable: false,
                 valueFormatter: params => params.value === 'f' ? 'Физ. лицо' : 'Юр. лицо'
               },
               // {

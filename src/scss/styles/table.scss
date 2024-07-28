@@ -25,13 +25,30 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		height: 58px;
+		height: 60px;
+		gap: 10px;
+		padding: 10px 20px;
+		& > * {
+			margin: 0;
+		}
+		@media (max-width: $md4) {
+			align-items: flex-start;
+			flex-direction: column;
+			height: 90px;
+		}
 	}
 
 	.ag-header-cell,
 	.ag-header-group-cell {
 		padding-left: 15px;
 		padding-right: 15px;
+		@media (max-width: $md2) {
+			padding-left: 10px;
+			padding-right: 10px;
+			&:first-child {
+				padding-left: 20px;
+			}
+		}
 	}
 
 	.ag-header-cell-text {
@@ -47,6 +64,13 @@
 		font-weight: 400;
 		font-size: 14px;
 		color: #212b36;
+		@media (max-width: $md2) {
+			padding-left: 10px;
+			padding-right: 10px;
+			&:first-child {
+				padding-left: 20px;
+			}
+		}
 	}
 
 	.ag-cell:focus,
@@ -101,6 +125,16 @@
 		gap: 20px;
 		border: 1px solid #e1e8f0;
 		border-bottom: none;
+		@media (max-width: $md2) {
+			padding: 20px;
+			gap: 10px;
+		}
+		@media (max-width: $md5) {
+			flex-direction: column;
+		}
+		@media (max-width: $md6) {
+			padding: 10px;
+		}
 	}
 
 	&__form {
@@ -121,14 +155,33 @@
 			padding: 5px 15px;
 			height: 40px;
 		}
+
+		.mySelect {
+			flex-shrink: 0;
+		}
+
+		@media (max-width: $md3) {
+			width: 100%;
+		}
 	}
 
 	&__buttuns {
 		display: flex;
 		align-items: center;
 		gap: 10px;
+		@media (max-width: $md5) {
+			width: 100%;
+		}
 	}
 
+	&__button {
+		@media (max-width: $md5) {
+			flex: 1 1 auto;
+			white-space: nowrap;
+			padding: 5px 10px;
+			justify-content: space-between;
+		}
+	}
 	// &__button {	}
 
 	// &__content {}

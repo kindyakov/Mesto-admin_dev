@@ -2,6 +2,26 @@
 	flex: 1 1 auto;
 	position: relative;
 
+	&::before {
+		content: '';
+		position: absolute;
+		inset: 0 0 0 0;
+		width: 100%;
+		height: 100%;
+		transition: opacity 0.3s ease-out;
+		z-index: 1;
+		opacity: 0;
+		visibility: hidden;
+		background-color: rgba(0, 0, 0, 0.7);
+	}
+
+	&._shadow {
+		&::before {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+
 	// &__container {}
 	// :first-letter
 	&__body {
@@ -15,14 +35,6 @@
 
 		&._active {
 			display: flex;
-		}
-		&[data-content='charging-locks'] {
-			.mySelect__input {
-				.prefix {
-					margin-right: 3px;
-					color: #64748b;
-				}
-			}
 		}
 	}
 
@@ -39,6 +51,9 @@
 		justify-content: space-between;
 		@include adaptiv-value('gap', 20, 10, 1);
 		flex-wrap: wrap;
+		@media (max-width: $md4) {
+			flex-direction: column;
+		}
 	}
 
 	&__date-filter {
@@ -77,7 +92,7 @@
 		display: flex;
 		align-items: center;
 		gap: 10px;
-		@media (max-width: $md5) {
+		@media (max-width: $md4) {
 			width: 100%;
 			.select-filter-main {
 				width: 100%;

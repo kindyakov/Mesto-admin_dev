@@ -9,12 +9,12 @@ export function filterHtml(data) {
         <div class="filter__wp-input">
           <span class="pref">от</span>
           <input type="text" name="electric-quantity_start" value="0" data-step="1" class="filter__input input-filter"
-            inputmode="tel" autocomplete="off">
+            inputmode="decimal" autocomplete="off">
         </div>
         <div class="filter__wp-input">
           <span class="pref">до</span>
           <input type="text" name="electric-quantity_end" value="100" data-step="1" class="filter__input input-filter"
-            inputmode="tel" autocomplete="off">
+            inputmode="decimal" autocomplete="off">
         </div>
       </div>
     </div>
