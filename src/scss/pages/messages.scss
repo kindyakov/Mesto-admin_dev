@@ -276,6 +276,25 @@ $md-mobile: 678.98px;
 				display: flex;
 				align-items: center;
 				gap: 15px;
+
+				.button-back {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					width: 30px;
+					height: 30px;
+					.icon {
+						transform: rotate(-90deg);
+						width: 12px;
+						height: 7px;
+						fill: #637381;
+					}
+
+					@media (min-width: $md-mobile) {
+						display: none;
+					}
+				}
+
 				.img {
 					width: 50px;
 					height: 50px;
@@ -464,6 +483,23 @@ $md-mobile: 678.98px;
 				border-radius: 16px 16px 0 16px;
 				background-color: $blue;
 				color: #fff;
+				a {
+					color: #fff;
+				}
+			}
+
+			.link-file {
+				border: 1px solid #fff;
+				.icon {
+					fill: #fff;
+				}
+
+				.btn-file-download {
+					border-color: #fff;
+					.icon {
+						fill: #fff;
+					}
+				}
 			}
 		}
 
@@ -481,12 +517,18 @@ $md-mobile: 678.98px;
 			flex-direction: column;
 			gap: 5px;
 
-			padding: 12px 20px;
+			padding: 20px;
 
-			font-weight: 500;
-			font-size: 16px;
-			line-height: 150%;
-			word-wrap: break-word;
+			> p,
+			a {
+				font-weight: 500;
+				font-size: 16px;
+				line-height: 150%;
+				word-wrap: break-word;
+				@media (max-width: $md1) {
+					@include adaptiv-font(16, 12, 1);
+				}
+			}
 
 			max-width: 47%;
 
@@ -502,7 +544,7 @@ $md-mobile: 678.98px;
 				outline: none;
 			}
 
-			[data-fancybox] {
+			.link-img {
 				border-radius: 6px;
 				overflow: hidden;
 				display: flex;
@@ -517,11 +559,72 @@ $md-mobile: 678.98px;
 				}
 			}
 
-			@media (max-width: $md1) {
-				@include adaptiv-font(16, 12, 1);
+			.link-file {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				padding: 10px;
+				padding-right: 40px;
+				border: 1px solid #000;
+				border-radius: 6px;
+				position: relative;
+
+				> .icon {
+					fill: #000;
+					width: 40px;
+					height: 40px;
+					flex-shrink: 0;
+				}
+
+				> div {
+					display: flex;
+					flex-direction: column;
+					align-items: flex-start;
+					text-align: left;
+					font-size: 14px;
+
+					.name {
+						display: -webkit-box;
+						-webkit-line-clamp: 1;
+						-webkit-box-orient: vertical;
+						overflow: hidden;
+					}
+
+					@media (max-width: $md4) {
+						font-size: 12px;
+					}
+				}
+
+				.btn-file-download {
+					position: absolute;
+					right: 5px;
+					top: 5px;
+					width: 30px;
+					height: 30px;
+					border: 1px solid #000;
+					border-radius: 4px;
+					opacity: 0;
+					visibility: hidden;
+					.icon {
+						fill: #000;
+					}
+				}
+
+				&:hover {
+					.btn-file-download {
+						opacity: 1;
+						visibility: visible;
+					}
+				}
 			}
+
+			@media (max-width: $md1) {
+				max-width: 60%;
+			}
+
 			@media (max-width: $md3) {
 				max-width: 70%;
+				padding: 10px 15px;
 			}
 
 			@media (max-width: $md5) {

@@ -50,6 +50,11 @@
 
         <div class="chat__messages_header chat-messages-header">
           <div class="chat__messages_header-chat">
+            <button class="button-back btn-open-chats">
+              <svg class="icon icon-arrow">
+                <use xlink:href="img/svg/sprite.svg#arrow"></use>
+              </svg>
+            </button>
             <div class="img">
               <img src="">
             </div>
@@ -93,18 +98,37 @@
 
           <div class="chat__message message-sent">
             <div class="chat__message_bubble">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id sequi voluptates saepe, officiis natus
-                perspiciatis sit possimus sint deleniti! Consectetur distinctio quos voluptatem voluptates ab quo,</p>
-            </div>
-            <span class="chat__message_timestamp">16:58</span>
-          </div>
-
-          <div class="chat__message message-sent">
-            <div class="chat__message_bubble">
-              <a href="https://koshka.top/uploads/posts/2021-11/1636684429_18-koshka-top-p-koshki-grustnii-leopard-30.jpg"
-                data-fancybox="х" data-caption>
-                <img
-                  src="https://koshka.top/uploads/posts/2021-11/1636684429_18-koshka-top-p-koshki-grustnii-leopard-30.jpg" />
+              <a href="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4" data-fancybox="х"
+                data-caption class="link-file link-video">
+                <svg class='icon icon-video'>
+                  <use xlink:href='img/svg/sprite.svg#video'></use>
+                </svg>
+                <div>
+                  <span class="name">Видео.mp4</span>
+                  <span class="size">14 Мб</span>
+                </div>
+                <button data-download-src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4"
+                  class="btn-file-download">
+                  <svg class='icon icon-dow-2'>
+                    <use xlink:href='img/svg/sprite.svg#dow-2'></use>
+                  </svg>
+                </button>
+              </a>
+              <a href="https://mesto-store.ru/assets/files/Agreement-on-autopayments.pdf"
+                data-thumb="./img/icons/pdf-file.png" data-fancybox="х" class="link-file">
+                <svg class='icon icon-file'>
+                  <use xlink:href='img/svg/sprite.svg#file'></use>
+                </svg>
+                <div>
+                  <span class="name">Agreement-on-autopayments.pdf</span>
+                  <span class="size">179 Кб</span>
+                </div>
+                <button data-download-src="https://mesto-store.ru/assets/files/Agreement-on-autopayments.pdf"
+                  class="btn-file-download">
+                  <svg class='icon icon-dow-2'>
+                    <use xlink:href='img/svg/sprite.svg#dow-2'></use>
+                  </svg>
+                </button>
               </a>
             </div>
             <span class="chat__message_timestamp">16:58</span>
@@ -125,7 +149,7 @@
           <form class="chat__form-send form-send-msg">
             <div class="wp-input">
               <input type="text" name="msg" placeholder="Напишите что нибудь..." autocomplete="off"
-                class="chat__textarea input">
+                class="chat__textarea input input-value-msg">
               <label class="load-file">
                 <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
                   <path fill-rule="evenodd" clip-rule="evenodd"
