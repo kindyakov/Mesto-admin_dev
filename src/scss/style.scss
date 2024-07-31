@@ -76,6 +76,10 @@ body {
 	fill: #000;
 }
 
+[data-fancybox] {
+	cursor: pointer;
+}
+
 // shared
 @import 'shared/input';
 @import 'shared/button';

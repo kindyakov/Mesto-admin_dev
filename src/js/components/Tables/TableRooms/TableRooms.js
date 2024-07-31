@@ -48,7 +48,6 @@ class TableRooms extends Table {
           }
         },
         {
-          minWidth: 300,
           headerName: 'Клиент', field: 'fullname', minWidth: 300, flex: 1,
           cellRenderer: params => {
             const span = createElement('p', ['table-p'], `
@@ -76,7 +75,7 @@ class TableRooms extends Table {
           }
         },
         {
-          headerName: 'Статус', field: 'rented', minWidth: 100, flex: 0.3,
+          headerName: 'Статус', field: 'rented', minWidth: 110, flex: 0.3,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-agrid')

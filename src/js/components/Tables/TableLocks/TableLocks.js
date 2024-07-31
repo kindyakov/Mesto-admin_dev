@@ -1,6 +1,6 @@
 import Table from '../Table.js';
 import { createElement } from '../../../settings/createElement.js'
-import { getBatteryImage } from '../../../page/ChargingLocks/html.js';
+import { getBatteryImage } from '../../../pages/ChargingLocks/html.js';
 
 class TableLocks extends Table {
   constructor(selector, options, params) {
@@ -19,7 +19,7 @@ class TableLocks extends Table {
           headerName: 'Заряд', field: 'electric_quantity', width: 100, flex: 1, resizable: false,
           cellRenderer: params => {
             const div = createElement('div', [], `
-              <span>${params.value}%</span>
+              <span>${params.value ? params.value + '%' : ''}</span>
               <img src="./img/icons/${getBatteryImage(params.value)}" alt="иконка">`)
             div.style.cssText = `display: flex; align-items: center; gap: 10px; color: #212b36; font-weight: 400; font-size: 14px;`
             return div
@@ -46,12 +46,11 @@ class TableLocks extends Table {
     super(selector, mergedOptions, mergedParams);
   }
 
-  render(locks) {
-    if (!locks.length) return
-    // const { locks, cnt_pages, page } = data;
-    // this.setPage(page, cnt_pages)
-    this.gridApi?.setGridOption('rowData', locks)
-    this.gridApi?.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, locks.length])
+  render(data) {
+    const { rooms_x_locks = [], cnt_pages, page } = data;
+    this.setPage(page, cnt_pages)
+    this.gridApi?.setGridOption('rowData', rooms_x_locks)
+    this.gridApi?.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, rooms_x_locks.length])
   }
 }
 

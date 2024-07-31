@@ -159,9 +159,14 @@ $md-mobile: 678.98px;
 		}
 
 		&_item {
+			padding: 10px 15px;
 			display: flex;
 			gap: 15px;
 			align-items: center;
+			cursor: pointer;
+			border-radius: 6px;
+
+			transition: background-color 0.2s ease-out;
 
 			&._online {
 				.status-user {
@@ -253,6 +258,10 @@ $md-mobile: 678.98px;
 				@media (max-width: $md1) {
 					@include adaptiv-font(14, 11, 1);
 				}
+			}
+
+			&:hover {
+				background-color: #eff4fb;
 			}
 		}
 	}
@@ -582,6 +591,7 @@ $md-mobile: 678.98px;
 					align-items: flex-start;
 					text-align: left;
 					font-size: 14px;
+					line-height: 130%;
 
 					.name {
 						display: -webkit-box;
@@ -603,6 +613,11 @@ $md-mobile: 678.98px;
 					height: 30px;
 					border: 1px solid #000;
 					border-radius: 4px;
+
+					display: flex;
+					align-items: center;
+					justify-content: center;
+
 					opacity: 0;
 					visibility: hidden;
 					.icon {

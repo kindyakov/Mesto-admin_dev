@@ -220,10 +220,6 @@ class Table {
 
   }
 
-  async download() {
-
-  }
-
   enableEditing(row) {
     if (!row) return []
     const inputs = row.querySelectorAll('.cell-input')

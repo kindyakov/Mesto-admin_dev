@@ -93,7 +93,7 @@ class Dashboards {
       const [name, str] = params.split(',')
       const value = data[name] ? data[name] + `${str ? str : ''}` : 'В процессе доработки'
       if (!data[name]) {
-        widget.style.fontSize = '16px'  
+        widget.style.fontSize = '16px'
       }
       widget.innerHTML = value
     });

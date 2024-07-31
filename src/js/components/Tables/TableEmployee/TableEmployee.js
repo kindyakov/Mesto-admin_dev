@@ -7,7 +7,7 @@ class TableEmployee extends Table {
     const defaultOptions = {
       columnDefs: [
         {
-          headerName: 'ФИО', field: 'fullname', minWidth: 250, flex: 1, resizable: false,
+          headerName: 'ФИО', field: 'manager_fullname', minWidth: 250, flex: 1, resizable: false,
         },
         { headerName: 'Дата', field: 'date', minWidth: 80, flex: 0.5, resizable: false, valueFormatter: params => getFormattedDate(params.value) },
         { headerName: 'Время начала рабочего дня', field: 'time_start', minWidth: 100, flex: 0.6, resizable: false, },
@@ -15,9 +15,14 @@ class TableEmployee extends Table {
         {
           headerName: 'Фотоотчет', field: '', minWidth: 100, flex: 0.5, resizable: false, sortable: false,
           cellRenderer: params => {
-            const div = createElement('div', [], `
-              </img src="${params.data.start_photo_link}" alt="Картинка">
-              </img src="${params.data.end_photo_link}" alt="Картинка">`)
+            const div = createElement('div', ['wrap-photo-report'], `
+              <div data-src="${params.data.start_photo_link}" data-fancybox="table-employee" data-caption="Фото начало рабочего дня </br>Время: ${params.data.time_start}</br>Сотрудник: ${params.data.manager_fullname}">
+                <img src="${params.data.start_photo_link}"/>
+              </div>
+              ${params.data.end_photo_link ? `
+              <div data-src="${params.data.end_photo_link}" data-fancybox="table-employee" data-caption="Фото завершения рабочего дня </br>Время: ${params.data.time_end}</br>Сотрудник: ${params.data.manager_fullname}">
+                <img src="${params.data.end_photo_link}"/>
+              </div>`: ''}`)
             return div
           }
         },
@@ -33,12 +38,11 @@ class TableEmployee extends Table {
 
   }
   render(data) {
-    return
-    const { clients, cnt_pages, page } = data
-    this.setPage(page, cnt_pages)
 
-    this.gridApi.setGridOption('rowData', clients)
-    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, clients.length])
+    const { timepoints = [], cnt_pages, page } = data
+    // this.setPage(page, cnt_pages)
+    this.gridApi.setGridOption('rowData', timepoints)
+    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, timepoints.length])
   }
 }
 

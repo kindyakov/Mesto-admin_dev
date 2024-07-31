@@ -10,10 +10,12 @@ class Navigation {
       'dashboards/finance': 'Dashboards/Finance/Finance.js',
       'dashboards/marketing': 'Dashboards/Marketing/Marketing.js',
       'dashboards/warehouse': 'Dashboards/Warehouse/Warehouse.js',
-      'dashboards/forecast': 'Dashboards/Forecast/Forecast.js',
+      'dashboards/plan-fact': 'Dashboards/PlanFact/PlanFact.js',
+      'dashboards/sales-channels': 'Dashboards/SalesChannels/SalesChannels.js',
       'charging-locks': 'ChargingLocks/ChargingLocks.js',
       'users': 'Users/Users.js',
       'working-hours': 'WorkingHours/WorkingHours.js',
+      'forecast': 'Forecast/Forecast.js',
       'rooms': 'Rooms/Rooms.js',
       'payments': 'Payments/Payments.js',
       'agreements': 'Agreements/Agreements.js',
@@ -77,7 +79,7 @@ class Navigation {
       this.modulesCache[path].render();
     } else {
       // Загружаем модуль и сохраняем его в кэш
-      import(`../../page/${this.pages[path]}`)
+      import(`../../pages/${this.pages[path]}`)
         .then(module => {
           this.loader.disable();
           const page = new module.default({ loader: this.loader, warehouse: this.warehouse });

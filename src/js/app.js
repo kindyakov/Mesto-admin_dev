@@ -23,9 +23,7 @@ function appInit() {
     useDynamicAdapt()
     burger({ selectorNav: '.sidebar' })
     initializeModalTriggers(modalMap)
-    Fancybox.bind("[data-fancybox]", {
-      // Your custom options
-    });
+    Fancybox.bind("[data-fancybox]")
 
     new Accordion({ isAccordion: false })
     warehousesSelect.render().then(warehouse => {

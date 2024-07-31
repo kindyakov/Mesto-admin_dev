@@ -1,4 +1,5 @@
 import { getFormattedDate } from "../utils/getFormattedDate.js"
+import { mergeQueryParams } from "../utils/buildQueryParams.js";
 
 class Page {
   constructor({ loader, tables = [], page }) {
@@ -31,7 +32,7 @@ class Page {
 
   events() {
     this.tables.length && this.actionsTables(table => {
-      table.onPageChange = page => this.changeQueryParams(table, { page })
+      table.onPageChange = page => this.changeQueryParams({ page }, table)
       table.onValueInputSearch = value => {
         let data = {}
 
@@ -41,30 +42,34 @@ class Page {
           data = {}
         }
 
-        this.changeQueryParams(table, data)
+        this.changeQueryParams(data, table)
       }
       table.selects.onChange = (e, select, value) => {
         const name = select.getAttribute('data-name')
-        this.changeQueryParams(table, { [name]: value })
+        this.changeQueryParams({ [name]: value }, table)
       }
 
       if (table.calendar) {
         table.calendar.methods.onChange = (selectedDates, dateStr, instance) => {
           if (selectedDates.length === 2) {
             const [start, end] = instance.element.name.split(',')
-            this.changeQueryParams(table, {
+            this.changeQueryParams({
               [start]: getFormattedDate(selectedDates[0], 'YYYY-MM-DD'),
               [end]: getFormattedDate(selectedDates[1], 'YYYY-MM-DD'),
-            })
+            }, table)
           }
         }
       }
     })
   }
 
-  changeQueryParams(table, data) {
-    this.queryParams = { ...this.queryParams, ...data }
-    this.renderTable(table, this.queryParams)
+  changeQueryParams(params, table = null) {
+    this.queryParams = mergeQueryParams(this.queryParams, params)
+    if (table) {
+      this.renderTable(table, this.queryParams)
+    } else {
+      this.render(this.queryParams)
+    }
   }
 
   actionsTables(callback = () => { }) {
@@ -74,10 +79,10 @@ class Page {
     })
   }
 
-  async render() {
+  async render(queryParams = {}) {
     try {
       this.loader.enable()
-      const dataEntities = await this.getData()
+      const dataEntities = await this.getData(queryParams)
 
       if (this.tables.length && dataEntities) {
         this.actionsTables(table => table.render(dataEntities))
@@ -91,11 +96,11 @@ class Page {
     }
   }
 
-  async renderTable(table, data = {}) {
+  async renderTable(table, queryParams = {}) {
     try {
       this.loader.enable()
-      const resData = await this.getData(data)
-      table.render(resData)
+      const resData = await this.getData(queryParams)
+      table?.render(resData)
     } catch (error) {
       console.error(error)
     } finally {

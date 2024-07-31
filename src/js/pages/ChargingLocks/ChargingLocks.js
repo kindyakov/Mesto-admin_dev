@@ -1,10 +1,15 @@
 import Page from "../Page.js"
 import TableLocks from "../../components/Tables/TableLocks/TableLocks.js";
 import FilterLocks from "../../components/Filters/FilterLocks/FilterLocks.js";
+
 import { getLocksPower } from "../../settings/request.js";
 import { Select } from "../../modules/mySelect.js";
 import { cardHtml } from "./html.js";
-import { createCalendar } from "../../settings/createCalendar.js";
+
+function extractNumbers(str) {
+  const nonDigitRegex = /\D/g;
+  return str.replace(nonDigitRegex, '');
+}
 
 class ChargingLocks extends Page {
   constructor({ loader }) {
@@ -26,7 +31,7 @@ class ChargingLocks extends Page {
     this.customSelect = new Select({ uniqueName: 'select-change-display' })
     this.filterLocks = new FilterLocks(this.wrapper.querySelector('.btn-set-filters'))
     this.locksContent = this.wrapper.querySelector('.locks')
-    this.calendar = createCalendar(this.wrapper.querySelector('.input-date-filter'))
+    this.inputSearch = this.wrapper.querySelector('.input-search')
 
     this.customSelect.onChange = (e, select, value) => {
       if (value === 'tile') {
@@ -37,26 +42,29 @@ class ChargingLocks extends Page {
         this.tableLocks.table.classList.remove('_none')
       }
     }
+
+    this.inputSearch && this.inputSearch.addEventListener('input', this.handleInputSearch.bind(this))
   }
 
-  async getData() {
-    return getLocksPower()
+  async getData(queryParams = {}) {
+    return getLocksPower(queryParams)
+  }
+
+  handleInputSearch(e) {
+    const input = e.target
+    input.value = extractNumbers(input.value)
+    clearTimeout(this.timerInput)
+    this.timerInput = setTimeout(() => {
+      this.changeQueryParams({ search_str: input.value })
+    }, 600)
   }
 
   onRender(data) {
-    const { rooms = [], locks = [] } = data
-    const customData = {}
+    const { rooms_x_locks = [] } = data
 
-    if (rooms.length) {
-      rooms.forEach(room => {
-        customData[room.lock_id] = room.room_id
-      })
-    }
-
-    if (locks.length) {
-      locks.forEach(lock => lock.room_id = customData[lock.lock_id])
-      this.locksContent.innerHTML = locks.map(lock => cardHtml(lock)).join('')
-      this.tableLocks.render(locks)
+    if (rooms_x_locks.length) {
+      this.locksContent.innerHTML = rooms_x_locks.map(lock => cardHtml(lock)).join('')
+      // this.tableLocks.render(data)
     } else {
       this.locksContent.innerHTML = `<div class="not-data"><span>Нет замков для отображения</span></div>`
     }

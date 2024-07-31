@@ -14,13 +14,13 @@ class WorkingHours extends Page {
     super({
       loader,
       tables: [
-        // {
-        //   tableSelector: '.table-employee',
-        //   TableComponent: TableEmployee,
-        //   options: {
-        //     paginationPageSize: 15
-        //   }
-        // }
+        {
+          tableSelector: '.table-employee',
+          TableComponent: TableEmployee,
+          options: {
+            paginationPageSize: 15
+          }
+        }
       ],
       page: 'working-hours'
     });

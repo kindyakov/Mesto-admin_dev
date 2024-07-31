@@ -27,7 +27,7 @@ export function cardHtml(data) {
       </div>
       <div class="locks__card_bottom">
         <div>
-          <b>${data.electric_quantity}%</b>
+          <b>${data.electric_quantity ? data.electric_quantity + '%' : ''}</b>
           <img src="./img/icons/${getBatteryImage(data.electric_quantity)}" alt="иконка">
         </div>
         <button class="table-button transparent" data-json="${objStr(data)}" data-modal="modal-confirm-open-room"><span>Открыть</span></button>

@@ -35,7 +35,6 @@ class Rooms extends Page {
     this.planRooms = []
     this.selectRooms = []
     this.currentRented = null
-    this.queryParams = {}
 
     this.warehouseScheme = new Scheme(this.wrapper)
     this.selectWarehouseFloors = new Select({ uniqueName: 'select-warehouse-floors', parentEl: this.wrapper })
@@ -165,11 +164,6 @@ class Rooms extends Page {
     actions[type]?.(room)
   }
 
-  changeQueryParams(params = {}) {
-    this.queryParams = { ...this.queryParams, ...params }
-    this.render(this.queryParams)
-  }
-
   resizeScrollableContent() {
     const children = Array.from(this.selectsRoomsContent.querySelectorAll('.room'))
     const maxHeight = children.reduce((max, child) => Math.max(max, child.offsetHeight), 0)
@@ -193,32 +187,14 @@ class Rooms extends Page {
         this.roomsContent.innerHTML = `<div class="not-room"><span>Нет ячеек для отображения<span></div>`
       }
 
-      this.tableRooms.render(dataRooms)
+      // this.tableRooms.render(dataRooms)
       // this.warehouseScheme.setNumRooms(dataRooms.plan_rooms)
       // this.warehouseScheme.filterCell(this.currentRented)
     }
   }
 
   async getData(params = {}) {
-    try {
-      const data = await getRooms(params)
-      return data
-    } catch (error) {
-      console.log(error)
-      throw error
-    }
-  }
-
-  async render(params = {}) {
-    try {
-      this.loader.enable()
-      const dataEntities = await this.getData(params)
-      this.onRender(dataEntities)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      this.loader.disable()
-    }
+    return getRooms(params)
   }
 
   async renderConfirmation() {

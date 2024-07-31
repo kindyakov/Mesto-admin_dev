@@ -4,7 +4,7 @@ import TableTransactions from "../../../components/Tables/TableTransactions/Tabl
 import ChartConversions from "../../../components/Charts/ChartConversions/ChartConversions.js";
 import { getAgreements } from "../../../settings/request.js";
 
-class Forecast extends Dashboards {
+class PlanFact extends Dashboards {
   constructor({ loader }) {
     super({
       loader,
@@ -15,7 +15,7 @@ class Forecast extends Dashboards {
       charts: [
         { id: 'chart-conversions', ChartComponent: ChartConversions }
       ],
-      page: 'forecast'
+      page: 'plan-fact'
     });
 
   }
@@ -29,4 +29,4 @@ class Forecast extends Dashboards {
   }
 }
 
-export default Forecast
+export default PlanFact
