@@ -22,16 +22,16 @@ class TableAgreements extends Table {
             const span = document.createElement('span')
             span.classList.add('table-span-agrid')
             span.textContent = params.value ? addPrefixToNumbers(params.value) : 'нет'
-            return cellRendererInput(params, undefined, null, span)
+            return cellRendererInput(params, { el: span })
           }
         },
         {
           headerName: 'ФИО', field: 'fullname', minWidth: 300, flex: 1,
-          cellRenderer: params => cellRendererInput(params, undefined, 'profile')
+          cellRenderer: params => cellRendererInput(params, { iconId: 'profile' })
         },
         {
           headerName: 'Дата начала', field: 'agrbegdate', minWidth: 130, flex: 0.6,
-          cellRenderer: params => cellRendererInput(params, getFormattedDate, 'calendar')
+          cellRenderer: params => cellRendererInput(params, { funcFormate: getFormattedDate, iconId: 'calendar' })
         },
         {
           headerName: 'Платеж в мес.', field: 'price', minWidth: 100, flex: 0.5,
@@ -39,7 +39,7 @@ class TableAgreements extends Table {
             const span = document.createElement('span')
             span.classList.add('table-span-price')
             span.innerHTML = params.value ? formattingPrice(params.value) : 'нет'
-            return cellRendererInput(params, undefined, null, span)
+            return cellRendererInput(params, { el: span })
           }
         },
         {

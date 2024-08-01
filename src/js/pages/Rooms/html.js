@@ -22,6 +22,7 @@ function buttonsRoom(data) {
   const buttons = {
     0: `<button class="room__button button" data-json="${dataStr(data)}" data-modal="modal-add-client"><span>Оформить клиенту</span></button>`,
     0.25: `<button class="room__button button" data-json="${dataStr(data)}" data-modal=""><span>Отменить доступ</span></button>`,
+    0.45: ``,
     0.4: `<button class="room__button button" data-json="${dataStr(data)}" data-modal=""><span>Отменить оплату</span></button>`,
     0.5: `<button class="room__button button" data-json="${dataStr(data)}" data-modal="modal-confirmation-client"><span>Подтвердить клиента</span></button>`,
     0.75: `<button class="room__button button" data-json="${dataStr(data)}" data-modal="modal-confirmation-departure"><span>Подтвердить выезд</span></button>`,
@@ -69,9 +70,9 @@ export function roomHtml(data) {
             </div>
             <div class="room__bottom">
               ${buttonsRoom(data)}
+              <button class="room__button button transparent" data-json="${dataStr(data)}" data-modal="modal-confirm-open-room"><span>Открыть</span></button>
               ${+data.rented === 0.75 ?
-      `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal=""><span>Ускорить</span></button>` :
-      `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal="modal-confirm-open-room"><span>Открыть</span></button>`}
+      `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal=""><span>Ускорить</span></button>` : ``}
             </div>
           </div>`
 }

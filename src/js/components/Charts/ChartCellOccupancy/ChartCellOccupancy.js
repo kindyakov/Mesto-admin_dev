@@ -56,21 +56,30 @@ class ChartCellOccupancy extends BaseChart {
 
     super(ctx, merge({}, defaultOptions, addOptions));
 
+    this.rooms = []
+
+    this.wp = this.chart.canvas.closest('.chart')
+    this.countCellsEl = this.wp.querySelector('.count-cells b')
+    this.widgets = this.wp.querySelectorAll('[data-chart-widget]')
+
     this.datasets = {
       1: () => {
-        this.chart.data.datasets[0].hidden = true;
-        this.chart.data.datasets[1].hidden = false;
-        this.chart.update();
+        const filterRooms = this.rooms.filter(room => room.floor === 1)
+        this.countCellsEl.textContent = filterRooms.length
+        // this.chart.data.datasets[0].data
+        // this.chart.update();
       },
       2: () => {
-        this.chart.data.datasets[0].hidden = false;
-        this.chart.data.datasets[1].hidden = true;
-        this.chart.update();
+        const filterRooms = this.rooms.filter(room => room.floor === 2)
+        this.countCellsEl.textContent = filterRooms.length
+        // this.chart.data.datasets[0].data
+        // this.chart.update();
       },
       all: () => {
-        this.chart.data.datasets[0].hidden = false;
-        this.chart.data.datasets[1].hidden = false;
-        this.chart.update();
+        this.countCellsEl.textContent = this.rooms.length
+
+        // this.chart.data.datasets[0].data
+        // this.chart.update();
       },
     };
 
@@ -80,11 +89,35 @@ class ChartCellOccupancy extends BaseChart {
 
   handleSelectChange(e, select, value) {
     if (this.datasets[value]) {
-      // this.datasets[value]();
+      this.datasets[value]();
     }
   }
 
-  render() { }
+  render(data) {
+    const { rented_cnt = [], plan_rooms = [] } = data
+
+    this.rooms = plan_rooms
+
+    if (!rented_cnt.length) return
+    const [free = null] = rented_cnt.filter(obj => +obj.rented === 0)
+    const [booked = null] = rented_cnt.filter(obj => +obj.rented === 0.5)
+    const [busy = null] = rented_cnt.filter(obj => +obj.rented === 1)
+
+    this.chart.data.datasets[0].data = [
+      free ? free.cnt : 0,
+      booked ? booked.cnt : 0,
+      busy ? busy.cnt : 0
+    ]
+
+    this.countCellsEl.textContent = plan_rooms.length
+    this.widgets.length && this.widgets.forEach(widget => {
+      const rented = +widget.getAttribute('data-chart-widget')
+      const [currentData = null] = rented_cnt.filter(obj => +obj.rented === rented)
+      widget.innerText = currentData ? `${currentData.rate}%` : '0%'
+    })
+
+    this.chart.update()
+  }
 }
 
 export default ChartCellOccupancy

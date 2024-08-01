@@ -91,6 +91,10 @@ export const getNonApprovedClients = getCreate('/_get_nonapproved_clients_')
 export const getLocksPower = getCreate('/_get_locks_power_/')
 
 export const getManagersList = getCreate('/_get_managers_list_')
+
+export const getFinancePlan = getCreate('/_get_finance_plan_')
+
+export const getSalesPlan = getCreate('/_get_sales_plan_')
 // ============================================================================>
 
 export const getClientTotal = getCreateTotal('/_get_client_total_')

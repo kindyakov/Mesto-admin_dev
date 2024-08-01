@@ -64,6 +64,14 @@
 		& > * {
 			margin: 0;
 		}
+		.wrap-buttons {
+			display: flex;
+			gap: 10px;
+			margin-left: auto;
+			.button {
+				height: 40px;
+			}
+		}
 		@media (max-width: $md4) {
 			align-items: flex-start;
 			flex-direction: column;

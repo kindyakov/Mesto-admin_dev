@@ -36,7 +36,15 @@ class ChartMonthlyRevenue extends BaseChart {
           y: {
             ticks: {
               callback: function (value, index, values) {
-                return value + ' млн';
+                const units = ['', 'тыс', 'млн', 'млрд']
+                let unitIndex = 0
+
+                while (value >= 1000 && unitIndex < units.length - 1) {
+                  value /= 1000
+                  unitIndex++
+                }
+
+                return value.toFixed(0) + ' ' + units[unitIndex]
               }
             }
           },
@@ -79,7 +87,13 @@ class ChartMonthlyRevenue extends BaseChart {
     }
   }
 
-  render() { }
+  render(data) {
+    if (!data.length) return
+    this.chart.data.labels = Array.from({ length: data.length }, (_, i) => i + 1)
+    this.chart.data.datasets[0].data = data.map(obj => obj.revenue)
+    this.chart.data.datasets[1].data = data.map(obj => obj.revenue_planned)
+    this.chart.update()
+  }
 }
 
 export default ChartMonthlyRevenue

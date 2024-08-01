@@ -7,6 +7,8 @@ import { Loader } from '../../modules/myLoader.js';
 import { Select } from '../../modules/mySelect.js';
 import { createCalendar } from '../../settings/createCalendar.js';
 
+import { mergeQueryParams } from "../../utils/buildQueryParams.js";
+
 class Table {
   constructor(selector, options, params) {
     let defaultParams = {
@@ -71,6 +73,7 @@ class Table {
     this.onRowSelected = this.onRowSelected.bind(this)
 
     this.selectedRows = []
+    this.queryParams = {}
 
     this.page = null
     this.pages = null
@@ -247,6 +250,39 @@ class Table {
     })
 
     btn.classList.remove('_edit')
+  }
+
+  changeQueryParams(params) {
+    this.queryParams = mergeQueryParams(this.queryParams, params)
+  }
+
+  getAllRows() {
+    let rowData = [];
+    const rowCount = this.gridApi.getDisplayedRowCount();
+
+    for (let i = 0; i < rowCount; i++) {
+      let rowNode = this.gridApi.getDisplayedRowAtIndex(i);
+      rowData.push(rowNode.data);
+    }
+
+    return rowData;
+  }
+
+  getAllRowsWithElements() {
+    let rowsWithElements = [];
+    const rowCount = this.gridApi.getDisplayedRowCount();
+
+    for (let i = 0; i < rowCount; i++) {
+      let rowNode = this.gridApi.getDisplayedRowAtIndex(i);
+      let rowElement = this.wpTable.querySelector(`.ag-row[row-id="${rowNode.id}"]`);
+
+      rowsWithElements.push({
+        data: rowNode.data,
+        element: rowElement
+      });
+    }
+
+    return rowsWithElements;
   }
 }
 

@@ -1,10 +1,15 @@
-export function cellRendererInput(params, func = val => val, iconId = null, dopEl = null) {
-  const wpInput = document.createElement('div');
-  wpInput.classList.add('wp-input', 'wp-input-cell', 'not-edit')
+import { createElement } from "../../../settings/createElement.js"
 
-  if (dopEl) {
+const defaultOptions = { funcFormate: val => val, iconId: null, el: null, inputmode: 'text', attributes: [] }
+
+export function cellRendererInput(params, options = {}) {
+  const { funcFormate, iconId, el, inputmode, attributes } = Object.assign({}, defaultOptions, options)
+  const wpInput = createElement('div', ['wp-input', 'wp-input-cell', 'not-edit'])
+  let attributesStr = ''
+
+  if (el) {
     wpInput.classList.add('is-dop-content')
-    dopEl.classList.add('dop-el-content')
+    el.classList.add('dop-el-content')
   }
 
   if (iconId) {
@@ -13,6 +18,10 @@ export function cellRendererInput(params, func = val => val, iconId = null, dopE
     wpInput.classList.add('is-icon')
   }
 
-  wpInput.insertAdjacentHTML('beforeend', `<input type="text" name="${params.colDef.field}" value="${params.value ? func(params.value) : ''}" class="input-cell cell-input not-edit" autocomplete="off" readonly="true">${dopEl ? dopEl.outerHTML : ''}`);
+  if (attributes.length) {
+    attributesStr = attributes.map(attr => `${attr[0]}="${attr[1]}"`).join(' ')
+  }
+
+  wpInput.insertAdjacentHTML('beforeend', `<input type="text" name="${params.colDef.field}" value="${params.value ? funcFormate(params.value) : ''}" class="input-cell cell-input not-edit" autocomplete="off" readonly="true" inputmode="${inputmode}" ${attributesStr}>${el ? el.outerHTML : ''}`);
   return wpInput;
 }

@@ -45,7 +45,6 @@ class Rooms extends Page {
       specialSelector: '.room-tabs',
       uniqueName: true,
     })
-    this.tableRooms = this.tables[0]
 
     this.selectsRoomsContent = this.wrapper.querySelector('.selects-rooms')
     this.formFilterRoom = this.wrapper.querySelector('.form-filter-room')
@@ -187,7 +186,6 @@ class Rooms extends Page {
         this.roomsContent.innerHTML = `<div class="not-room"><span>Нет ячеек для отображения<span></div>`
       }
 
-      // this.tableRooms.render(dataRooms)
       // this.warehouseScheme.setNumRooms(dataRooms.plan_rooms)
       // this.warehouseScheme.filterCell(this.currentRented)
     }

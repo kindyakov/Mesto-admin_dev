@@ -20,9 +20,9 @@ class TableClients extends Table {
         { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
         {
           headerName: 'ФИО', field: 'fullname', minWidth: 300, flex: 1,
-          cellRenderer: params => cellRendererInput(params, undefined, 'profile')
+          cellRenderer: params => cellRendererInput(params, { iconId: 'profile' })
         },
-        { headerName: 'Телефон', field: 'username', minWidth: 170, flex: 0.5, cellRenderer: params => cellRendererInput(params, formatPhoneNumber) },
+        { headerName: 'Телефон', field: 'username', minWidth: 170, flex: 0.5, cellRenderer: params => cellRendererInput(params, { funcFormate: formatPhoneNumber }) },
         { headerName: 'Почта', field: 'email', minWidth: 260, flex: 0.5, sortable: false, cellRenderer: params => cellRendererInput(params) },
         { headerName: 'Ячейки', field: 'rooms', minWidth: 100, flex: 0.5, valueFormatter: params => params.value ? addPrefixToNumbers(params.value) : 'нет' },
         {

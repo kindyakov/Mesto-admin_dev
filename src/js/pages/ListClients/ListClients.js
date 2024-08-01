@@ -15,7 +15,7 @@ class ListClients extends Page {
           }
         }
       ],
-      page: 'forecast'
+      page: 'list-clients'
     });
   }
 

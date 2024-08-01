@@ -22,16 +22,16 @@ class TablePayments extends Table {
             const span = document.createElement('span')
             span.classList.add('table-span-agrid')
             span.textContent = params.value ? addPrefixToNumbers(params.value) : 'нет'
-            return cellRendererInput(params, undefined, null, span)
+            return cellRendererInput(params, { el: span })
           }
         },
         {
           headerName: 'ФИО', field: 'fullname', minWidth: 300, flex: 0.8,
-          cellRenderer: params => cellRendererInput(params, undefined, 'profile')
+          cellRenderer: params => cellRendererInput(params, { iconId: 'profile' })
         },
         {
           headerName: 'Дата платежа', field: 'payment_date', minWidth: 130, flex: 0.5,
-          cellRenderer: params => cellRendererInput(params, getFormattedDate, 'calendar')
+          cellRenderer: params => cellRendererInput(params, { funcFormate: getFormattedDate, iconId: 'calendar' })
         },
         {
           headerName: 'Вид поступления', field: 'type', minWidth: 100, flex: 0.5,
@@ -45,7 +45,7 @@ class TablePayments extends Table {
             const span = document.createElement('span')
             span.classList.add('table-span-price')
             span.innerHTML = params.value ? formattingPrice(params.value) : 'нет'
-            return cellRendererInput(params, undefined, null, span)
+            return cellRendererInput(params, { el: span })
           }
         },
         {
