@@ -41,7 +41,7 @@ export class Tabs {
     return Array.from(this._buttonsActive)
   }
 
-  // tabs.buttonsActive и вернет массив с активными контентами
+  // tabs.contentActive и вернет массив с активными контентами
   get contentActive() {
     return Array.from(this._contentsActive)
   }

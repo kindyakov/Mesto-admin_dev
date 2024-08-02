@@ -95,6 +95,8 @@ export const getManagersList = getCreate('/_get_managers_list_')
 export const getFinancePlan = getCreate('/_get_finance_plan_')
 
 export const getSalesPlan = getCreate('/_get_sales_plan_')
+
+export const getMessagesHistory = getCreate('/_get_messages_history_')
 // ============================================================================>
 
 export const getClientTotal = getCreateTotal('/_get_client_total_')

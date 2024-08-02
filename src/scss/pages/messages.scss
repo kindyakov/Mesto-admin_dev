@@ -1,6 +1,7 @@
 $height-header: 90px;
 $border-color: #e2e8f0;
 $md-mobile: 678.98px;
+$heightChat: 680px;
 
 @mixin chat-header($height) {
 	height: $height;
@@ -22,7 +23,7 @@ $md-mobile: 678.98px;
 
 .chat {
 	width: 100%;
-	height: 680px;
+	height: $heightChat;
 	background-color: #fff;
 	border: 1px solid $border-color;
 	border-radius: 2px;
@@ -31,6 +32,7 @@ $md-mobile: 678.98px;
 
 	display: grid;
 	grid-template-columns: minmax(280px, 340px) 1fr;
+	// display: flex;
 
 	@media (max-width: $md3) {
 		grid-template-columns: 220px 1fr;
@@ -39,12 +41,15 @@ $md-mobile: 678.98px;
 	@media (max-width: $md-mobile) {
 		display: block;
 		position: relative;
-		height: calc(100vh - 20px);
+		// height: calc(100vh - 20px);
 		min-height: 500px;
 	}
 
 	&__aside {
+		display: flex;
+		flex-direction: column;
 		border-right: 1px solid $border-color;
+		height: $heightChat;
 
 		@media (max-width: $md-mobile) {
 			position: absolute;
@@ -63,6 +68,7 @@ $md-mobile: 678.98px;
 
 		&_header {
 			@include chat-header($height-header);
+			flex-shrink: 0;
 		}
 
 		&_title {
@@ -99,7 +105,8 @@ $md-mobile: 678.98px;
 		&_body {
 			display: flex;
 			flex-direction: column;
-			height: 100%;
+			overflow-y: auto;
+			overflow-x: hidden;
 			gap: 25px;
 			padding: 30px 25px;
 			@media (max-width: $md3) {
@@ -263,11 +270,15 @@ $md-mobile: 678.98px;
 			&:hover {
 				background-color: #eff4fb;
 			}
+
+			&._tab-btn-active {
+				background-color: #eff4fb;
+			}
 		}
 	}
 
 	&__body {
-		height: 100%;
+		height: $heightChat;
 		width: 100%;
 	}
 
@@ -275,8 +286,12 @@ $md-mobile: 678.98px;
 		// display: grid;
 		// grid-template-rows: auto minmax(auto, 500px) auto;
 		height: 100%;
-		display: flex;
+		display: none;
 		flex-direction: column;
+
+		&._tab-content-active {
+			display: flex;
+		}
 
 		&_header {
 			@include chat-header($height-header);
