@@ -25,7 +25,8 @@ function unlockPadding() {
 }
 
 
-export const burger = ({ selectorBurger = '.header-burger', selectorNav = '.header__nav' }) => {
+export const burger = ({ selectorBurger = '.header-burger', selectorNav = '.header__nav', selectorSidebar = '.sidebar' }) => {
+  const sidebar = document.querySelector(selectorSidebar)
   const burger = document.querySelector(selectorBurger)
   const nav = document.querySelector(selectorNav)
   const main = document.querySelector('.main')
