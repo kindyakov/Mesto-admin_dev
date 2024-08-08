@@ -24,18 +24,14 @@ class ChartCellOccupancy extends BaseChart {
       },
       options: {
         cutout: '70%', // Создает отверстие в центре
+
         plugins: {
           legend: {
-            display: false // Скрываем легенду
+            display: false,
           },
-          // title: {
-          //   display: true,
-          //   text: '2548 Ячеек',
-          //   font: {
-          //     size: 24,
-          //     weight: 'bold'
-          //   }
-          // }
+          tooltip: {
+            enabled: true,
+          }
         },
         scales: {
           x: {
@@ -66,20 +62,35 @@ class ChartCellOccupancy extends BaseChart {
       1: () => {
         const filterRooms = this.rooms.filter(room => room.floor === 1)
         this.countCellsEl.textContent = filterRooms.length
-        // this.chart.data.datasets[0].data
-        // this.chart.update();
+        console.log(this.dataFilter(this.rooms, 0, 1))
+
+        this.chart.data.datasets[0].data = [
+          this.dataFilter(this.rooms, 0, 1),
+          this.dataFilter(this.rooms, 0.5, 1),
+          this.dataFilter(this.rooms, 1, 1),
+        ]
+        this.chart.update();
       },
       2: () => {
         const filterRooms = this.rooms.filter(room => room.floor === 2)
         this.countCellsEl.textContent = filterRooms.length
-        // this.chart.data.datasets[0].data
-        // this.chart.update();
+
+        this.chart.data.datasets[0].data = [
+          this.dataFilter(this.rooms, 0, 2),
+          this.dataFilter(this.rooms, 0.5, 2),
+          this.dataFilter(this.rooms, 1, 2),
+        ]
+        this.chart.update();
+
       },
       all: () => {
         this.countCellsEl.textContent = this.rooms.length
-
-        // this.chart.data.datasets[0].data
-        // this.chart.update();
+        this.chart.data.datasets[0].data = [
+          this.dataFilter(this.rooms, 0),
+          this.dataFilter(this.rooms, 0.5),
+          this.dataFilter(this.rooms, 1),
+        ]
+        this.chart.update();
       },
     };
 
@@ -91,6 +102,16 @@ class ChartCellOccupancy extends BaseChart {
     if (this.datasets[value]) {
       this.datasets[value]();
     }
+  }
+
+  dataFilter(rooms, rented, floor = false) {
+    let data = []
+    if (floor) {
+      data = rooms.filter(room => +room.rented === rented && +room.floor === floor)
+    } else {
+      data = rooms.filter(room => +room.rented === rented)
+    }
+    return data.length
   }
 
   render(data) {

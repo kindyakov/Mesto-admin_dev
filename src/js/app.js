@@ -10,6 +10,11 @@ import { burger } from "./utils/header.js";
 
 import { modalMap } from "./modalMap.js";
 
+window.app = {
+  warehouses: [],
+  warehouse: null
+}
+
 const nav = new Navigation();
 const auth = new Auth({ modalMap })
 const warehousesSelect = new WarehousesSelect()
@@ -18,7 +23,7 @@ let isFirstLoad = true
 
 Fancybox.defaults.Hash = false;
 
-function appInit() {
+function appInit(user) {
   if (isFirstLoad) {
     useDynamicAdapt()
     burger({ selectorNav: '.sidebar' })
@@ -35,10 +40,10 @@ function appInit() {
 }
 
 if (auth.isAuth) {
-  appInit()
+  appInit(auth.user)
 }
 
-auth.onAuth = data => appInit()
+auth.onAuth = user => appInit(user)
 
 
 const sidebarContent = document.querySelector('.sidebar-content')
@@ -65,29 +70,4 @@ if (sidebarContent && window.innerWidth > 1200) {
       isFixed = false;
     }
   })
-}
-
-if (false && window.innerWidth > 100) {
-  const wrapper = slideEstablish.parentElement;
-  const header = document.querySelector('.header')
-  let isFixed = false;
-
-  window.addEventListener('scroll', e => {
-    if (window.innerWidth < 1500) return
-    const rect = slideEstablish.getBoundingClientRect();
-    const parentRect = wrapper.getBoundingClientRect();
-    const headerRect = header.getBoundingClientRect();
-    const paddingTop = headerRect.height + 20
-
-    if (!isFixed && parentRect.top <= paddingTop && parentRect.bottom - rect.height >= paddingTop) {
-      slideEstablish.style.cssText = `position: fixed; top: ${paddingTop}px; left: ${parentRect.left}px; max-width: ${wrapper.clientWidth}px;`
-      isFixed = true;
-    } else if (isFixed && parentRect.top >= paddingTop) {
-      slideEstablish.removeAttribute('style')
-      isFixed = false;
-    } else if (isFixed && parentRect.bottom - rect.height <= paddingTop) {
-      slideEstablish.style.cssText = `position: absolute; bottom: 0; left: 0; max-width: ${wrapper.clientWidth}px;`
-      isFixed = false;
-    }
-  });
 }

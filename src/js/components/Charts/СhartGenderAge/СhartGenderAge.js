@@ -5,7 +5,7 @@ class ChartGenderAge extends BaseChart {
     super(ctx, {
       type: 'bar',
       data: {
-        labels: ['до 18', '18-25', '25-30', '30-35', '35-45', 'от 45'],
+        labels: ['18-25', '25-30', '30-35', '35-45', 'от 45'],
         datasets: [{
           label: 'Мужчины',
           data: [25, 20, 35, 15, 20, 25],
@@ -46,7 +46,7 @@ class ChartGenderAge extends BaseChart {
             },
             ticks: {
               callback: function (value, index, values) {
-                return value + '%';
+                return value;
               }
             }
           }
@@ -61,12 +61,34 @@ class ChartGenderAge extends BaseChart {
 
   }
 
+  genderFilter(arr, gender) {
+    if (!arr.length) return
+    return arr
+      .filter(obj => obj.gender === gender)
+      .filter(obj => obj.age)
+  }
+
+  dataFilter(labels, data) {
+    return labels.map(item => {
+      const [s, e = 100] = item.split('-')
+      return data
+        .filter(obj => +s <= obj.age && obj.age <= +e)
+        .reduce((acc, obj) => acc += obj.cnt, 0)
+    })
+  }
+
   render(data) {
     const { sex_age_data = [] } = data
 
-    if (sex_age_data.length) {
+    const labels = ['18-25', '25-30', '30-35', '35-45', '45']
+    if (!sex_age_data.length) return
 
-    }
+    const menData = this.genderFilter(sex_age_data, 1)
+    const womenData = this.genderFilter(sex_age_data, 0)
+
+    this.chart.data.datasets[0].data = this.dataFilter(labels, menData)
+    this.chart.data.datasets[1].data = this.dataFilter(labels, womenData)
+    this.chart.update()
   }
 }
 

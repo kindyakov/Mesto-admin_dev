@@ -5,7 +5,7 @@ import ChartCellOccupancy from "../../../components/Charts/ChartCellOccupancy/Ch
 import FilterRooms from "../../../components/Filters/FilterRooms/FilterRooms.js";
 import { getRooms, } from "../../../settings/request.js";
 import { Select } from "../../../modules/mySelect.js";
-import { getDashboardWarehouse } from "../../../settings/request.js";
+import { getDashboardWarehouse, getFinancePlan } from "../../../settings/request.js";
 
 class Warehouse extends Dashboards {
   constructor({ loader }) {
@@ -60,17 +60,18 @@ class Warehouse extends Dashboards {
     if (!this.widgets.length) return
     this.widgets.forEach(widget => {
       const { rented_cnt } = data
-      const rented = +widget.getAttribute('data-render-widget')
-      const [currentData = null] = rented_cnt.filter(obj => +obj.rented === rented)
-      widget.innerText = currentData ? `${currentData.rate}% (${currentData.cnt})` : 'В процессе доработки'
+      const [rented, str] = widget.getAttribute('data-render-widget').split(',')
+      const [currentData = null] = rented_cnt.filter(obj => +obj.rented === +rented)
+      widget.innerText = currentData ? `${currentData.rate}% (${currentData.cnt})` : '0% (0)'
     });
   }
 
   async render() {
     try {
       this.loader.enable()
-      const [dataDashboard, dataRooms] = await Promise.all([getDashboardWarehouse(), getRooms()])
+      const [dataDashboard, dataRooms, { finance_planfact = [] }] = await Promise.all([getDashboardWarehouse(), getRooms(), getFinancePlan()])
 
+      dataDashboard.finance_planfact = finance_planfact
       this.renderWidgets(dataDashboard)
       this.actionsCharts(chart => chart.render(dataDashboard))
 
@@ -103,7 +104,6 @@ class Warehouse extends Dashboards {
       this.loader.disable()
     }
   }
-
 }
 
 export default Warehouse

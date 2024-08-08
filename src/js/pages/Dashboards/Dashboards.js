@@ -2,6 +2,20 @@ import { Select } from "../../modules/mySelect.js"
 import { createCalendar } from "../../settings/createCalendar.js"
 import { getFormattedDate } from "../../utils/getFormattedDate.js"
 
+function formatePrice(value) {
+  if (!value) return ''
+  const units = ['', 'тыс', 'млн', 'млрд', 'трлн']
+  let unitIndex = 0
+
+  while (value >= 1000 && unitIndex < units.length - 1) {
+    value /= 1000
+    unitIndex++
+  }
+  console.log(value);
+
+  return value.toFixed(3) + ' ' + units[unitIndex]
+}
+
 class Dashboards {
   constructor({ loader, tables = [], charts = [], page }) {
     this.loader = loader
@@ -87,6 +101,8 @@ class Dashboards {
   }
 
   renderWidgets(data) {
+    this.widgets = this.wrapper.querySelectorAll('[data-render-widget]')
+
     if (!this.widgets.length) return
     this.widgets.forEach(widget => {
       const params = widget.getAttribute('data-render-widget')
@@ -95,7 +111,11 @@ class Dashboards {
       if (!data[name]) {
         widget.style.fontSize = '16px'
       }
-      widget.innerHTML = value
+      if (name === 'revenue') {
+        widget.innerText = Number.isInteger(value) ? formatePrice(value) + ' ₽' : ''
+      } else {
+        widget.innerHTML = value
+      }
     });
   }
 

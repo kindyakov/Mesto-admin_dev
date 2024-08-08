@@ -16,7 +16,7 @@ class Clients extends Dashboards {
         { id: 'chart-gender-age', ChartComponent: ChartGenderAge },
       ],
       page: 'clients'
-    });
+    });    
   }
 
   async getData(data = {}) {

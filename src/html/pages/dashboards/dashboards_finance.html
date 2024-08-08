@@ -6,8 +6,8 @@
       </svg>
       <input type="text" class="input-date-filter" name="date" placeholder="Дата">
     </label>
-    <div class="main__selects-filter">
-      <!-- <select class="init-custom-select" data-special-select="select-filter-main" name="plan"
+    <!-- <div class="main__selects-filter">
+      <select class="init-custom-select" data-special-select="select-filter-main" name="plan"
         data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
         <option value="1">Склад 1</option>
         <option value="2">Склад 2</option>
@@ -18,8 +18,8 @@
         <option value="month">За месяц</option>
         <option value="2">Option 2</option>
         <option value="3">Option 3</option>
-      </select> -->
-    </div>
+      </select>
+    </div> -->
   </form>
   <div class="widgets">
     <div class="widgets__item">
@@ -27,7 +27,16 @@
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
       <div class="widgets__item_content">
-        <span class="value" data-render-widget="avg_price_per_room, ₽/мес"></span>
+        <span class="value" data-render-widget=""></span>
+        <span class="name">Выручка за период</span>
+      </div>
+    </div>
+    <div class="widgets__item">
+      <div class="widgets__item_img">
+        <img src="img/icons/coins.png" alt="Иконка">
+      </div>
+      <div class="widgets__item_content">
+        <span class="value" data-render-widget="avg_price_per_room, ₽/м²"></span>
         <span class="name">Средняя ставка аренды</span>
       </div>
     </div>
@@ -36,26 +45,8 @@
         <img src="img/icons/receipt.png" alt="Иконка">
       </div>
       <div class="widgets__item_content">
-        <span class="value" data-render-widget="delayed_payments_sum_rate, %"></span>
+        <span class="value" data-render-widget=""></span>
         <span class="name">Просроченные платежи</span>
-      </div>
-    </div>
-    <div class="widgets__item">
-      <div class="widgets__item_img">
-        <img src="img/icons/percent.png" alt="Иконка">
-      </div>
-      <div class="widgets__item_content">
-        <span class="value" data-render-widget>15 %</span>
-        <span class="name">Клиенты с подпиской</span>
-      </div>
-    </div>
-    <div class="widgets__item">
-      <div class="widgets__item_img">
-        <img src="img/icons/user.png" alt="Иконка">
-      </div>
-      <div class="widgets__item_content">
-        <span class="value" data-render-widget>20.488</span>
-        <span class="name">Новые клиенты</span>
       </div>
     </div>
   </div>
@@ -64,15 +55,15 @@
     <div class="chart" style="flex: 1 1 auto; width: 100%; height: 380px;">
       <div class="chart__header" style="align-items: center;">
         <h4 class="chart__title">
-          Выручка за месяц: 20,2 млн ₽
-          <div class="frame up" style="transform: translate(0, -10%);">
+          Выручка за период: <span data-render-widget="revenue"></span>
+          <!-- <div class="frame up" style="transform: translate(0, -10%);">
             <span>0,23%</span>
             <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M3.49967 1.914L0.817673 4.596L0.110674 3.889L3.99967 3.67785e-06L7.88867 3.889L7.18167 4.596L4.49967 1.914L4.49967 8L3.49967 8L3.49967 1.914Z"
                 fill="white" />
             </svg>
-          </div>
+          </div> -->
         </h4>
         <div class="" style="display: flex; align-items: center; gap: 25px;">
           <div class="chart__info">
@@ -110,8 +101,8 @@
       <div class="table__top">
         <form class="table__form form-table-search">
           <div class="wp-input wp-input-search">
-            <input type="text" name="search_str" placeholder="Поиск" class="input input-table-search"
-              autocomplete="off" inputmode="search">
+            <input type="text" name="search_str" placeholder="Поиск" class="input input-table-search" autocomplete="off"
+              inputmode="search">
             <button type="submit" class="button-icon-search">
               <svg class='icon icon-search'>
                 <use xlink:href='img/svg/sprite.svg#search'></use>
@@ -119,7 +110,7 @@
             </button>
           </div>
         </form>
-        <div class="table__buttuns">
+        <!-- <div class="table__buttuns">
           <button class="table__button button-table btn-table-add" data-modal="">
             <span>Добавить</span>
             <svg class='icon icon-plus'>
@@ -132,7 +123,7 @@
               <use xlink:href='img/svg/sprite.svg#dow'></use>
             </svg>
           </button>
-        </div>
+        </div> -->
       </div>
       <div class="table__content table-payments ag-theme-quartz" style="height: 100%;"></div>
     </div>

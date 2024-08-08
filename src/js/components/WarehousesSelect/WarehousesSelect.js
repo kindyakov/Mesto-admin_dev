@@ -55,6 +55,7 @@ class WarehousesSelect {
           this.setStorageWarehouse(warehouses[activeIndex])
         }
 
+        window.app = { ...window.app, warehouse: warehouses[activeIndex], warehouses }
         this.selectCustom.options.activeIndex = activeIndex
         this.selectCustom.init()
 

@@ -1,12 +1,7 @@
 import Dashboards from "../Dashboards.js";
-import TablePayments from "../../../components/Tables/TablePayments/TablePayments.js"
+import TableUpcomingPayments from "../../../components/Tables/TableUpcomingPayments/TableUpcomingPayments.js"
 import ChartMonthlyRevenue from "../../../components/Charts/ChartMonthlyRevenue/ChartMonthlyRevenue.js";
-import { getDashboardFinance, getPayments, getFinancePlan } from "../../../settings/request.js";
-import { cellRendererInput } from "../../../components/Tables/utils/cellRenderer.js";
-import { getFormattedDate } from "../../../utils/getFormattedDate.js";
-import { formattingPrice } from "../../../utils/formattingPrice.js";
-import { addPrefixToNumbers } from "../../../components/Tables/utils/addPrefixToNumbers.js";
-import { dateFormatter } from "../../../settings/dateFormatter.js";
+import { getDashboardFinance, getFuturePayments, getFinancePlan } from "../../../settings/request.js";
 
 function getFirstAndLastDayOfMonth() {
   const today = new Date();
@@ -31,49 +26,7 @@ class Finance extends Dashboards {
       tables: [
         {
           tableSelector: '.table-payments',
-          TableComponent: TablePayments,
-          options: {
-            columnDefs: [
-              { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
-              {
-                headerName: 'Дата платежа', field: 'payment_date', minWidth: 140, flex: 0.5,
-                cellRenderer: params => cellRendererInput(params, { funcFormate: getFormattedDate, iconId: 'calendar' })
-              },
-              {
-                headerName: 'Сумма', field: 'amount', minWidth: 80, flex: 0.5,
-                cellRenderer: params => {
-                  const span = document.createElement('span')
-                  span.classList.add('table-span-price')
-                  span.innerHTML = params.value ? formattingPrice(params.value) : 'нет'
-                  return cellRendererInput(params, { el: span })
-                }
-              },
-              {
-                headerName: 'ФИО', field: 'fullname', minWidth: 350, flex: 1,
-                cellRenderer: params => cellRendererInput(params, { iconId: 'profile' })
-              },
-              {
-                headerName: 'Договор', field: 'agrid', minWidth: 70, flex: 0.5,
-                cellRenderer: params => {
-                  const span = document.createElement('span')
-                  span.classList.add('table-span-agrid')
-                  span.textContent = params.value ? addPrefixToNumbers(params.value) : 'нет'
-                  return cellRendererInput(params, { el: span })
-                }
-              },
-              {
-                headerName: 'Вид поступления', field: 'type', minWidth: 90, flex: 0.5,
-              },
-              {
-                headerName: 'Физ./Юр.', field: 'user_type', minWidth: 90, flex: 0.5, resizable: false,
-                valueFormatter: params => params.value === 'f' ? 'Физ. лицо' : 'Юр. лицо'
-              },
-              // {
-              //   headerName: 'Действия', field: 'actions', flex: 0.3, resizable: false, sortable: false,
-              //   cellRenderer: params => this.actionCellRenderer(params),
-              // }
-            ]
-          }
+          TableComponent: TableUpcomingPayments,
         }
       ],
       charts: [
@@ -84,26 +37,34 @@ class Finance extends Dashboards {
   }
 
   async getData(data = {}) {
-    return getPayments(data);
+    return getFuturePayments(data);
   }
 
   async getDashboardData(data = {}) {
-    return Promise.all([getDashboardFinance(data), getFinancePlan(Object.keys(data).length ? data : {
-      start_date: dateFormatter(getFirstAndLastDayOfMonth()[0], 'yyyy-MM-dd'),
-      end_date: dateFormatter(getFirstAndLastDayOfMonth()[1], 'yyyy-MM-dd')
-    })])
+    return Promise.all([getDashboardFinance(data), getFinancePlan(data)])
+  }
+
+  async renderDashboard(data) {
+    try {
+      this.loader.enable()
+      const dataDashboard = await this.getDashboardData(data)
+      const [dataWidgets = [], { finance_planfact = [] }] = dataDashboard
+
+      this.renderWidgets(dataWidgets)
+      this.actionsCharts(chart => chart.render(finance_planfact))
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loader.disable()
+    }
   }
 
   async render() {
     try {
       this.loader.enable()
-      const [dataDashboard, dataEntities,] = await Promise.all([this.getDashboardData(), this.getData()])
+      const [dataDashboard = [], dataEntities,] = await Promise.all([this.getDashboardData(), this.getData()])
 
-      if (dataDashboard) {
-        const [dataWidgets = [], { finance_planfact = [] }] = dataDashboard
-        this.renderWidgets(dataWidgets)
-        this.actionsCharts(chart => chart.render(finance_planfact))
-      }
+      this.renderDashboard(dataDashboard)
 
       if (this.tables.length && dataEntities) {
         this.actionsTables(table => table.render(dataEntities))

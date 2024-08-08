@@ -26,7 +26,7 @@ class Auth {
     this.mainLoader = document.querySelector('.body-loader')
 
     this.isAuth = false
-    this.resData = null
+    this.user = null
     this.currentDate = new Date()
 
     this.onAuth = this.options.onAuth
@@ -62,7 +62,8 @@ class Auth {
     if (isAuth) {
       const tokenData = JSON.parse(atob(token.split('.')[1]))
       const tokenExpiration = new Date(tokenData.exp * 1000)
-
+      this.user = tokenData
+      
       if (this.currentDate > tokenExpiration) {
         deleteCookie('token');
         isAuth = false
@@ -133,7 +134,7 @@ class Auth {
 
       if (response.status !== 200) return
 
-      const { msg, msg_type, access_token, expiration_time } = this.resData = response.data
+      const { msg, msg_type, access_token, expiration_time } = this.user = response.data
 
       outputInfo(response.data)
 

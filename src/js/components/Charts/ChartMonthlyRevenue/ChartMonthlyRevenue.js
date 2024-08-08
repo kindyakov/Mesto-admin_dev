@@ -1,6 +1,7 @@
 import merge from 'lodash.merge'
 import BaseChart from "../BaseChart.js"
 import { Select } from '../../../modules/mySelect.js';
+import { dateFormatter } from '../../../settings/dateFormatter.js';
 
 // Функция для генерации случайных данных
 function generateRandomData(length, min, max) {
@@ -16,16 +17,16 @@ class ChartMonthlyRevenue extends BaseChart {
     const defaultOptions = {
       type: 'bar',
       data: {
-        labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30], // Все дни месяца
+        labels: [], // Все дни месяца
         datasets: [{
           label: 'Факт',
-          data: generateRandomData(30, 100, 1500), // Замените на ваши фактические данные
+          data: [], // Замените на ваши фактические данные
           backgroundColor: '#3c50e0',
           color: '#3c50e0',
           barThickness: 6
         }, {
           label: 'План',
-          data: generateRandomData(30, 200, 1200), // Замените на ваши данные плана
+          data: [], // Замените на ваши данные плана
           backgroundColor: '#6f7d90',
           color: '#6f7d90',
           barThickness: 6
@@ -33,6 +34,20 @@ class ChartMonthlyRevenue extends BaseChart {
       },
       options: {
         scales: {
+          x: {
+            ticks: {
+              minRotation: 60,
+              // maxRotation: 0,
+              font: {
+                size: 12,
+              },
+              callback: function (value, index, values) {
+                const [y, m, d] = this.chart.data.labels[index].split('-')
+
+                return `${d}-${m}`; // Число и месяц в две строки
+              }
+            }
+          },
           y: {
             ticks: {
               callback: function (value, index, values) {
@@ -49,11 +64,6 @@ class ChartMonthlyRevenue extends BaseChart {
             }
           },
         },
-        plugins: {
-          legend: {
-            position: 'top'
-          }
-        }
       },
     }
 
@@ -87,14 +97,18 @@ class ChartMonthlyRevenue extends BaseChart {
     }
   }
 
+  onExternal(tooltipEl, chart, tooltip) {
+    const dataI = tooltip.dataPoints[0].dataIndex
+    const date = chart.data.labels[dataI]
+    tooltipEl.insertAdjacentHTML('afterbegin', `<div><svg class="icon icon-calendar" style="width: 12px; height: 12px; fill: gray; margin-right: 2px;"><use xlink:href="img/svg/sprite.svg#calendar"></use></svg><span style="font-size: 12px; text-align: center;">${dateFormatter(date)}</span></div>`)
+  }
+
   render(data) {
-    if (!data.length) return
-    this.chart.data.labels = Array.from({ length: data.length }, (_, i) => i + 1)
-    this.chart.data.datasets[0].data = data.map(obj => obj.revenue)
-    this.chart.data.datasets[1].data = data.map(obj => obj.revenue_planned)
+    this.chart.data.labels = data.length ? data.map(obj => obj.data) : [] // Array.from({ length: data.length }, (_, i) => i + 1)
+    this.chart.data.datasets[0].data = data.length ? data.map(obj => obj.revenue) : []
+    this.chart.data.datasets[1].data = data.length ? data.map(obj => obj.revenue_planned) : []
     this.chart.update()
   }
 }
 
 export default ChartMonthlyRevenue
-

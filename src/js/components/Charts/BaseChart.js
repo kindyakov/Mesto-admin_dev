@@ -44,7 +44,8 @@ class BaseChart {
           },
           tooltip: {
             enabled: false,
-            external: function (context) {
+            position: 'average',
+            external: context => {
               const { chart, tooltip } = context
               const tooltipEl = chart.canvas.parentNode.querySelector('.chart-tooltip');
 
@@ -58,11 +59,13 @@ class BaseChart {
               const data1 = chart.data.datasets[0]
               const data2 = chart.data.datasets[1]
 
-              tooltipEl.innerHTML = `<div><b style="background: ${data1.color};"></b><span>${data1.data[dataI]}</span></div>
-              <div><b style="background: ${data2.color};"></b><span>${data2.data[dataI]}</span></div>`
+              tooltipEl.innerHTML = `<div><b style="background: ${data1.color};"></b><span class="value">${data1.data[dataI]}</span></div>
+              <div><b style="background: ${data2.color};"></b><span class="value">${data2.data[dataI]}</span></div>`
               tooltipEl.style.opacity = 1;
               tooltipEl.style.left = (chart.canvas.offsetLeft + tooltip.caretX) - tooltipEl.clientWidth - 6 + 'px';
               tooltipEl.style.top = (chart.canvas.offsetTop + tooltip.caretY) - tooltipEl.clientHeight - 6 + 'px';
+
+              this.onExternal(tooltipEl, chart, tooltip)
             }
           }
         },
@@ -72,7 +75,7 @@ class BaseChart {
     };
 
     this.chart = new Chart(ctx, merge({}, defaultOptions, options));
-
+    this.onExternal = this.onExternal.bind(this)
     window.addEventListener('resize', () => this.resizeChart())
   }
 
@@ -80,6 +83,10 @@ class BaseChart {
     if (this.chart) {
       this.chart.update('resize')
     }
+  }
+
+  onExternal(tooltipEl, chart, tooltip) {
+
   }
 }
 

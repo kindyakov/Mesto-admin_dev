@@ -6,7 +6,7 @@
       </svg>
       <input type="text" class="input-date-filter" name="date" placeholder="Дата">
     </label>
-    <div class="main__selects-filter">
+    <!-- <div class="main__selects-filter">
       <select class="init-custom-select" data-special-select="select-filter-main" name="plan"
         data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
         <option value="1">Склад 1</option>
@@ -18,32 +18,20 @@
         <option value="2">Option 2</option>
         <option value="3">Option 3</option>
       </select>
-    </div>
+    </div> -->
   </form>
 
   <div class="widgets">
     <div class="widgets__item">
       <div class="widgets__item_img">
-        <img src="img/icons/coin.png" alt="Иконка">
+        <img src="img/icons/size.png" alt="Иконка">
       </div>
       <div class="widgets__item_content">
-        <span class="value" data-render-widget="avg_room_rent"></span>
-        <span class="name">Выручка за месяц</span>
+        <span class="value" data-render-widget="avg_area_per_user, м<sup>2</sup>"></span>
+        <span class="name">Средняя площадь на клиента</span>
       </div>
       <div class="widgets__item_bottom">
         <p>Выполнения плана:</p><span class="percent success">125%</span>
-      </div>
-    </div>
-    <div class="widgets__item">
-      <div class="widgets__item_img">
-        <img src="img/icons/eye.png" alt="Иконка">
-      </div>
-      <div class="widgets__item_content">
-        <span class="value" data-render-widget="avg_opens"></span>
-        <span class="name">Средняя ставка аренды</span>
-      </div>
-      <div class="widgets__item_bottom">
-        <p>Выполнения плана:</p><span class="percent danger">125%</span>
       </div>
     </div>
     <div class="widgets__item">
@@ -60,11 +48,23 @@
     </div>
     <div class="widgets__item">
       <div class="widgets__item_img">
-        <img src="img/icons/size.png" alt="Иконка">
+        <img src="img/icons/eye.png" alt="Иконка">
       </div>
       <div class="widgets__item_content">
-        <span class="value" data-render-widget="avg_area_per_user, м<sup>2</sup>"></span>
-        <span class="name">Сред. площадь</span>
+        <span class="value" data-render-widget="new_clients_cnt"></span>
+        <span class="name">Новые клиенты</span>
+      </div>
+      <div class="widgets__item_bottom">
+        <p>Выполнения плана:</p><span class="percent danger">125%</span>
+      </div>
+    </div>
+    <div class="widgets__item">
+      <div class="widgets__item_img">
+        <img src="img/icons/coin.png" alt="Иконка">
+      </div>
+      <div class="widgets__item_content">
+        <span class="value" data-render-widget=""></span>
+        <span class="name">Клиенты с подпиской</span>
       </div>
       <div class="widgets__item_bottom">
         <p>Выполнения плана:</p><span class="percent danger">125%</span>
