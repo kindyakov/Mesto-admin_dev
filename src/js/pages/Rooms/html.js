@@ -70,9 +70,8 @@ export function roomHtml(data) {
             </div>
             <div class="room__bottom">
               ${buttonsRoom(data)}
-              <button class="room__button button transparent" data-json="${dataStr(data)}" data-modal="modal-confirm-open-room"><span>Открыть</span></button>
               ${+data.rented === 0.75 ?
-      `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal=""><span>Ускорить</span></button>` : ``}
+    `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal=""><span>Ускорить</span></button>` : `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal="modal-confirm-open-room"><span>Открыть</span></button>`}
             </div>
           </div>`
 }
