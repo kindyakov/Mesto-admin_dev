@@ -53,8 +53,7 @@ class TableUpcomingPayments extends Table {
     super(selector, mergedOptions, mergedParams);
   }
 
-  render(data) {
-    const { agreements, cnt_pages, page } = data;
+  onRendering({ agreements = [], cnt_pages, page }) {
     this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', agreements)
     this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length])

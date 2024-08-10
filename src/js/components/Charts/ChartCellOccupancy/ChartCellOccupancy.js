@@ -62,7 +62,6 @@ class ChartCellOccupancy extends BaseChart {
       1: () => {
         const filterRooms = this.rooms.filter(room => room.floor === 1)
         this.countCellsEl.textContent = filterRooms.length
-        console.log(this.dataFilter(this.rooms, 0, 1))
 
         this.chart.data.datasets[0].data = [
           this.dataFilter(this.rooms, 0, 1),

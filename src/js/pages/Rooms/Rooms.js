@@ -26,6 +26,9 @@ class Rooms extends Page {
           TableComponent: TableRooms,
           options: {
             paginationPageSize: 10
+          },
+          params: {
+            getData: getRooms
           }
         }
       ],

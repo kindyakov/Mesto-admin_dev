@@ -12,6 +12,9 @@ class Payments extends Page {
           TableComponent: TablePayments,
           options: {
             paginationPageSize: 15
+          },
+          params: {
+            getData: getPayments
           }
         }
       ],

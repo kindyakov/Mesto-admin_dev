@@ -27,6 +27,7 @@ class Finance extends Dashboards {
         {
           tableSelector: '.table-payments',
           TableComponent: TableUpcomingPayments,
+          params: { getData: getFuturePayments }
         }
       ],
       charts: [
@@ -67,7 +68,7 @@ class Finance extends Dashboards {
       this.renderDashboard(dataDashboard)
 
       if (this.tables.length && dataEntities) {
-        this.actionsTables(table => table.render(dataEntities))
+        this.actionsTables((table, i) => table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities))
       }
     } catch (error) {
       console.error(error)

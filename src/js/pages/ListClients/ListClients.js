@@ -12,6 +12,9 @@ class ListClients extends Page {
           TableComponent: TableClients,
           options: {
             paginationPageSize: 15
+          },
+          params: {
+            getData: getClients,
           }
         }
       ],

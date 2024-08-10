@@ -27,6 +27,7 @@ class Navigation {
     });
     this.sidebarAccordion = new Accordion({ uniqueName: 'sidebar-accordion', isAccordion: false });
     this.modulesCache = {};  // Добавляем кэш для загруженных модулей
+    this.md1200 = window.matchMedia(`(max-width: 1200px)`)
   }
 
   init(warehouse) {
@@ -52,11 +53,29 @@ class Navigation {
     }
   }
 
+
+  closeSideBar() {
+    const body = document.body
+    const sidebar = document.querySelector('.sidebar')
+    const main = document.querySelector('.main')
+    const headerBurger = document.querySelector('.header-burger')
+
+    if (this.md1200.matches) {
+      body && body.classList.remove('_lock')
+      sidebar && sidebar.classList.remove('_active')
+      main && main.classList.remove('_shadow')
+      headerBurger && headerBurger.classList.remove('_active')
+    }
+  }
+
   navigate(e) {
     const path = e.target.closest('[data-path]').getAttribute('data-path');
+
     if (path) {
       window.location.hash = path;
     }
+
+    this.closeSideBar()
   }
 
   handleHashChange() {

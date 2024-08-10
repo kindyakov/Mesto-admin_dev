@@ -12,6 +12,9 @@ class Agreements extends Page {
           TableComponent: TableAgreements,
           options: {
             paginationPageSize: 15
+          },
+          params: {
+            getData: getAgreements
           }
         }
       ],

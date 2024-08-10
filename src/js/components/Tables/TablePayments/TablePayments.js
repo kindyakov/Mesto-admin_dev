@@ -138,8 +138,7 @@ class TablePayments extends Table {
     return button
   }
 
-  render(data) {
-    const { payments, cnt_pages, page } = data;
+  onRendering({ payments = [], cnt_pages, page }) {
     this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', payments)
     this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, payments.length])

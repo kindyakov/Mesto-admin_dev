@@ -8,6 +8,7 @@ import modalDownloadPhotoWh from "../../components/Modals/ModalDownloadPhotoWh/M
 import { api } from "../../settings/api.js";
 import { outputInfo } from "../../utils/outputinfo.js"
 import { getCurrentTimeString } from '../../utils/getCurrentTimeString.js';
+import { getTimeControlInfo } from '../../settings/request.js';
 
 class WorkingHours extends Page {
   constructor({ loader }) {
@@ -19,6 +20,9 @@ class WorkingHours extends Page {
           TableComponent: TableEmployee,
           options: {
             paginationPageSize: 15
+          },
+          params: {
+            getData: getTimeControlInfo
           }
         }
       ],
@@ -128,15 +132,8 @@ class WorkingHours extends Page {
     }
   }
 
-  async getData() {
-    try {
-      const response = await api.get('/_get_time_control_info_')
-      if (response.status !== 200) return null
-      return response.data
-    } catch (error) {
-      console.error(error)
-      throw error
-    }
+  async getData(params = {}) {
+    return getTimeControlInfo(params)
   }
 }
 

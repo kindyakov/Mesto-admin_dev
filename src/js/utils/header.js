@@ -202,3 +202,31 @@ export const linkActive = (linkSelector = '.header__link') => {
     }
   })
 }
+
+export const fixedSideBar = () => {
+  const sidebarContent = document.querySelector('.sidebar-content')
+
+  if (sidebarContent && window.innerWidth > 1200) {
+    const wrapper = sidebarContent.parentElement;
+    const paddingTop = 20
+    const topRect = sidebarContent.getBoundingClientRect().top
+    let isFixed = false;
+
+    window.addEventListener('scroll', e => {
+      if (window.innerWidth < 1200) return
+      const rect = sidebarContent.getBoundingClientRect();
+      const parentRect = wrapper.getBoundingClientRect();
+
+      if (!isFixed && window.scrollY + paddingTop >= topRect && parentRect.bottom - rect.height >= paddingTop) {
+        sidebarContent.style.cssText = `position: fixed; top: ${paddingTop}px; left: ${rect.left}px; max-width: ${rect.width}px;`
+        isFixed = true;
+      } else if (isFixed && window.scrollY + paddingTop <= topRect) {
+        sidebarContent.removeAttribute('style')
+        isFixed = false;
+      } else if (isFixed && parentRect.bottom - rect.height <= paddingTop) {
+        sidebarContent.style.cssText = `position: absolute; bottom: 0; left: 0; max-width: ${rect.width}px;`
+        isFixed = false;
+      }
+    })
+  }
+}

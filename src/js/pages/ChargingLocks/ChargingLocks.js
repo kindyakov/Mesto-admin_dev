@@ -21,6 +21,9 @@ class ChargingLocks extends Page {
           TableComponent: TableLocks,
           options: {
             paginationPageSize: 15
+          },
+          params: {
+            getData: getLocksPower
           }
         }
       ],
@@ -64,11 +67,10 @@ class ChargingLocks extends Page {
 
     if (rooms_x_locks.length) {
       this.locksContent.innerHTML = rooms_x_locks.map(lock => cardHtml(lock)).join('')
-      // this.tableLocks.render(data)
     } else {
       this.locksContent.innerHTML = `<div class="not-data"><span>Нет замков для отображения</span></div>`
     }
   }
 }
-// _get_locks_power_
+
 export default ChargingLocks

@@ -16,7 +16,6 @@ class Page {
       })
     }
 
-    this.queryParams = {}
 
     this.init(page)
   }
@@ -32,28 +31,15 @@ class Page {
 
   events() {
     this.tables.length && this.actionsTables(table => {
-      table.onPageChange = page => this.changeQueryParams({ page }, table)
-      table.onValueInputSearch = value => {
-        let data = {}
-
-        if (value !== '') {
-          data = { search_str: value }
-        } else {
-          data = {}
-        }
-
-        this.changeQueryParams(data, table)
-      }
-      table.selects.onChange = (e, select, value) => {
-        const name = select.getAttribute('data-name')
-        this.changeQueryParams({ [name]: value }, table)
-      }
+      table.onPageChange = page => table.changeQueryParams({ page })
+      table.onValueInputSearch = value => table.changeQueryParams({ search_str: value })
+      table.selects.onChange = (e, select, value) => table.changeQueryParams({ [select.getAttribute('data-name')]: value })
 
       if (table.calendar) {
         table.calendar.methods.onChange = (selectedDates, dateStr, instance) => {
           if (selectedDates.length === 2) {
             const [start, end] = instance.element.name.split(',')
-            this.changeQueryParams({
+            table.changeQueryParams({
               [start]: getFormattedDate(selectedDates[0], 'YYYY-MM-DD'),
               [end]: getFormattedDate(selectedDates[1], 'YYYY-MM-DD'),
             }, table)
@@ -74,9 +60,13 @@ class Page {
 
   actionsTables(callback = () => { }) {
     if (!this.tables.length) return console.error('Нет таблиц')
-    this.tables.forEach(table => {
-      callback(table)
+    this.tables.forEach((table, i) => {
+      callback(table, i)
     })
+  }
+
+  async getData(data = {}) {
+    return []
   }
 
   async render(queryParams = {}) {
@@ -85,7 +75,7 @@ class Page {
       const dataEntities = await this.getData(queryParams)
 
       if (this.tables.length && dataEntities) {
-        this.actionsTables(table => table.render(dataEntities))
+        this.actionsTables((table, i) => table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities))
       }
 
       this.onRender(dataEntities)

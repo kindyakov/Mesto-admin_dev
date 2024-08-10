@@ -11,7 +11,6 @@ import { declOfNum } from '../../../utils/declOfNum.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
 import { outputInfo } from "../../../utils/outputinfo.js";
-import { Select } from "../../../modules/mySelect.js";
 
 class TableClients extends Table {
   constructor(selector, options, params) {
@@ -138,10 +137,8 @@ class TableClients extends Table {
     return button
   }
 
-  render(data) {
-    const { clients, cnt_pages, page } = data
+  onRendering({ clients = [], cnt_pages, page }) {
     this.setPage(page, cnt_pages)
-
     this.gridApi.setGridOption('rowData', clients)
     this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, clients.length])
   }
@@ -154,6 +151,17 @@ class TableClients extends Table {
       outputInfo(response.data)
     } catch (error) {
       console.error(error)
+    } finally {
+      this.loader.disable()
+    }
+  }
+
+  async download(data) {
+    try {
+      this.loader.enable()
+    } catch (error) {
+      console.error(error)
+      throw error
     } finally {
       this.loader.disable()
     }

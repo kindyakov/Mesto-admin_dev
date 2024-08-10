@@ -74,15 +74,9 @@ class Dashboards {
 
   events() {
     this.tables.length && this.actionsTables(table => {
-      table.onPageChange = page => this.renderTable(table, { page })
-      table.onChangeTypeUser = ({ e, select, optionValue }) => this.renderTable(table, { user_type: optionValue })
-      table.onValueInputSearch = value => {
-        if (value !== '') {
-          this.renderTable(table, { search_str: value })
-        } else {
-          this.renderTable(table)
-        }
-      }
+      table.onPageChange = page => table.changeQueryParams({ page })
+      table.onChangeTypeUser = ({ e, select, optionValue }) => table.changeQueryParams({ user_type: optionValue })
+      table.onValueInputSearch = value => table.changeQueryParams({ search_str: value })
     })
 
     if (this.selectFilter) {
@@ -120,15 +114,15 @@ class Dashboards {
 
   actionsTables(callback = () => { }) {
     if (!this.tables.length) return console.error('Нет таблиц')
-    this.tables.forEach(table => {
-      callback(table)
+    this.tables.forEach((table, i) => {
+      callback(table, i)
     })
   }
 
   actionsCharts(callback = () => { }) {
     if (!this.charts.length) return
-    this.charts.forEach(chart => {
-      callback(chart)
+    this.charts.forEach((chart, i) => {
+      callback(chart, i)
     })
   }
 
@@ -143,7 +137,7 @@ class Dashboards {
       }
 
       if (this.tables.length && dataEntities) {
-        this.actionsTables(table => table.render(dataEntities))
+        this.actionsTables((table, i) => table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities))
       }
     } catch (error) {
       console.error(error)

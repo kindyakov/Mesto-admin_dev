@@ -14,6 +14,7 @@ class Table {
     let defaultParams = {
       isPagination: true,
       paginationCountBtn: 5,
+      getData: async () => { },
       onPageChange: () => { },
       onSubmitSearch: () => { },
       onValidateSearch: () => { },
@@ -65,6 +66,7 @@ class Table {
     this.grid = createGrid(this.gridOptions.wrapper.querySelector(selector), this.gridOptions);
     this.table = this.gridOptions.wrapper.querySelector(selector)
 
+    this.getData = this.params.getData
     this.onPageChange = this.params.onPageChange
     this.onSubmitSearch = this.params.onSubmitSearch
     this.onValidateSearch = this.params.onValidateSearch
@@ -254,6 +256,7 @@ class Table {
 
   changeQueryParams(params) {
     this.queryParams = mergeQueryParams(this.queryParams, params)
+    this.tableRendering(this.queryParams)
   }
 
   getAllRows() {
@@ -283,6 +286,23 @@ class Table {
     }
 
     return rowsWithElements;
+  }
+
+  onRendering(data) {
+    console.log(data)
+  }
+
+  async tableRendering(queryParams = {}) {
+    try {
+      this.loader.enable()
+      const data = await this.getData(queryParams)
+
+      this.onRendering(data)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loader.disable()
+    }
   }
 }
 

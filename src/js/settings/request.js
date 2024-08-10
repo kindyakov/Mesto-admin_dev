@@ -98,6 +98,7 @@ export const getSalesPlan = getCreate('/_get_sales_plan_')
 
 export const getMessagesHistory = getCreate('/_get_messages_history_')
 
+export const getTimeControlInfo = getCreate('/_get_time_control_info_')
 // ============================================================================>
 
 export const getClientTotal = getCreateTotal('/_get_client_total_')

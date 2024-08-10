@@ -144,8 +144,7 @@ class TableAgreements extends Table {
     return button
   }
 
-  render(data) {
-    const { agreements, cnt_pages, page } = data;
+  onRendering({ agreements = [], cnt_pages, page }) {
     this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', agreements)
     this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length])
@@ -167,6 +166,7 @@ class TableAgreements extends Table {
       const res = await downloadAgreement(reqData)
     } catch (error) {
       console.error(error)
+      throw error
     } finally {
       this.loader.disable()
     }

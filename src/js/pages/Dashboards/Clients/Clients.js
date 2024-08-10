@@ -9,7 +9,7 @@ class Clients extends Dashboards {
     super({
       loader,
       tables: [
-        { tableSelector: '.table-clients', TableComponent: TableClients, }
+        { tableSelector: '.table-clients', TableComponent: TableClients, params: { getData: getClients } }
       ],
       charts: [
         { id: 'chart-influx-customers', ChartComponent: ChartInfluxCustomers },
