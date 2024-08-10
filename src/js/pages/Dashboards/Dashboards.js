@@ -11,7 +11,6 @@ function formatePrice(value) {
     value /= 1000
     unitIndex++
   }
-  console.log(value);
 
   return value.toFixed(3) + ' ' + units[unitIndex]
 }
@@ -112,7 +111,7 @@ class Dashboards {
         widget.style.fontSize = '16px'
       }
       if (name === 'revenue') {
-        widget.innerText = Number.isInteger(value) ? formatePrice(value) + ' ₽' : ''
+        widget.innerText = Number.isInteger(+value) ? formatePrice(+value) + ' ₽' : ''
       } else {
         widget.innerHTML = value
       }

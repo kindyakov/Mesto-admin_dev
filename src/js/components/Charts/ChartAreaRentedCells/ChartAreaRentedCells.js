@@ -21,7 +21,7 @@ class ChartAreaRentedCells extends BaseChart {
           color: '#3c50e0',
           pointBackgroundColor: '#fff',
           // backgroundColor: gradient,
-          pointRadius: 3,
+          pointRadius: 2,
           fill: true,
           tension: 0.6
         }, {
@@ -58,10 +58,10 @@ class ChartAreaRentedCells extends BaseChart {
           },
         },
         plugins: {
-          tooltip: {
+          // tooltip: {
             // mode: 'index',
             // intersect: true
-          },
+          // },
           // Для заштрихованной области можно использовать плагин, например, chartjs-plugin-annotation
         }
       },
@@ -107,8 +107,8 @@ class ChartAreaRentedCells extends BaseChart {
 
   render({ finance_planfact = [] }) {
     this.chart.data.labels = finance_planfact.length ? finance_planfact.map(obj => obj.data) : []
-    this.chart.data.datasets[0].data = finance_planfact.length ? finance_planfact.map(obj => obj.inflow_area) : []
-    this.chart.data.datasets[1].data = finance_planfact.length ? finance_planfact.map(obj => obj.inflow_area_planned) : []
+    this.chart.data.datasets[0].data = finance_planfact.length ? finance_planfact.map(obj => obj.rented_area) : []
+    this.chart.data.datasets[1].data = finance_planfact.length ? finance_planfact.map(obj => obj.rented_area_planned) : []
     this.chart.update()
   }
 }
