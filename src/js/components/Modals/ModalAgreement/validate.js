@@ -23,13 +23,13 @@ export function validate(form, options) {
 
   const calendarAgrPlanEndDate = createCalendar(agrplanenddate, {
     dateFormat: 'd.m.Y',
-    appendTo: agrbegdate.parentElement
+    appendTo: agrplanenddate.parentElement
   })
   calendarAgrPlanEndDate.setDate(agrplanenddate.value, true, "d.m.Y");
 
   const calendarAgrEndDate = createCalendar(agrenddate, {
     dateFormat: 'd.m.Y',
-    appendTo: agrbegdate.parentElement
+    appendTo: agrenddate.parentElement
   })
   calendarAgrEndDate.setDate(agrenddate.value, true, "d.m.Y");
 

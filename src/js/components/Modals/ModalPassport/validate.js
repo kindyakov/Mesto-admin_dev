@@ -13,11 +13,13 @@ export function validatePassport(form, options) {
   Inputmask.default("999999").mask(inputNo)
   Inputmask.default("999-999").mask(inputSubdivision)
 
-  validator.calendar = createCalendar(form.querySelector('input[name="issue_date"]'), {
+  const calendar = createCalendar(form.querySelector('input[name="issue_date"]'), {
     dateFormat: 'd.m.Y',
     appendTo: form.querySelector('input[name="issue_date"]').parentElement
-
   })
+
+  validator.calendars = [calendar]
+  validator.calendars.forEach(c => c.set('clickOpens', false))
 
   validator.addField(form.querySelector('input[name="no"]'), [
     {

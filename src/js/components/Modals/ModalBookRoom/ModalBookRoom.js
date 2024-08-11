@@ -41,7 +41,6 @@ class ModalBookRoom extends BaseModal {
         this.electRoomId.innerHTML = ''
 
         ids.length && this.electRoomId.append(...ids.map(id => itemEl(id, curId => {
-          console.log(curId)
           const index = this.roomIds.findIndex(_id => _id === curId)
           this.roomIds.splice(index, 1)
           if (!this.roomIds.length) {
@@ -84,21 +83,12 @@ class ModalBookRoom extends BaseModal {
       this.sendData = { room_id: this.roomIds[0] }
 
       formData.set('username', formData.get('username').replace(/[+() -]/g, ''))
+      formData.delete('flatpickr-month')
+
       Array.from(formData).forEach(obj => this.sendData[obj[0]] = obj[1])
 
       this.popupSelectSend.show()
     })
-  }
-
-  checkValue() {
-    const inputs = this.form.querySelectorAll('input')
-    let isValue = false
-    inputs.length && inputs.forEach(input => {
-      if (input.value !== '') {
-        isValue = true
-      }
-    })
-    return isValue
   }
 
   beforeClose() {

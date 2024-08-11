@@ -768,32 +768,46 @@
 
 		&._select {
 			.mySelect__input .icon-arrow {
-				transform: translate(0, -4px) rotate(0);
+				transform: translateY(-4px) rotate(0);
+			}
+		}
+
+		&.select-passport {
+			.mySelect__input {
+				&[data-value='0'] {
+					background-color: $red-light;
+					color: $red;
+					.icon-yes {
+						display: none;
+					}
+					.icon-no {
+						display: inline-flex;
+					}
+				}
+
+				&[data-value='1'] {
+					background-color: $green-light;
+					color: $green;
+					.icon-yes {
+						display: inline-flex;
+					}
+					.icon-no {
+						display: none;
+					}
+				}
+			}
+			.mySelect__option {
+				gap: 10px;
 			}
 		}
 
 		&__input {
 			height: 50px;
-			&[data-value='0'] {
-				background-color: $red-light;
-				color: $red;
-				&::before {
-					content: '✕';
-				}
-			}
-
-			&[data-value='1'] {
-				background-color: $green-light;
-				color: $green;
-				&::before {
-					content: '✓';
-				}
-			}
 
 			.icon-arrow {
 				width: 18px;
 				height: 10px;
-				transform: translate(0, -4px) rotate(180deg);
+				transform: translateY(-4px) rotate(180deg);
 			}
 
 			> span {
@@ -801,13 +815,17 @@
 			}
 		}
 		&__list {
-			padding: 8px 10px;
+			// padding: 8px 10px;
 			box-shadow: 0 3px 6px rgba(128, 128, 128, 0.4);
 		}
 
 		&__option {
-			padding: 12px 15px;
+			min-height: 50px;
+			padding: 10px 15px;
 			border-radius: 2px;
+			display: flex;
+			align-items: center;
+			gap: 6px;
 			&:hover {
 				background-color: #f1f5f9;
 			}

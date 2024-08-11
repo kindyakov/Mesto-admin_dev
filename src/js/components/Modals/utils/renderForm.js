@@ -1,10 +1,10 @@
 import { declOfNum } from "../../../utils/declOfNum.js"
 import { formatPhoneNumber, formattingPrice } from "../../../utils/formattingPrice.js"
-import { getFormattedDate } from "../../../utils/getFormattedDate.js"
+import { dateFormatter } from "../../../settings/dateFormatter.js"
 
 const actions = {
   'INPUT': {
-    'date': (el, value) => el.value = getFormattedDate(value),
+    'date': (el, value) => el.value = dateFormatter(value),
     'area': (el, value) => el.value = value + ' м²',
     'day': (el, value) => el.value = !!value ? `${value} ${declOfNum(Math.abs(+value), ['день', 'дня', 'дней'])}` : '',
     'price': (el, value) => el.value = formattingPrice(value),

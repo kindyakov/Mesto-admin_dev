@@ -46,7 +46,7 @@ export const createCalendar = (input, options = {}) => {
         uniqueName: `${uniqueId}-select-flatpickr`,
         activeIndex: instance.currentMonth,
         maxHeightList: 279,
-        selectMinWidth: 100,
+        selectMinWidth: 130,
         onChange: (e, select, optionValue) => instance.changeMonth(parseInt(optionValue), false)
       });
     },

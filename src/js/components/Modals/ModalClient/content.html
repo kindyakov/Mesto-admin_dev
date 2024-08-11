@@ -15,7 +15,7 @@
     <div class="modal__block_item">
       <div class="modal__block_top">
         <h4 class="modal__sub-title">О клиенте:</h4>
-        <button class="button-text btn-edit-client-data">
+        <button class="button-text btn-edit-data">
           <span class="span-edit">Редактировать</span>
           <span class="span-save">Сохранить</span>
           <svg class='icon icon-edit'>
@@ -38,7 +38,7 @@
           <span>Дата рождения</span>
           <div class="modal__form_wp-input wp-input">
             <input type="text" class="modal__form_input input not-edit" name="birthday" readonly="true"
-              data-render="birthday" autocomplete="off">
+              data-render="birthday,date" autocomplete="off">
           </div>
         </div>
         <div class="modal__form_item">
@@ -89,7 +89,7 @@
               <span>Дата выдачи:</span>
               <div class="modal__passport-form_wp-input wp-input">
                 <input type="text" name="issue_date" class="modal__passport-form_input-passport input-passport"
-                  data-render="issue_date" readonly="true">
+                  data-render="issue_date,date" readonly="true">
               </div>
             </div>
             <div class="modal__passport-form_item">

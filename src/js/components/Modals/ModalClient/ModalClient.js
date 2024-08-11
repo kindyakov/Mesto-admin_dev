@@ -6,10 +6,9 @@ import { validateClient } from "./validate.js";
 
 import { getClientTotal } from "../../../settings/request.js";
 import { api } from "../../../settings/api.js";
-import { formatPhoneNumber } from "../../../utils/formattingPrice.js";
-import { getFormattedDate } from "../../../utils/getFormattedDate.js";
 import { outputInfo } from "../../../utils/outputinfo.js";
 import { renderForm } from "../utils/renderForm.js";
+import { dateFormatter } from "../../../settings/dateFormatter.js";
 
 class ModalClient extends BaseModal {
   constructor(options = {}) {
@@ -18,48 +17,27 @@ class ModalClient extends BaseModal {
       ...options
     })
     this.userId = null
-    this.isEdit = false
 
     this.init()
   }
 
   init() {
     if (!this.modalBody) return
-    this.formClientData = this.modalBody.querySelector('.form-client-data')
-    this.validatorClient = validateClient(this.formClientData)
-    this.events()
+    this.form = this.modalBody.querySelector('.form-client-data')
+    this.validator = validateClient(this.form)
   }
 
-  events() {
-    this.modalBody.addEventListener('click', e => {
-      if (e.target.closest('.btn-edit-client-data')) {
-        this.handleClickEdit(e)
-      }
-    })
-  }
+  onEdit() {
+    const formData = new FormData(this.form)
+    let data = { user_id: this.userId }
 
-  handleClickEdit(e) {
-    const btn = e.target.closest('.btn-edit-client-data')
-    if (btn.classList.contains('_is-edit')) {
-      this.validatorClient.revalidate().then(isValid => {
-        if (isValid) {
-          const formData = new FormData(this.formClientData)
-          let data = { user_id: this.userId }
-          formData.set('username', formData.get('username').replace(/[+() -]/g, ''))
-          Array.from(formData).forEach(obj => data[obj[0]] = obj[1])
+    formData.set('birthday', dateFormatter(formData.get('birthday'), 'yyyy-MM-dd'))
+    formData.set('username', formData.get('username').replace(/[+() -]/g, ''))
+    formData.delete('flatpickr-month')
 
-          this.editClient({ client: data }).finally(() => {
-            btn.classList.remove('_is-edit')
-            this.isEdit = false
-            this.disableEditInput(this.formClientData)
-          })
-        }
-      })
-    } else {
-      btn.classList.add('_is-edit')
-      this.isEdit = true
-      this.enableEditInput(this.formClientData)
-    }
+    Array.from(formData).forEach(obj => data[obj[0]] = obj[1])
+
+    return { client: data }
   }
 
   renderModal({ client, agreements }) {
@@ -70,11 +48,9 @@ class ModalClient extends BaseModal {
       el.setAttribute('data-json', JSON.stringify(client))
     })
 
-    this.renderElements.length && this.renderElements.forEach(el => {
-      renderForm(el, client)
-    })
+    this.userId = client.user_id
 
-    this.validatorClient?.calendarBirthday.setDate(getFormattedDate(client.birthday ? client.birthday : undefined), true, "d.m.Y")
+    this.renderElements.length && this.renderElements.forEach(el => renderForm(el, client))
 
     this.contentAgreements = this.modalBody.querySelector('.modal-content-agreements')
     this.contentAgreements.innerHTML = ''
@@ -83,62 +59,7 @@ class ModalClient extends BaseModal {
     })
   }
 
-  enableEditInput(form) {
-    if (!form) return
-    const inputs = form.querySelectorAll('input')
-    inputs.length && inputs.forEach(input => {
-      input.removeAttribute('readonly')
-      input.classList.add('edit')
-      input.classList.remove('not-edit')
-    })
-
-    this.validatorClient?.calendarBirthday.set('clickOpens', true)
-  }
-
-  disableEditInput(form, arr = []) {
-    if (form) {
-      const inputs = form.querySelectorAll('input')
-
-      inputs.length && inputs.forEach(input => {
-        input.setAttribute('readonly', 'true')
-        input.classList.remove('edit')
-        input.classList.add('not-edit')
-      })
-
-      this.validatorClient?.calendarBirthday.set('clickOpens', false)
-    }
-
-    if (arr.length) {
-      arr.forEach(obj => obj.el.classList.remove(obj.delClass))
-    }
-  }
-
-  onClose() {
-    this.disableEditInput(this.formClientData, [
-      { el: this.modalBody.querySelector('.btn-edit-client-data'), delClass: '_is-edit' }
-    ])
-  }
-
-  beforeClose() {
-    if (this.isEdit) {
-      outputInfo({
-        msg: 'У вас есть несохраненные изменения.</br>Вы уверены, что хотите закрыть окно?',
-        msg_type: 'warning',
-        isConfirm: true
-      }, isConfirm => {
-        if (isConfirm) {
-          this.isEdit = false
-          this.close()
-        }
-      });
-
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  async editClient(data) {
+  async editForm(data) {
     try {
       this.loader.enable()
       const response = await api.post('/_edit_client_', data)

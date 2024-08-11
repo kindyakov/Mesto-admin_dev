@@ -1,4 +1,5 @@
 import { Loader } from "../../modules/myLoader.js";
+import { outputInfo } from "../../utils/outputinfo.js";
 
 // Базовый класс для модального окна
 class BaseModal {
@@ -17,7 +18,9 @@ class BaseModal {
       beforeClose: this.beforeClose.bind(this),
     });
 
+    this.form = null
     this.isEdit = false
+    this.isSend = false
     this.enablePhotoUpload = options.enablePhotoUpload || false
 
     this.setContent(content);
@@ -27,13 +30,49 @@ class BaseModal {
   }
 
   onClose() {
+    this.disableEditInput(this.form, [
+      { el: this.modalBody.querySelector('.btn-edit-data'), delClass: '_is-edit' }
+    ])
   }
 
   onSave() {
   }
 
+  onEdit() {
+    return {}
+  }
+
+  checkValue() {
+    const inputs = this.form.querySelectorAll('input')
+    let isValue = false
+    inputs.length && inputs.forEach(input => {
+      if (input.value !== '') {
+        isValue = true
+      }
+    })
+    return isValue
+  }
+
   beforeClose() {
-    return true;
+    if (this.isEdit) {
+      outputInfo({
+        msg: 'У вас есть несохраненные изменения.</br>Вы уверены, что хотите закрыть окно?',
+        msg_type: 'warning',
+        isConfirm: true
+      }, isConfirm => {
+        if (isConfirm) {
+          this.isEdit = false
+          this.close()
+          if (this.nextModal) {
+            this.nextModal?.modalInstance.open(this.nextModal.button)
+          }
+        }
+      });
+
+      return false;
+    } else {
+      return true;
+    }
   }
 
   setContent(content) {
@@ -57,6 +96,10 @@ class BaseModal {
 
       if (button && button.getAttribute('data-modal')) {
         this.close()
+      }
+
+      if (e.target.closest('.btn-edit-data')) {
+        this.handleClickEdit(e)
       }
     })
   }
@@ -119,6 +162,63 @@ class BaseModal {
     }
   }
 
+  handleClickEdit(e) {
+    const btn = e.target.closest('.btn-edit-data')
+    if (btn.classList.contains('_is-edit')) {
+      this.validator?.revalidate().then(isValid => {
+        if (isValid) {
+          const reqData = this.onEdit()
+
+          this.editForm(reqData).finally(() => {
+            btn.classList.remove('_is-edit')
+            this.isEdit = false
+            this.disableEditInput(this.form)
+          })
+        }
+      })
+    } else {
+      btn.classList.add('_is-edit')
+      this.isEdit = true
+      this.enableEditInput(this.form)
+    }
+  }
+
+  enableEditInput(form = null) {
+    if (!form) return
+    const inputs = form.querySelectorAll('input')
+    inputs.length && inputs.forEach(input => {
+      input.removeAttribute('readonly')
+      input.classList.add('edit')
+      input.classList.remove('not-edit')
+    })
+
+    this.selects?.selectsCustom?.forEach(select => select.classList.remove('_disabled'))
+    this.validator?.calendars?.forEach(calendar => calendar.set('clickOpens', true))
+  }
+
+  disableEditInput(form = null, arr = [
+    { el: this.modalBody.querySelector('.btn-edit-data'), delClass: '_is-edit' }
+  ]) {
+    if (form) {
+      const inputs = form.querySelectorAll('input')
+
+      inputs.length && inputs.forEach(input => {
+        input.setAttribute('readonly', 'true')
+        input.classList.remove('edit')
+        input.classList.add('not-edit')
+      })
+
+      if (this.modalBody.querySelector('.btn-edit-data')) {
+        this.selects?.selectsCustom?.forEach(select => select.classList.add('_disabled'))
+        this.validator?.calendars?.forEach(calendar => calendar.set('clickOpens', false))
+      }
+    }
+
+    if (arr.length) {
+      arr.forEach(obj => obj.el?.classList.remove(obj.delClass))
+    }
+  }
+
   open(button = null) {
     this.modal.open()
     if (button) {
@@ -135,6 +235,10 @@ class BaseModal {
     const isObject = (params && typeof params === 'object' && !Array.isArray(params) && params !== null && !(params instanceof Element));
     if (!isElement && !isObject) return null
     return isElement ? JSON.parse(params.getAttribute('data-json')) : params
+  }
+
+  async editForm() {
+
   }
 }
 

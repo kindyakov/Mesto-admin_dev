@@ -7,7 +7,7 @@ import { Select } from '../../../modules/mySelect.js'
 import { getClientTotal } from "../../../settings/request.js";
 import { api } from "../../../settings/api.js";
 
-import { getFormattedDate } from "../../../utils/getFormattedDate.js";
+import { dateFormatter } from "../../../settings/dateFormatter.js";
 import { outputInfo } from "../../../utils/outputinfo.js";
 import { renderForm } from "../utils/renderForm.js";
 
@@ -18,101 +18,38 @@ class ModalPassport extends BaseModal {
       ...options
     })
 
-    this.selects = new Select({ uniqueName: 'select-passport', disable: true })
+    this.selects = new Select({
+      uniqueName: 'select-passport',
+      disable: true,
+      callbackInput: (optionContent, optionValue, select) => {
+        return `<svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-yes"><path d="M1 6L5.66667 10.5L15 1.5" stroke="#0B704E" stroke-width="2"/></svg><svg width="16" height="13" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-no"><path d="M1 9L9 1M9 9L1 1" stroke="#D42424" stroke-width="1.5" /></svg><span>${optionContent}</span><svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>`
+      },
+      callbackOption: (optionContent, optionValue) => {
+        return `${optionValue === '0'
+          ? `<svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6.5" r="5" fill="#DC3545" stroke="white" stroke-width="2" /></svg>`
+          : `<svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6.5" r="5" fill="#11B880" stroke="white" stroke-width="2" /></svg>`}
+        <span>${optionContent}</span>`
+      }
+    })
     this.init()
   }
 
   init() {
     if (!this.modalBody) return
-    this.formPassportData = this.modalBody.querySelector('.form-passport-data')
-    this.validator = validatePassport(this.formPassportData)
-    this.events()
+    this.form = this.modalBody.querySelector('.form-passport-data')
+    this.validator = validatePassport(this.form)
   }
 
-  events() {
-    this.modalBody.addEventListener('click', e => {
-      if (e.target.closest('.btn-edit-client-data')) {
-        this.handleClickEdit(e)
-      }
-    })
-  }
+  onEdit() {
+    const formData = new FormData(this.form)
+    let data = { user_id: this.userId }
 
-  handleClickEdit(e) {
-    const btn = e.target.closest('.btn-edit-client-data')
-    if (btn.classList.contains('_is-edit')) {
-      this.validator.revalidate().then(isValid => {
-        if (isValid) {
-          const formData = new FormData(this.formPassportData)
-          let data = { user_id: this.userId }
-          Array.from(formData).forEach(obj => data[obj[0]] = obj[1])
+    formData.set('issue_date', dateFormatter(formData.get('issue_date'), 'yyyy-MM-dd'))
+    formData.delete('flatpickr-month')
 
-          this.editClient({ client: data }).finally(() => {
-            btn.classList.remove('_is-edit')
-            this.isEdit = false
-            this.disableEditInput(this.formPassportData)
-          })
-        }
-      })
-    } else {
-      btn.classList.add('_is-edit')
-      this.isEdit = true
-      this.enableEditInput(this.formPassportData)
-    }
-  }
-
-  enableEditInput(form) {
-    if (!form) return
-    const inputs = form.querySelectorAll('input')
-    inputs.length && inputs.forEach(input => {
-      input.removeAttribute('readonly')
-      input.classList.add('edit')
-      input.classList.remove('not-edit')
-    })
-
-    this.validator?.calendar.set('clickOpens', true)
-  }
-
-  disableEditInput(form, arr = []) {
-    if (form) {
-      const inputs = form.querySelectorAll('input')
-
-      inputs.length && inputs.forEach(input => {
-        input.setAttribute('readonly', 'true')
-        input.classList.remove('edit')
-        input.classList.add('not-edit')
-      })
-
-      this.validator?.calendar.set('clickOpens', false)
-    }
-
-    if (arr.length) {
-      arr.forEach(obj => obj.el.classList.remove(obj.delClass))
-    }
-  }
-
-  onClose() {
-    this.disableEditInput(this.formPassportData, [
-      { el: this.modalBody.querySelector('.btn-edit-client-data'), delClass: '_is-edit' }
-    ])
-  }
-
-  beforeClose() {
-    if (this.isEdit) {
-      outputInfo({
-        msg: 'У вас есть несохраненные изменения.</br>Вы уверены, что хотите закрыть окно?',
-        msg_type: 'warning',
-        isConfirm: true
-      }, isConfirm => {
-        if (isConfirm) {
-          this.isEdit = false
-          this.close()
-        }
-      });
-
-      return false;
-    } else {
-      return true;
-    }
+    Array.from(formData).forEach(obj => data[obj[0]] = obj[1])
+    
+    return { client: data }
   }
 
   renderModal({ client }) {
@@ -123,12 +60,14 @@ class ModalPassport extends BaseModal {
       el.setAttribute('data-json', JSON.stringify(client))
     })
 
+    this.userId = client.user_id
+
     this.renderElements.length && this.renderElements.forEach(el => renderForm(el, client))
 
     this.selects.setValue(client.approved)
   }
 
-  async editClient(data) {
+  async editForm(data) {
     try {
       this.loader.enable()
       const response = await api.post('/_edit_client_', data)

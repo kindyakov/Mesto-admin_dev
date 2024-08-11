@@ -5,6 +5,7 @@ import { validate } from "./validate.js";
 import { Select } from "../../../modules/mySelect.js";
 import { outputInfo } from "../../../utils/outputinfo.js";
 import { api } from "../../../settings/api.js";
+import { dateFormatter } from "../../../settings/dateFormatter.js";
 
 class ModalAddPayment extends BaseModal {
   constructor(options = {}) {
@@ -14,7 +15,6 @@ class ModalAddPayment extends BaseModal {
     })
 
     this.agrId = null
-    this.isEdit = false
 
     this.init()
   }
@@ -41,7 +41,10 @@ class ModalAddPayment extends BaseModal {
       const formData = new FormData(this.form)
       let data = {}
 
+      formData.set('payment_date', dateFormatter(formData.get('payment_date'), 'yyyy-MM-dd'))
       formData.set('amount', formData.get('amount').replace(/[^0-9]/g, ''))
+      formData.delete('flatpickr-month')
+
       Array.from(formData).forEach(arr => data[arr[0]] = arr[1])
 
       this.addPayment(data, this.agrId).finally(() => {
@@ -50,25 +53,6 @@ class ModalAddPayment extends BaseModal {
         this.isEdit = false
       })
     })
-  }
-
-  beforeClose() {
-    if (this.isEdit) {
-      outputInfo({
-        msg: 'У вас есть несохраненные изменения.</br>Вы уверены, что хотите закрыть окно?',
-        msg_type: 'warning',
-        isConfirm: true
-      }, isConfirm => {
-        if (isConfirm) {
-          this.isEdit = false
-          this.close()
-        }
-      });
-
-      return false;
-    } else {
-      return true;
-    }
   }
 
   onOpen(params = null) {

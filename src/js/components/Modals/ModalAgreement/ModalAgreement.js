@@ -11,6 +11,7 @@ import { outputInfo } from "../../../utils/outputinfo.js";
 import { api } from "../../../settings/api.js";
 import { createElement } from "../../../settings/createElement.js";
 import { renderForm } from "../utils/renderForm.js";
+import { dateFormatter } from "../../../settings/dateFormatter.js";
 
 class ModalAgreement extends BaseModal {
   constructor(options = {}) {
@@ -19,6 +20,7 @@ class ModalAgreement extends BaseModal {
       ...options
     })
 
+    this.agrId = null
     this.isEdit = false
 
     this.init()
@@ -31,68 +33,6 @@ class ModalAgreement extends BaseModal {
     this.contentRooms = this.modalBody.querySelector('.modal-content-rooms')
     this.form = this.modalBody.querySelector('.form-agreement-data')
     this.btnCompleteAgreement = this.modalBody.querySelector('.btn-complete-agreement')
-    this.events()
-  }
-
-  renderModal({ agreement, rooms, payments, returns }) {
-    this.renderElements = this.modalBody.querySelectorAll('[data-render]')
-    this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
-
-    this.attrsModal.length && this.attrsModal.forEach(el => {
-      el.setAttribute('data-json', JSON.stringify(agreement))
-    })
-
-    this.renderElements.length && this.renderElements.forEach(el => renderForm(el, agreement))
-
-    this.validator = validate(this.form)
-
-    // рендер платежей 
-    if (payments.length) {
-      this.paymentsList.innerHTML = ''
-      payments.forEach(payment => {
-        this.paymentsList.insertAdjacentHTML('beforeend', `
-          <div class="modal__box_row">
-            <span class="table-span-price">${payment.amount ? formattingPrice(payment.amount) : ''}</span>
-            <span class="date">${payment.payment_date ? getFormattedDate(payment.payment_date) : ''}</span>
-          </div>`
-        )
-      })
-    } else {
-      this.paymentsList.innerHTML = `<div class="not-data"><span>Нет платежей для отображения</span></div>`
-    }
-
-    // рендер возвратов
-    if (returns.length) {
-      this.returnsList.innerHTML = ''
-      returns.forEach(obj => {
-        this.returnsList.insertAdjacentHTML('beforeend', `
-          <div class="modal__box_row">
-            <span class="table-span-agrid">${obj.amount ? formattingPrice(obj.amount) : ''}</span>
-              <span class="date">${obj.payment_date ? getFormattedDate(obj.payment_date) : ''}</span>
-          </div>`
-        )
-      })
-    } else {
-      this.returnsList.innerHTML = `<div class="not-data"><span>Нет возвратов для отображения</span></div>`
-    }
-
-    // рендер ячеек
-    if (rooms.length) {
-      this.contentRooms.innerHTML = ''
-      rooms.forEach(room => {
-        const roomData = JSON.stringify(room).replace(/\s+/g, '').replace(/"/g, '&quot;');
-        this.contentRooms.insertAdjacentHTML('beforeend', `
-          <div class="modal__block_grid-item">
-            <span class="item-num">${room.room_id ? '№' + room.room_id : ''}</span>
-            <p class="item-info">${room.warehouse_name ? room.warehouse_name : ''}</p>
-            <button class="item-more-detailed" data-json="${roomData}" data-modal="modal-room"><span>Подробнее</span></button>
-          </div>`
-        )
-      })
-    } else {
-      this.contentRooms.innerHTML = `<div class="not-data"><span>Нет ячеек для отображения</span></div>`
-    }
-
     this.confirmationModal = tippy(this.btnCompleteAgreement, {
       allowHTML: true,
       trigger: 'click',
@@ -145,35 +85,80 @@ class ModalAgreement extends BaseModal {
     })
   }
 
-  events() {
-    this.modalBody.addEventListener('click', e => {
-      if (e.target.closest('.btn-edit-client-data')) {
-        this.handleClickEdit(e)
-      }
+  renderModal({ agreement, rooms, payments, returns }) {
+    this.renderElements = this.modalBody.querySelectorAll('[data-render]')
+    this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
+
+    this.attrsModal.length && this.attrsModal.forEach(el => {
+      el.setAttribute('data-json', JSON.stringify(agreement))
     })
-  }
 
-  handleClickEdit(e) {
-    const btn = e.target.closest('.btn-edit-client-data')
-    if (btn.classList.contains('_is-edit')) {
-      this.validator.revalidate().then(isValid => {
-        if (isValid) {
-          const formData = new FormData(this.form)
-          let data = { user_id: this.userId }
-          Array.from(formData).forEach(obj => data[obj[0]] = obj[1])
+    this.renderElements.length && this.renderElements.forEach(el => renderForm(el, agreement))
 
-          this.edit(data).finally(() => {
-            btn.classList.remove('_is-edit')
-            this.isEdit = false
-            this.disableEditInput(this.form)
-          })
-        }
+    this.validator = validate(this.form)
+
+    this.agrId = agreement.agrid
+
+    // рендер платежей 
+    if (payments.length) {
+      this.paymentsList.innerHTML = ''
+      payments.forEach(payment => {
+        this.paymentsList.insertAdjacentHTML('beforeend', `
+          <div class="modal__box_row">
+            <span class="table-span-price">${payment.amount ? formattingPrice(payment.amount) : ''}</span>
+            <span class="date">${payment.payment_date ? getFormattedDate(payment.payment_date) : ''}</span>
+          </div>`
+        )
       })
     } else {
-      btn.classList.add('_is-edit')
-      this.isEdit = true
-      this.enableEditInput(this.form)
+      this.paymentsList.innerHTML = `<div class="not-data"><span>Нет платежей для отображения</span></div>`
     }
+
+    // рендер возвратов
+    if (returns.length) {
+      this.returnsList.innerHTML = ''
+      returns.forEach(obj => {
+        this.returnsList.insertAdjacentHTML('beforeend', `
+          <div class="modal__box_row">
+            <span class="table-span-agrid">${obj.amount ? formattingPrice(obj.amount) : ''}</span>
+              <span class="date">${obj.payment_date ? getFormattedDate(obj.payment_date) : ''}</span>
+          </div>`
+        )
+      })
+    } else {
+      this.returnsList.innerHTML = `<div class="not-data"><span>Нет возвратов для отображения</span></div>`
+    }
+
+    // рендер ячеек
+    if (rooms.length) {
+      this.contentRooms.innerHTML = ''
+      rooms.forEach(room => {
+        const roomData = JSON.stringify(room).replace(/\s+/g, '').replace(/"/g, '&quot;');
+        this.contentRooms.insertAdjacentHTML('beforeend', `
+          <div class="modal__block_grid-item">
+            <span class="item-num">${room.room_id ? '№' + room.room_id : ''}</span>
+            <p class="item-info">${room.warehouse_name ? room.warehouse_name : ''}</p>
+            <button class="item-more-detailed" data-json="${roomData}" data-modal="modal-room"><span>Подробнее</span></button>
+          </div>`
+        )
+      })
+    } else {
+      this.contentRooms.innerHTML = `<div class="not-data"><span>Нет ячеек для отображения</span></div>`
+    }
+  }
+
+  onEdit() {
+    const formData = new FormData(this.form)
+    let data = { agrid: this.agrId }
+
+    formData.set('agrbegdate', dateFormatter(formData.get('agrbegdate'), 'yyyy-MM-dd'))
+    formData.set('agrenddate', dateFormatter(formData.get('agrenddate'), 'yyyy-MM-dd'))
+    formData.set('agrplanenddate', dateFormatter(formData.get('agrplanenddate'), 'yyyy-MM-dd'))
+    formData.delete('flatpickr-month')
+
+    Array.from(formData).forEach(obj => data[obj[0]] = obj[1])
+
+    return data
   }
 
   handleClickConfirmation(isConfirm) {
@@ -184,63 +169,12 @@ class ModalAgreement extends BaseModal {
     this.confirmationModal.hide()
   }
 
-  enableEditInput(form) {
-    if (!form) return
-    const inputs = form.querySelectorAll('input')
-    inputs.length && inputs.forEach(input => {
-      input.removeAttribute('readonly')
-      input.classList.add('edit')
-      input.classList.remove('not-edit')
-    })
-
-    this.validator?.calendars.forEach(calendar => calendar.set('clickOpens', true))
-  }
-
-  disableEditInput(form, arr = []) {
-    if (form) {
-      const inputs = form.querySelectorAll('input')
-
-      inputs.length && inputs.forEach(input => {
-        input.setAttribute('readonly', 'true')
-        input.classList.remove('edit')
-        input.classList.add('not-edit')
-      })
-
-      this.validator?.calendars.forEach(calendar => calendar.set('clickOpens', false))
-    }
-
-    if (arr.length) {
-      arr.forEach(obj => obj.el.classList.remove(obj.delClass))
-    }
-  }
-
   onClose() {
-    this.disableEditInput(this.form, [
-      { el: this.modalBody.querySelector('.btn-edit-client-data'), delClass: '_is-edit' }
-    ])
+    this.disableEditInput(this.form)
     this.confirmationModal?.hide()
   }
 
-  beforeClose() {
-    if (this.isEdit) {
-      outputInfo({
-        msg: 'У вас есть несохраненные изменения.</br>Вы уверены, что хотите закрыть окно?',
-        msg_type: 'warning',
-        isConfirm: true
-      }, isConfirm => {
-        if (isConfirm) {
-          this.isEdit = false
-          this.close()
-        }
-      });
-
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  async edit(data) {
+  async editForm(data) {
     try {
       this.loader.enable()
       const response = await api.post('/_edit_agreement_', data)
