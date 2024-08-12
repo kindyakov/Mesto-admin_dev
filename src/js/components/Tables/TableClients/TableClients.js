@@ -3,6 +3,8 @@ import Inputmask from "inputmask";
 import Table from '../Table.js';
 import { validateRow } from './validate.js';
 
+import tippy from '../../../configs/tippy.js';
+
 import { api } from "../../../settings/api.js";
 
 import { actions } from '../utils/actions.js';
@@ -11,19 +13,43 @@ import { declOfNum } from '../../../utils/declOfNum.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
 import { outputInfo } from "../../../utils/outputinfo.js";
+import { createElement } from '../../../settings/createElement.js';
+import { dateFormatter } from "../../../settings/dateFormatter.js";
 
 class TableClients extends Table {
   constructor(selector, options, params) {
     const defaultOptions = {
       columnDefs: [
-        { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
+        {
+          headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false,
+          // cellRenderer: params => {
+          //   const { user_id } = params.data
+          // }
+        },
         {
           headerName: 'ФИО', field: 'fullname', minWidth: 300, flex: 1,
           cellRenderer: params => cellRendererInput(params, { iconId: 'profile' })
         },
         { headerName: 'Телефон', field: 'username', minWidth: 170, flex: 0.5, cellRenderer: params => cellRendererInput(params, { funcFormate: formatPhoneNumber }) },
-        { headerName: 'Почта', field: 'email', minWidth: 260, flex: 0.5, sortable: false, cellRenderer: params => cellRendererInput(params) },
-        { headerName: 'Ячейки', field: 'rooms', minWidth: 100, flex: 0.5, valueFormatter: params => params.value ? addPrefixToNumbers(params.value) : 'нет' },
+        { headerName: 'Почта', field: 'email', minWidth: 260, flex: 0.5, cellRenderer: params => cellRendererInput(params) },
+        {
+          headerName: 'Ячейки', field: 'rooms', minWidth: 90, flex: 0.5,
+          cellRenderer: params => {
+            const span = createElement('span', ['span-rooms-id'], `нет`)
+            if (params.value) {
+              span.innerHTML = addPrefixToNumbers(params.value)
+              if (params.value.split(',').length > 1) {
+                tippy(span, {
+                  trigger: 'mouseenter',
+                  placement: 'top',
+                  arrow: true,
+                  content: `<span class="tippy-info-span tippy-info-rooms-id" style="font-size: 14px;">${addPrefixToNumbers(params.value)}</span>`,
+                })
+              }
+            }
+            return span
+          }
+        },
         {
           headerName: 'Платеж в мес.', field: 'month_payment', minWidth: 100, flex: 0.5,
           cellRenderer: params => {
@@ -36,13 +62,30 @@ class TableClients extends Table {
         {
           headerName: 'До платежа', field: 'days_left', minWidth: 100, flex: 0.5,
           cellRenderer: params => {
-            const p = document.createElement('p')
-            p.classList.add('table-p')
-            p.innerHTML = `
-            <svg class='icon icon-calendar'>
-              <use xlink:href='img/svg/sprite.svg#calendar'></use>
-            </svg>
-            <span>${params.value ? `${params.value} ${declOfNum(Math.abs(params.value), ['День', 'Дня', 'Дней'])}` : 'Нет'}</span>`
+            const p = createElement('p', ['table-p', 'days-left-p'], `<svg class='icon icon-calendar'><use xlink:href='img/svg/sprite.svg#calendar'></use></svg>
+            <span>${params.value ? `${params.value} ${declOfNum(Math.abs(params.value), ['День', 'Дня', 'Дней'])}` : 'Нет'}</span>`)
+
+            if (params.value && params.value >= 0) {
+              const date = new Date();
+              date.setDate(date.getDate() + params.value);
+
+              tippy(p, {
+                trigger: 'mouseenter',
+                placement: 'top',
+                arrow: true,
+                interactive: false,
+                content: `<span class="tippy-info-span tippy-info-rooms-id">${dateFormatter(date)}</span>`,
+              })
+            }
+
+            if (params.value && params.value >= 0 && params.value <= 5) {
+              p.classList.add('_payments-soon')
+              tippy(p, {
+                trigger: 'mouseenter',
+                placement: 'bottom-end',
+                content: `<div class="tippy-contact"><p>Связались с клиентом?</p><button class="yes"><span>Да</span></button><button><span>Нет</span></button></div>`
+              })
+            }
             return p
           }
         },

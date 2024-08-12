@@ -56,7 +56,7 @@ class TablePayments extends Table {
           valueFormatter: params => params.value === 'f' ? 'Физ. лицо' : 'Юр. лицо'
         },
         {
-          headerName: 'Действия', field: 'actions', minWidth: 80, flex: 0.5, resizable: false, sortable: false,
+          headerName: 'Действия', field: 'actions', width: 90, resizable: false, sortable: false,
           cellRenderer: params => this.actionCellRenderer(params),
         }
       ],

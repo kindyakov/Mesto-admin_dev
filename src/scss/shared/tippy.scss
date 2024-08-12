@@ -57,6 +57,8 @@
 	color: #212b36;
 	padding: 4px 10px;
 	position: relative;
+	display: block;
+	line-height: normal;
 	&::before {
 		content: '';
 		position: absolute;
@@ -65,6 +67,40 @@
 		border-width: 6px;
 		border-style: solid;
 		border-color: #e2e8f0 transparent transparent transparent; /* Цвет стрелки */
+	}
+}
+
+.tippy-contact {
+	border: 2px solid #e2e8f0;
+	border-radius: 4px;
+	background-color: #fff;
+	padding: 15px 20px;
+	box-shadow: 0 8px 13px -3px rgba(0, 0, 0, 0.07);
+
+	font-size: 14px;
+	color: #212b36;
+
+	p {
+		margin-bottom: 10px;
+		font-weight: 400;
+		line-height: 125%;
+	}
+	button {
+		font-weight: 500;
+		background-color: #eff4fb;
+		height: 30px;
+		padding: 4px 10px;
+		border-radius: 2px;
+		transition: 0.2s;
+
+		&:hover {
+			background-color: $blue;
+			color: #fff;
+		}
+
+		&.yes {
+			margin-right: 5px;
+		}
 	}
 }
 

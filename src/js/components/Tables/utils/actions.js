@@ -1,4 +1,4 @@
-import tippy from 'tippy.js';
+import tippy from '../../../configs/tippy.js';
 
 let defaultOptions = {
   tippyInstance: null,
@@ -36,8 +36,7 @@ export function actions(button, opt = {}) {
   const options = Object.assign({ toggleEdit, toggleActive }, defaultOptions, opt)
 
   const instance = tippy(button, {
-    allowHTML: true,
-    trigger: 'click',
+    maxWidth: 180,
     content: (reference) => {
       const content = document.createElement('div')
       content.classList.add('tippy', 'table-tippy-client')
@@ -67,11 +66,6 @@ export function actions(button, opt = {}) {
 
       return content
     },
-    maxWidth: 180,
-    duration: 0,
-    placement: 'bottom-start',
-    interactive: true,
-    appendTo: document.body,
     onTrigger(instance, event) {
       options.tippyInstance = instance; // Сохраняем ссылку на экземпляр tippy.js
       if (options.isEdit) {

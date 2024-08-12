@@ -1,4 +1,4 @@
-import tippy from 'tippy.js';
+import tippy from '../../../../configs/tippy.js';
 import { contentHtml } from './html.js';
 import { createElement } from '../../../../settings/createElement.js';
 
@@ -8,13 +8,8 @@ class CustomHeaderComponentAddSales {
     this.btnAdd = null
 
     this.optionsTippy = {
-      allowHTML: true,
-      trigger: 'click',
       maxWidth: 300,
-      duration: 0,
       placement: 'bottom-end',
-      interactive: true,
-      appendTo: document.body,
       content: (reference) => {
         const content = createElement('div', [], contentHtml())
         this.input = content.querySelector('.input')

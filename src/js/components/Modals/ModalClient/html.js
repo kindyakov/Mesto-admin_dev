@@ -1,4 +1,4 @@
-import tippy from "tippy.js";
+import tippy from "../../../configs/tippy.js";
 import { declOfNum } from "../../../utils/declOfNum.js";
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
 
@@ -13,7 +13,11 @@ export function agreementHtml(data) {
   innerContainer.classList.add('modal__block_grid-item');
   innerContainer.innerHTML = `
     <span class="item-num">${data.agrid ? '№' + data.agrid : ''}</span>
-    <p class="item-info">${data.days_left ? data.days_left + ` ${declOfNum(+data.days_left, ['день', 'дня', 'дней'])} до окончания` : ''}</p>
+    <p class="item-info">${data.days_left
+      ? +data.days_left > 0
+        ? data.days_left + ` ${declOfNum(+data.days_left, ['день', 'дня', 'дней'])} до окончания`
+        : Math.abs(+data.days_left) + ` ${declOfNum(Math.abs(+data.days_left), ['день', 'дня', 'дней'])} просрочен`
+      : 'Не оплачен'}</p>
     <button class="item-more-detailed" data-agr-id="${data.agrid ? data.agrid : ''}" data-modal="modal-agreement" data-json="${dataStr(data)}"><span>Подробнее</span></button>
   `;
 
@@ -21,9 +25,9 @@ export function agreementHtml(data) {
 
   if (data.next_payment_date) {
     tippy(itemInfo, {
-      allowHTML: true,
+      trigger: 'mouseenter',
+      placement: 'top',
       arrow: true,
-      duration: 0,
       content: `<span class="tippy-info-span tippy-info-date">${getFormattedDate(data.next_payment_date)}</span>`,
     });
   }

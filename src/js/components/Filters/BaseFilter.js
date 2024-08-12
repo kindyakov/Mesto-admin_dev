@@ -1,4 +1,4 @@
-import tippy from "tippy.js"
+import tippy from '../../configs/tippy.js'
 import RangeSlider from "../RangeSlider/RangeSlider.js"
 
 class BaseFilter {
@@ -6,13 +6,7 @@ class BaseFilter {
     if (!button) return;
 
     this.defaultOptions = {
-      duration: 0,
-      allowHTML: true,
       content: '<div>Пусто</div>',
-      trigger: 'click',
-      placement: 'bottom-start',
-      interactive: true,
-      appendTo: document.body,
     };
 
     this.defaultFilterValues = defaultFilterValues;

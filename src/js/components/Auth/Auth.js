@@ -137,7 +137,7 @@ class Auth {
       const { msg, msg_type, access_token, expiration_time } = this.user = response.data
 
       outputInfo(response.data)
-
+      
       if (msg_type === 'success') {
         this.isAuth = true
         api.defaults.headers.Authorization = `Bearer ${access_token}`

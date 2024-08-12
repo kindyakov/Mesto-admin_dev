@@ -1,5 +1,4 @@
-import tippy from "tippy.js";
-
+import tippy from '../../../configs/tippy.js'
 import BaseModal from "../BaseModal.js";
 import content from "./content.html"
 
@@ -34,9 +33,8 @@ class ModalAgreement extends BaseModal {
     this.form = this.modalBody.querySelector('.form-agreement-data')
     this.btnCompleteAgreement = this.modalBody.querySelector('.btn-complete-agreement')
     this.confirmationModal = tippy(this.btnCompleteAgreement, {
-      allowHTML: true,
-      trigger: 'click',
       maxWidth: 450,
+      placement: 'top-end',
       content: (reference) => {
         const confirmation = createElement('div', ['confirmation-modal', 'confirmation-completion-agreement']);
         const confirmationContent = createElement('div', ['confirmation-modal__content'], `
@@ -78,10 +76,6 @@ class ModalAgreement extends BaseModal {
 
         return confirmation;
       },
-      duration: 0,
-      placement: 'top-end',
-      interactive: true,
-      appendTo: document.body,
     })
   }
 

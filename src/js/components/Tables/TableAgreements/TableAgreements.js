@@ -1,15 +1,12 @@
 import Table from '../Table.js';
-// import { validateRow } from './validate.js';
-
-import { api } from "../../../settings/api.js";
-
+import tippy from '../../../configs/tippy.js';
 import { actions } from '../utils/actions.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
 import { getFormattedDate } from '../../../utils/getFormattedDate.js';
 import { downloadAgreement } from '../../../settings/request.js';
-
+import { createElement } from '../../../settings/createElement.js';
 
 class TableAgreements extends Table {
   constructor(selector, options, params) {
@@ -36,15 +33,28 @@ class TableAgreements extends Table {
         {
           headerName: 'Платеж в мес.', field: 'price', minWidth: 100, flex: 0.5,
           cellRenderer: params => {
-            const span = document.createElement('span')
-            span.classList.add('table-span-price')
+            const span = createElement('span', ['table-span-price'])
             span.innerHTML = params.value ? formattingPrice(params.value) : 'нет'
             return cellRendererInput(params, { el: span })
           }
         },
         {
-          headerName: 'Ячейки', field: 'room_ids', minWidth: 70, flex: 0.5,
-          valueFormatter: params => params.value ? addPrefixToNumbers(params.value) : 'нет'
+          headerName: 'Ячейки', field: 'room_ids', minWidth: 90, flex: 0.5,
+          cellRenderer: params => {
+            const span = createElement('span', ['span-rooms-id'], `нет`)
+            if (params.value) {
+              span.innerHTML = addPrefixToNumbers(params.value)
+              if (params.value.length > 1) {
+                tippy(span, {
+                  trigger: 'mouseenter',
+                  placement: 'top',
+                  arrow: true,
+                  content: `<span class="tippy-info-span tippy-info-rooms-id" style="font-size: 14px;">${addPrefixToNumbers(params.value)}</span>`,
+                })
+              }
+            }
+            return span
+          }
         },
         {
           headerName: 'Конец договора', field: 'agrplanenddate', minWidth: 100, flex: 0.5,
@@ -54,7 +64,7 @@ class TableAgreements extends Table {
           headerName: 'Способ оплаты', field: 'last_payment_type', minWidth: 100, flex: 0.5,
         },
         {
-          headerName: 'Действия', field: 'actions', width: 80,
+          headerName: 'Действия', field: 'actions', width: 90,
           cellRenderer: params => this.actionCellRenderer(params), resizable: false, sortable: false
         }
       ],
@@ -79,67 +89,22 @@ class TableAgreements extends Table {
   actionCellRenderer(params) {
     const { user_id, user_type } = params.data
     const row = params.eGridCell.closest('.ag-row')
-    const button = document.createElement('button');
-    button.classList.add('button-table-actions');
-    button.innerHTML = `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`;
+    const button = createElement('button', ['button-table-actions'], `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`);
     let form
 
     const tippyInstance = actions(button, {
       onOpen: () => {
 
       },
+      buttons: [
+        (options = {}) => {
+          const button = createElement('button', ['tippy-button', 'table-tippy-client__button', 'btn-open'], `<svg class='icon icon-arrow-right-circle' styles="fill: none;"><use xlink:href='img/svg/sprite.svg#arrow-right-circle'></use></svg><span>Открыть</span>`)
+          return button
+        }
+      ],
       attrModal: 'modal-agreement',
       data: params.data
     })
-
-    // tippyInstance.options.onEdit = instance => {
-    //   this.validatorRow?.revalidate().then(isValid => {
-    //     if (isValid) {
-    //       const formData = new FormData(form)
-    //       let data = {}
-
-    //       formData.set('username', formData.get('username').replace(/[+() -]/g, ''))
-    //       Array.from(formData).forEach(obj => data[obj[0]] = obj[1])
-
-    //       this.editClient(data).finally(() => {
-    //         instance.toggleEdit(button)
-    //         instance.isEdit = false
-
-    //         this.disableEditing(row) // метод из родительского класса для откл редактирования полей
-    //         this.validatorRow.destroy()
-    //       })
-    //     }
-    //   })
-    // }
-
-    // tippyInstance.options.onEnableEdit = () => {
-    //   form = document.createElement('form')
-    //   const inputs = this.enableEditing(row) // метод из родительского класса для вкл редактирования полей
-
-    //   inputs.forEach(input => {
-    //     const inputClone = input.cloneNode(true);
-    //     inputClone.value = input.value; // Установить начальное значение
-    //     form.appendChild(inputClone);
-
-    //     if (input.name === 'username') {
-    //       Inputmask.default("+7 (999) 999-99-99").mask(input)
-    //     }
-
-    //     // Обработчик событий для синхронизации значений
-    //     input.addEventListener('input', () => {
-    //       inputClone.value = input.value;
-    //       this.validatorRow?.revalidateField(inputClone).then(isValid => {
-    //         if (isValid) {
-    //           input.classList.remove('just-validate-error-field')
-    //         } else {
-    //           input.classList.add('just-validate-error-field')
-    //         }
-    //       })
-    //     });
-    //   });
-
-    //   this.validatorRow = validateRow(form)
-    // }
 
     return button
   }

@@ -165,6 +165,13 @@
 		background-color: #eee;
 	}
 
+	.span-rooms-id {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		word-break: break-word;
+		max-width: 100%;
+	}
+
 	.table-p {
 		display: flex;
 		align-items: center;
@@ -173,10 +180,26 @@
 			width: 15px;
 			height: 15px;
 			fill: #212b36;
+			flex-shrink: 0;
 			&.icon-profile {
 				fill: #a8b0b9;
 			}
 		}
+	}
+
+	.days-left-p {
+		position: relative;
+		&._payments-soon {
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 100%;
+			background-color: $red;
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+		}}
 	}
 
 	&.table-clients {
