@@ -7,12 +7,16 @@ import tippy from '../../../configs/tippy.js';
 
 import { api } from "../../../settings/api.js";
 
+
 import { actions } from '../utils/actions.js';
-import { formattingPrice, formatPhoneNumber } from '../../../utils/formattingPrice.js';
-import { declOfNum } from '../../../utils/declOfNum.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
+
+import { formattingPrice, formatPhoneNumber } from '../../../utils/formattingPrice.js';
+import { declOfNum } from '../../../utils/declOfNum.js';
 import { outputInfo } from "../../../utils/outputinfo.js";
+import { downloadClient } from '../../../settings/request.js';
+
 import { createElement } from '../../../settings/createElement.js';
 import { dateFormatter } from "../../../settings/dateFormatter.js";
 
@@ -202,6 +206,17 @@ class TableClients extends Table {
   async download(data) {
     try {
       this.loader.enable()
+      let reqData = {}
+
+      if (data.length) {
+        const userIds = data.map(obj => obj.user_id)
+        reqData.all_clients = 0
+        reqData.user_ids = userIds
+      } else {
+        reqData.all_clients = 1
+      }
+
+      const res = await downloadClient(reqData)
     } catch (error) {
       console.error(error)
       throw error

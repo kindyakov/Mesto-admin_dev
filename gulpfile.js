@@ -40,6 +40,9 @@ global.app = {
   }
 }
 
+process.env.NODE_ENV = app.isBuild ? 'production' : 'development';
+process.env.APP_VERSION = app.version;
+
 // Путь к файлу настроек
 const settingsPath = 'settings.json';
 

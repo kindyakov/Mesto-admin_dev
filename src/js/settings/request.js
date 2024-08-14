@@ -111,6 +111,10 @@ export const downloadPayments = downloadCreate('/download_payments', { nameFile:
 
 export const downloadAgreement = downloadCreate('/download_reestr', { nameFile: `Договора от` })
 
+export const downloadClient = downloadCreate('/download_clients', { nameFile: `Клиенты от` })
+
+export const downloadFuturePayments = downloadCreate('/download_future_payments', { nameFile: `Предстоящие плановые платежи от` })
+
 // /download_agr
 export async function downloadAgr(room_id) {
   try {
