@@ -3,7 +3,7 @@ import { getDashboardMarketing } from "../../../settings/request.js";
 
 class Marketing extends Dashboards {
   constructor({ loader }) {
-    super({ loader, page: 'marketing' });
+    super({ loader, page: 'dashboards/marketing' });
   }
 
   async getData(data = {}) {

@@ -2,11 +2,12 @@ import { getFormattedDate } from "../utils/getFormattedDate.js"
 import { mergeQueryParams } from "../utils/buildQueryParams.js";
 
 class Page {
-  constructor({ loader, tables = [], page }) {
+  constructor({ loader, tables = [], charts = [], page }) {
     this.loader = loader
     this.wrapper = document.querySelector(`[data-content="${page}"]`)
 
     this.tables = []
+    this.charts = []
 
     if (tables.length) {
       tables.forEach(table => {
@@ -16,6 +17,14 @@ class Page {
       })
     }
 
+    if (charts.length) {
+      charts.forEach(_chart => {
+        const { id, ChartComponent, options = {} } = _chart
+        const ctx = this.wrapper.querySelector(`#${id}`)
+        const chart = new ChartComponent(ctx, options)
+        this.charts.push(chart)
+      })
+    }
 
     this.init(page)
   }
@@ -65,7 +74,14 @@ class Page {
     })
   }
 
-  async getData(data = {}) {
+  actionsCharts(callback = () => { }) {
+    if (!this.charts.length) return
+    this.charts.forEach((chart, i) => {
+      callback(chart, i)
+    })
+  }
+
+  async getData(queryParams = {}) {
     return []
   }
 

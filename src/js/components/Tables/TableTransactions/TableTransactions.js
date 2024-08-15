@@ -1,16 +1,18 @@
 import Table from '../Table.js';
 // import { validateRow } from './validate.js';
 
-import { api } from "../../../settings/api.js";
-
 import { actions } from '../utils/actions.js';
-import { formattingPrice, formatPhoneNumber } from '../../../utils/formattingPrice.js';
-import { declOfNum } from '../../../utils/declOfNum.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
-import { outputInfo } from "../../../utils/outputinfo.js";
+
 import { Select } from "../../../modules/mySelect.js";
+
+import { api } from "../../../settings/api.js";
+import { createElement } from '../../../settings/createElement.js';
 import { getFormattedDate } from '../../../utils/getFormattedDate.js';
+import { outputInfo } from "../../../utils/outputinfo.js";
+import { declOfNum } from '../../../utils/declOfNum.js';
+import { formattingPrice, formatPhoneNumber } from '../../../utils/formattingPrice.js';
 
 class TableTransactions extends Table {
   constructor(selector, options, params) {
@@ -62,7 +64,6 @@ class TableTransactions extends Table {
 
     const defaultParams = {
       selectTypeUser: true,
-      onChangeTypeUser: () => { },
     }
 
     const mergedOptions = Object.assign({}, defaultOptions, options);
@@ -71,18 +72,12 @@ class TableTransactions extends Table {
 
     this.actionCellRenderer = this.actionCellRenderer.bind(this)
     this.enableEditing = this.enableEditing.bind(this)
-
-    this.onChangeTypeUser = this.params.onChangeTypeUser
   }
 
   actionCellRenderer(params) {
     const { user_id, user_type } = params.data
     const row = params.eGridCell.closest('.ag-row')
-    const button = document.createElement('button');
-    button.classList.add('button-table-actions');
-    button.setAttribute('data-user-id', user_id)
-    button.setAttribute('data-user-type', user_type)
-    button.innerHTML = `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`;
+    const button = createElement('button', ['button-table-actions'], `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`);
     let form
 
     const tippyInstance = actions(button, {

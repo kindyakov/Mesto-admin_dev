@@ -31,7 +31,7 @@ function getCreateTotal(rout) {
 
 function downloadCreate(rout, opts = {}) {
   const options = {
-    nameFile: `Файл от ${getFormattedDate()}`,
+    nameFile: `Файл от`,
     ...opts
   }
 
@@ -61,7 +61,6 @@ function downloadCreate(rout, opts = {}) {
 }
 
 // ============================================================================>
-
 export const getClients = getCreate('/_main_clients_')
 
 export const getPayments = getCreate('/_main_payments_')
@@ -99,6 +98,14 @@ export const getSalesPlan = getCreate('/_get_sales_plan_')
 export const getMessagesHistory = getCreate('/_get_messages_history_')
 
 export const getTimeControlInfo = getCreate('/_get_time_control_info_')
+
+export const getSales = getCreate('/_get_sales_')
+
+export const getSaleChannels = getCreate('/_get_sale_channels_')
+
+export const getSaleChannelsExpenses = getCreate('/_get_sale_channels_expenses_')
+
+export const getSaleChannelsStats = getCreate('/_get_sale_channels_stats_')
 // ============================================================================>
 
 export const getClientTotal = getCreateTotal('/_get_client_total_')

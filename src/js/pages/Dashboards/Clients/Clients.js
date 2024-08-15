@@ -15,7 +15,7 @@ class Clients extends Dashboards {
         { id: 'chart-influx-customers', ChartComponent: ChartInfluxCustomers },
         { id: 'chart-gender-age', ChartComponent: ChartGenderAge },
       ],
-      page: 'clients'
+      page: 'dashboards/clients'
     });
   }
 

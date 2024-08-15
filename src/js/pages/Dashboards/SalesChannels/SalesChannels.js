@@ -2,24 +2,37 @@ import Dashboards from "../Dashboards.js";
 import TableSalesChannels from "../../../components/Tables/TableSalesChannels/TableSalesChannels.js";
 import TableSalesChannelsEdit from "../../../components/Tables/TableSalesChannelsEdit/TableSalesChannelsEdit.js";
 import ChartSalesChannels from "../../../components/Charts/ChartSalesChannels/ChartSalesChannels.js";
+import { getSaleChannelsExpenses, getSaleChannelsStats } from "../../../settings/request.js";
 
 class SalesChannels extends Dashboards {
   constructor({ loader }) {
     super({
       loader,
       tables: [
-        { tableSelector: '.table-sales-channels', TableComponent: TableSalesChannels, },
-        { tableSelector: '.table-sales-channels-edit', TableComponent: TableSalesChannelsEdit, }
+        {
+          tableSelector: '.table-sales-channels-edit',
+          TableComponent: TableSalesChannelsEdit,
+          params: {
+            getData: getSaleChannelsExpenses,
+          }
+        },
+        {
+          tableSelector: '.table-sales-channels',
+          TableComponent: TableSalesChannels,
+          params: {
+            getData: getSaleChannelsStats,
+          }
+        },
       ],
       charts: [
         { id: 'chart-sales-channels', ChartComponent: ChartSalesChannels },
       ],
-      page: 'sales-channels'
+      page: 'dashboards/sales-channels'
     });
   }
 
   async getData(data = {}) {
-    return [];
+    return Promise.all([getSaleChannelsExpenses(), getSaleChannelsStats()]);
   }
 
   async getDashboardData() {

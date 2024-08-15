@@ -42,8 +42,8 @@ class Forecast extends Page {
     })
   }
 
-  async getData(data = {}) {
-    return Promise.all([getSalesPlan(data), getFinancePlan(data)])
+  async getData(queryParams = {}) {
+    return Promise.all([getSalesPlan(queryParams), getFinancePlan(queryParams)])
   }
 }
 

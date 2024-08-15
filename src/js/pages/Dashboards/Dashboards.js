@@ -1,3 +1,4 @@
+import Page from "../Page.js"
 import { Select } from "../../modules/mySelect.js"
 import { createCalendar } from "../../settings/createCalendar.js"
 import { getFormattedDate } from "../../utils/getFormattedDate.js"
@@ -15,47 +16,19 @@ function formatePrice(value) {
   return value.toFixed(3) + ' ' + units[unitIndex]
 }
 
-class Dashboards {
-  constructor({ loader, tables = [], charts = [], page }) {
-    this.loader = loader
-    this.wrapper = document.querySelector(`[data-content="dashboards/${page}"]`)
+class Dashboards extends Page {
+  constructor(options) {
+    super(options)
+
     this.formFilter = this.wrapper.querySelector('.form-filter-dashboards')
-
-    this.tables = []
-    this.charts = []
-
-    if (tables.length) {
-      tables.forEach(table => {
-        const { TableComponent, tableSelector, options = {}, params = {}
-        } = table
-        this.table = new TableComponent(tableSelector, { ...options, wrapper: this.wrapper }, params)
-        this.tables.push(this.table)
-      })
-    }
-
-    if (charts.length) {
-      charts.forEach(_chart => {
-        const { id, ChartComponent, options = {} } = _chart
-        const ctx = this.wrapper.querySelector(`#${id}`)
-        const chart = new ChartComponent(ctx, options)
-        this.charts.push(chart)
-      })
-    }
-
-    this.queryParams = {}
-
     this.widgets = this.wrapper.querySelectorAll('[data-render-widget]')
 
-    this.init(page)
-  }
-
-  init(page) {
     if (this.formFilter) {
       this.selectFilter = new Select({
         uniqueName: 'select-filter-main',
         parentEl: this.wrapper
       })
-      this.calendars = createCalendar(`[data-content="dashboards/${page}"] .input-date-filter`, {
+      this.calendars = createCalendar(`[data-content="${options.page}"] .input-date-filter`, {
         mode: "range",
         dateFormat: "d. M, Y",
         onChange: (selectedDates, dateStr, instance) => {
@@ -69,16 +42,6 @@ class Dashboards {
       })
     }
 
-    this.events()
-  }
-
-  events() {
-    this.tables.length && this.actionsTables(table => {
-      table.onPageChange = page => table.changeQueryParams({ page })
-      table.onChangeTypeUser = ({ e, select, optionValue }) => table.changeQueryParams({ user_type: optionValue })
-      table.onValueInputSearch = value => table.changeQueryParams({ search_str: value })
-    })
-
     if (this.selectFilter) {
       this.selectFilter.onChange = (e, select, optionValue) => {
         const name = select.getAttribute('data-name')
@@ -86,11 +49,6 @@ class Dashboards {
         this.changeQueryParams(data)
       }
     }
-  }
-
-  changeQueryParams(data) {
-    this.queryParams = { ...this.queryParams, ...data }
-    this.renderDashboard(data)
   }
 
   renderWidgets(data) {
@@ -112,24 +70,10 @@ class Dashboards {
     });
   }
 
-  actionsTables(callback = () => { }) {
-    if (!this.tables.length) return console.error('Нет таблиц')
-    this.tables.forEach((table, i) => {
-      callback(table, i)
-    })
-  }
-
-  actionsCharts(callback = () => { }) {
-    if (!this.charts.length) return
-    this.charts.forEach((chart, i) => {
-      callback(chart, i)
-    })
-  }
-
-  async render() {
+  async render(queryParams = {}) {
     try {
       this.loader.enable()
-      const [dataDashboard, dataEntities] = await Promise.all([this.getDashboardData(), this.getData()])
+      const [dataDashboard = null, dataEntities = null] = await Promise.all([this.getDashboardData(queryParams), this.getData(queryParams)])
 
       if (dataDashboard) {
         this.renderWidgets(dataDashboard)
@@ -139,29 +83,6 @@ class Dashboards {
       if (this.tables.length && dataEntities) {
         this.actionsTables((table, i) => table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities))
       }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      this.loader.disable()
-    }
-  }
-
-  async renderDashboard(data) {
-    try {
-      this.loader.enable()
-      const resData = await this.getDashboardData(data)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      this.loader.disable()
-    }
-  }
-
-  async renderTable(table, data = {}) {
-    try {
-      this.loader.enable()
-      const resData = await this.getData(data)
-      table.render(resData)
     } catch (error) {
       console.error(error)
     } finally {

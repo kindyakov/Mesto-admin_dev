@@ -33,7 +33,7 @@ class Finance extends Dashboards {
       charts: [
         { id: 'chart-monthly-revenue', ChartComponent: ChartMonthlyRevenue },
       ],
-      page: 'finance'
+      page: 'dashboards/finance'
     });
   }
 
@@ -45,27 +45,16 @@ class Finance extends Dashboards {
     return Promise.all([getDashboardFinance(data), getFinancePlan(data)])
   }
 
-  async renderDashboard(data) {
+  async render(queryParams = {}) {
     try {
       this.loader.enable()
-      const dataDashboard = await this.getDashboardData(data)
-      const [dataWidgets = [], { finance_planfact = [] }] = dataDashboard
+      const [dataDashboard = [], dataEntities,] = await Promise.all([this.getDashboardData(queryParams), this.getData(queryParams)])
 
-      this.renderWidgets(dataWidgets)
-      this.actionsCharts(chart => chart.render(finance_planfact))
-    } catch (error) {
-      console.error(error)
-    } finally {
-      this.loader.disable()
-    }
-  }
-
-  async render() {
-    try {
-      this.loader.enable()
-      const [dataDashboard = [], dataEntities,] = await Promise.all([this.getDashboardData(), this.getData()])
-
-      this.renderDashboard(dataDashboard)
+      if (dataDashboard.length) {
+        const [dataWidgets = [], { finance_planfact = [] }] = dataDashboard
+        this.renderWidgets(dataWidgets)
+        this.actionsCharts(chart => chart.render(finance_planfact))
+      }
 
       if (this.tables.length && dataEntities) {
         this.actionsTables((table, i) => table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities))

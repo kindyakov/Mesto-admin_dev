@@ -10,7 +10,7 @@ class Navigation {
       'dashboards/finance': 'Dashboards/Finance/Finance.js',
       'dashboards/marketing': 'Dashboards/Marketing/Marketing.js',
       'dashboards/warehouse': 'Dashboards/Warehouse/Warehouse.js',
-      'dashboards/plan-fact': 'Dashboards/PlanFact/PlanFact.js',
+      'dashboards/transactions': 'Dashboards/Transactions/Transactions.js',
       'dashboards/sales-channels': 'Dashboards/SalesChannels/SalesChannels.js',
       'charging-locks': 'ChargingLocks/ChargingLocks.js',
       'users': 'Users/Users.js',

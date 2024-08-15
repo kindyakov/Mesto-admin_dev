@@ -10,7 +10,7 @@ import { getDashboardWarehouse, getFinancePlan } from "../../../settings/request
 class Warehouse extends Dashboards {
   constructor({ loader }) {
     super({
-      loader, page: 'warehouse',
+      loader, page: 'dashboards/warehouse',
       charts: [
         { id: 'chart-area-rented-cells', ChartComponent: ChartAreaRentedCells },
         { id: 'chart-cell-occupancy', ChartComponent: ChartCellOccupancy },
