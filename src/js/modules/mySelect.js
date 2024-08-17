@@ -47,6 +47,13 @@ export class Select {
 
     this.options = Object.assign(defaultOptions, options)
 
+    this.onInit = this.options.onInit
+    this.onChange = this.options.onChange
+    this.onOpen = this.options.onOpen
+    this.onClose = this.options.onClose
+    this.callbackInput = this.options.callbackInput
+    this.callbackOption = this.options.callbackOption
+
     if (this.options.uniqueName) {
       const wp = this.options.parentEl ? this.options.parentEl : document
 
@@ -63,13 +70,6 @@ export class Select {
       this.options.isDev && console.log(`Ошибка: не найден select c классом "${this.options.initSelect}"`)
       return
     }
-
-    this.onInit = this.options.onInit
-    this.onChange = this.options.onChange
-    this.onOpen = this.options.onOpen
-    this.onClose = this.options.onClose
-    this.callbackInput = this.options.callbackInput
-    this.callbackOption = this.options.callbackOption
 
     this.init()
   }
@@ -150,7 +150,7 @@ export class Select {
 
           selectInput.setAttribute('data-value', optionValue)
 
-          this.disableSelectedOption(select)
+          this.disableSelectedOption(select, optionValue)
           this.changeSelectOption(select, optionValue)
           this.close(select)
 
@@ -187,7 +187,7 @@ export class Select {
     this.onOpen(select)
   }
 
-  close(select) {
+  close(select = this.selects[0]) {
     if (select) {
       select.classList.remove(this.options.classActive)
       if (select.querySelector(this.options.selectList)) {
@@ -211,16 +211,15 @@ export class Select {
       selectInputSpan.innerText = optionText
       selectInput.setAttribute('data-value', optionValue)
 
-      this.disableSelectedOption(select)
+      this.disableSelectedOption(select, optionValue)
       this.changeSelectOption(select, optionValue)
       this.close(select)
 
-      // this.onChange(option, select, optionValue)
+      this.onChange(option, select, optionValue)
     })
   }
 
-  disableSelectedOption(select) {
-    const selectedOptionValue = select.querySelector(this.options.selectInput).getAttribute('data-value')
+  disableSelectedOption(select, selectedOptionValue) {
     const options = select.querySelectorAll(this.options.selectOption)
 
     options.forEach(option => {
@@ -236,7 +235,6 @@ export class Select {
 
     const optionsShow = select.querySelectorAll(`${this.options.selectOption}._show`)
     optionsShow[optionsShow.length - 1].classList.add('_option-list')
-
   }
 
   changeSelectOption(select, optionValue) {
@@ -270,5 +268,51 @@ export class Select {
     }
 
     return mySelect
+  }
+}
+
+export class exSelect extends Select {
+  constructor(selects = [], options = {}) {
+    super(options)
+
+    this.init(selects)
+  }
+
+  init(selects) {
+    this.selectsCustom = []
+
+    selects.length && selects.forEach(select => {
+      const options = select.querySelectorAll('option')
+      const selectName = select.getAttribute('name')
+
+      const selectCustom = select.getAttribute('data-special-select') || this.options.selectCustom
+      const activeIndex = select.getAttribute('data-active-index') || this.options.activeIndex
+      const placeholder = select.getAttribute('data-placeholder') || this.options.placeholder
+      const isDisabled = select.getAttribute('data-disabled') != null ? true : this.options.isDisabled
+      const inputHtml = select.getAttribute('data-input-html') || this.options.inputHtml
+      const selectMinWidth = select.getAttribute('data-select-min-width') || this.options.selectMinWidth
+      const selectMaxWidth = select.getAttribute('data-select-max-width') || this.options.selectMaxWidth
+      const prefix = select.getAttribute('data-prefix') || ''
+
+      const customSelect = this.customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder, isDisabled, inputHtml, prefix })
+      const b479 = window.matchMedia(`(min-width: 479px)`)
+
+      if (this.options.disable) {
+        customSelect.classList.add('_disabled')
+      }
+
+      const selectInput = customSelect.querySelector(this.options.selectInput)
+      if (selectInput) {
+        selectInput.innerHTML = this.callbackInput(options[activeIndex]?.textContent || '', options[activeIndex]?.value || '', customSelect)
+      }
+
+      select.insertAdjacentElement('afterend', customSelect)
+      select.style.display = 'none'
+
+      this.selectsCustom.push(customSelect)
+    })
+
+    this.events()
+    this.onInit(this.selectsCustom)
   }
 }

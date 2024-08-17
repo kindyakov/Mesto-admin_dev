@@ -49,7 +49,7 @@ class SearchRoom {
   }
 
   content(reference) {
-    const wrapper = createElement('div', ['search-modal'])
+    const wrapper = createElement('div', { classes: ['search-modal'] })
     wrapper.innerHTML = searchModalHtml()
     return wrapper
   }

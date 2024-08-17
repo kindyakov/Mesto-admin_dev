@@ -37,8 +37,8 @@ class BaseTableForecast extends Table {
     }
 
     this.btnAdd = this.wpTable.querySelector('.btn-table-add')
-    this.wrapButtons = createElement('div', ['wrap-buttons'])
-    this.btnCancel = createElement('button', ['button', 'transparent'], `<span>Отменить<span>`)
+    this.wrapButtons = createElement('div', { classes: ['wrap-buttons'] })
+    this.btnCancel = createElement('button', { classes: ['button', 'transparent'], content: `<span>Отменить<span>` })
 
     this.btnAdd.addEventListener('click', this.addEmptyRow.bind(this))
     this.btnCancel.addEventListener('click', this.handleClickBtnCancel.bind(this))
@@ -48,7 +48,7 @@ class BaseTableForecast extends Table {
   }
 
   btnEditCellRenderer(params) {
-    const button = createElement('button', ['button-table-row-edit'], btnEditContent());
+    const button = createElement('button', { classes: ['button-table-row-edit'], content: btnEditContent() });
 
     if (params.data.isNew) {
       this.toggleEditMode(params, button);
@@ -113,7 +113,6 @@ class BaseTableForecast extends Table {
     let emptyRow = { ...this.emptyRow };
     emptyRow.data = dateFormatter(new Date(), this.select.value === 'day' ? 'yyyy-MM-dd' : 'yyyy-MM');
     emptyRow.isNew = true;
-
     this.gridApi.applyTransaction({ add: [emptyRow], addIndex: 0 });
   }
 

@@ -39,7 +39,7 @@ class TableClients extends Table {
         {
           headerName: 'Ячейки', field: 'rooms', minWidth: 90, flex: 0.5,
           cellRenderer: params => {
-            const span = createElement('span', ['span-rooms-id'], `нет`)
+            const span = createElement('span', { classes: ['span-rooms-id'], content: `нет` })
             if (params.value) {
               span.innerHTML = addPrefixToNumbers(params.value)
               if (params.value.split(',').length > 1) {
@@ -66,8 +66,10 @@ class TableClients extends Table {
         {
           headerName: 'До платежа', field: 'days_left', minWidth: 100, flex: 0.5,
           cellRenderer: params => {
-            const p = createElement('p', ['table-p', 'days-left-p'], `<svg class='icon icon-calendar'><use xlink:href='img/svg/sprite.svg#calendar'></use></svg>
-            <span>${params.value ? `${params.value} ${declOfNum(Math.abs(params.value), ['День', 'Дня', 'Дней'])}` : 'Нет'}</span>`)
+            const p = createElement('p', {
+              classes: ['table-p', 'days-left-p'], content: `<svg class='icon icon-calendar'><use xlink:href='img/svg/sprite.svg#calendar'></use></svg>
+            <span>${params.value ? `${params.value} ${declOfNum(Math.abs(params.value), ['День', 'Дня', 'Дней'])}` : 'Нет'}</span>`
+            })
 
             if (params.value && params.value >= 0) {
               const date = new Date();
@@ -124,10 +126,7 @@ class TableClients extends Table {
     let form
 
     const tippyInstance = actions(button, {
-      onOpen: () => {
-        // modalClient.userId = user_id
-        // modalClient.open()
-      },
+      onOpen: () => { },
       attrModal: 'modal-client',
       data: params.data
     })

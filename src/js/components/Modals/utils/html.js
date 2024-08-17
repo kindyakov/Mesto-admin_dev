@@ -1,8 +1,10 @@
 import { createElement } from "../../../settings/createElement.js"
 
 export function itemEl(id, onClick = () => { }) {
-  const div = createElement('div', ['custom-input__item'], `<span>${id}</span>`)
-  const button = createElement('span', ['btn-del'], `<svg class='icon-close'><use xlink:href='img/svg/sprite.svg#close'></use></svg>`)
+  const div = createElement('div', { classes: ['custom-input__item'], content: `<span>${id}</span>` })
+  const button = createElement('span', {
+    classes: ['btn-del'], content: `<svg class='icon-close'><use xlink:href='img/svg/sprite.svg#close'></use></svg>`
+  })
   button.setAttribute('data-room-id', id)
 
   const handleClick = () => {

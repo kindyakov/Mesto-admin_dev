@@ -55,7 +55,7 @@ class Users extends Page {
   }
 
   managerRender(manager) {
-    const employee = createElement('div', ['employee'], employeeHtml(manager))
+    const employee = createElement('div', { classes: ['employee'], content: employeeHtml(manager) })
     const btnActions = employee.querySelector('.button-actions')
 
     if (manager.subordinates.length) {

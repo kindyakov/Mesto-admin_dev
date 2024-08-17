@@ -22,6 +22,7 @@ class Page {
         const { id, ChartComponent, options = {} } = _chart
         const ctx = this.wrapper.querySelector(`#${id}`)
         const chart = new ChartComponent(ctx, options)
+        chart.wrapper = this.wrapper
         this.charts.push(chart)
       })
     }
@@ -97,6 +98,7 @@ class Page {
       this.onRender(dataEntities)
     } catch (error) {
       console.error(error)
+      throw error
     } finally {
       this.loader.disable()
     }
@@ -109,6 +111,7 @@ class Page {
       table?.render(resData)
     } catch (error) {
       console.error(error)
+      throw error
     } finally {
       this.loader.disable()
     }

@@ -1,65 +1,109 @@
 import Table from '../Table.js';
-// import { validateRow } from './validate.js';
 
 import { actions } from '../utils/actions.js';
-import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
-import { cellRendererInput } from '../utils/cellRenderer.js';
-
-import { Select } from "../../../modules/mySelect.js";
+import { cellRendererInput, cellRendererSelect } from '../utils/cellRenderer.js';
 
 import { api } from "../../../settings/api.js";
 import { createElement } from '../../../settings/createElement.js';
 import { getFormattedDate } from '../../../utils/getFormattedDate.js';
 import { outputInfo } from "../../../utils/outputinfo.js";
-import { declOfNum } from '../../../utils/declOfNum.js';
-import { formattingPrice, formatPhoneNumber } from '../../../utils/formattingPrice.js';
+import { formatPhoneNumber } from '../../../utils/formattingPrice.js';
+import { buildQueryParams } from '../../../utils/buildQueryParams.js';
 
 class TableTransactions extends Table {
   constructor(selector, options, params) {
     const defaultOptions = {
       columnDefs: [
-        { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
+        // { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
         {
-          headerName: 'Заявка №', field: 'agrid', flex: 0.5,
-          cellRenderer: params => {
-            const span = document.createElement('span')
-            span.classList.add('table-span-agrid')
-            span.textContent = params.value ? addPrefixToNumbers(params.value) : 'нет'
-            return cellRendererInput(params, { el: span })
+          headerName: 'Время сделки', field: 'question_datetime', minWidth: 160, flex: 0.6,
+          valueFormatter: params => {
+            let value = 'нет'
+            if (params.value) {
+              const [date, time] = params.value.split(' ')
+              value = `${getFormattedDate(date)} ${time}`
+            }
+            return value
           }
         },
         {
-          headerName: 'ФИО', field: 'fullname', flex: 1,
-          cellRenderer: params => cellRendererInput(params, { iconId: 'profile' })
+          headerName: 'Телефон', field: 'username', minWidth: 140, flex: 0.6,
+          valueFormatter: params => params.value ? formatPhoneNumber(params.value) : 'нет'
         },
         {
-          headerName: 'Телефон', field: '', flex: 0.6,
-          cellRenderer: params => cellRendererInput(params, { funcFormate: getFormattedDate, iconId: 'calendar' })
+          headerName: 'ФИО', field: 'fullname', minWidth: 250, flex: 1,
+          // cellRenderer: params => cellRendererInput(params, { iconId: 'profile' })
         },
         {
-          headerName: 'Сумма', field: 'price', flex: 0.5,
+          headerName: 'Источник', field: 'source', minWidth: 120, flex: 0.5,
+        },
+        {
+          headerName: 'Канал продаж', field: 'sale_channel', minWidth: 180, flex: 0.8,
           cellRenderer: params => {
-            const span = document.createElement('span')
-            span.classList.add('table-span-price')
-            span.innerHTML = params.value ? formattingPrice(params.value) : 'нет'
-            return cellRendererInput(params, { el: span })
+            const { sale_channels } = params.data
+            const options = sale_channels.map(obj => obj.sale_channel)
+            params.value = options[0]
+            params.setValue(params.value)
+            params.data.channel_id = sale_channels[0].channel_id
+            const span = createElement('span', { classes: ['table-span-w', 'gray'], content: params.value })
+            return cellRendererSelect(params, {
+              el: span, options, onSelect: value => {
+                const [filterChannel] = sale_channels.filter(channel => channel.sale_channel == value)
+                params.data.channel_id = filterChannel.channel_id
+              }
+            })
+          },
+        },
+        {
+          headerName: 'Дата сделки', field: 'agrbegdate', minWidth: 180, flex: 0.5,
+          cellRenderer: params => getFormattedDate(params.value) // cellRendererInput(params, { funcFormate: getFormattedDate, iconId: 'calendar' }) 
+        },
+        {
+          headerName: 'Статус', field: 'status', minWidth: 200, flex: 0.8,
+          cellRenderer: params => {
+            function addClassSpan(value) {
+              let strClass = ''
+
+              switch (value) {
+                case 'Не обработан':
+                  strClass = 'yellow'
+                  break
+                case 'В процессе':
+                  strClass = 'blue'
+                  break
+                case 'Отказ':
+                  strClass = 'red'
+                  break
+                case 'Сделка':
+                  strClass = 'green'
+                  break
+              }
+
+              return strClass
+            }
+
+            let options = [params.value, 'Не обработан', 'В процессе', 'Отказ', 'Сделка']
+            options = [...new Set(options.filter(item => item !== null))];
+            params.setValue(options[0])
+            params.value = options[0]
+            const span = createElement('span', { classes: ['table-span-w', addClassSpan(params.value)], content: params.value })
+            return cellRendererSelect(params, {
+              el: span, options, onSelect: value => {
+                span.classList.remove('yellow', 'blue', 'red', 'green')
+                span.classList.add(addClassSpan(value))
+              }
+            })
           }
         },
         {
-          headerName: 'Канал продаж', field: '', flex: 0.5, sortable: false,
-        },
-        {
-          headerName: 'Время сделки', field: '', flex: 0.5,
-          valueFormatter: params => params.value ? getFormattedDate(params.value) : 'нет'
-        },
-        {
-          headerName: 'Статус', field: 'status', flex: 0.5,
-        },
-        {
-          headerName: 'Действия', field: 'actions', flex: 0.4,
-          cellRenderer: params => this.actionCellRenderer(params), resizable: false, sortable: false
+          headerName: 'Действия', field: 'actions', width: 90, resizable: false, sortable: false,
+          cellRenderer: params => this.actionCellRenderer(params),
         }
       ],
+      // onModelUpdated: params => this.onModelUpdated(params),
+      // onFirstDataRendered: params => {
+      //   params.api.addEventListener('paginationChanged', e => this.onModelUpdated(params))
+      // },
     };
 
     const defaultParams = {
@@ -72,78 +116,67 @@ class TableTransactions extends Table {
 
     this.actionCellRenderer = this.actionCellRenderer.bind(this)
     this.enableEditing = this.enableEditing.bind(this)
+    // this.onModelUpdated = this.onModelUpdated.bind(this)
   }
 
+  // onModelUpdated() {
+  //   setTimeout(() => {
+  //     const rows = this.table.querySelectorAll('.ag-row')
+  //     if (rows.length) {
+  //       // rows.forEach((row, i) => row.style.zIndex = this.getAllRows().length - i)
+  //     }
+  //   }, 100)
+  // }
+
   actionCellRenderer(params) {
-    const { user_id, user_type } = params.data
     const row = params.eGridCell.closest('.ag-row')
-    const button = createElement('button', ['button-table-actions'], `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`);
-    let form
+    const button = createElement('button', { classes: ['button-table-actions'], content: `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>` });
 
     const tippyInstance = actions(button, {
-      onOpen: () => {
-
-      }
+      buttonsIs: [true, false],
+      onOpen: () => { }
     })
 
-    // tippyInstance.options.onEdit = instance => {
-    //   this.validatorRow?.revalidate().then(isValid => {
-    //     if (isValid) {
-    //       const formData = new FormData(form)
-    //       let data = {}
+    tippyInstance.options.onEdit = async instance => {
+      try {
+        this.loader.enable()
+        const { question_id, status, channel_id, sale_channel } = params.data
+        await this.setData('/_set_sale_channel_', { question_id, sale_channel_id: channel_id, sale_channel: sale_channel })
+        await this.setData('/_set_status_', { question_id, status })
+      } catch (error) {
+        console.log(error)
+        throw error
+      } finally {
+        instance.isEdit = false
+        this.disableEditing(row)
+        this.loader.disable()
+      }
+    }
 
-    //       formData.set('username', formData.get('username').replace(/[+() -]/g, ''))
-    //       Array.from(formData).forEach(obj => data[obj[0]] = obj[1])
-
-    //       this.editClient(data).finally(() => {
-    //         instance.toggleEdit(button)
-    //         instance.isEdit = false
-
-    //         this.disableEditing(row) // метод из родительского класса для откл редактирования полей
-    //         this.validatorRow.destroy()
-    //       })
-    //     }
-    //   })
-    // }
-
-    // tippyInstance.options.onEnableEdit = () => {
-    //   form = document.createElement('form')
-    //   const inputs = this.enableEditing(row) // метод из родительского класса для вкл редактирования полей
-
-    //   inputs.forEach(input => {
-    //     const inputClone = input.cloneNode(true);
-    //     inputClone.value = input.value; // Установить начальное значение
-    //     form.appendChild(inputClone);
-
-    //     if (input.name === 'username') {
-    //       Inputmask.default("+7 (999) 999-99-99").mask(input)
-    //     }
-
-    //     // Обработчик событий для синхронизации значений
-    //     input.addEventListener('input', () => {
-    //       inputClone.value = input.value;
-    //       this.validatorRow?.revalidateField(inputClone).then(isValid => {
-    //         if (isValid) {
-    //           input.classList.remove('just-validate-error-field')
-    //         } else {
-    //           input.classList.add('just-validate-error-field')
-    //         }
-    //       })
-    //     });
-    //   });
-
-    //   this.validatorRow = validateRow(form)
-    // }
+    tippyInstance.options.onEnableEdit = () => {
+      this.enableEditing(row)
+    }
 
     return button
   }
 
-  render(data) {
-    return
-    const { agreements, cnt_pages, page } = data;
+  onRendering([{ sales = [], cnt_pages, page }, { sale_channels = [] }]) {
+    sales.length && sales.forEach(sale => sale.sale_channels = sale_channels)
     this.setPage(page, cnt_pages)
-    this.gridApi.setGridOption('rowData', agreements)
-    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length])
+    this.gridApi.setGridOption('rowData', sales)
+    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, sales.length])
+  }
+
+  async setData(route, data) {
+    try {
+      const response = await api.post(`${route}${buildQueryParams(data)}`)
+      if (response.status !== 200) return null
+      outputInfo(response.data)
+      return response.data
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
   }
 }
 

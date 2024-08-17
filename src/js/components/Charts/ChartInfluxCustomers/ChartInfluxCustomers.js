@@ -2,8 +2,6 @@ import merge from 'lodash.merge'
 import BaseChart from "../BaseChart.js";
 import { getMonthName } from "../../../utils/getFormattedDate.js";
 import { Select } from '../../../modules/mySelect.js';
-import { createElement } from '../../../settings/createElement.js';
-import { plugins } from 'chart.js';
 
 class ChartInfluxCustomers extends BaseChart {
   constructor(ctx, addOptions = {}) {

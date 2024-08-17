@@ -2,7 +2,7 @@ import Dashboards from "../Dashboards.js";
 import TableAgreements from "../../../components/Tables/TableAgreements/TableAgreements.js";
 import TableTransactions from "../../../components/Tables/TableTransactions/TableTransactions.js";
 import ChartConversions from "../../../components/Charts/ChartConversions/ChartConversions.js";
-import { getAgreements, getSales } from "../../../settings/request.js";
+import { getSales, getSaleChannels, getAgreements, getSalesConversionRates } from "../../../settings/request.js";
 
 class Transactions extends Dashboards {
   constructor({ loader }) {
@@ -13,7 +13,14 @@ class Transactions extends Dashboards {
           tableSelector: '.table-transactions',
           TableComponent: TableTransactions,
           params: {
-            getData: getSales,
+            getData: async function (queryParams = {}) {
+              try {
+                return await Promise.all([getSales(queryParams), getSaleChannels()])
+              } catch (error) {
+                console.error(error)
+                throw error
+              }
+            },
           }
         },
         {
@@ -33,11 +40,11 @@ class Transactions extends Dashboards {
   }
 
   async getData(queryParams = {}) {
-    return Promise.all([getSales(queryParams), getAgreements(queryParams)])
+    return Promise.all([[await getSales(queryParams), await getSaleChannels()], getAgreements(queryParams)])
   }
 
-  async getDashboardData() {
-    return []
+  async getDashboardData(queryParams = {}) {
+    return getSalesConversionRates(queryParams)
   }
 }
 

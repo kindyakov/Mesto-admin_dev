@@ -6,51 +6,49 @@ class TableSalesChannels extends Table {
     const defaultOptions = {
       columnDefs: [
         {
-          headerName: 'Канал продаж', field: '', minWidth: 120, flex: 0.6,
+          headerName: 'Канал продаж', field: 'sale_channel', minWidth: 120, flex: 0.6,
         },
         {
-          headerName: 'Бюджет', field: '', minWidth: 80, flex: 0.4,
+          headerName: 'Бюджет', field: 'revenue', minWidth: 80, flex: 0.4,
           valueFormatter: params => params.value ? formattingPrice(params.value) : ''
         },
         {
-          headerName: 'Все лиды', field: '', minWidth: 80, flex: 0.4,
+          headerName: 'Все лиды', field: 'leads', minWidth: 80, flex: 0.4,
         },
         {
           headerName: 'Цена лида', field: '', minWidth: 100, flex: 0.5,
           valueFormatter: params => params.value ? formattingPrice(params.value) : ''
         },
         {
-          headerName: 'Количество сделок', field: '', minWidth: 70, flex: 0.4,
+          headerName: 'Количество сделок', field: 'lead_cost', minWidth: 70, flex: 0.4,
         },
         {
-          headerName: '% конверсии', field: '', minWidth: 80, flex: 0.5,
+          headerName: '% конверсии', field: 'conversion_rate', minWidth: 80, flex: 0.5,
           valueFormatter: params => params.value ? params.value + '%' : ''
         },
         {
-          headerName: 'Выручка', field: '', minWidth: 100, flex: 0.5,
+          headerName: 'Выручка', field: 'sales', minWidth: 100, flex: 0.5,
           valueFormatter: params => params.value ? formattingPrice(params.value) : ''
         },
         {
-          headerName: 'ROI', field: '', minWidth: 80, flex: 0.4, resizable: false,
+          headerName: 'ROI', field: 'roi', minWidth: 80, flex: 0.4, resizable: false,
           valueFormatter: params => params.value ? params.value + '%' : ''
         },
       ],
     };
 
     const defaultParams = {}
-    
+
     const mergedOptions = Object.assign({}, defaultOptions, options);
     const mergedParams = Object.assign({}, defaultParams, params);
 
     super(selector, mergedOptions, mergedParams);
   }
 
-  render(data) {
-    return
-    const { rooms, cnt_pages, page } = data;
-    this.setPage(page, cnt_pages)
-    this.gridApi.setGridOption('rowData', rooms)
-    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, rooms.length])
+  onRendering({ sale_channels_stats, cnt_pages, page }) {
+    // this.setPage(page, cnt_pages)
+    this.gridApi.setGridOption('rowData', sale_channels_stats)
+    // this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, sale_channels_stats.length])
   }
 }
 

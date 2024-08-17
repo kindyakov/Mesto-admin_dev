@@ -13,25 +13,24 @@
 		}
 		.ag-header {
 			border-bottom: 0;
-		}
-
-		[aria-colindex='3'],
-		[aria-colindex='4'] {
-			padding: 0 !important;
-			border: 1px solid #efefef;
-			cursor: pointer;
-			.ag-header-cell-comp-wrapper {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				.btn-custom-th {
-					width: 100%;
-					height: 100%;
+			[aria-colindex='3'],
+			[aria-colindex='4'] {
+				padding: 0 !important;
+				border: 1px solid #efefef;
+				cursor: pointer;
+				.ag-header-cell-comp-wrapper {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					.btn-custom-th {
+						width: 100%;
+						height: 100%;
+					}
 				}
 			}
-		}
-		[aria-colindex='3'] {
-			border-right: none;
+			[aria-colindex='3'] {
+				border-right: none;
+			}
 		}
 
 		.ag-row {
@@ -145,6 +144,45 @@
 		border-color: transparent !important;
 	}
 
+	.ag-cell-value {
+		&:has(.mySelect) {
+			overflow: visible;
+		}
+	}
+
+	.table-span-w {
+		border-radius: 22px;
+		padding: 6px 10px;
+		line-height: 100%;
+		font-weight: 500;
+		font-size: 14px;
+
+		&.yellow {
+			background-color: $yellow-light;
+			color: $yellow;
+		}
+
+		&.blue {
+			background-color: $blue-light;
+			color: $blue;
+		}
+
+		&.red {
+			background-color: $red-light;
+			color: $red;
+		}
+
+		&.green {
+			background-color: $green-light;
+			color: $green;
+		}
+
+		&.gray {
+			background-color: #eee;
+			color: #212b36;
+		}
+	}
+
 	.table-span-price {
 		color: $green;
 		font-weight: 500;
@@ -190,16 +228,17 @@
 	.days-left-p {
 		position: relative;
 		&._payments-soon {
-		&::before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 100%;
-			background-color: $red;
-			width: 6px;
-			height: 6px;
-			border-radius: 50%;
-		}}
+			&::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 100%;
+				background-color: $red;
+				width: 6px;
+				height: 6px;
+				border-radius: 50%;
+			}
+		}
 	}
 
 	&.table-clients {
@@ -278,6 +317,35 @@
 		gap: 10px;
 		justify-content: flex-end;
 		margin-left: auto;
+	}
+
+	.btn-custom-th {
+		transition: background-color 0.2s;
+		&:hover {
+			background-color: #e1edfd;
+		}
+	}
+
+	.btn-edit-th {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.icon-edit {
+		}
+
+		.icon-check {
+			display: none;
+			fill: $blue;
+		}
+
+		&._edit {
+			.icon-edit {
+				display: none;
+			}
+			.icon-check {
+				display: inline-block;
+			}
+		}
 	}
 }
 

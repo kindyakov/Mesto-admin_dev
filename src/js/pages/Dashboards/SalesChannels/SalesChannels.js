@@ -31,8 +31,8 @@ class SalesChannels extends Dashboards {
     });
   }
 
-  async getData(data = {}) {
-    return Promise.all([getSaleChannelsExpenses(), getSaleChannelsStats()]);
+  async getData(queryParams = {}) {
+    return Promise.all([getSaleChannelsExpenses(queryParams), getSaleChannelsStats(queryParams)]);
   }
 
   async getDashboardData() {

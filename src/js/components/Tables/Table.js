@@ -227,28 +227,28 @@ class Table {
 
   enableEditing(row) {
     if (!row) return []
-    const inputs = row.querySelectorAll('.cell-input')
+    const els = row.querySelectorAll('.cell-input, .mySelect')
 
-    inputs.length && inputs.forEach(input => {
-      const wpInput = input.closest('.wp-input-cell')
+    els.length && els.forEach(el => {
+      const wpInput = el.closest('.wp-input-cell')
       wpInput.classList.remove('not-edit')
-      input.classList.remove('not-edit')
-      input.removeAttribute('readonly')
+      el.classList.remove('not-edit')
+      el.removeAttribute('readonly')
     })
 
-    return inputs
+    return els
   }
 
   disableEditing(row) {
     if (!row) return
-    const inputs = row.querySelectorAll('.cell-input')
+    const els = row.querySelectorAll('.cell-input, .mySelect')
     const btn = row.querySelector('.button-table-actions')
 
-    inputs.length && inputs.forEach(input => {
-      const wpInput = input.closest('.wp-input-cell')
+    els.length && els.forEach(el => {
+      const wpInput = el.closest('.wp-input-cell')
       wpInput.classList.add('not-edit')
-      input.classList.add('not-edit')
-      input.setAttribute('readonly', true)
+      el.classList.add('not-edit')
+      el.setAttribute('readonly', true)
     })
 
     btn.classList.remove('_edit')

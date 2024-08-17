@@ -1,10 +1,6 @@
 import BaseChart from "../BaseChart.js"
 import merge from 'lodash.merge'
-import { Select } from '../../../modules/mySelect.js';
-
-function generateRandomData(length, min, max) {
-  return Array.from({ length }, () => Math.floor(Math.random() * (max - min + 1)) + min);
-}
+import { dateFormatter } from '../../../settings/dateFormatter.js';
 
 class ChartConversions extends BaseChart {
   constructor(ctx, addOptions = {}) {
@@ -16,83 +12,56 @@ class ChartConversions extends BaseChart {
     const defaultOptions = {
       type: 'line',
       data: {
-        labels: Array.from({ length: 30 }, (_, i) => i + 1), // Все дни месяца
+        labels: [],
         datasets: [{
           label: 'Факт',
-          data: generateRandomData(30, 5, 35), // Замените на ваши фактические данные
+          data: [],
           borderColor: '#3c50e0',
           color: '#3c50e0',
           pointBackgroundColor: '#fff',
           backgroundColor: gradient,
           pointRadius: 4,
           fill: true,
-
-          tension: 0.6
-        },
-        {
-          label: 'План',
-          data: generateRandomData(30, 5, 24), // Замените на ваши данные плана
-          borderColor: '#6f7d90',
-          color: '#6f7d90',
-          pointRadius: 0,
-          pointBackgroundColor: '#fff',
-          backgroundColor: gradient,
-          borderWidth: 2,
-          borderDash: [5, 5], // Пунктирная линия
-          fill: false,
           tension: 0.6
         }]
       },
       options: {
         scales: {
+          x: {
+            ticks: {
+              minRotation: 70,
+              font: {
+                size: 12,
+              },
+              callback: function (value, index, values) {
+                const [y, m, d] = this.chart.data.labels[index].split('-')
+                return `${d}-${m}`; // Число и месяц в две строки
+              }
+            }
+          },
           y: {
             beginAtZero: true,
           },
         },
-        plugins: {
-          legend: {
-            position: 'top'
-          },
-          tooltip: {
-            mode: 'index',
-            intersect: true
-          },
-          // Для заштрихованной области можно использовать плагин, например, chartjs-plugin-annotation
-        }
       },
     }
 
     super(ctx, merge({}, defaultOptions, addOptions));
-
-    this.datasets = {
-      plan: () => {
-        this.chart.data.datasets[0].hidden = true;
-        this.chart.data.datasets[1].hidden = false;
-        this.chart.update();
-      },
-      fact: () => {
-        this.chart.data.datasets[0].hidden = false;
-        this.chart.data.datasets[1].hidden = true;
-        this.chart.update();
-      },
-      planFact: () => {
-        this.chart.data.datasets[0].hidden = false;
-        this.chart.data.datasets[1].hidden = false;
-        this.chart.update();
-      },
-    };
-
-    this.selects = new Select({ uniqueName: 'select-chart-conversion', selectMinWidth: 125 });
-    this.selects.onChange = this.handleSelectChange.bind(this);
   }
 
-  handleSelectChange(e, select, value) {
-    if (this.datasets[value]) {
-      this.datasets[value]();
-    }
+  onExternal(tooltipEl, chart, tooltip) {
+    const dataI = tooltip.dataPoints[0].dataIndex
+    const date = chart.data.labels[dataI]
+    tooltipEl.insertAdjacentHTML('afterbegin', `<div><svg class="icon icon-calendar" style="width: 12px; height: 12px; fill: gray; margin-right: 2px;"><use xlink:href="img/svg/sprite.svg#calendar"></use></svg><span style="font-size: 12px; text-align: center;">${dateFormatter(date)}</span></div>`)
   }
 
-  render() { }
+  render({ conversions = [] }) {
+    const el = this.chart.canvas.closest('.chart').querySelector('.chart__title span')
+    el.textContent = conversions.length
+    this.chart.data.labels = conversions.length ? conversions.map(obj => obj.date) : []
+    this.chart.data.datasets[0].data = conversions.length ? conversions.map(obj => obj.conversion_rate) : []
+    this.chart.update()
+  }
 }
 
 export default ChartConversions

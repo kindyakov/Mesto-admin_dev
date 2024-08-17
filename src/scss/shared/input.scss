@@ -65,7 +65,8 @@
 		display: none;
 	}
 
-	.icon {
+	.icon-profile,
+	.icon-calendar {
 		position: absolute;
 		top: 50%;
 		left: 0;
@@ -84,7 +85,8 @@
 		}
 
 		&.not-edit {
-			.input-cell {
+			.input-cell,
+			.mySelect {
 				display: none;
 			}
 

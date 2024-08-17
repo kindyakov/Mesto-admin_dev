@@ -85,6 +85,7 @@ class Dashboards extends Page {
       }
     } catch (error) {
       console.error(error)
+      throw error
     } finally {
       this.loader.disable()
     }

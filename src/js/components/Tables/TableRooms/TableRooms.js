@@ -50,11 +50,13 @@ class TableRooms extends Table {
         {
           headerName: 'Клиент', field: 'fullname', minWidth: 300, flex: 1,
           cellRenderer: params => {
-            const span = createElement('p', ['table-p'], `
+            const span = createElement('p', {
+              classes: ['table-p'], content: `
               <svg class='icon icon-profile'>
                 <use xlink:href='img/svg/sprite.svg#profile'></use>
               </svg>
-              <span>${params.value ? params.value : '___'}</span>`)
+              <span>${params.value ? params.value : '___'}</span>`
+            })
             return span
           }
         },
@@ -94,10 +96,12 @@ class TableRooms extends Table {
         {
           headerName: '', field: '', minWidth: 250, flex: 1, sortable: false, resizable: false,
           cellRenderer: params => {
-            const div = createElement('div', ['table-buttons'], `${buttonsRoom(params.data)}
+            const div = createElement('div', {
+              classes: ['table-buttons'], content: `${buttonsRoom(params.data)}
             ${+params.data.rented === 0.75
-                ? `<button class="table-button button transparent" data-modal="" data-json="${dataStr(params.data)}"><span>Ускорить</span></button>`
-                : `<button class="table-button button transparent" data-modal="modal-confirm-open-room" data-json="${dataStr(params.data)}"><span>Открыть</span></button>`}`)
+                  ? `<button class="table-button button transparent" data-modal="" data-json="${dataStr(params.data)}"><span>Ускорить</span></button>`
+                  : `<button class="table-button button transparent" data-modal="modal-confirm-open-room" data-json="${dataStr(params.data)}"><span>Открыть</span></button>`}`
+            })
             return div
           }
         }

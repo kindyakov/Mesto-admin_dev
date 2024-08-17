@@ -15,14 +15,16 @@ class TableEmployee extends Table {
         {
           headerName: 'Фотоотчет', field: '', minWidth: 100, flex: 0.5, resizable: false, sortable: false,
           cellRenderer: params => {
-            const div = createElement('div', ['wrap-photo-report'], `
+            const div = createElement('div', {
+              classes: ['wrap-photo-report'], content: `
               <div data-src="${params.data.start_photo_link}" data-fancybox="table-employee" data-caption="Фото начало рабочего дня </br>Время: ${params.data.time_start}</br>Сотрудник: ${params.data.manager_fullname}">
                 <img src="${params.data.start_photo_link}"/>
               </div>
               ${params.data.end_photo_link ? `
               <div data-src="${params.data.end_photo_link}" data-fancybox="table-employee" data-caption="Фото завершения рабочего дня </br>Время: ${params.data.time_end}</br>Сотрудник: ${params.data.manager_fullname}">
                 <img src="${params.data.end_photo_link}"/>
-              </div>`: ''}`)
+              </div>`: ''}`
+            })
             return div
           }
         },

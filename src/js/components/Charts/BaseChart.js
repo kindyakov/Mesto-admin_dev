@@ -1,5 +1,6 @@
 import Chart from 'chart.js/auto'
 import merge from 'lodash.merge'
+import { createElement } from '../../settings/createElement.js';
 
 class BaseChart {
   constructor(ctx, options = {}) {
@@ -55,12 +56,18 @@ class BaseChart {
                 return;
               }
 
-              const dataI = tooltip.dataPoints[0].dataIndex
-              const data1 = chart.data.datasets[0]
-              const data2 = chart.data.datasets[1]
+              tooltipEl.innerHTML = ''
 
-              tooltipEl.innerHTML = `<div><b style="background: ${data1.color};"></b><span class="value">${data1.data[dataI]}</span></div>
-              <div><b style="background: ${data2.color};"></b><span class="value">${data2.data[dataI]}</span></div>`
+              const dataI = tooltip.dataPoints[0].dataIndex
+
+              chart.data.datasets.length && chart.data.datasets.forEach(obj => {
+                const el = createElement('div', {
+                  content: `<b style="background: ${obj.color};"></b><span class="value">${obj.data[dataI]}</span>`
+                })
+
+                tooltipEl.appendChild(el)
+              });
+
               tooltipEl.style.opacity = 1;
               tooltipEl.style.left = (chart.canvas.offsetLeft + tooltip.caretX) - tooltipEl.clientWidth - 6 + 'px';
               tooltipEl.style.top = (chart.canvas.offsetTop + tooltip.caretY) - tooltipEl.clientHeight - 6 + 'px';

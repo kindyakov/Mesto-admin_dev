@@ -1,0 +1,44 @@
+.main__content[data-content='dashboards/sales-channels'] {
+	.charts {
+		.table {
+			* {
+				// border-color: red !important;
+			}
+			@media (max-width: $md2) {
+				flex: 1 1 auto !important;
+			}
+
+			.ag-cell {
+				border-right: 1px solid #efefef;
+				&:has(.wp-input) {
+					padding: 0;
+
+					.wp-input,
+					.cell-input {
+						width: 100%;
+						height: 100%;
+					}
+					.cell-input {
+						padding-left: 15px;
+						padding-right: 15px;
+						border: none;
+						background-color: #eff4fb;
+
+						&.not-edit {
+							background-color: transparent;
+						}
+
+						&._err {
+							background-color: $red-light;
+						}
+
+						// @media (max-width: $md2) {
+						// 	padding-left: 10px;
+						// 	padding-right: 10px;
+						// }
+					}
+				}
+			}
+		}
+	}
+}

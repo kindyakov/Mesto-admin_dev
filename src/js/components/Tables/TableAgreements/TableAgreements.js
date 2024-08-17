@@ -33,7 +33,7 @@ class TableAgreements extends Table {
         {
           headerName: 'Платеж в мес.', field: 'price', minWidth: 100, flex: 0.5,
           cellRenderer: params => {
-            const span = createElement('span', ['table-span-price'])
+            const span = createElement('span', { classes: ['table-span-price'] })
             span.innerHTML = params.value ? formattingPrice(params.value) : 'нет'
             return cellRendererInput(params, { el: span })
           }
@@ -41,7 +41,7 @@ class TableAgreements extends Table {
         {
           headerName: 'Ячейки', field: 'room_ids', minWidth: 90, flex: 0.5,
           cellRenderer: params => {
-            const span = createElement('span', ['span-rooms-id'], `нет`)
+            const span = createElement('span', { classes: ['span-rooms-id'], content: `нет` })
             if (params.value) {
               span.innerHTML = addPrefixToNumbers(params.value)
               if (params.value.length > 1) {
@@ -89,21 +89,16 @@ class TableAgreements extends Table {
   actionCellRenderer(params) {
     const { user_id, user_type } = params.data
     const row = params.eGridCell.closest('.ag-row')
-    const button = createElement('button', ['button-table-actions'], `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`);
+    const button = createElement('button', {
+      classes: ['button-table-actions'], content: `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`
+    });
     let form
 
     const tippyInstance = actions(button, {
-      onOpen: () => {
-
-      },
-      buttons: [
-        (options = {}) => {
-          const button = createElement('button', ['tippy-button', 'table-tippy-client__button', 'btn-open'], `<svg class='icon icon-arrow-right-circle' styles="fill: none;"><use xlink:href='img/svg/sprite.svg#arrow-right-circle'></use></svg><span>Открыть</span>`)
-          return button
-        }
-      ],
+      buttonsIs: [true, false],
       attrModal: 'modal-agreement',
-      data: params.data
+      data: params.data,
+      onOpen: () => { },
     })
 
     return button

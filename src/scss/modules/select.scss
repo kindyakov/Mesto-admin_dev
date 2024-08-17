@@ -48,6 +48,8 @@
 		gap: 10px;
 
 		.icon-arrow {
+			position: relative;
+			inset: auto;
 			width: 12px;
 			height: 8px;
 			fill: #a8b0b9;
@@ -83,6 +85,16 @@
 		&::-webkit-scrollbar {
 			width: 2px;
 			height: 2px;
+		}
+
+		&._canceling-styles {
+			position: relative;
+			inset: auto;
+			opacity: 1;
+			visibility: visible;
+			max-height: 155px;
+			overflow-y: auto;
+			font-size: 13px;
 		}
 	}
 

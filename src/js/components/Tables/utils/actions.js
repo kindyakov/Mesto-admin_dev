@@ -3,6 +3,7 @@ import tippy from '../../../configs/tippy.js';
 let defaultOptions = {
   tippyInstance: null,
   isEdit: false,
+  buttonsIs: [true, true],
   buttons: [
     (options = {}) => {
       const button = document.createElement('button')
@@ -41,17 +42,19 @@ export function actions(button, opt = {}) {
       const content = document.createElement('div')
       content.classList.add('tippy', 'table-tippy-client')
 
-      options.buttons.forEach(func => {
-        const btn = func()
-        btn.setAttribute('data-json', JSON.stringify(options.data))
+      options.buttons.forEach((func, i) => {
+        if (options.buttonsIs[i]) {
+          const btn = func()
+          btn.setAttribute('data-json', JSON.stringify(options.data))
 
-        if (btn.classList.contains('btn-open')) {
-          btn.setAttribute('data-modal', options.attrModal)
+          if (btn.classList.contains('btn-open')) {
+            btn.setAttribute('data-modal', options.attrModal)
+          }
+
+          btn.addEventListener('click', handleClick)
+
+          content.appendChild(btn)
         }
-
-        btn.addEventListener('click', handleClick)
-
-        content.appendChild(btn)
       })
 
       function handleClick(e) {

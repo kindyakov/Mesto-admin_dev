@@ -10,7 +10,7 @@ function getCreate(rout) {
       if (response.status !== 200) return null
       return response.data
     } catch (error) {
-      console.log(error)
+      console.error(error)
       throw error
     }
   }
@@ -106,6 +106,8 @@ export const getSaleChannels = getCreate('/_get_sale_channels_')
 export const getSaleChannelsExpenses = getCreate('/_get_sale_channels_expenses_')
 
 export const getSaleChannelsStats = getCreate('/_get_sale_channels_stats_')
+
+export const getSalesConversionRates = getCreate('/_get_sales_conversion_rates_')
 // ============================================================================>
 
 export const getClientTotal = getCreateTotal('/_get_client_total_')

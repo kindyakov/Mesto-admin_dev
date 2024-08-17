@@ -36,12 +36,13 @@ class ModalAgreement extends BaseModal {
       maxWidth: 450,
       placement: 'top-end',
       content: (reference) => {
-        const confirmation = createElement('div', ['confirmation-modal', 'confirmation-completion-agreement']);
-        const confirmationContent = createElement('div', ['confirmation-modal__content'], `
+        const confirmation = createElement('div', { classes: ['confirmation-modal', 'confirmation-completion-agreement'] })
+        const confirmationContent = createElement('div', {
+          classes: ['confirmation-modal__content'], content: `
           <h5 class="confirmation-modal__title">Уверены ли Вы что хотите завершить договор?</h5>
           <p class="confirmation-modal__text">Дата завершения договора: <span>${getFormattedDate()}</span></p>
           <!-- <div class="confirmation-modal__rooms"></div> -->
-        `);
+        `});
         // const confirmationRooms = createElement('div', ['confirmation-modal__rooms'])
 
         // const buttonsRoom = rooms.map((room, i) => {
@@ -62,9 +63,9 @@ class ModalAgreement extends BaseModal {
         //   return btnRoom
         // })
 
-        const confirmationFooter = createElement('div', ['confirmation-modal__footer']);
-        const btnNo = createElement('button', ['button', 'transparent', 'btn-no'], '<span>Нет</span>');
-        const btnYes = createElement('button', ['button', 'btn-yes'], '<span>Да</span>');
+        const confirmationFooter = createElement('div', { classes: ['confirmation-modal__footer'] });
+        const btnNo = createElement('button', { classes: ['button', 'transparent', 'btn-no'], content: '<span>Нет</span>' });
+        const btnYes = createElement('button', { classes: ['button', 'btn-yes'], content: '<span>Да</span>' });
 
         btnNo.addEventListener('click', () => this.handleClickConfirmation(false));
         btnYes.addEventListener('click', () => this.handleClickConfirmation(true));
