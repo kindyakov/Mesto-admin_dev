@@ -6,7 +6,7 @@ class TableSalesChannels extends Table {
     const defaultOptions = {
       columnDefs: [
         {
-          headerName: 'Канал продаж', field: 'sale_channel', minWidth: 120, flex: 0.6,
+          headerName: 'Канал продаж', field: 'sale_channel_name', minWidth: 120, flex: 0.6,
         },
         {
           headerName: 'Бюджет', field: 'revenue', minWidth: 80, flex: 0.4,
@@ -35,9 +35,13 @@ class TableSalesChannels extends Table {
           valueFormatter: params => params.value ? params.value + '%' : ''
         },
       ],
+      pagination: false,
+      domLayout: 'autoHeight',
     };
 
-    const defaultParams = {}
+    const defaultParams = {
+      isPagination: false,
+    }
 
     const mergedOptions = Object.assign({}, defaultOptions, options);
     const mergedParams = Object.assign({}, defaultParams, params);

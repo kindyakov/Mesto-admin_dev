@@ -8,6 +8,16 @@
 				flex: 1 1 auto !important;
 			}
 
+			.ag-row {
+				&::before {
+					display: none;
+				}
+				
+				&:hover {
+					background-color: #fff !important;
+				}
+			}
+
 			.ag-cell {
 				border-right: 1px solid #efefef;
 				&:has(.wp-input) {

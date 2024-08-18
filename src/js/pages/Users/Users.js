@@ -45,8 +45,8 @@ class Users extends Page {
     employees.forEach(employee => {
       const managerId = employee.chief_id;
       if (managerId !== null) {
-        const manager = employeesById[managerId];
-        manager.subordinates.push(employee);
+        const manager = employeesById[managerId]
+        manager && manager.subordinates.push(employee)
       }
     });
 

@@ -128,6 +128,10 @@
 			}
 		}
 
+		&:has(.btn-del) {
+			padding: 0;
+		}
+
 		@media (max-width: $md2) {
 			padding-left: 10px;
 			padding-right: 10px;
@@ -323,6 +327,47 @@
 		transition: background-color 0.2s;
 		&:hover {
 			background-color: #e1edfd;
+		}
+	}
+
+	.btn-del {
+		width: 100%;
+		height: 100%;
+		transition: background-color 0.2s;
+		opacity: 0;
+		visibility: hidden;
+
+		&::before,
+		&::after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 15px;
+			height: 2px;
+			background-color: #474747;
+		}
+
+		&::before {
+			transform: translate(-50%, -50%) rotate(45deg);
+		}
+		&::after {
+			transform: translate(-50%, -50%) rotate(-45deg);
+		}
+
+		&._show {
+			opacity: 1;
+			visibility: visible;
+			&:hover {
+				&::before,
+				&::after {
+					background-color: $red;
+				}
+			}
+
+			&:active {
+				background-color: $red-light;
+			}
 		}
 	}
 

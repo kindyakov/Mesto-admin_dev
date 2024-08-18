@@ -1,4 +1,4 @@
-export const createElement = (tag, { classes = [], attributes = [], content = '' }) => {
+export const createElement = (tag, { classes = [], attributes = [], content = '' } = {}) => {
   const el = document.createElement(tag);
 
   // Добавляем классы

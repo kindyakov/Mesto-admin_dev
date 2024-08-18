@@ -20,7 +20,6 @@ let lastCallTime = 0;
 
 export const outputInfo = (options, callback) => {
   const now = Date.now();
-
   // if (now - lastCallTime < defaultOptions.throttleTime) {
   //   return; // Прерываем вызов функции, если он происходит слишком часто
   // }

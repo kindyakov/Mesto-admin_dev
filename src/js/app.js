@@ -9,10 +9,11 @@ import { useDynamicAdapt } from "./utils/dynamicAdapt.js"
 import { burger, fixedSideBar } from "./utils/header.js";
 
 import { modalMap } from "./modalMap.js";
+import { outputInfo } from "./utils/outputinfo.js";
 
 window.app = {
   warehouses: [],
-  warehouse: null
+  warehouse: null,
 }
 
 const nav = new Navigation();

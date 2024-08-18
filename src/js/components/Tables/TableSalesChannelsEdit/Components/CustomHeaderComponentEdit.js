@@ -3,6 +3,7 @@ import { api } from '../../../../settings/api.js';
 import { outputInfo } from '../../../../utils/outputinfo.js';
 import { Loader } from '../../../../modules/myLoader.js';
 import { inputValidator } from '../../../../settings/validates.js';
+import { formattingPrice } from '../../../../utils/formattingPrice.js';
 
 class CustomHeaderComponentEdit {
   constructor() {
@@ -38,6 +39,9 @@ class CustomHeaderComponentEdit {
 
     rowsWithElements.length && rowsWithElements.forEach(({ data, element }) => {
       const input = element.querySelector('input')
+      const btnDel = element.querySelector('.btn-del')
+
+      btnDel.classList.toggle('_show')
       this.setReadonly(input, !isEditMode)
 
       if (!isEditMode) {
@@ -78,9 +82,11 @@ class CustomHeaderComponentEdit {
     if (isReadonly) {
       input.setAttribute('readonly', 'true');
       input.classList.add('not-edit');
+      input.value = formattingPrice(+input.value)
     } else {
       input.removeAttribute('readonly');
       input.classList.remove('not-edit');
+      this.handleInput(input)
     }
   }
 

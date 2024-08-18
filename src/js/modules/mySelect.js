@@ -88,6 +88,7 @@ export class Select {
       const inputHtml = select.getAttribute('data-input-html') || this.options.inputHtml
       const selectMinWidth = select.getAttribute('data-select-min-width') || this.options.selectMinWidth
       const selectMaxWidth = select.getAttribute('data-select-max-width') || this.options.selectMaxWidth
+      this.options.maxHeightList = select.getAttribute('data-select-max-height-list') || this.options.maxHeightList
       const prefix = select.getAttribute('data-prefix') || ''
 
       const customSelect = this.customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder, isDisabled, inputHtml, prefix })
@@ -173,14 +174,12 @@ export class Select {
   }
 
   open(select) {
-    const maxHeightList = select.getAttribute('data-select-maw-height-list') || this.options.maxHeightList
-
     const selectList = select.querySelector(this.options.selectList)
 
     this.selectsCustom.forEach(_select => this.close(_select))
     select.classList.add(this.options.classActive)
-    selectList.style.maxHeight = maxHeightList ? maxHeightList + 'px' : selectList.scrollHeight + 'px'
-    if (maxHeightList) {
+    selectList.style.maxHeight = this.options.maxHeightList ? this.options.maxHeightList + 'px' : selectList.scrollHeight + 'px'
+    if (this.options.maxHeightList) {
       selectList.style.overflowY = 'auto'
     }
 

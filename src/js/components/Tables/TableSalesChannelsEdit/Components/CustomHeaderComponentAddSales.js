@@ -55,10 +55,11 @@ class CustomHeaderComponentAddSales {
     if (!this.value) return
     const rowCount = this.params.api.getDisplayedRowCount()
     const rowNode = this.params.api.getDisplayedRowAtIndex(0)
-    const formData = new FormData()
-    const emptyRow = { ...rowNode.data, channel_id: rowCount + 1, sale_channel: this.value, expenses: null }
-    formData.set('sale_channel_name', this.value)
+    const emptyRow = { month: null, ...rowNode?.data, channel_id: rowCount + 1, sale_channel_name: this.value, expenses: null }
 
+    const formData = new FormData()
+    formData.set('sale_channel_name', this.value)
+    
     this.addSaleChannel(formData).then(({ msg_type }) => {
       if (msg_type === 'success') {
         this.params.api.applyTransaction({ add: [emptyRow] });

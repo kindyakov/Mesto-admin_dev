@@ -1,19 +1,22 @@
 import Table from '../Table.js';
+import dataPicker from '../../../configs/datepicker.js';
 import CustomHeaderComponentAddSales from './Components/CustomHeaderComponentAddSales.js';
 import CustomHeaderComponentEdit from './Components/CustomHeaderComponentEdit.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
-import { formattingPrice } from '../../../utils/formattingPrice.js';
+import { createElement } from '../../../settings/createElement.js';
+import { api } from '../../../settings/api.js';
+import { outputInfo } from '../../../utils/outputinfo.js';
 
 class TableSalesChannelsEdit extends Table {
   constructor(selector, options, params) {
     const defaultOptions = {
       columnDefs: [
         {
-          headerName: 'Канал продаж', field: 'sale_channel', minWidth: 120, flex: 0.6, resizable: false,
+          headerName: 'Канал продаж', field: 'sale_channel_name', minWidth: 120, flex: 0.6, resizable: false,
         },
         {
           headerName: 'Сумма затрат', field: 'expenses', minWidth: 80, flex: 0.4, resizable: false,
-          cellRenderer: params => cellRendererInput(params, { funcFormate: formattingPrice, inputmode: 'numeric' })
+          cellRenderer: params => cellRendererInput(params, { inputmode: 'numeric' })
         },
         {
           headerName: '', field: '', minWidth: 40, width: 40, resizable: false, sortable: false,
@@ -26,13 +29,29 @@ class TableSalesChannelsEdit extends Table {
           headerComponent: CustomHeaderComponentEdit
         },
         {
-          headerName: '', field: '', minWidth: 40, width: 40, resizable: false, sortable: false,
+          headerName: '', field: 'channel_id', minWidth: 40, width: 40, resizable: false, sortable: false,
           headerComponentParams: {
             template: `<svg class='icon icon-plus' style="flex-shrink: 0; width: 10px; height: 10px;">
                         <use xlink:href='img/svg/sprite.svg#plus'></use>
                       </svg>`,
           },
           headerComponent: CustomHeaderComponentAddSales,
+          cellRenderer: ({ api, value, data }) => {
+            const button = createElement('button', { classes: ['btn-del'] })
+
+            button.addEventListener('click', () => {
+              const formData = new FormData()
+              formData.set('sale_channel_id', value)
+
+              this.deleteSaleChannel(formData).then(({ msg_type = '' }) => {
+                if (msg_type === 'success') {
+                  api.applyTransaction({ remove: [data] })
+                }
+              })
+            })
+
+            return button
+          }
         },
       ],
       pagination: false,
@@ -46,12 +65,37 @@ class TableSalesChannelsEdit extends Table {
     const mergedParams = Object.assign({}, defaultParams, params);
 
     super(selector, mergedOptions, mergedParams);
+
+    const datepicker = dataPicker(this.wpTable.querySelector('.input-date-filter-month'), {
+      view: 'months',
+      minView: 'months',
+      dateFormat: 'yyyy-MM',
+      position: 'bottom right',
+      onSelect: ({ date, formattedDate, datepicker }) => {
+        this.changeQueryParams({ [datepicker.$el.name]: formattedDate })
+      }
+    });
   }
 
   onRendering({ sale_channels = [] }) {
     // this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', sale_channels)
     this.gridApi.setGridOption('paginationPageSize', sale_channels.length + 20)
+  }
+
+  async deleteSaleChannel(formData) {
+    try {
+      this.loader.enable()
+      const response = await api.post('/_delete_sale_channel_', formData)
+      if (response.status !== 200) return null
+      outputInfo(response.data)
+      return response.data
+    } catch (error) {
+      console.error(error)
+      throw error
+    } finally {
+      this.loader.disable()
+    }
   }
 }
 

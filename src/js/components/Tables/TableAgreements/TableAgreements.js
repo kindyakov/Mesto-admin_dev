@@ -95,7 +95,7 @@ class TableAgreements extends Table {
     let form
 
     const tippyInstance = actions(button, {
-      buttonsIs: [true, false],
+      buttonsIs: [false, true],
       attrModal: 'modal-agreement',
       data: params.data,
       onOpen: () => { },

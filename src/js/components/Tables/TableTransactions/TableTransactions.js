@@ -41,14 +41,14 @@ class TableTransactions extends Table {
           headerName: 'Канал продаж', field: 'sale_channel', minWidth: 180, flex: 0.8,
           cellRenderer: params => {
             const { sale_channels } = params.data
-            const options = sale_channels.map(obj => obj.sale_channel)
+            const options = sale_channels.map(obj => obj.sale_channel_name)
             params.value = options[0]
             params.setValue(params.value)
             params.data.channel_id = sale_channels[0].channel_id
             const span = createElement('span', { classes: ['table-span-w', 'gray'], content: params.value })
             return cellRendererSelect(params, {
               el: span, options, onSelect: value => {
-                const [filterChannel] = sale_channels.filter(channel => channel.sale_channel == value)
+                const [filterChannel] = sale_channels.filter(channel => channel.sale_channel_name == value)
                 params.data.channel_id = filterChannel.channel_id
               }
             })
@@ -100,10 +100,6 @@ class TableTransactions extends Table {
           cellRenderer: params => this.actionCellRenderer(params),
         }
       ],
-      // onModelUpdated: params => this.onModelUpdated(params),
-      // onFirstDataRendered: params => {
-      //   params.api.addEventListener('paginationChanged', e => this.onModelUpdated(params))
-      // },
     };
 
     const defaultParams = {
@@ -116,17 +112,7 @@ class TableTransactions extends Table {
 
     this.actionCellRenderer = this.actionCellRenderer.bind(this)
     this.enableEditing = this.enableEditing.bind(this)
-    // this.onModelUpdated = this.onModelUpdated.bind(this)
   }
-
-  // onModelUpdated() {
-  //   setTimeout(() => {
-  //     const rows = this.table.querySelectorAll('.ag-row')
-  //     if (rows.length) {
-  //       // rows.forEach((row, i) => row.style.zIndex = this.getAllRows().length - i)
-  //     }
-  //   }, 100)
-  // }
 
   actionCellRenderer(params) {
     const row = params.eGridCell.closest('.ag-row')
