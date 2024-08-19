@@ -1,7 +1,7 @@
 export function employeeHtml(data) {
   return `<div class="employee__body">
         <div class="employee__img">
-          <img src="">
+          <img src="./img/ava.jpg">
         </div>
         <div class="employee__content">
           <h6>${data.manager_fullname ? data.manager_fullname : ''}</h6>

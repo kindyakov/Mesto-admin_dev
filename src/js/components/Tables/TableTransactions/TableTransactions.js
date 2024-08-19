@@ -21,7 +21,7 @@ class TableTransactions extends Table {
             let value = 'нет'
             if (params.value) {
               const [date, time] = params.value.split(' ')
-              value = `${getFormattedDate(date)} ${time}`
+              value = `${getFormattedDate(date)} ${time ? time : '00:00:00'}`
             }
             return value
           }
@@ -41,6 +41,7 @@ class TableTransactions extends Table {
           headerName: 'Канал продаж', field: 'sale_channel', minWidth: 180, flex: 0.8,
           cellRenderer: params => {
             const { sale_channels } = params.data
+            if (!sale_channels.length) return ''
             const options = sale_channels.map(obj => obj.sale_channel_name)
             params.value = options[0]
             params.setValue(params.value)

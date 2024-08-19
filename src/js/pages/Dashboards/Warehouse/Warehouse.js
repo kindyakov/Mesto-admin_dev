@@ -62,7 +62,7 @@ class Warehouse extends Dashboards {
       const { rented_cnt } = data
       const [rented, str] = widget.getAttribute('data-render-widget').split(',')
       const [currentData = null] = rented_cnt.filter(obj => +obj.rented === +rented)
-      widget.innerText = currentData ? `${currentData.rate}% (${currentData.cnt})` : '0% (0)'
+      widget.innerText = currentData ? `${currentData.rate}% (${currentData.cnt}, ${+currentData.area.toFixed(1)} м²)` : '0% (0)'
     });
   }
 

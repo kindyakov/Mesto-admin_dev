@@ -156,7 +156,7 @@
 			padding-bottom: 6px;
 		}
 		.warehouse__body_room {
-			max-width: 300px;
+			max-width: 340px;
 		}
 	}
 
@@ -565,6 +565,7 @@
 				background-color: $green-light;
 				border-radius: 22px;
 				padding: 6px 10px;
+				white-space: nowrap;
 			}
 			.text {
 				font-weight: 500;
@@ -574,6 +575,7 @@
 				background-color: #eee;
 				border-radius: 22px;
 				padding: 6px 10px;
+				white-space: nowrap;
 			}
 		}
 
@@ -647,6 +649,14 @@
 		&.transparent {
 			padding: 10px;
 			background-color: #eff4fb;
+		}
+	}
+}
+
+.main__content[data-content='dashboards/warehouse'] {
+	.widgets__item_content {
+		.value {
+			@include adaptiv-font(18, 14, 1);
 		}
 	}
 }

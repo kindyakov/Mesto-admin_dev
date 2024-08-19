@@ -1,13 +1,13 @@
 import { formatPhoneNumber, formattingPrice } from "../../utils/formattingPrice.js";
-import { getFormattedDate } from "../../utils/getFormattedDate.js";
+import { dateFormatter } from "../../settings/dateFormatter.js";
 
-function typeRoom({ rented }) {
+function typeRoom({ rented, rentenddate }) {
   const text = {
     0: 'Свободно',
     0.25: 'Гостевые',
     0.4: 'Не оплачено',
     0.5: 'Забронировано',
-    0.75: 'Выезд',
+    0.75: `Выезд: ${rentenddate ? dateFormatter(rentenddate) : ''}`,
     1: 'Занято',
   }
 
@@ -51,7 +51,7 @@ export function roomHtml(data) {
               ${data.rented == 0 ? '' : `
                 <div class="room__content_info">
                   ${data.fullname ? `
-                  <p>
+                  <p data-modal="modal-client" data-json="${dataStr(data)}" style="cursor: pointer;">
                     <svg class='icon icon-user'>
                       <use xlink:href='img/svg/sprite.svg#user'></use>
                     </svg>
@@ -71,7 +71,7 @@ export function roomHtml(data) {
             <div class="room__bottom">
               ${buttonsRoom(data)}
               ${+data.rented === 0.75 ?
-    `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal=""><span>Ускорить</span></button>` : `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal="modal-confirm-open-room"><span>Открыть</span></button>`}
+      `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal=""><span>Ускорить</span></button>` : `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal="modal-confirm-open-room"><span>Открыть</span></button>`}
             </div>
           </div>`
 }
@@ -80,7 +80,7 @@ export function rowHtml(data) {
   return `
   <div class="warehouse__confirmation_row">
                 <p class="name">${data.fullname ? data.fullname : ''}</p>
-                <span class="span">Выезд:<b>${data.rentenddate ? getFormattedDate(data.rentenddate) : ''}</b></span>
+                <span class="span">Выезд:<b>${data.rentenddate ? dateFormatter(data.rentenddate) : ''}</b></span>
                 <button class="button table-button" data-modal="modal-confirmation-departure" data-json="${dataStr(data)}"><span>Подтвердить</span></button>
               </div>`
 }
