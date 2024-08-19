@@ -23,6 +23,7 @@ class BaseTableForecast extends Table {
     this.emptyRow = {};
     this.data = [];
     this.endpoint = params.endpoint || ''
+    this.keysQueryParams = params.keysQueryParams || []
     this.gridOptions.columnDefs.forEach(coll => coll.field ? this.emptyRow[coll.field] = 0 : '');
 
     this.btnEditCellRenderer = this.btnEditCellRenderer.bind(this)
@@ -79,8 +80,15 @@ class BaseTableForecast extends Table {
         delete data.isNew;
         this.data = [...this.data, data];
       }
+      const queryParams = { day: data.data }
 
-      this.setPlan(data, this.endpoint);
+      Object.keys(data).forEach(key => {
+        if (this.keysQueryParams.includes(key)) {
+          queryParams[key] = data[key]
+        }
+      })
+
+      this.setPlan(queryParams, this.endpoint);
     }
   }
 

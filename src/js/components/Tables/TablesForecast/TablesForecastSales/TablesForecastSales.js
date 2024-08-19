@@ -27,6 +27,10 @@ class TablesForecastSales extends BaseTableForecast {
         },
         {
           headerName: '% выполнения', field: '', minWidth: 80, flex: 0.4,
+          valueFormatter: params => {
+            const { leads_fact, leads_planned } = params.data
+            return +leads_planned ? (+leads_fact / +leads_planned * 100).toFixed(2) + '%' : '—'
+          }
         },
         {
           headerName: 'Количество лидов нарастающим итогом (план)', field: 'leads_accumulated_planned', minWidth: 80, flex: 0.5,
@@ -40,7 +44,7 @@ class TablesForecastSales extends BaseTableForecast {
           headerName: '% выполнения', field: '', minWidth: 80, flex: 0.5,
           valueFormatter: params => {
             const { leads_accumulated_fact, leads_accumulated_planned } = params.data
-            return +leads_accumulated_planned ? +leads_accumulated_fact / +leads_accumulated_planned * 100 + '%' : '—'
+            return +leads_accumulated_planned ? (+leads_accumulated_fact / +leads_accumulated_planned * 100).toFixed(2) + '%' : '—'
           }
         },
         {
@@ -54,7 +58,7 @@ class TablesForecastSales extends BaseTableForecast {
           headerName: '% выполнения', field: '', minWidth: 80, flex: 0.4, resizable: false,
           valueFormatter: params => {
             const { sales, sales_planned } = params.data
-            return +sales_planned ? +sales / +sales_planned * 100 + '%' : '—'
+            return +sales_planned ? (+sales / +sales_planned * 100).toFixed(2) + '%' : '—'
           }
         },
         {
@@ -66,7 +70,8 @@ class TablesForecastSales extends BaseTableForecast {
 
     const defaultParams = {
       isPagination: false,
-      endpoint: '/_set_sales_plan_'
+      endpoint: '/_set_sales_plan_',
+      keysQueryParams: ['leads_accumulated_fact', 'leads_accumulated_planned', 'leads_fact', 'leads_planned', 'sales_planned']
     }
 
     const mergedOptions = Object.assign({}, defaultOptions, options);

@@ -31,7 +31,7 @@ class TableForecastArea extends BaseTableForecast {
           headerName: '% выполнения', field: '', minWidth: 80, flex: 0.4,
           valueFormatter: params => {
             const { revenue, revenue_planned } = params.data
-            return +revenue_planned ? +revenue / +revenue_planned * 100 + '%' : '—'
+            return +revenue_planned ? (+revenue / +revenue_planned * 100).toFixed(2) + '%' : '—'
           }
         },
         {
@@ -67,7 +67,7 @@ class TableForecastArea extends BaseTableForecast {
           headerName: '% выполнения', field: '', minWidth: 80, flex: 0.6, resizable: false,
           valueFormatter: params => {
             const { rented_area, rented_area_planned } = params.data
-            return +rented_area_planned ? +rented_area / +rented_area_planned * 100 + '%' : '—'
+            return +rented_area_planned ? (+rented_area / +rented_area_planned * 100).toFixed(2) + '%' : '—'
           }
         },
         {
@@ -80,7 +80,8 @@ class TableForecastArea extends BaseTableForecast {
 
     const defaultParams = {
       isPagination: false,
-      endpoint: '/_set_finance_plan_'
+      endpoint: '/_set_finance_plan_',
+      keysQueryParams: ['revenue', 'revenue_accumulated', 'outflow_area', 'inflow_area', 'rented_area']
     }
 
     const mergedOptions = Object.assign({}, defaultOptions, options);
