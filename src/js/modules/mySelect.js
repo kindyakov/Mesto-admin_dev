@@ -214,7 +214,7 @@ export class Select {
       this.changeSelectOption(select, optionValue)
       this.close(select)
 
-      this.onChange(option, select, optionValue)
+      // this.onChange(option, select, optionValue)
     })
   }
 
