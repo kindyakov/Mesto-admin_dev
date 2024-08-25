@@ -70,7 +70,7 @@ class BaseTableForecast extends Table {
       if (isEditMode) {
         input.addEventListener('input', this.validateInputHandler);
       } else {
-        data[input.name] = +input.value;
+        data[input.name] = input.name === 'data' ? input.dataset.value : +input.value;
         input.removeEventListener('input', this.validateInputHandler);
       }
     });
@@ -80,7 +80,7 @@ class BaseTableForecast extends Table {
         delete data.isNew;
         this.data = [...this.data, data];
       }
-      const queryParams = { day: data.data }
+      const queryParams = { day: data.data, month_or_day: this.queryParams.month_or_day || 'day' }
 
       Object.keys(data).forEach(key => {
         if (this.keysQueryParams.includes(key)) {

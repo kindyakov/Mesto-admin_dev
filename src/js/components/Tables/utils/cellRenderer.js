@@ -2,10 +2,10 @@ import tippy from "../../../configs/tippy.js"
 import { exSelect } from "../../../modules/mySelect.js"
 import { createElement } from "../../../settings/createElement.js"
 
-const defaultOptionsInput = { funcFormate: val => val, iconId: null, el: null, inputmode: 'text', attributes: [] }
+const defaultOptionsInput = { funcFormate: val => val, name: '', inputmode: 'text', iconId: null, el: null, attributes: [] }
 
 export function cellRendererInput(params, options = {}) {
-  const { funcFormate, iconId, el, inputmode, attributes } = Object.assign({}, defaultOptionsInput, options)
+  const { funcFormate, iconId, el, inputmode, attributes, name } = Object.assign({}, defaultOptionsInput, options)
   const wpInput = createElement('div', { classes: ['wp-input', 'wp-input-cell', 'not-edit'] })
   let attributesStr = ''
 
@@ -24,7 +24,7 @@ export function cellRendererInput(params, options = {}) {
     attributesStr = attributes.map(attr => `${attr[0]}="${attr[1]}"`).join(' ')
   }
 
-  wpInput.insertAdjacentHTML('beforeend', `<input type="text" name="${params.colDef.field}" value="${params.value ? funcFormate(params.value) : ''}" class="input-cell cell-input not-edit" autocomplete="off" readonly="true" inputmode="${inputmode}" ${attributesStr}>${el ? el.outerHTML : ''}`);
+  wpInput.insertAdjacentHTML('beforeend', `<input type="text" name="${name ? name : params.colDef.field}" value="${params.value ? funcFormate(params.value) : ''}" class="input-cell cell-input not-edit" autocomplete="off" readonly="true" inputmode="${inputmode}" ${attributesStr}>${el ? el.outerHTML : ''}`);
   return wpInput;
 }
 

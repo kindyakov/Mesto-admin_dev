@@ -1,8 +1,8 @@
 import axios from "axios";
 
-axios.defaults.timeout = 15000
+const baseURL = 'https://store-demo-test.ru' // store-franchise.ru
 
-const baseURL = 'https://store-demo-test.ru'
+axios.defaults.timeout = 30000
 
 export const api = axios.create({ baseURL })
 
@@ -12,7 +12,7 @@ api.interceptors.response.use(
   },
   error => {
     if (error.response && error.response.status === 401) {
-
+      window.app.auth ?? window.app.auth.logout()
     }
 
     return Promise.reject(error);

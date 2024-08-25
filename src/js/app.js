@@ -9,7 +9,6 @@ import { useDynamicAdapt } from "./utils/dynamicAdapt.js"
 import { burger, fixedSideBar } from "./utils/header.js";
 
 import { modalMap } from "./modalMap.js";
-import { outputInfo } from "./utils/outputinfo.js";
 
 window.app = {
   warehouses: [],
@@ -23,6 +22,7 @@ const warehousesSelect = new WarehousesSelect()
 let isFirstLoad = true
 
 Fancybox.defaults.Hash = false;
+window.app.auth = auth
 
 function appInit(user) {
   if (isFirstLoad) {

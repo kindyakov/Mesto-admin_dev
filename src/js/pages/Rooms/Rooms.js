@@ -144,7 +144,7 @@ class Rooms extends Page {
       const html = this.selectRooms.map(_room => roomHtml({ ..._room, remove: true })).join('')
       const div = createElement('div', { classes: ['wrap-scroll'], content: html })
       this.selectsRoomsContent.innerHTML = div.outerHTML
-      this.selectsRoomsContent.scrollIntoView({ block: "center", behavior: "smooth" })
+      this.selectsRoomsContent.scrollIntoView({ block: "center", behavior: "smooth" })      
       this.resizeScrollableContent()
     }
 
@@ -152,7 +152,7 @@ class Rooms extends Page {
 
     const actions = {
       add: room => {
-        this.selectRooms.push(room)
+        this.selectRooms.unshift(room)
         currentCell.classList.add('_selected')
         renderRooms()
       },

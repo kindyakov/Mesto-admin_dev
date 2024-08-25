@@ -1,21 +1,24 @@
 import BaseTableForecast from '../BaseTableForecast.js';
 import { dateFormatter } from '../../../../settings/dateFormatter.js';
-
 import { cellRendererInput } from '../../utils/cellRenderer.js';
+import { cellDatePicker } from '../cellDatePicker.js';
 
 class TablesForecastSales extends BaseTableForecast {
   constructor(selector, options, params) {
     const defaultOptions = {
       columnDefs: [
         {
-          headerName: 'Период', field: 'data', minWidth: 80, flex: 0.5,
-          valueFormatter: params => {
+          headerName: 'Период', field: 'data', minWidth: 120, flex: 0.6,
+          cellRenderer: params => {
             if (!params.value) return '';
             // Определяем формат даты на основе наличия дня
             const hasDay = /^\d{4}-\d{2}-\d{2}$/.test(params.value);
             const format = hasDay ? "dd.MM.yyyy" : "yyyy, MMMM";
+            const el = cellRendererInput(params, { funcFormate: value => dateFormatter(value, format) })
 
-            return dateFormatter(params.value, format);
+            cellDatePicker(el.querySelector('input'), { params, prefixClass: 'table-forecast-sales', inputmode: 'none' })
+
+            return el
           }
         },
         {

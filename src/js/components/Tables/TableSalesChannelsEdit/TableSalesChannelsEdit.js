@@ -1,5 +1,5 @@
 import Table from '../Table.js';
-import dataPicker from '../../../configs/datepicker.js';
+import datePicker from '../../../configs/datepicker.js';
 import CustomHeaderComponentAddSales from './Components/CustomHeaderComponentAddSales.js';
 import CustomHeaderComponentEdit from './Components/CustomHeaderComponentEdit.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
@@ -66,7 +66,7 @@ class TableSalesChannelsEdit extends Table {
 
     super(selector, mergedOptions, mergedParams);
 
-    const datepicker = dataPicker(this.wpTable.querySelector('.input-date-filter-month'), {
+    const datepicker = datePicker(this.wpTable.querySelector('.input-date-filter-month'), {
       view: 'months',
       minView: 'months',
       dateFormat: 'yyyy-MM',
