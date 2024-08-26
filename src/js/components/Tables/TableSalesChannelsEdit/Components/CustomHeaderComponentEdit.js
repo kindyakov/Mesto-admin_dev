@@ -112,7 +112,7 @@ class CustomHeaderComponentEdit {
       this.loader.enable()
       const response = await api.post('/_set_sale_channel_expense_', formData)
       if (response.status !== 200) return null
-      outputInfo(response.data)
+      this.app.notify.show(response.data)
       return response.data
     } catch (error) {
       console.error(error)

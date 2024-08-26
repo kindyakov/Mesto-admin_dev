@@ -4,7 +4,6 @@ import { getManagersList } from "../../settings/request.js";
 import { createElement } from "../../settings/createElement.js";
 import { employeeHtml, accessesPopupHtml } from "./html.js";
 import { api } from "../../settings/api.js";
-import { outputInfo } from "../../utils/outputinfo.js";
 
 class Users extends Page {
   constructor({ loader }) {
@@ -109,7 +108,7 @@ class Users extends Page {
       this.loader.enable()
       const response = await api.post('/_set_accesses_', data)
       if (response.status !== 200) return
-      outputInfo(response.data)
+      this.app.notify.show(response.data)
     } catch (error) {
       console.log(error)
       throw error

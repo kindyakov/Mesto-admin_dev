@@ -2,7 +2,6 @@ import Page from "../Page.js"
 import { chatItemHtml, chatHtml, chatMessageHtml } from "./html.js";
 import { api } from "../../settings/api.js";
 import { getMessagesHistory, getManagersList } from "../../settings/request.js";
-import { outputInfo } from "../../utils/outputinfo.js";
 
 import { Tabs } from "../../modules/myTabs.js"
 import { createElement } from "../../settings/createElement.js";
@@ -255,7 +254,7 @@ class Messages extends Page {
       this.loader.enable()
       const response = await api.post('/_send_message_', formData)
       if (response.status !== 200) return
-      outputInfo(response.data)
+      this.app.notify.show(response.data)
       return response.data
     } catch (error) {
       console.log(error)

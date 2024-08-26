@@ -6,7 +6,6 @@ import { cellRendererInput, cellRendererSelect } from '../utils/cellRenderer.js'
 import { api } from "../../../settings/api.js";
 import { createElement } from '../../../settings/createElement.js';
 import { getFormattedDate } from '../../../utils/getFormattedDate.js';
-import { outputInfo } from "../../../utils/outputinfo.js";
 import { formatPhoneNumber } from '../../../utils/formattingPrice.js';
 import { buildQueryParams } from '../../../utils/buildQueryParams.js';
 
@@ -158,7 +157,7 @@ class TableTransactions extends Table {
     try {
       const response = await api.post(`${route}${buildQueryParams(data)}`)
       if (response.status !== 200) return null
-      outputInfo(response.data)
+      this.app.notify.show(response.data)
       return response.data
     } catch (error) {
       console.log(error)

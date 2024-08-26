@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = 'https://store-demo-test.ru' // store-franchise.ru
+const baseURL = 'http://store-franchise.ru' // store-demo-test.ru
 
 axios.defaults.timeout = 30000
 

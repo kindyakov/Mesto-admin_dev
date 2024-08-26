@@ -80,7 +80,7 @@
 		width: 100%;
 		gap: 25px;
 		@media (max-width: $md2) {
-			padding-bottom: 20px;
+			padding-bottom: 80px;
 		}
 	}
 
@@ -216,6 +216,14 @@
 				gap: 10px;
 				padding: 0 15px 0 45px;
 				cursor: pointer;
+				.icon {
+					fill: #dee4ee;
+					&.icon-contract,
+					&.icon-list-users,
+					&.icon-forecast {
+						fill: none;
+					}
+				}
 				> span {
 					font-weight: 500;
 					font-size: 16px;

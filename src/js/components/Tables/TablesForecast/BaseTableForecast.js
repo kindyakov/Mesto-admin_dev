@@ -5,8 +5,6 @@ import { dateFormatter } from '../../../settings/dateFormatter.js';
 import { api } from '../../../settings/api.js';
 import { inputValidator } from '../../../settings/validates.js';
 
-import { outputInfo } from '../../../utils/outputinfo.js';
-
 function btnEditContent() {
   return `<svg class='icon icon-edit edit'>
             <use xlink:href='img/svg/sprite.svg#edit'></use>
@@ -133,7 +131,7 @@ class BaseTableForecast extends Table {
       this.loader.enable();
       const response = await api.post(endpoint, data);
       if (response.status !== 200) return;
-      outputInfo(response.data);
+      this.app.notify.show(response.data)
     } catch (error) {
       console.log(error);
       throw error;

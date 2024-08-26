@@ -65,6 +65,7 @@ class Table {
     this.columnDefs = []
     this.grid = createGrid(this.gridOptions.wrapper.querySelector(selector), this.gridOptions);
     this.table = this.gridOptions.wrapper.querySelector(selector)
+    this.app = window.app
 
     this.getData = this.params.getData
     this.onPageChange = this.params.onPageChange

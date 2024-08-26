@@ -6,7 +6,6 @@ import TableEmployee from '../../components/Tables/TableEmployee/TableEmployee.j
 import modalDownloadPhotoWh from "../../components/Modals/ModalDownloadPhotoWh/ModalDownloadPhotoWh.js"
 
 import { api } from "../../settings/api.js";
-import { outputInfo } from "../../utils/outputinfo.js"
 import { getCurrentTimeString } from '../../utils/getCurrentTimeString.js';
 import { getTimeControlInfo } from '../../settings/request.js';
 
@@ -118,7 +117,7 @@ class WorkingHours extends Page {
       const response = await api.post('/_add_timepoint_', formData)
 
       if (response.status !== 200) return
-      outputInfo(response.data)
+      this.app.notify.show(response.data)
 
       if (response.data.msg_type === 'success') {
         this.changeRow(this.timePoint)

@@ -40,7 +40,7 @@ function downloadCreate(rout, opts = {}) {
       const response = await api.post(`${rout}`, data, { responseType: 'blob' })
       if (response.status !== 200) return null
       if (response.data.msg_type) {
-        outputInfo(response.data)
+        window.app.notify.show(response.data)
         return response.data
       } else {
         const blob = new Blob([response.data], { type: response.headers['content-type'] })
@@ -130,7 +130,7 @@ export async function downloadAgr(room_id) {
     const response = await api.post(`/download_agr/${room_id}`, { responseType: 'blob' })
     if (response.status !== 200) return
     if (response.data.msg_type) {
-      outputInfo(response.data)
+      window.app.notify.show(response.data)
     } else {
       const blob = new Blob([response.data], { type: response.headers['content-type'] })
       const url = URL.createObjectURL(blob)

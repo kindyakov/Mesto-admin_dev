@@ -5,7 +5,6 @@ import CustomHeaderComponentEdit from './Components/CustomHeaderComponentEdit.js
 import { cellRendererInput } from '../utils/cellRenderer.js';
 import { createElement } from '../../../settings/createElement.js';
 import { api } from '../../../settings/api.js';
-import { outputInfo } from '../../../utils/outputinfo.js';
 
 class TableSalesChannelsEdit extends Table {
   constructor(selector, options, params) {
@@ -88,7 +87,7 @@ class TableSalesChannelsEdit extends Table {
       this.loader.enable()
       const response = await api.post('/_delete_sale_channel_', formData)
       if (response.status !== 200) return null
-      outputInfo(response.data)
+      this.app.notify.show(response.data)
       return response.data
     } catch (error) {
       console.error(error)

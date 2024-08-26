@@ -4,6 +4,7 @@ import WarehousesSelect from "./components/WarehousesSelect/WarehousesSelect.js"
 import { initializeModalTriggers } from "./components/initializeModalTriggers.js";
 
 import { Accordion } from "./modules/myAccordion.js"
+import { Notification } from "./modules/myNotification.js";
 
 import { useDynamicAdapt } from "./utils/dynamicAdapt.js"
 import { burger, fixedSideBar } from "./utils/header.js";
@@ -15,14 +16,16 @@ window.app = {
   warehouse: null,
 }
 
+const notify = new Notification()
 const nav = new Navigation();
-const auth = new Auth({ modalMap })
+const auth = new Auth({ modalMap, notify })
 const warehousesSelect = new WarehousesSelect()
 
 let isFirstLoad = true
 
 Fancybox.defaults.Hash = false;
 window.app.auth = auth
+window.app.notify = notify
 
 function appInit(user) {
   if (isFirstLoad) {
@@ -34,7 +37,7 @@ function appInit(user) {
 
     new Accordion({ isAccordion: false })
     warehousesSelect.render().then(warehouse => {
-      nav.init(warehouse)
+      nav.init({ warehouse, notify, user })
     })
   }
 

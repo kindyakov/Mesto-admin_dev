@@ -9,7 +9,6 @@ import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
-import { outputInfo } from "../../../utils/outputinfo.js";
 
 class TablePayments extends Table {
   constructor(selector, options, params) {
@@ -149,7 +148,7 @@ class TablePayments extends Table {
       this.loader.enable()
       const response = await api.post('/_edit_payment_', data)
       if (response.status !== 200) return
-      outputInfo(response.data)
+      this.app.notify.show(response.data)
     } catch (error) {
       console.error(error)
     } finally {

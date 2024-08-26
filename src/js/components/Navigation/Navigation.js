@@ -30,9 +30,10 @@ class Navigation {
     this.md1200 = window.matchMedia(`(max-width: 1200px)`)
   }
 
-  init(warehouse) {
-    // Сохраняю склад
+  init({ warehouse, notify, user }) {
     this.warehouse = warehouse
+    this.notify = notify
+    this.user = user
 
     // Добавляем обработчики событий на ссылки навигации
     this.navLinks.forEach(link => {
@@ -101,7 +102,14 @@ class Navigation {
       import(`../../pages/${this.pages[path]}`)
         .then(module => {
           this.loader.disable();
-          const page = new module.default({ loader: this.loader, warehouse: this.warehouse });
+
+          const page = new module.default({
+            loader: this.loader,
+            warehouse: this.warehouse,
+            notify: this.notify,
+            user: this.user
+          });
+
           this.modulesCache[path] = page;  // Сохраняем модуль в кэш
           page.render();
         })

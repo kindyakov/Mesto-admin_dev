@@ -1,6 +1,5 @@
 import modalAuth from "../Modals/ModalAuth/ModalAuth.js"
 import { validate } from "./validate.js"
-import { outputInfo } from "../../utils/outputinfo.js"
 import { api } from "../../settings/api.js"
 import { Loader } from "../../modules/myLoader.js"
 import { getCookie, deleteCookie } from "../../utils/getCookie.js"
@@ -14,6 +13,7 @@ class Auth {
     }
 
     this.options = Object.assign(defaultOptions, options)
+    this.notify = this.options.notify
     this.modal = modalAuth
 
     this.form = this.modal.modalBody.querySelector('.form-authorization')
@@ -63,7 +63,7 @@ class Auth {
       const tokenData = JSON.parse(atob(token.split('.')[1]))
       const tokenExpiration = new Date(tokenData.exp * 1000)
       this.user = tokenData
-      
+
       if (this.currentDate > tokenExpiration) {
         deleteCookie('token');
         isAuth = false
@@ -136,8 +136,8 @@ class Auth {
 
       const { msg, msg_type, access_token, expiration_time } = this.user = response.data
 
-      outputInfo(response.data)
-      
+      this.notify.show(response.data)
+
       if (msg_type === 'success') {
         this.isAuth = true
         api.defaults.headers.Authorization = `Bearer ${access_token}`

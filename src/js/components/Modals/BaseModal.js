@@ -18,6 +18,9 @@ class BaseModal {
       beforeClose: this.beforeClose.bind(this),
     });
 
+    this.app = window.app
+
+    // this.app.notify.show(response.data)
     this.form = null
     this.isEdit = false
     this.isSend = false

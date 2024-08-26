@@ -2,7 +2,6 @@ import tippy from '../../../../configs/tippy.js';
 import { contentHtml } from './html.js';
 import { createElement } from '../../../../settings/createElement.js';
 import { api } from '../../../../settings/api.js';
-import { outputInfo } from '../../../../utils/outputinfo.js';
 import { Loader } from '../../../../modules/myLoader.js';
 
 class CustomHeaderComponentAddSales {
@@ -59,7 +58,7 @@ class CustomHeaderComponentAddSales {
 
     const formData = new FormData()
     formData.set('sale_channel_name', this.value)
-    
+
     this.addSaleChannel(formData).then(({ msg_type }) => {
       if (msg_type === 'success') {
         this.params.api.applyTransaction({ add: [emptyRow] });
@@ -74,7 +73,7 @@ class CustomHeaderComponentAddSales {
       this.loader.enable()
       const response = await api.post('/_add_sale_channel_', formData)
       if (response.status !== 200) return null
-      outputInfo(response.data)
+      this.app.notify.show(response.data)
       return response.data
     } catch (error) {
       console.error(error)

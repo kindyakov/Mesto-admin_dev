@@ -1,0 +1,124 @@
+.notify-container {
+	position: fixed;
+	top: 10px;
+	left: 50%;
+	transform: translate(-50%, 0);
+	width: 420px;
+	max-height: calc(100vh - 20px);
+	/* overflow-y: auto; */
+	z-index: 1000;
+	@media (max-width: $md6) {
+		width: 300px;
+	}
+}
+
+.notify {
+	background-color: #f0f0f0;
+	border-radius: 5px;
+	padding: 15px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	opacity: 0;
+	transform: translateY(-20px);
+	transition:
+		opacity 0.3s ease,
+		transform 0.3s ease,
+		top 0.3s ease;
+
+	@include adaptiv-font(20, 16, 1);
+	text-align: center;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.notify.absolute {
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	width: 100%;
+}
+
+.notify.show {
+	opacity: 1;
+	transform: translateY(0);
+	// animation: show 0.3s ease;
+}
+
+.notify.info {
+	// border-left: 5px solid $blue;
+	background-color: $blue-light;
+	color: $blue;
+}
+
+.notify.success {
+	// border-left: 5px solid $green;
+	background-color: $green-light;
+	color: $green;
+}
+
+.notify.error {
+	// border-left: 5px solid $red;
+	background-color: $red-light;
+	color: $red;
+}
+
+.notify.warning {
+	// border-left: 5px solid $yellow;
+	background-color: $yellow-light;
+	color: $yellow;
+}
+
+.notify.confirm {
+	display: flex;
+	flex-direction: column;
+	color: #000;
+	padding: 10px 20px;
+	gap: 10px;
+	box-shadow: 0 3px 10px rgba(128, 128, 128, 0.4);
+	background-color: #fff;
+
+	> div {
+		display: flex;
+		justify-content: center;
+		gap: 10px;
+		button {
+			border-radius: 4px;
+			padding: 10px 20px;
+			font-size: 16px;
+			background-color: #fff;
+			transition: 0.1s;
+			box-shadow: 0 2px 3px #ccc;
+
+			&.btn-confirm-yes {
+				background-color: $blue;
+				color: #fff;
+			}
+
+			&:hover {
+				box-shadow: 0 3px 3px #ccc;
+				opacity: 0.8;
+			}
+
+			&:active {
+				transform: translate(0, 1px);
+			}
+		}
+	}
+}
+
+@keyframes show {
+	0% {
+		transform: translate(-20px) scale(0);
+		opacity: 0;
+	}
+
+	70% {
+		transform: translateY(0) scale(1.1);
+		opacity: 1;
+	}
+
+	100% {
+		transform: translateY(0) scale(1);
+		opacity: 1;
+	}
+}

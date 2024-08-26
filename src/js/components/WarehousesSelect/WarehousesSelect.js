@@ -6,7 +6,10 @@ class WarehousesSelect {
     this.select = document.querySelector('[data-special-select="warehouse-select"]')
     this.selectCustom = new Select({
       uniqueName: 'warehouse-select',
-      onChange: this.onChange
+      onChange: this.onChange,
+      callbackInput: value => {
+        return `<img src="./img/svg/warehouse.svg" alt="Склад" width="20" height="20"><span style="flex: 1 1 auto">${value}</span><svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>`
+      },
     })
 
     this.mainLoader = document.querySelector('.body-loader')

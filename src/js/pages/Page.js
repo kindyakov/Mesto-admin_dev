@@ -5,6 +5,7 @@ class Page {
   constructor({ loader, tables = [], charts = [], page }) {
     this.loader = loader
     this.wrapper = document.querySelector(`[data-content="${page}"]`)
+    this.app = window.app
 
     this.tables = []
     this.charts = []

@@ -14,7 +14,6 @@ import { cellRendererInput } from '../utils/cellRenderer.js';
 
 import { formattingPrice, formatPhoneNumber } from '../../../utils/formattingPrice.js';
 import { declOfNum } from '../../../utils/declOfNum.js';
-import { outputInfo } from "../../../utils/outputinfo.js";
 import { downloadClient } from '../../../settings/request.js';
 
 import { createElement } from '../../../settings/createElement.js';
@@ -194,7 +193,7 @@ class TableClients extends Table {
       this.loader.enable()
       const response = await api.post('/_edit_client_', data)
       if (response.status !== 200) return
-      outputInfo(response.data)
+      this.app.notify.show(response.data)
     } catch (error) {
       console.error(error)
     } finally {
