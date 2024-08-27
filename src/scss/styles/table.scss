@@ -108,6 +108,16 @@
 		font-size: 14px;
 		color: #212b36;
 
+		&.bg-red {
+			background-color: $red-light;
+			color: $red;
+		}
+
+		&.bg-green {
+			background-color: $green-light;
+			color: $green;
+		}
+
 		.wrap-photo-report {
 			width: 100%;
 			height: 100%;
@@ -130,6 +140,17 @@
 
 		&:has(.btn-del) {
 			padding: 0;
+		}
+
+		.ag-cell-wrapper {
+			width: 100%;
+		}
+
+		.wp-input.not-edit.cursor-pointer {
+			cursor: pointer;
+			.input-cell {
+				cursor: pointer;
+			}
 		}
 
 		@media (max-width: $md2) {
@@ -389,6 +410,28 @@
 			}
 			.icon-check {
 				display: inline-block;
+			}
+		}
+	}
+	.ag-paging-panel {
+		.paging-show-count {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			.mySelect {
+				&__input {
+					padding: 10px;
+				}
+
+				&__list {
+					top: auto;
+					bottom: 100%;
+					flex-direction: column-reverse;
+				}
+
+				&__option {
+					padding: 10px;
+				}
 			}
 		}
 	}

@@ -11,6 +11,7 @@ import { api } from "../../../settings/api.js";
 import { actions } from '../utils/actions.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
+import { observeCell } from "../utils/observeCell.js";
 
 import { formattingPrice, formatPhoneNumber } from '../../../utils/formattingPrice.js';
 import { declOfNum } from '../../../utils/declOfNum.js';
@@ -25,13 +26,14 @@ class TableClients extends Table {
       columnDefs: [
         {
           headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false,
-          // cellRenderer: params => {
-          //   const { user_id } = params.data
-          // }
         },
         {
           headerName: 'ФИО', field: 'fullname', minWidth: 300, flex: 1,
-          cellRenderer: params => cellRendererInput(params, { iconId: 'profile' })
+          cellRenderer: params => {
+            const wp = cellRendererInput(params, { iconId: 'profile' })
+            observeCell(wp, params)
+            return wp
+          }
         },
         { headerName: 'Телефон', field: 'username', minWidth: 170, flex: 0.5, cellRenderer: params => cellRendererInput(params, { funcFormate: formatPhoneNumber }) },
         { headerName: 'Почта', field: 'email', minWidth: 260, flex: 0.5, cellRenderer: params => cellRendererInput(params) },
@@ -66,8 +68,8 @@ class TableClients extends Table {
           headerName: 'До платежа', field: 'days_left', minWidth: 100, flex: 0.5,
           cellRenderer: params => {
             const p = createElement('p', {
-              classes: ['table-p', 'days-left-p'], content: `<svg class='icon icon-calendar'><use xlink:href='img/svg/sprite.svg#calendar'></use></svg>
-            <span>${params.value ? `${params.value} ${declOfNum(Math.abs(params.value), ['День', 'Дня', 'Дней'])}` : 'Нет'}</span>`
+              classes: ['table-p', 'days-left-p'], content: `<svg class='icon icon-calendar' style="${+params.value < 0 ? 'fill: red;' : ''}"><use xlink:href='img/svg/sprite.svg#calendar'></use></svg>
+            <span style="${+params.value < 0 ? 'color: red;' : ''}">${params.value ? `${params.value} ${declOfNum(Math.abs(params.value), ['День', 'Дня', 'Дней'])}` : 'Нет'}</span>`
             })
 
             if (params.value && params.value >= 0) {
@@ -182,10 +184,11 @@ class TableClients extends Table {
     return button
   }
 
-  onRendering({ clients = [], cnt_pages, page }) {
+  onRendering({ clients = [], cnt_pages, page, cnt_all = 0 }) {
+    this.cntAll = cnt_all
     this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', clients)
-    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, clients.length])
+    // this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, 30, clients.length])
   }
 
   async editClient(data) {

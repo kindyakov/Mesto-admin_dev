@@ -4,10 +4,11 @@ import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { translations } from './translations.js';
 import { paginationHtml } from './html.js';
 import { Loader } from '../../modules/myLoader.js';
-import { Select } from '../../modules/mySelect.js';
+import { Select, exSelect } from '../../modules/mySelect.js';
 import { createCalendar } from '../../settings/createCalendar.js';
 
 import { mergeQueryParams } from "../../utils/buildQueryParams.js";
+import { createElement } from '../../settings/createElement.js';
 
 class Table {
   constructor(selector, options, params) {
@@ -19,6 +20,7 @@ class Table {
       onSubmitSearch: () => { },
       onValidateSearch: () => { },
       onValueInputSearch: () => { },
+      onInit: () => { },
     }
 
     let defaultoptions = {
@@ -27,30 +29,58 @@ class Table {
       rowData: [],
       pagination: true,
       paginationPageSize: 5,
-      paginationPageSizeSelector: [5, 10, 15, 20],
-      getLocaleText: this.getLocaleText,
+      paginationPageSizeSelector: [5, 10, 15, 20, 30],
       suppressRowClickSelection: true, // Отключение выбора строки при клике на ячейку
       suppressHorizontalScroll: false,
+      // suppressPaginationPanel: true,
+      suppressScrollOnNewData: true,
+      // enableCellTextSelection: true, // разрешить выделять текст
       rowSelection: 'multiple', // Включение множественного выбора строк
+      rowHeight: 60,
+      domLayout: 'normal',
+      getLocaleText: this.getLocaleText,
       onCellClicked: (params) => {
         if (params.column.colId === 'checkboxSelection') {
           params.node.setSelected(!params.node.isSelected());
         }
       },
-      rowHeight: 60,
-      domLayout: 'normal',
       onGridReady: (params) => {
         this.gridApi = params.api;
         this.gridColumnApi = params.columnApi;
         this.tableFooter = document.querySelector(`${selector} .ag-paging-panel`)
-        document.querySelector(`${selector} .ag-paging-row-summary-panel`).remove()
-        document.querySelector(`${selector} .ag-paging-page-summary-panel`).remove()
+        document.querySelector(`${selector} .ag-paging-row-summary-panel`)?.remove()
+        document.querySelector(`${selector} .ag-paging-page-summary-panel`)?.remove()
+        document.querySelector(`${selector} .ag-paging-page-size`)?.remove()
 
         if (defaultParams.isPagination) {
           this.tableFooter.insertAdjacentHTML('beforeend', paginationHtml.pagination())
           this.tablePaginationPages = this.tableFooter.querySelector(`.table-pagination-pages`)
           this.tablePaginationBtnPrev = this.tableFooter.querySelector(`.btn-pagination-prev`)
           this.tablePaginationBtnNext = this.tableFooter.querySelector(`.btn-pagination-next`)
+
+          const pagingShowCount = createElement('div', {
+            content: `<span>Показывать по</span>`,
+            classes: ['paging-show-count'],
+          })
+          // Кастомный переключатель
+          const select = createElement('select', {
+            attributes: [
+              ['name', 'count-rows'],
+            ],
+            content: `
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="0">все</option>
+            `
+          })
+
+          pagingShowCount.appendChild(select)
+          this.tableFooter.insertAdjacentElement('afterbegin', pagingShowCount)
+
+          this.customPageSize = new exSelect([select], { selectMinWidth: 80, })
         }
 
         this.init()
@@ -72,17 +102,17 @@ class Table {
     this.onSubmitSearch = this.params.onSubmitSearch
     this.onValidateSearch = this.params.onValidateSearch
     this.onValueInputSearch = this.params.onValueInputSearch
+    this.onInit = this.params.onInit
 
     this.onRowSelected = this.onRowSelected.bind(this)
 
     this.selectedRows = []
-    this.queryParams = {}
+    this.queryParams = { show_cnt: this.gridOptions.paginationPageSize }
 
     this.page = null
     this.pages = null
 
-    this.init()
-    this.events()
+    // this.init()
   }
 
   init() {
@@ -93,17 +123,17 @@ class Table {
     this.btnTableUploadExcel = this.wpTable.querySelector('.btn-table-upload-excel')
 
     this.loader = new Loader(this.wpTable)
-  }
-
-  events() {
-    if (!this.table) return
-
-    this.selects = new Select({ uniqueName: 'select-filter-table', parentEl: this.wpTable })
+    this.selects = this.selects || new Select({ uniqueName: 'select-filter-table', parentEl: this.wpTable })
     this.calendar = createCalendar(this.wpTable.querySelector('.input-date-filter'), {
       mode: "range",
       dateFormat: "d. M, Y",
     })
 
+    this.events()
+    this.onInit()
+  }
+
+  events() {
     this.table.addEventListener('click', e => {
       if (e.target.closest('.btn-pagination-prev') && this.params.isPagination) {
         this.prevPage()
@@ -135,6 +165,15 @@ class Table {
           this.onValueInputSearch(value)
         }, 500);
       })
+    }
+
+    if (this.customPageSize) {
+      this.customPageSize.setValue(this.gridOptions.paginationPageSize)
+      this.customPageSize.onChange = (e, select, value) => {
+        const count = value == 0 ? +this.cntAll : +value
+        this.changeQueryParams({ show_cnt: count, page: value == 0 ? null : this.queryParams.page })
+        this.gridApi.setGridOption('paginationPageSize', count)
+      }
     }
   }
 
@@ -278,7 +317,7 @@ class Table {
 
     for (let i = 0; i < rowCount; i++) {
       let rowNode = this.gridApi.getDisplayedRowAtIndex(i);
-      let rowElement = this.wpTable.querySelector(`.ag-row[row-id="${rowNode.id}"]`);
+      let rowElement = this.wpTable.querySelector(`.ag - row[row - id="${rowNode.id}"]`);
 
       rowsWithElements.push({
         data: rowNode.data,

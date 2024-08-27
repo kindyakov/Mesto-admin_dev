@@ -22,8 +22,8 @@ class Agreements extends Page {
     });
   }
 
-  async getData(data = {}) {
-    return getAgreements(data)
+  async getData(queryParams = {}) {
+    return getAgreements({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams })
   }
 }
 

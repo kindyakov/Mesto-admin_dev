@@ -300,6 +300,10 @@ export class exSelect extends Select {
         customSelect.classList.add('_disabled')
       }
 
+      if (b479.matches && selectMinWidth) {
+        customSelect.style.minWidth = `${+selectMinWidth}px`
+      }
+
       const selectInput = customSelect.querySelector(this.options.selectInput)
       if (selectInput) {
         selectInput.innerHTML = this.callbackInput(options[activeIndex]?.textContent || '', options[activeIndex]?.value || '', customSelect)

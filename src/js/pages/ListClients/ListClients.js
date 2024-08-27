@@ -22,8 +22,8 @@ class ListClients extends Page {
     });
   }
 
-  async getData(data = {}) {
-    return getClients(data);
+  async getData(queryParams = {}) {
+    return getClients({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams });
   }
 }
 

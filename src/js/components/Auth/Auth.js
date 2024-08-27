@@ -36,7 +36,6 @@ class Auth {
   }
 
   init() {
-    this.btnExit = document.querySelector('.btn-exit')
     this.isAuth = this.checkAuth()
     this.events()
     this.onInit(this.isAuth)
@@ -44,7 +43,11 @@ class Auth {
 
   events() {
     this.form && this.form.addEventListener('submit', this.submit.bind(this))
-    this.btnExit.addEventListener('click', this.logout.bind(this))
+    document.addEventListener('click', e => {
+      if (e.target.closest('.btn-exit')) {
+        this.logout()
+      }
+    })
   }
 
   submit() {

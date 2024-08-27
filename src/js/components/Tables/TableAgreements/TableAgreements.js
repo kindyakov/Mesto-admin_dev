@@ -1,9 +1,12 @@
 import Table from '../Table.js';
 import tippy from '../../../configs/tippy.js';
+
 import { actions } from '../utils/actions.js';
-import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
+import { observeCell } from "../utils/observeCell.js";
+
+import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { getFormattedDate } from '../../../utils/getFormattedDate.js';
 import { downloadAgreement } from '../../../settings/request.js';
 import { createElement } from '../../../settings/createElement.js';
@@ -24,7 +27,11 @@ class TableAgreements extends Table {
         },
         {
           headerName: 'ФИО', field: 'fullname', minWidth: 300, flex: 1,
-          cellRenderer: params => cellRendererInput(params, { iconId: 'profile' })
+          cellRenderer: params => {
+            const wp = cellRendererInput(params, { iconId: 'profile' })
+            observeCell(wp, params)
+            return wp
+          }
         },
         {
           headerName: 'Дата начала', field: 'agrbegdate', minWidth: 130, flex: 0.6,
@@ -104,10 +111,10 @@ class TableAgreements extends Table {
     return button
   }
 
-  onRendering({ agreements = [], cnt_pages, page }) {
+  onRendering({ agreements = [], cnt_pages, page, cnt_all = 0 }) {
+    this.cntAll = cnt_all
     this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', agreements)
-    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length])
   }
 
   async download(data) {

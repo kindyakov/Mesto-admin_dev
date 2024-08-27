@@ -22,8 +22,8 @@ class Payments extends Page {
     });
   }
 
-  async getData(data = {}) {
-    return getPayments(data)
+  async getData(queryParams = {}) {
+    return getPayments({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams })
   }
 }
 

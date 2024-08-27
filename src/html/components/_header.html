@@ -63,17 +63,25 @@
 				</div>
 			</li>
 		</ul>
-		<button class="header__user">
+		<div class="header__user">
 			<div class="header__user_info">
 				<span class="name">Адрей Быков</span>
 				<span class="email">bykov@mail.ru</span>
 			</div>
-			<div class="header__user_img">
-				<img src="./img/ava.jpg" alt="Фото">
+			<div class="header__user_control">
+				<div class="header__user_img">
+					<img src="./img/ava.jpg" alt="Фото">
+				</div>
+				<svg class='icon icon-arrow'>
+					<use xlink:href='img/svg/sprite.svg#arrow'></use>
+				</svg>
+				<nav class="header__user_menu">
+					<ul class="header__user_list">
+						<li><button class="btn-exit button-table">Выйти</button>
+						</li>
+					</ul>
+				</nav>
 			</div>
-			<svg class='icon icon-arrow'>
-				<use xlink:href='img/svg/sprite.svg#arrow'></use>
-			</svg>
-		</button>
+		</div>
 	</div>
 </header>

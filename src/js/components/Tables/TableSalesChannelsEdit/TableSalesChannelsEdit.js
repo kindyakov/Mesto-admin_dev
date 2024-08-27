@@ -76,7 +76,8 @@ class TableSalesChannelsEdit extends Table {
     });
   }
 
-  onRendering({ sale_channels = [] }) {
+  onRendering({ sale_channels = [], cnt_all = 0 }) {
+    this.cntAll = cnt_all
     // this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', sale_channels)
     this.gridApi.setGridOption('paginationPageSize', sale_channels.length + 20)

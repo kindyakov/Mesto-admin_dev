@@ -5,8 +5,8 @@ import { createElement } from "../../../settings/createElement.js"
 const defaultOptionsInput = { funcFormate: val => val, name: '', inputmode: 'text', iconId: null, el: null, attributes: [] }
 
 export function cellRendererInput(params, options = {}) {
-  const { funcFormate, iconId, el, inputmode, attributes, name } = Object.assign({}, defaultOptionsInput, options)
-  const wpInput = createElement('div', { classes: ['wp-input', 'wp-input-cell', 'not-edit'] })
+  const { funcFormate, iconId, el, inputmode, attributes, name, } = Object.assign({}, defaultOptionsInput, options)
+  const wpInput = createElement('div', { classes: ['wp-input', 'wp-input-cell', 'not-edit',] })
   let attributesStr = ''
 
   if (el) {

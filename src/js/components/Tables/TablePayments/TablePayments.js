@@ -5,9 +5,11 @@ import { api } from "../../../settings/api.js";
 import { downloadPayments } from "../../../settings/request.js";
 
 import { actions } from '../utils/actions.js';
-import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
+import { observeCell } from "../utils/observeCell.js";
+
+import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
 
 class TablePayments extends Table {
@@ -26,7 +28,11 @@ class TablePayments extends Table {
         },
         {
           headerName: 'ФИО', field: 'fullname', minWidth: 300, flex: 0.8,
-          cellRenderer: params => cellRendererInput(params, { iconId: 'profile' })
+          cellRenderer: params => {
+            const wp = cellRendererInput(params, { iconId: 'profile' })
+            observeCell(wp, params)
+            return wp
+          }
         },
         {
           headerName: 'Дата платежа', field: 'payment_date', minWidth: 130, flex: 0.5,
@@ -137,10 +143,11 @@ class TablePayments extends Table {
     return button
   }
 
-  onRendering({ payments = [], cnt_pages, page }) {
+  onRendering({ payments = [], cnt_pages, page, cnt_all }) {
+    this.cntAll = cnt_all
     this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', payments)
-    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, payments.length])
+    // this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, payments.length])
   }
 
   async editPayment(data) {

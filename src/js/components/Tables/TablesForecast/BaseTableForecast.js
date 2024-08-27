@@ -16,7 +16,30 @@ function btnEditContent() {
 
 class BaseTableForecast extends Table {
   constructor(selector, options, params) {
-    super(selector, options, params);
+    super(selector, options, params)
+
+    const intervalId = setInterval(() => {
+      if (!this.wpTable) return
+      [this.select] = Array.from(this.selects.selects).filter(select => select.name === 'month_or_day')
+      this.tableFooter = this.wpTable.querySelector('.ag-paging-panel')
+      this.agPagingPageSize = this.wpTable.querySelector('.ag-paging-page-size')
+
+      if (this.agPagingPageSize) {
+        this.agPagingPageSize.remove()
+      }
+
+      this.btnAdd = this.wpTable.querySelector('.btn-table-add')
+      this.wrapButtons = createElement('div', { classes: ['wrap-buttons'] })
+      this.btnCancel = createElement('button', { classes: ['button', 'transparent'], content: `<span>Отменить<span>` })
+
+      this.btnAdd.addEventListener('click', this.addEmptyRow.bind(this))
+      this.btnCancel.addEventListener('click', this.handleClickBtnCancel.bind(this))
+
+      this.wrapButtons.appendChild(this.btnCancel)
+      this.tableFooter.appendChild(this.wrapButtons)
+
+      clearInterval(intervalId)
+    }, 1000)
 
     this.emptyRow = {};
     this.data = [];
@@ -26,24 +49,6 @@ class BaseTableForecast extends Table {
 
     this.btnEditCellRenderer = this.btnEditCellRenderer.bind(this)
     this.validateInputHandler = this.validateInput.bind(this);
-
-    [this.select] = Array.from(this.selects.selects).filter(select => select.name === 'month_or_day')
-    this.tableFooter = this.wpTable.querySelector('.ag-paging-panel')
-    this.agPagingPageSize = this.wpTable.querySelector('.ag-paging-page-size')
-
-    if (this.agPagingPageSize) {
-      this.agPagingPageSize.remove()
-    }
-
-    this.btnAdd = this.wpTable.querySelector('.btn-table-add')
-    this.wrapButtons = createElement('div', { classes: ['wrap-buttons'] })
-    this.btnCancel = createElement('button', { classes: ['button', 'transparent'], content: `<span>Отменить<span>` })
-
-    this.btnAdd.addEventListener('click', this.addEmptyRow.bind(this))
-    this.btnCancel.addEventListener('click', this.handleClickBtnCancel.bind(this))
-
-    this.wrapButtons.appendChild(this.btnCancel)
-    this.tableFooter.appendChild(this.wrapButtons)
   }
 
   btnEditCellRenderer(params) {

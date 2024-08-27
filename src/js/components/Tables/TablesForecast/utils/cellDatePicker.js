@@ -1,5 +1,5 @@
-import datePicker from '../../../configs/datepicker.js';
-import { dateFormatter } from '../../../settings/dateFormatter.js';
+import datePicker from '../../../../configs/datepicker.js';
+import { dateFormatter } from '../../../../settings/dateFormatter.js';
 
 export function cellDatePicker(input, { params, prefixClass = 'air', hasDay = true }) {
   const customClassDatePicker = `${prefixClass}-${params.colDef.field}-${params.node.rowIndex}`
@@ -17,7 +17,7 @@ export function cellDatePicker(input, { params, prefixClass = 'air', hasDay = tr
     startDate, selectedDates: [startDate],
     position({ $datepicker, $target, $pointer }) {
       let coords = $target.getBoundingClientRect()
-      let top = coords.y + coords.height
+      let top = coords.y + coords.height + window.scrollY
       let left = coords.x
 
       $datepicker.style.left = isMobile ? '50%' : `${left}px`;
@@ -25,7 +25,7 @@ export function cellDatePicker(input, { params, prefixClass = 'air', hasDay = tr
       $datepicker.style.transform = isMobile ? 'translate(-50%, -50%)' : 'translate(0, 0)'
       $pointer.style.display = 'none';
     },
-    onShow: onShow,
+    onShow,
     onSelect({ date, formattedDate, datepicker }) {
       input.dataset.value = dateFormatter(date, hasDay ? 'yyyy-MM-dd' : 'yyyy-MM')
     }

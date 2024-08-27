@@ -32,9 +32,10 @@ class ChargingLocks extends Page {
 
     this.tableLocks = this.tables[0]
     this.customSelect = new Select({ uniqueName: 'select-change-display' })
-    this.filterLocks = new FilterLocks(this.wrapper.querySelector('.btn-set-filters'))
+    // this.filterLocks = new FilterLocks(this.wrapper.querySelector('.btn-set-filters'))
     this.locksContent = this.wrapper.querySelector('.locks')
     this.inputSearch = this.wrapper.querySelector('.input-search')
+    this.btnSort = this.wrapper.querySelector('.btn-set-sort')
 
     this.customSelect.onChange = (e, select, value) => {
       if (value === 'tile') {
@@ -47,10 +48,21 @@ class ChargingLocks extends Page {
     }
 
     this.inputSearch && this.inputSearch.addEventListener('input', this.handleInputSearch.bind(this))
+    this.btnSort && this.btnSort.addEventListener('click', this.handleBtnSortClick.bind(this))
   }
 
   async getData(queryParams = {}) {
-    return getLocksPower(queryParams)
+    return getLocksPower({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams })
+  }
+
+  onRender(data) {
+    const { rooms_x_locks = [] } = data
+
+    if (rooms_x_locks.length) {
+      this.locksContent.innerHTML = rooms_x_locks.map(lock => cardHtml(lock)).join('')
+    } else {
+      this.locksContent.innerHTML = `<div class="not-data"><span>Нет замков для отображения</span></div>`
+    }
   }
 
   handleInputSearch(e) {
@@ -62,14 +74,17 @@ class ChargingLocks extends Page {
     }, 600)
   }
 
-  onRender(data) {
-    const { rooms_x_locks = [] } = data
+  handleBtnSortClick(e) {
+    this.btnSort.classList.toggle('sort')
+    let queryParams = { sort_column: 'electric_quantity' }
 
-    if (rooms_x_locks.length) {
-      this.locksContent.innerHTML = rooms_x_locks.map(lock => cardHtml(lock)).join('')
+    if (this.btnSort.classList.contains('sort')) {
+      queryParams.sort_direction = 'desc'
     } else {
-      this.locksContent.innerHTML = `<div class="not-data"><span>Нет замков для отображения</span></div>`
+      queryParams.sort_direction = 'asc'
     }
+
+    this.changeQueryParams(queryParams)
   }
 }
 

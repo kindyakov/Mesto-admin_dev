@@ -146,7 +146,8 @@ class TableTransactions extends Table {
     return button
   }
 
-  onRendering([{ sales = [], cnt_pages, page }, { sale_channels = [] }]) {
+  onRendering([{ sales = [], cnt_pages, page, cnt_all = 0 }, { sale_channels = [] }]) {
+    this.cntAll = cnt_all
     sales.length && sales.forEach(sale => sale.sale_channels = sale_channels)
     this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', sales)

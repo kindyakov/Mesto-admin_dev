@@ -1,7 +1,10 @@
 import BaseTableForecast from '../BaseTableForecast.js';
 import { dateFormatter } from '../../../../settings/dateFormatter.js';
 import { cellRendererInput } from '../../utils/cellRenderer.js';
-import { cellDatePicker } from '../cellDatePicker.js';
+
+import { cellDatePicker } from '../utils/cellDatePicker.js';
+import { cellColorize } from '../utils/cellColorize.js';
+import { getFormattedNumber } from '../utils/getFormattedNumber.js';
 
 class TablesForecastSales extends BaseTableForecast {
   constructor(selector, options, params) {
@@ -16,7 +19,7 @@ class TablesForecastSales extends BaseTableForecast {
             const format = hasDay ? "dd.MM.yyyy" : "yyyy, MMMM";
             const el = cellRendererInput(params, { funcFormate: value => dateFormatter(value, format) })
 
-            cellDatePicker(el.querySelector('input'), { params, prefixClass: 'table-forecast-sales', inputmode: 'none' })
+            cellDatePicker(el.querySelector('input'), { params, prefixClass: 'table-forecast-sales', hasDay })
 
             return el
           }
@@ -27,17 +30,19 @@ class TablesForecastSales extends BaseTableForecast {
         },
         {
           headerName: 'Количество лидов (факт)', field: 'leads_fact', minWidth: 80, flex: 0.6,
+          cellRenderer: params => cellRendererInput(params, { inputmode: 'numeric' })
         },
         {
           headerName: '% выполнения', field: '', minWidth: 80, flex: 0.4,
-          valueFormatter: params => {
+          cellRenderer: params => {
             const { leads_fact, leads_planned } = params.data
-            return +leads_planned ? (+leads_fact / +leads_planned * 100).toFixed(2) + '%' : '—'
+            const value = getFormattedNumber(+leads_planned ? (+leads_fact / +leads_planned * 100) : 0)
+            cellColorize(value, params)
+            return value + '%'
           }
         },
         {
           headerName: 'Количество лидов нарастающим итогом (план)', field: 'leads_accumulated_planned', minWidth: 80, flex: 0.5,
-          cellRenderer: params => cellRendererInput(params, { inputmode: 'numeric' })
         },
         {
           headerName: 'Количество лидов нарастающим итогом (факт)', field: 'leads_accumulated_fact', minWidth: 80, flex: 0.5,
@@ -45,9 +50,11 @@ class TablesForecastSales extends BaseTableForecast {
         },
         {
           headerName: '% выполнения', field: '', minWidth: 80, flex: 0.5,
-          valueFormatter: params => {
-            const { leads_accumulated_fact, leads_accumulated_planned } = params.data
-            return +leads_accumulated_planned ? (+leads_accumulated_fact / +leads_accumulated_planned * 100).toFixed(2) + '%' : '—'
+          cellRenderer: params => {
+            const { leads_accumulated_fact = 0, leads_accumulated_planned = 0 } = params.data
+            const value = getFormattedNumber(+leads_accumulated_planned ? (+leads_accumulated_fact / +leads_accumulated_planned * 100) : 0)
+            cellColorize(value, params)
+            return value + '%'
           }
         },
         {
@@ -59,9 +66,11 @@ class TablesForecastSales extends BaseTableForecast {
         },
         {
           headerName: '% выполнения', field: '', minWidth: 80, flex: 0.4, resizable: false,
-          valueFormatter: params => {
+          cellRenderer: params => {
             const { sales, sales_planned } = params.data
-            return +sales_planned ? (+sales / +sales_planned * 100).toFixed(2) + '%' : '—'
+            const value = getFormattedNumber(+sales_planned ? (+sales / +sales_planned * 100) : 0)
+            cellColorize(value, params)
+            return value + '%'
           }
         },
         {

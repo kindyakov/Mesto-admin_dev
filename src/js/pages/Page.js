@@ -9,7 +9,7 @@ class Page {
 
     this.tables = []
     this.charts = []
-
+    this.queryParams = {}
     if (tables.length) {
       tables.forEach(table => {
         const { TableComponent, tableSelector, options = {}, params = {} } = table
@@ -41,7 +41,7 @@ class Page {
   }
 
   events() {
-    this.tables.length && this.actionsTables(table => {
+    this.tables.length && this.actionsTables(table => table.onInit = () => {
       table.onPageChange = page => table.changeQueryParams({ page })
       table.onValueInputSearch = value => table.changeQueryParams({ search_str: value })
       table.selects.onChange = (e, select, value) => table.changeQueryParams({ [select.getAttribute('data-name')]: value })
@@ -87,7 +87,7 @@ class Page {
     return []
   }
 
-  async render(queryParams = {}) {
+  async render(queryParams = this.queryParams) {
     try {
       this.loader.enable()
       const dataEntities = await this.getData(queryParams)

@@ -19,12 +19,12 @@ class Clients extends Dashboards {
     });
   }
 
-  async getData(data = {}) {
-    return getClients(data);
+  async getData(queryParams = {}) {
+    return getClients({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams });
   }
 
-  async getDashboardData(data = {}) {
-    return getDashboardClient(data);
+  async getDashboardData(queryParams = {}) {
+    return getDashboardClient(queryParams)
   }
 }
 

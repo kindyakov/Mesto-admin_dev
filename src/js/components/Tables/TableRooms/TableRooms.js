@@ -114,7 +114,8 @@ class TableRooms extends Table {
     super(selector, mergedOptions, mergedParams);
   }
 
-  onRendering({ rooms = [], cnt_pages = 0, page = 0 }) {
+  onRendering({ rooms = [], cnt_pages = 0, page = 0, cnt_all = 0 }) {
+    this.cntAll = cnt_all
     this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', rooms)
     this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, rooms.length])

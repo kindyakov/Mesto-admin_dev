@@ -49,7 +49,8 @@ class TableSalesChannels extends Table {
     super(selector, mergedOptions, mergedParams);
   }
 
-  onRendering({ sale_channels_stats, cnt_pages, page }) {
+  onRendering({ sale_channels_stats, cnt_pages, page, cnt_all = 0 }) {
+    this.cntAll = cnt_all
     // this.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', sale_channels_stats)
     // this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, sale_channels_stats.length])

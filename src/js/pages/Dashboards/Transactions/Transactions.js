@@ -40,7 +40,13 @@ class Transactions extends Dashboards {
   }
 
   async getData(queryParams = {}) {
-    return Promise.all([[await getSales(queryParams), await getSaleChannels()], getAgreements(queryParams)])
+    return Promise.all([
+      [
+        await getSales({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams }),
+        await getSaleChannels()
+      ],
+      getAgreements({ show_cnt: this.tables[1].gridOptions.paginationPageSize, ...queryParams })
+    ])
   }
 
   async getDashboardData(queryParams = {}) {

@@ -37,12 +37,12 @@ class Finance extends Dashboards {
     });
   }
 
-  async getData(data = {}) {
-    return getFuturePayments(data);
+  async getData(queryParams = {}) {
+    return getFuturePayments({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams });
   }
 
-  async getDashboardData(data = {}) {
-    return Promise.all([getDashboardFinance(data), getFinancePlan(data)])
+  async getDashboardData(queryParams = {}) {
+    return Promise.all([getDashboardFinance(queryParams), getFinancePlan(queryParams)])
   }
 
   async render(queryParams = {}) {

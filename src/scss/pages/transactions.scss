@@ -1,0 +1,14 @@
+.main__content[data-content='dashboards/transactions'] {
+	.table:has(.table-transactions) {
+		@media (max-width: $md4) {
+			.main__date-filter {
+				min-width: 200px;
+			}
+		}
+		@media (max-width: $md6) {
+			.table__form {
+				flex-direction: column;
+			}
+		}
+	}
+}

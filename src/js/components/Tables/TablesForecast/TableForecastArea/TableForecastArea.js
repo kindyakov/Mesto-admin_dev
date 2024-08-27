@@ -3,7 +3,10 @@ import datePicker from '../../../../configs/datepicker.js';
 import { dateFormatter } from '../../../../settings/dateFormatter.js';
 import { formattingPrice } from '../../../../utils/formattingPrice.js';
 import { cellRendererInput } from '../../utils/cellRenderer.js';
-import { cellDatePicker } from '../cellDatePicker.js';
+
+import { cellDatePicker } from '../utils/cellDatePicker.js';
+import { cellColorize } from '../utils/cellColorize.js';
+import { getFormattedNumber } from '../utils/getFormattedNumber.js';
 
 class TableForecastArea extends BaseTableForecast {
   constructor(selector, options, params) {
@@ -33,9 +36,11 @@ class TableForecastArea extends BaseTableForecast {
         },
         {
           headerName: '% выполнения', field: '', minWidth: 80, flex: 0.4,
-          valueFormatter: params => {
+          cellRenderer: params => {
             const { revenue, revenue_planned } = params.data
-            return +revenue_planned ? (+revenue / +revenue_planned * 100).toFixed(2) + '%' : '—'
+            const value = getFormattedNumber(+revenue_planned ? (+revenue / +revenue_planned * 100) : 0)
+            cellColorize(value, params)
+            return value + '%'
           }
         },
         {
@@ -69,9 +74,11 @@ class TableForecastArea extends BaseTableForecast {
         },
         {
           headerName: '% выполнения', field: '', minWidth: 80, flex: 0.6, resizable: false,
-          valueFormatter: params => {
+          cellRenderer: params => {
             const { rented_area, rented_area_planned } = params.data
-            return +rented_area_planned ? (+rented_area / +rented_area_planned * 100).toFixed(2) + '%' : '—'
+            const value = getFormattedNumber(+rented_area_planned ? (+rented_area / +rented_area_planned * 100) : 0)
+            cellColorize(value, params)
+            return value + '%'
           }
         },
         {
@@ -93,7 +100,8 @@ class TableForecastArea extends BaseTableForecast {
     super(selector, mergedOptions, mergedParams);
   }
 
-  onRendering({ finance_planfact = [] }) {
+  onRendering({ finance_planfact = [], cnt_all }) {
+    this.cntAll = cnt_all
     this.data = finance_planfact
     this.gridApi.setGridOption('rowData', finance_planfact)
     this.gridApi.setGridOption('paginationPageSize', finance_planfact.length + 20)
