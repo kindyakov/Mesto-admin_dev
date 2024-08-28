@@ -169,7 +169,15 @@
 		border-color: transparent !important;
 	}
 
+	.ag-cell-wrapper {
+		height: 100%;
+	}
+	
 	.ag-cell-value {
+		height: 100%;
+		display: flex;
+		align-items: center;
+
 		&:has(.mySelect) {
 			overflow: visible;
 		}
