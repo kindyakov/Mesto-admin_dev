@@ -7,6 +7,7 @@ import { Loader } from '../../modules/myLoader.js';
 import { Select } from '../../modules/mySelect.js';
 import { createCalendar } from '../../settings/createCalendar.js';
 import { mergeQueryParams } from "../../utils/buildQueryParams.js";
+import { dateFormatter } from '../../settings/dateFormatter.js'
 
 class Table {
   constructor(selector, options, params) {
@@ -60,7 +61,6 @@ class Table {
     this.getData = this.params.getData
     this.onSubmitSearch = this.params.onSubmitSearch
     this.onValidateSearch = this.params.onValidateSearch
-    this.onValueInputSearch = this.params.onValueInputSearch
 
     this.grid = createGrid(this.gridOptions.wrapper.querySelector(selector), this.gridOptions);
     this.table = this.gridOptions.wrapper.querySelector(selector)
@@ -70,10 +70,7 @@ class Table {
 
     this.selectedRows = []
     this.queryParams = { show_cnt: this.gridOptions.paginationPageSize }
-    this.onReadyFunctions = [this.initPaging.bind(this)]
-
-
-    // this.init()
+    this.onReadyFunctions = []
   }
 
   onInit() {
@@ -104,6 +101,7 @@ class Table {
       dateFormat: "d. M, Y",
     })
 
+    this.initPaging()
     this.onInit()
     this.events()
   }
@@ -119,13 +117,27 @@ class Table {
       this.formTableSearch.addEventListener('submit', this.submitFormSearch.bind(this))
 
       this.inputTableSearch && this.inputTableSearch.addEventListener('input', e => {
-        let value = e.target.value
-
         clearTimeout(timerSearch);
         timerSearch = setTimeout(() => {
-          this.onValueInputSearch(value)
+          this.changeQueryParams({ [e.target.name]: e.target.value })
         }, 500);
       })
+    }
+
+    if (this.selects) {
+      this.selects.onChange = (e, select, value) => this.changeQueryParams({ [select.getAttribute('data-name')]: value })
+    }
+
+    if (this.calendar) {
+      this.calendar.methods.onChange = (selectedDates, dateStr, instance) => {
+        if (selectedDates.length === 2) {
+          const [start, end] = instance.element.name.split(',')
+          this.changeQueryParams({
+            [start]: dateFormatter(selectedDates[0], 'yyyy-MM-dd'),
+            [end]: dateFormatter(selectedDates[1], 'yyyy-MM-dd'),
+          })
+        }
+      }
     }
 
     if (this.params.isPagination && this.pagination) {

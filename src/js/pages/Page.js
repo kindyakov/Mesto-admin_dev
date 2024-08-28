@@ -1,4 +1,3 @@
-import { getFormattedDate } from "../utils/getFormattedDate.js"
 import { mergeQueryParams } from "../utils/buildQueryParams.js";
 
 class Page {
@@ -41,22 +40,7 @@ class Page {
   }
 
   events() {
-    this.tables.length && this.actionsTables(table => table.onReadyFunctions.push(function (context) {
-      context.onValueInputSearch = value => context.changeQueryParams({ search_str: value })
-      context.selects.onChange = (e, select, value) => context.changeQueryParams({ [select.getAttribute('data-name')]: value })
-
-      if (context.calendar) {
-        context.calendar.methods.onChange = (selectedDates, dateStr, instance) => {
-          if (selectedDates.length === 2) {
-            const [start, end] = instance.element.name.split(',')
-            context.changeQueryParams({
-              [start]: getFormattedDate(selectedDates[0], 'YYYY-MM-DD'),
-              [end]: getFormattedDate(selectedDates[1], 'YYYY-MM-DD'),
-            }, context)
-          }
-        }
-      }
-    }))
+    
   }
 
   changeQueryParams(params, table = null) {
