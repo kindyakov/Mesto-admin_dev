@@ -62,7 +62,7 @@ class Dashboards extends Page {
       if (!data[name]) {
         widget.style.fontSize = '16px'
       }
-      if (name === 'revenue') {
+      if (name === 'revenue' || name === 'this_month_revenue' || name === 'reestr_sum') {
         widget.innerText = Number.isInteger(+value) ? formatePrice(+value) + ' ₽' : ''
       } else {
         widget.innerHTML = value
