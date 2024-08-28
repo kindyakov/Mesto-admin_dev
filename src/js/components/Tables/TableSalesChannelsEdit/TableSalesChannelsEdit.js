@@ -65,15 +65,17 @@ class TableSalesChannelsEdit extends Table {
 
     super(selector, mergedOptions, mergedParams);
 
-    const datepicker = datePicker(this.wpTable.querySelector('.input-date-filter-month'), {
-      view: 'months',
-      minView: 'months',
-      dateFormat: 'yyyy-MM',
-      position: 'bottom right',
-      onSelect: ({ date, formattedDate, datepicker }) => {
-        this.changeQueryParams({ [datepicker.$el.name]: formattedDate })
-      }
-    });
+    this.onReadyFunctions.push(function (context) {
+      const datepicker = datePicker(context.wpTable.querySelector('.input-date-filter-month'), {
+        view: 'months',
+        minView: 'months',
+        dateFormat: 'yyyy-MM',
+        position: 'bottom right',
+        onSelect: ({ date, formattedDate, datepicker }) => {
+          context.changeQueryParams({ [datepicker.$el.name]: formattedDate })
+        }
+      });
+    })
   }
 
   onRendering({ sale_channels = [], cnt_all = 0 }) {

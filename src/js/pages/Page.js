@@ -41,23 +41,23 @@ class Page {
   }
 
   events() {
-    this.tables.length && this.actionsTables(table => table.onInit = () => {
-      table.onPageChange = page => table.changeQueryParams({ page })
-      table.onValueInputSearch = value => table.changeQueryParams({ search_str: value })
-      table.selects.onChange = (e, select, value) => table.changeQueryParams({ [select.getAttribute('data-name')]: value })
+    this.tables.length && this.actionsTables(table => table.onReadyFunctions.push(function (context) {
+      context.onPageChange = page => context.changeQueryParams({ page })
+      context.onValueInputSearch = value => context.changeQueryParams({ search_str: value })
+      context.selects.onChange = (e, select, value) => context.changeQueryParams({ [select.getAttribute('data-name')]: value })
 
-      if (table.calendar) {
-        table.calendar.methods.onChange = (selectedDates, dateStr, instance) => {
+      if (context.calendar) {
+        context.calendar.methods.onChange = (selectedDates, dateStr, instance) => {
           if (selectedDates.length === 2) {
             const [start, end] = instance.element.name.split(',')
-            table.changeQueryParams({
+            context.changeQueryParams({
               [start]: getFormattedDate(selectedDates[0], 'YYYY-MM-DD'),
               [end]: getFormattedDate(selectedDates[1], 'YYYY-MM-DD'),
-            }, table)
+            }, context)
           }
         }
       }
-    })
+    }))
   }
 
   changeQueryParams(params, table = null) {

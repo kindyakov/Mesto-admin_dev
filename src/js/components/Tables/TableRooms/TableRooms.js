@@ -68,7 +68,7 @@ class TableRooms extends Table {
           valueFormatter: params => params.value ? params.value + ' м²' : '___'
         },
         {
-          headerName: 'Цена', field: 'price', minWidth: 90, flex: 0.4,
+          headerName: 'Цена', field: 'price', minWidth: 120, flex: 0.3,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-price')
@@ -77,7 +77,7 @@ class TableRooms extends Table {
           }
         },
         {
-          headerName: 'Статус', field: 'rented', minWidth: 110, flex: 0.3,
+          headerName: 'Статус', field: 'rented', minWidth: 120, flex: 0.3,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-agrid')

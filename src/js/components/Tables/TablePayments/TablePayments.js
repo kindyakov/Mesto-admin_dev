@@ -18,7 +18,7 @@ class TablePayments extends Table {
       columnDefs: [
         { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
         {
-          headerName: 'Договор', field: 'agrid', minWidth: 80, flex: 0.3,
+          headerName: 'Договор', field: 'agrid', minWidth: 90, flex: 0.3,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-agrid')

@@ -18,7 +18,7 @@ api.interceptors.response.use(
           response.data.rented_cnt = response.data.rented_cnt.map(obj => {
             if (+obj.rented == 0) {
               obj.area = obj.area + d.area
-              obj.cnt = obj.cnt + d.area
+              obj.cnt = obj.cnt + d.cnt
               obj.rate = obj.rate + d.rate
             }
 

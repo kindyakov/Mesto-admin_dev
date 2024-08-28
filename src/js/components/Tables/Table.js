@@ -20,7 +20,6 @@ class Table {
       onSubmitSearch: () => { },
       onValidateSearch: () => { },
       onValueInputSearch: () => { },
-      onInit: () => { },
     }
 
     let defaultoptions = {
@@ -34,7 +33,7 @@ class Table {
       suppressHorizontalScroll: false,
       // suppressPaginationPanel: true,
       suppressScrollOnNewData: true,
-      // enableCellTextSelection: true, // разрешить выделять текст
+      enableCellTextSelection: true, // разрешить выделять текст
       rowSelection: 'multiple', // Включение множественного выбора строк
       rowHeight: 60,
       domLayout: 'normal',
@@ -92,28 +91,36 @@ class Table {
     this.params = Object.assign(defaultParams, params)
     this.gridOptions = Object.assign(defaultoptions, options)
 
-    this.columnDefs = []
-    this.grid = createGrid(this.gridOptions.wrapper.querySelector(selector), this.gridOptions);
-    this.table = this.gridOptions.wrapper.querySelector(selector)
-    this.app = window.app
-
     this.getData = this.params.getData
     this.onPageChange = this.params.onPageChange
     this.onSubmitSearch = this.params.onSubmitSearch
     this.onValidateSearch = this.params.onValidateSearch
     this.onValueInputSearch = this.params.onValueInputSearch
-    this.onInit = this.params.onInit
+    // this.onInit = this.params.onInit
+
+    // this.columnDefs = []
+    this.grid = createGrid(this.gridOptions.wrapper.querySelector(selector), this.gridOptions);
+    this.table = this.gridOptions.wrapper.querySelector(selector)
+    this.app = window.app
 
     this.onRowSelected = this.onRowSelected.bind(this)
 
     this.selectedRows = []
     this.queryParams = { show_cnt: this.gridOptions.paginationPageSize }
+    this.onReadyFunctions = []
 
     this.page = null
     this.pages = null
 
     // this.init()
   }
+
+  onInit() {
+    this.onReadyFunctions.forEach(fun => {
+      fun(this)
+    })
+  }
+
 
   init() {
     if (!this.table) return
