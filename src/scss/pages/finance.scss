@@ -1,0 +1,15 @@
+.main__content[data-content='dashboards/finance'] {
+	.widgets {
+		@media (min-width: $md3) {
+			grid-template-columns: repeat(3, minmax(300px, 1fr));
+		}
+
+		&__item {
+			@media (min-width: $md3) {
+				&:last-child {
+					grid-column-start: 3;
+				}
+			}
+		}
+	}
+}
