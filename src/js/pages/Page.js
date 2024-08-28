@@ -42,7 +42,6 @@ class Page {
 
   events() {
     this.tables.length && this.actionsTables(table => table.onReadyFunctions.push(function (context) {
-      context.onPageChange = page => context.changeQueryParams({ page })
       context.onValueInputSearch = value => context.changeQueryParams({ search_str: value })
       context.selects.onChange = (e, select, value) => context.changeQueryParams({ [select.getAttribute('data-name')]: value })
 

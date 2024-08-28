@@ -1,14 +1,12 @@
-import { createGrid } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
+import { createGrid } from 'ag-grid-community';
 import { translations } from './translations.js';
-import { paginationHtml } from './html.js';
+import Pagination from '../../components/Pagination/Pagination.js'
 import { Loader } from '../../modules/myLoader.js';
-import { Select, exSelect } from '../../modules/mySelect.js';
+import { Select } from '../../modules/mySelect.js';
 import { createCalendar } from '../../settings/createCalendar.js';
-
 import { mergeQueryParams } from "../../utils/buildQueryParams.js";
-import { createElement } from '../../settings/createElement.js';
 
 class Table {
   constructor(selector, options, params) {
@@ -16,7 +14,6 @@ class Table {
       isPagination: true,
       paginationCountBtn: 5,
       getData: async () => { },
-      onPageChange: () => { },
       onSubmitSearch: () => { },
       onValidateSearch: () => { },
       onValueInputSearch: () => { },
@@ -51,37 +48,6 @@ class Table {
         document.querySelector(`${selector} .ag-paging-page-summary-panel`)?.remove()
         document.querySelector(`${selector} .ag-paging-page-size`)?.remove()
 
-        if (defaultParams.isPagination) {
-          this.tableFooter.insertAdjacentHTML('beforeend', paginationHtml.pagination())
-          this.tablePaginationPages = this.tableFooter.querySelector(`.table-pagination-pages`)
-          this.tablePaginationBtnPrev = this.tableFooter.querySelector(`.btn-pagination-prev`)
-          this.tablePaginationBtnNext = this.tableFooter.querySelector(`.btn-pagination-next`)
-
-          const pagingShowCount = createElement('div', {
-            content: `<span>Показывать по</span>`,
-            classes: ['paging-show-count'],
-          })
-          // Кастомный переключатель
-          const select = createElement('select', {
-            attributes: [
-              ['name', 'count-rows'],
-            ],
-            content: `
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-              <option value="20">20</option>
-              <option value="30">30</option>
-              <option value="0">все</option>
-            `
-          })
-
-          pagingShowCount.appendChild(select)
-          this.tableFooter.insertAdjacentElement('afterbegin', pagingShowCount)
-
-          this.customPageSize = new exSelect([select], { selectMinWidth: 80, })
-        }
-
         this.init()
       },
       onRowSelected: params => this.onRowSelected(params)
@@ -92,13 +58,10 @@ class Table {
     this.gridOptions = Object.assign(defaultoptions, options)
 
     this.getData = this.params.getData
-    this.onPageChange = this.params.onPageChange
     this.onSubmitSearch = this.params.onSubmitSearch
     this.onValidateSearch = this.params.onValidateSearch
     this.onValueInputSearch = this.params.onValueInputSearch
-    // this.onInit = this.params.onInit
 
-    // this.columnDefs = []
     this.grid = createGrid(this.gridOptions.wrapper.querySelector(selector), this.gridOptions);
     this.table = this.gridOptions.wrapper.querySelector(selector)
     this.app = window.app
@@ -107,10 +70,8 @@ class Table {
 
     this.selectedRows = []
     this.queryParams = { show_cnt: this.gridOptions.paginationPageSize }
-    this.onReadyFunctions = []
+    this.onReadyFunctions = [this.initPaging.bind(this)]
 
-    this.page = null
-    this.pages = null
 
     // this.init()
   }
@@ -121,6 +82,13 @@ class Table {
     })
   }
 
+  initPaging() {
+    if (!this.params.isPagination) return
+    this.pagination = new Pagination(this.tableFooter, {
+      pageSize: this.gridOptions.paginationPageSize,
+      countBtn: this.params.paginationCountBtn
+    })
+  }
 
   init() {
     if (!this.table) return
@@ -136,25 +104,11 @@ class Table {
       dateFormat: "d. M, Y",
     })
 
-    this.events()
     this.onInit()
+    this.events()
   }
 
   events() {
-    this.table.addEventListener('click', e => {
-      if (e.target.closest('.btn-pagination-prev') && this.params.isPagination) {
-        this.prevPage()
-      }
-
-      if (e.target.closest('.btn-pagination-next') && this.params.isPagination) {
-        this.nextPage()
-      }
-
-      if (e.target.closest('.btn-page') && this.params.isPagination) {
-        this.handleBtnPage(e)
-      }
-    })
-
     if (this.btnTableUploadExcel) {
       this.btnTableUploadExcel.addEventListener('click', this.handleBtnUploadExcel.bind(this))
     }
@@ -174,75 +128,18 @@ class Table {
       })
     }
 
-    if (this.customPageSize) {
-      this.customPageSize.setValue(this.gridOptions.paginationPageSize)
-      this.customPageSize.onChange = (e, select, value) => {
-        const count = value == 0 ? +this.cntAll : +value
-        this.changeQueryParams({ show_cnt: count, page: value == 0 ? null : this.queryParams.page })
+    if (this.params.isPagination && this.pagination) {
+      this.pagination.onChangeShowCount = (count) => {
+        this.changeQueryParams({ show_cnt: count, page: null })
         this.gridApi.setGridOption('paginationPageSize', count)
       }
+      this.pagination.onPageChange = page => this.changeQueryParams({ page })
     }
   }
 
   getLocaleText(params) {
     return translations[params.key] || params.defaultValue;
   };
-
-  setPage(page, pages) {
-    this.page = page;
-    this.pages = pages;
-    this.updatePaginationControls(page, pages);
-  }
-
-  updatePaginationControls(currentPage, totalPages) {
-    if (!this.tablePaginationPages) return;
-
-    // Очистка текущей пагинации
-    this.tablePaginationPages.innerHTML = '';
-
-    const paginationArray = [];
-    const paginationCountBtn = this.params.paginationCountBtn = 5;
-    const halfBtnCount = Math.floor(paginationCountBtn / 1.1);
-
-    for (let i = 1; i <= totalPages; i++) {
-      if (i === 1 || i === totalPages || (i >= currentPage - halfBtnCount && i <= currentPage + halfBtnCount)) {
-        paginationArray.push(i);
-      } else if (i === currentPage - halfBtnCount - 1 || i === currentPage + halfBtnCount + 1) {
-        paginationArray.push('...');
-      }
-    }
-
-    paginationArray.forEach(page => {
-      this.tablePaginationPages.insertAdjacentHTML('beforeend', paginationHtml.li(page, page === currentPage));
-    });
-  }
-
-  prevPage() {
-    if (+this.page > 1) {
-      this.page--;
-      this.updatePaginationControls(this.page, this.pages);
-      this.onPageChange(this.page);
-    }
-  }
-
-  handleBtnPage(e) {
-    const btn = e.target.closest('.btn-page')
-    const page = btn.getAttribute('data-page');
-    if (page === '...') return;
-    if (parseInt(page, 10) !== this.page) {
-      this.page = parseInt(page, 10)
-      this.updatePaginationControls(this.page, this.pages)
-      this.onPageChange(this.page);
-    }
-  }
-
-  nextPage() {
-    if (+this.page < this.pages) {
-      this.page++;
-      this.updatePaginationControls(this.page, this.pages);
-      this.onPageChange(this.page);
-    }
-  }
 
   // срабатывает "submit" у form search
   submitFormSearch(e) {

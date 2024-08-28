@@ -186,7 +186,7 @@ class TableClients extends Table {
 
   onRendering({ clients = [], cnt_pages, page, cnt_all = 0 }) {
     this.cntAll = cnt_all
-    this.setPage(page, cnt_pages)
+    this.pagination.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', clients)
     // this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, 30, clients.length])
   }

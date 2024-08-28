@@ -145,7 +145,7 @@ class TablePayments extends Table {
 
   onRendering({ payments = [], cnt_pages, page, cnt_all }) {
     this.cntAll = cnt_all
-    this.setPage(page, cnt_pages)
+    this.pagination.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', payments)
     // this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, payments.length])
   }

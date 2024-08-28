@@ -56,7 +56,7 @@ class TableUpcomingPayments extends Table {
 
   onRendering({ agreements = [], cnt_pages, page, cnt_all = 0 }) {
     this.cntAll = cnt_all
-    this.setPage(page, cnt_pages)
+    this.pagination.setPage(page, cnt_pages)
     this.gridApi.setGridOption('rowData', agreements)
     this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length])
   }

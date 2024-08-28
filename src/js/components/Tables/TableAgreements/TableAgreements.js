@@ -113,7 +113,7 @@ class TableAgreements extends Table {
 
   onRendering({ agreements = [], cnt_pages, page, cnt_all = 0 }) {
     this.cntAll = cnt_all
-    this.setPage(page, cnt_pages)
+    this.pagination.setPage(page, cnt_pages, cnt_all)
     this.gridApi.setGridOption('rowData', agreements)
   }
 
