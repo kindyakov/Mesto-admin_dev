@@ -97,7 +97,12 @@
 		gap: 10px;
 
 		&_top {
-			> span {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 10px;
+
+			.num {
 				font-weight: 500;
 				font-size: 16px;
 				color: #dee4ee;
@@ -105,6 +110,11 @@
 				border-radius: 22px;
 				padding: 6px 10px;
 				display: inline-block;
+			}
+
+			.update-date {
+				font-size: 14px;
+				text-align: center;
 			}
 		}
 
@@ -124,7 +134,9 @@
 		&_bottom {
 			display: flex;
 			justify-content: space-between;
+			align-items: center;
 			gap: 10px;
+
 			> div {
 				display: flex;
 				align-items: center;

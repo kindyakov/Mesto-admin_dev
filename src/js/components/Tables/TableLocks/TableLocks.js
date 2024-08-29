@@ -1,6 +1,7 @@
 import Table from '../Table.js';
 import { createElement } from '../../../settings/createElement.js'
 import { getBatteryImage } from '../../../pages/ChargingLocks/html.js';
+import { dateFormatter } from '../../../settings/dateFormatter.js';
 
 class TableLocks extends Table {
   constructor(selector, options, params) {
@@ -16,7 +17,7 @@ class TableLocks extends Table {
           }
         },
         {
-          headerName: 'Заряд', field: 'electric_quantity', width: 100, flex: 1, resizable: false,
+          headerName: 'Заряд', field: 'electric_quantity', width: 110, resizable: false,
           cellRenderer: params => {
             const div = createElement('div', {
               content: `
@@ -25,6 +26,14 @@ class TableLocks extends Table {
             })
             div.style.cssText = `display: flex; align-items: center; gap: 10px; color: #212b36; font-weight: 400; font-size: 14px;`
             return div
+          }
+        },
+        {
+          headerName: 'Дата обновление', field: 'update_date', minWidth: 150, flex: 1, resizable: false,
+          cellRenderer: params => {
+            if (!params.value) return ''
+            const [date, time] = params.value.split(' ')
+            return `${dateFormatter(date)} ${time}`
           }
         },
         {
