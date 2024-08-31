@@ -48,21 +48,37 @@ class BaseTableForecast extends Table {
     this.validateInputHandler = this.validateInput.bind(this);
   }
 
+  addHandleDbClickCell(params) {
+    params.eGridCell.addEventListener('dblclick', e => {
+      const row = params.eGridCell.closest('.ag-row')
+      const input = e.target.closest('input')
+      const btnEdit = row.querySelector('.button-table-row-edit')
+
+      if (input.classList.contains('not-edit')) {
+        btnEdit.classList.add('_edit');
+        this.setReadonly(input, false)
+      }
+    })
+  }
+
   btnEditCellRenderer(params) {
-    const button = createElement('button', { classes: ['button-table-row-edit'], content: btnEditContent() });
+    const button = createElement('button', { classes: ['button-table-row-edit',], content: btnEditContent() });
 
     if (params.data.isNew) {
-      this.toggleEditMode(params, button);
+      this.toggleEditMode(params);
     }
 
-    button.addEventListener('click', () => this.toggleEditMode(params, button));
+    button.addEventListener('click', () => this.toggleEditMode(params));
+    params.btnEdit = button
+
     return button;
   }
 
-  toggleEditMode(params, button) {
+  toggleEditMode(params) {
     let { data } = params;
-    const isEditMode = button.classList.toggle('_edit');
     const row = params.eGridCell.closest('.ag-row');
+    const button = row.querySelector('.button-table-row-edit')
+    const isEditMode = button.classList.toggle('_edit');
     const inputs = row.querySelectorAll('.cell-input');
 
     inputs.length && inputs.forEach(input => {
@@ -88,7 +104,14 @@ class BaseTableForecast extends Table {
         }
       })
 
-      this.setPlan(queryParams, this.endpoint);
+      this.setPlan(queryParams, this.endpoint, params).then(data => {
+        if (data.msg_type !== 'success') return
+        const rowNode = this.gridApi.getRowNode(params.node.id);
+        this.gridApi.refreshCells({
+          rowNodes: [rowNode],
+          force: true // опционально, заставит рендерить все ячейки, даже если данные не изменились
+        });
+      })
     }
   }
 
@@ -134,6 +157,7 @@ class BaseTableForecast extends Table {
       const response = await api.post(endpoint, data);
       if (response.status !== 200) return;
       this.app.notify.show(response.data)
+      return response.data
     } catch (error) {
       console.log(error);
       throw error;

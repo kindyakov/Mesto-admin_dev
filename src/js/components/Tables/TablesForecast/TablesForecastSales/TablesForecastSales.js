@@ -20,24 +20,31 @@ class TablesForecastSales extends BaseTableForecast {
             const el = cellRendererInput(params, { funcFormate: value => dateFormatter(value, format) })
 
             cellDatePicker(el.querySelector('input'), { params, prefixClass: 'table-forecast-sales', hasDay })
+            this.addHandleDbClickCell(params)
 
             return el
           }
         },
         {
           headerName: 'Количество лидов (план)', field: 'leads_planned', minWidth: 80, flex: 0.5,
-          cellRenderer: params => cellRendererInput(params, { inputmode: 'numeric' })
+          cellRenderer: params => {
+            this.addHandleDbClickCell(params)
+            return cellRendererInput(params, { inputmode: 'numeric' })
+          }
         },
         {
           headerName: 'Количество лидов (факт)', field: 'leads_fact', minWidth: 80, flex: 0.6,
-          cellRenderer: params => cellRendererInput(params, { inputmode: 'numeric' })
+          cellRenderer: params => {
+            this.addHandleDbClickCell(params)
+            return cellRendererInput(params, { inputmode: 'numeric' })
+          }
         },
         {
           headerName: '% выполнения', field: '', minWidth: 80, flex: 0.4,
           cellRenderer: params => {
             const { leads_fact, leads_planned } = params.data
             const value = getFormattedNumber(+leads_planned ? (+leads_fact / +leads_planned * 100) : 0)
-            cellColorize(value, params)
+            cellColorize(value, params)            
             return value + '%'
           }
         },
@@ -59,7 +66,10 @@ class TablesForecastSales extends BaseTableForecast {
         },
         {
           headerName: 'Сделок (план)', field: 'sales_planned', minWidth: 80, flex: 0.5,
-          cellRenderer: params => cellRendererInput(params, { inputmode: 'numeric' })
+          cellRenderer: params => {
+            this.addHandleDbClickCell(params)
+            return cellRendererInput(params, { inputmode: 'numeric' })
+          }
         },
         {
           headerName: 'Сделок (факт)', field: 'sales', minWidth: 80, flex: 0.5,

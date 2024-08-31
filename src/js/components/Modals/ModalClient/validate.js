@@ -18,13 +18,12 @@ export function validateClient(form, options) {
   const calendar = createCalendar(inputBirthday, {
     dateFormat: "d.m.Y", // 'Y-m-d',
     maxDate: getMinDate(),
-    appendTo: inputBirthday.parentElement
+    appendTo: inputBirthday.parentElement,
+    clickOpens: false
   })
-
-  calendar.setDate(inputBirthday.value, true, "d.m.Y");
-
+  
   validator.calendars = [calendar]
-  validator.calendars.forEach(c => c.set('clickOpens', false))
+  // validator.calendars.forEach(c => c.set('clickOpens', false))
 
   const inputPhone = form.querySelector('input[name="username"]')
   Inputmask.default("+7 (999) 999-99-99").mask(inputPhone)

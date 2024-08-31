@@ -48,7 +48,7 @@ class ModalPassport extends BaseModal {
     formData.delete('flatpickr-month')
 
     Array.from(formData).forEach(obj => data[obj[0]] = obj[1])
-    
+
     return { client: data }
   }
 
@@ -84,9 +84,16 @@ class ModalPassport extends BaseModal {
     if (!params) return
     try {
       this.loader.enable()
-      const extractData = this.extractData(params)
-      if (!extractData) return
-      const data = await getClientTotal(extractData.user_id + '/')
+      let user_id = ''
+
+      if (params instanceof Element) {
+        user_id = params.getAttribute('user-id')
+      } else {
+        user_id = params
+      }
+
+      if (!user_id) return
+      const data = await getClientTotal(user_id + '/')
       if (data) {
         this.renderModal(data)
       }

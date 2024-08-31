@@ -45,7 +45,7 @@ class ModalClient extends BaseModal {
     this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
 
     this.attrsModal.length && this.attrsModal.forEach(el => {
-      el.setAttribute('data-json', JSON.stringify(client))
+      el.setAttribute('user-id', client.user_id)
     })
 
     this.userId = client.user_id
@@ -76,14 +76,20 @@ class ModalClient extends BaseModal {
     if (!params) return
     try {
       this.loader.enable()
-      let extractData = this.extractData(params)
-      if (!extractData) {
-        extractData = { user_id: params.getAttribute('user-id') }
-        if (!extractData.user_id) return
+      let user_id = ''
+
+      if (params instanceof Element) {
+        user_id = params.getAttribute('user-id')
+      } else {
+        user_id = params
       }
-      const data = await getClientTotal(extractData.user_id + '/')
+
+      if (!user_id) return
+
+      const data = await getClientTotal(user_id + '/')
       if (data) {
         this.renderModal(data)
+        this.data = data
       }
     } catch (error) {
       console.error(error)

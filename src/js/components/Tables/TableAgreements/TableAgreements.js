@@ -104,6 +104,7 @@ class TableAgreements extends Table {
     const tippyInstance = actions(button, {
       buttonsIs: [false, true],
       attrModal: 'modal-agreement',
+      placement: 'bottom-right',
       data: params.data,
       onOpen: () => { },
     })

@@ -1,7 +1,7 @@
 import Page from "../Page.js"
 import { Select } from "../../modules/mySelect.js"
 import { createCalendar } from "../../settings/createCalendar.js"
-import { getFormattedDate } from "../../utils/getFormattedDate.js"
+import { dateFormatter } from "../../settings/dateFormatter.js";
 
 function formatePrice(value) {
   if (!value) return ''
@@ -14,6 +14,13 @@ function formatePrice(value) {
   }
 
   return value.toFixed(3) + ' ' + units[unitIndex]
+}
+
+function subtractMonths(date, months) {
+  const newDate = new Date(date);
+  newDate.setMonth(newDate.getMonth() - months);
+
+  return newDate;
 }
 
 class Dashboards extends Page {
@@ -31,15 +38,21 @@ class Dashboards extends Page {
       this.calendars = createCalendar(`[data-content="${options.page}"] .input-date-filter`, {
         mode: "range",
         dateFormat: "d. M, Y",
+        defaultDate: [subtractMonths(new Date(), 2), new Date()],
         onChange: (selectedDates, dateStr, instance) => {
           if (selectedDates.length === 2) {
             this.changeQueryParams({
-              start_date: getFormattedDate(selectedDates[0], 'YYYY-MM-DD'),
-              end_date: getFormattedDate(selectedDates[1], 'YYYY-MM-DD')
+              start_date: dateFormatter(selectedDates[0], 'yyyy-MM-dd'),
+              end_date: dateFormatter(selectedDates[1], 'yyyy-MM-dd')
             })
           }
         }
       })
+
+      this.queryParams = {
+        start_date: dateFormatter(this.calendars.selectedDates[0], 'yyyy-MM-dd'),
+        end_date: dateFormatter(this.calendars.selectedDates[1], 'yyyy-MM-dd'),
+      }
     }
 
     if (this.selectFilter) {
@@ -70,7 +83,7 @@ class Dashboards extends Page {
     });
   }
 
-  async render(queryParams = {}) {
+  async render(queryParams = this.queryParams) {
     try {
       this.loader.enable()
       const [dataDashboard = null, dataEntities = null] = await Promise.all([this.getDashboardData(queryParams), this.getData(queryParams)])

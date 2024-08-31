@@ -15,17 +15,35 @@ class ModalRoom extends BaseModal {
     this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
 
     this.attrsModal.length && this.attrsModal.forEach(el => {
-      el.setAttribute('data-json', JSON.stringify(room))
+      el.setAttribute('room-id', room.room_id)
     })
 
     this.renderElements.length && this.renderElements.forEach(el => renderForm(el, room))
   }
 
-  onOpen(params = null) {
+  async onOpen(params = null) {
     if (!params) return
-    const extractData = this.extractData(params)
-    if (extractData) {
-      this.renderModal(extractData)
+    try {
+      this.loader.enable()
+      let id = ''
+
+      if (params instanceof Element) {
+        id = params.getAttribute('user-id')
+      } else {
+        id = params
+      }
+
+      if (!id) return
+
+      const data = await getClientTotal(user_id + '/')
+      if (data) {
+        this.renderModal(data)
+        this.data = data
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loader.disable()
     }
   }
 }

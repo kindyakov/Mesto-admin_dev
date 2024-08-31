@@ -22,13 +22,17 @@ class TableForecastArea extends BaseTableForecast {
             const el = cellRendererInput(params, { funcFormate: value => dateFormatter(value, format) })
 
             cellDatePicker(el.querySelector('input'), { params, prefixClass: 'table-forecast-area', hasDay })
+            this.addHandleDbClickCell(params)
 
             return el
           }
         },
         {
           headerName: 'Выручка план', field: 'revenue_planned', minWidth: 80, flex: 0.5,
-          cellRenderer: params => cellRendererInput(params, { funcFormate: formattingPrice, inputmode: 'numeric', })
+          cellRenderer: params => {
+            this.addHandleDbClickCell(params)
+            return cellRendererInput(params, { inputmode: 'numeric', })
+          }
         },
         {
           headerName: 'Выручка факт', field: 'revenue', minWidth: 80, flex: 0.5,
@@ -45,21 +49,30 @@ class TableForecastArea extends BaseTableForecast {
         },
         {
           headerName: 'Выезды (м²) (план)', field: 'outflow_area', minWidth: 80, flex: 0.5,
-          cellRenderer: params => cellRendererInput(params, { inputmode: 'decimal' })
+          cellRenderer: params => {
+            this.addHandleDbClickCell(params)
+            return cellRendererInput(params, { inputmode: 'decimal' })
+          }
         },
         {
           headerName: 'Выезды (м²) (факт)	% выполнения', field: 'outflow_area_planned', minWidth: 80, flex: 0.5,
         },
         {
           headerName: 'Заезды (м²) (план)', field: 'inflow_area_planned', minWidth: 80, flex: 0.5,
-          cellRenderer: params => cellRendererInput(params, { inputmode: 'decimal' })
+          cellRenderer: params => {
+            this.addHandleDbClickCell(params)
+            return cellRendererInput(params, { inputmode: 'decimal' })
+          }
         },
         {
           headerName: 'Заезды (м²) (факт)', field: 'inflow_area', minWidth: 80, flex: 0.5,
         },
         {
           headerName: 'Выручка накопленным итогом (план)', field: 'revenue_accumulated_planned', minWidth: 80, flex: 0.5,
-          cellRenderer: params => cellRendererInput(params, { funcFormate: formattingPrice, inputmode: 'numeric' })
+          cellRenderer: params => {
+            this.addHandleDbClickCell(params)
+            return cellRendererInput(params, { funcFormate: formattingPrice, inputmode: 'numeric' })
+          }
         },
         {
           headerName: 'Выручка накопленным итогом (факт)', field: 'revenue_accumulated', minWidth: 80, flex: 0.5,
@@ -67,7 +80,10 @@ class TableForecastArea extends BaseTableForecast {
         },
         {
           headerName: 'Арендованная площадь (план)', field: 'rented_area_planned', minWidth: 80, flex: 0.5,
-          cellRenderer: params => cellRendererInput(params, { funcFormate: formattingPrice, inputmode: 'decimal' })
+          cellRenderer: params => {
+            this.addHandleDbClickCell(params)
+            return cellRendererInput(params, { inputmode: 'decimal' })
+          }
         },
         {
           headerName: 'Арендованная площадь (факт)', field: 'rented_area', minWidth: 80, flex: 0.5,

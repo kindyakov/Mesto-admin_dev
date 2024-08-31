@@ -7,6 +7,7 @@ class ModalChangePhotoPassport extends BaseModal {
   constructor(options = {}) {
     super(content, {
       cssClass: ['modal-change-photo-passport'],
+      enablePhotoUpload: true,
       ...options
     });
 
@@ -14,66 +15,18 @@ class ModalChangePhotoPassport extends BaseModal {
     this.file = null;
     this.userId = null
 
-    this.init();
+    // this.init();
   }
 
   init() {
-    if (!this.modalBody) return;
-    this.inputFile = this.modalBody.querySelector('.input-file');
-    this.label = this.modalBody.querySelector('.modal__upload_lable');
-    this.img = this.modalBody.querySelector('.img');
-    this.btnSave = this.modalBody.querySelector('.btn-save');
-    this.acceptedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-    this.initEvents();
-  }
-
-  initEvents() {
-    this.label.addEventListener('dragover', this.onDragOver.bind(this));
-    this.label.addEventListener('dragleave', this.onDragLeave.bind(this));
-    this.label.addEventListener('drop', this.onDrop.bind(this));
-    this.inputFile.addEventListener('change', this.onFileChange.bind(this));
-    this.btnSave.addEventListener('click', this.onSave.bind(this));
-  }
-
-  onDragOver(event) {
-    event.preventDefault();
-    this.label.classList.add('_is-drag');
-  }
-
-  onDragLeave() {
-    this.label.classList.remove('_is-drag');
-  }
-
-  onDrop(event) {
-    event.preventDefault();
-    this.label.classList.remove('_is-drag');
-    const file = event.dataTransfer.files[0];
-    this.handleFile(file);
-  }
-
-  onFileChange() {
-    const file = this.inputFile.files[0];
-    this.handleFile(file);
-  }
-
-  handleFile(file) {
-    if (file && this.acceptedTypes.includes(file.type)) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-      this.file = file;
-
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(file);
-      this.inputFile.files = dataTransfer.files;
-
-      this.label.classList.add('_is-load');
-      this.label.classList.remove('_error');
-
-      this.isSendFile = true
-    }
+    // if (!this.modalBody) return;
+    // this.btnOpenPrevModal = this.modalBody.querySelector('.btn-open-prev-modal')
+    // this.inputFile = this.modalBody.querySelector('.input-file');
+    // this.label = this.modalBody.querySelector('.modal__upload_lable');
+    // this.img = this.modalBody.querySelector('.img');
+    // this.btnSave = this.modalBody.querySelector('.btn-save');
+    // this.acceptedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+    // this.initPhotoEvents();
   }
 
   onSave() {
@@ -83,7 +36,12 @@ class ModalChangePhotoPassport extends BaseModal {
       formData.set('file', this.file)
       formData.set('user_id', this.userId)
 
-      this.uploadPhoto(formData)
+      this.uploadPhoto(formData).then(data => {
+        if (data.msg_type !== 'success') return
+        this.close()
+        const prevModal = window.app.modalMap[this.btnOpenPrevModal.getAttribute('data-modal')]
+        prevModal.open(this.userId)
+      })
     } else {
       this.label.classList.add('_error');
     }
@@ -128,6 +86,7 @@ class ModalChangePhotoPassport extends BaseModal {
       if (response.status !== 200) return
       this.isSendFile = false
       outputInfo(response.data)
+      return response.data
     } catch (error) {
       console.error(error)
     } finally {

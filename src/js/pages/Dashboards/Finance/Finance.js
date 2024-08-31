@@ -48,7 +48,8 @@ class Finance extends Dashboards {
   async render(queryParams = {}) {
     try {
       this.loader.enable()
-      const [dataDashboard = [], dataEntities,] = await Promise.all([this.getDashboardData(queryParams), this.getData(queryParams)])
+
+      const [dataDashboard = [], dataEntities,] = await Promise.all([this.getDashboardData({ ...this.queryParams, ...queryParams }), this.getData(queryParams)])
 
       if (dataDashboard.length) {
         const [dataWidgets = [], { finance_planfact = [] }] = dataDashboard

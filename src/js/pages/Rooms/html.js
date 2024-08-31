@@ -51,7 +51,7 @@ export function roomHtml(data) {
               ${data.rented == 0 ? '' : `
                 <div class="room__content_info">
                   ${data.fullname ? `
-                  <p data-modal="modal-client" data-json="${dataStr(data)}" style="cursor: pointer;">
+                  <p data-modal="modal-client" user-id="${data.user_id}" style="cursor: pointer;">
                     <svg class='icon icon-user'>
                       <use xlink:href='img/svg/sprite.svg#user'></use>
                     </svg>

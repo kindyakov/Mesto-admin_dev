@@ -5,6 +5,7 @@ import modalOldClient from "./components/Modals/ModalOldClient/ModalOldClient.js
 import modalPassport from "./components/Modals/ModalPassport/ModalPassport.js";
 import modalAgreement from "./components/Modals/ModalAgreement/ModalAgreement.js";
 import modalAddPayment from "./components/Modals/ModalAddPayment/ModalAddPayment.js";
+import modalAddRefund from "./components/Modals/ModalAddRefund/ModalAddRefund.js";
 import modalRoom from "./components/Modals/ModalRoom/ModalRoom.js";
 import modalFinancialInformation from "./components/Modals/ModalFinancialInformation/ModalFinancialInformation.js";
 import modalCompleteRent from "./components/Modals/ModalCompleteRent/ModalCompleteRent.js";
@@ -34,6 +35,7 @@ export const modalMap = {
   [getClassModal(modalPassport)]: modalPassport, // Паспорт
   [getClassModal(modalAgreement)]: modalAgreement,
   [getClassModal(modalAddPayment)]: modalAddPayment,
+  [getClassModal(modalAddRefund)]: modalAddRefund,
   [getClassModal(modalRoom)]: modalRoom,
   [getClassModal(modalFinancialInformation)]: modalFinancialInformation,
   [getClassModal(modalCompleteRent)]: modalCompleteRent,

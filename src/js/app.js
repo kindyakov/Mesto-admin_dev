@@ -14,6 +14,8 @@ import { modalMap } from "./modalMap.js";
 window.app = {
   warehouses: [],
   warehouse: null,
+  modalMap,
+  logsModal: []
 }
 
 const notify = new Notification()

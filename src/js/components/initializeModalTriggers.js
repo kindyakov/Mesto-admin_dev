@@ -20,5 +20,7 @@ export function initializeModalTriggers(modalMap) {
     } else {
       modalInstance.open(button);
     }
+
+    window.app.logsModal.push(modalInstance)
   });
 }

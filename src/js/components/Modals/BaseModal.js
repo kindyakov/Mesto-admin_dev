@@ -1,5 +1,6 @@
 import { Loader } from "../../modules/myLoader.js";
 import { outputInfo } from "../../utils/outputinfo.js";
+import { dateFormatter } from "../../settings/dateFormatter.js";
 
 // Базовый класс для модального окна
 class BaseModal {
@@ -89,6 +90,7 @@ class BaseModal {
     }
 
     if (this.enablePhotoUpload) {
+      this.btnOpenPrevModal = this.modalBody.querySelector('.btn-open-prev-modal')
       this.isSendFile = false;
       this.file = null;
       this.initPhotoUpload();
@@ -196,7 +198,10 @@ class BaseModal {
     })
 
     this.selects?.selectsCustom?.forEach(select => select.classList.remove('_disabled'))
-    this.validator?.calendars?.forEach(calendar => calendar.set('clickOpens', true))
+    this.validator?.calendars?.forEach(calendar => {
+      calendar.input.value && calendar.setDate(new Date(dateFormatter(calendar.input.value, 'yyyy-MM-dd')))
+      calendar.set('clickOpens', true)
+    })
   }
 
   disableEditInput(form = null, arr = [
@@ -238,6 +243,10 @@ class BaseModal {
     const isObject = (params && typeof params === 'object' && !Array.isArray(params) && params !== null && !(params instanceof Element));
     if (!isElement && !isObject) return null
     return isElement ? JSON.parse(params.getAttribute('data-json')) : params
+  }
+
+  async getData(id) {
+    return {}
   }
 
   async editForm() {

@@ -8,7 +8,7 @@ const actions = {
     'area': (el, value) => el.value = value + ' м²',
     'day': (el, value) => el.value = !!value ? `${value} ${declOfNum(Math.abs(+value), ['день', 'дня', 'дней'])}` : '',
     'price': (el, value) => el.value = formattingPrice(value),
-    'username': (el, value) => el.value = formatPhoneNumber(value),
+    'phone': (el, value) => el.value = value.slice(1),
     'num': (el, value) => el.value = "№" + value,
     'default': (el, value) => el.value = value
   },
