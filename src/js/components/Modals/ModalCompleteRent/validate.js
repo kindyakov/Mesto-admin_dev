@@ -9,7 +9,8 @@ export function validate(form, options) {
 
   const calendar = createCalendar(leavedDate, {
     dateFormat: 'd.m.Y',
-    appendTo: leavedDate.parentElement
+    minDate: new Date(),
+    appendTo: leavedDate.parentElement,
   })
 
   validator.calendars = [calendar]

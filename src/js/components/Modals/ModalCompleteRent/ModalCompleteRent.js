@@ -14,7 +14,8 @@ class ModalCompleteRent extends BaseModal {
     })
 
     this.isEdit = false
-    this.roomData = null
+    this.roomId = null
+    this.agrId = null
 
     this.init()
   }
@@ -50,11 +51,17 @@ class ModalCompleteRent extends BaseModal {
     this.validator.revalidate().then(isValid => {
       if (!isValid) return
       const formData = new FormData(this.form)
-      let data = { room_id: this.roomData.room_id, comment: null }
+      let data = { room_id: this.roomId, comment: null }
 
       Array.from(formData).forEach(arr => data[arr[0]] = arr[1])
 
-      this.endRent(data).finally(() => {
+      this.endRent(data).then(({ msg_type = '' }) => {
+        if (msg_type == 'success') {
+          this.close()
+          const prevModal = window.app.modalMap[this.btnOpenPrevModal.getAttribute('data-modal')]
+          prevModal.open([this.agrId, this.roomId])
+        }
+      }).finally(() => {
         this.validator.refresh()
         this.form.reset()
         this.isEdit = false
@@ -81,14 +88,27 @@ class ModalCompleteRent extends BaseModal {
     }
   }
 
+  renderModal(agrId, roomId) {
+    this.attrsModal.length && this.attrsModal.forEach(el => {
+      el.setAttribute('room-id', roomId)
+      el.setAttribute('agr-id', agrId)
+    })
+  }
+
   onOpen(params = null) {
     if (!params) return
     setTimeout(() => {
       this.validator?.calendars.forEach(calendar => calendar.redraw())
     })
-    const extractData = this.extractData(params)
-    if (extractData) {
-      this.roomData = extractData
+    if (params instanceof Element) {
+      this.agrId = params.getAttribute('agr-id')
+      this.roomId = params.getAttribute('room-id')
+    } else {
+      [this.agrId, this.roomId] = params
+    }
+
+    if (this.agrId) {
+      this.renderModal(this.agrId, this.roomId)
     }
   }
 
@@ -98,6 +118,7 @@ class ModalCompleteRent extends BaseModal {
       const response = await api.post('/_end_rent_', data)
       if (response.status !== 200) return
       outputInfo(response.data)
+      return response.data
     } catch (error) {
       console.error(error)
     } finally {

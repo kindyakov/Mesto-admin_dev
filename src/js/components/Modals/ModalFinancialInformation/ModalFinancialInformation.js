@@ -1,9 +1,7 @@
 import BaseModal from "../BaseModal.js"
 import content from './content.html'
-import { formattingPrice } from "../../../utils/formattingPrice.js"
-import { getFormattedDate } from "../../../utils/getFormattedDate.js"
-import { declOfNum } from "../../../utils/declOfNum.js"
 import { renderForm } from "../utils/renderForm.js"
+import { getAgreementTotal } from "../../../settings/request.js";
 
 class ModalFinancialInformation extends BaseModal {
   constructor(options = {}) {
@@ -13,7 +11,8 @@ class ModalFinancialInformation extends BaseModal {
     })
   }
 
-  renderModal(room) {
+  renderModal(roomId, { rooms }) {
+    const [room] = rooms.filter(room => room.room_id == roomId)
     this.renderElements = this.modalBody.querySelectorAll('[data-render]')
     this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
 
@@ -24,11 +23,30 @@ class ModalFinancialInformation extends BaseModal {
     this.renderElements.length && this.renderElements.forEach(el => renderForm(el, room))
   }
 
-  onOpen(params = null) {
+  async onOpen(params = null) {
     if (!params) return
-    const extractData = this.extractData(params)
-    if (extractData) {
-      this.renderModal(extractData)
+    try {
+      this.loader.enable()
+      let agrId = null, roomId = null
+
+      if (params instanceof Element) {
+        agrId = params.getAttribute('agr-id')
+        roomId = params.getAttribute('room-id')
+      } else {
+        [agrId, roomId] = params
+      }
+
+      if (!agrId) return
+
+      const data = await getAgreementTotal(agrId)
+      if (data) {
+        this.renderModal(roomId, data)
+        this.data = data
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loader.disable()
     }
   }
 }

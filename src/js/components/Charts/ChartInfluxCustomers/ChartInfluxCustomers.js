@@ -105,11 +105,12 @@ class ChartInfluxCustomers extends BaseChart {
   }
 
   render(data) {
-    const { inflow_by_month = [] } = data;
+    const { sales_planfact = [] } = data;
 
-    if (inflow_by_month.length) {
-      this.chart.data.labels = inflow_by_month.map(obj => getMonthName(obj.month));
-      this.chart.data.datasets[0].data = inflow_by_month.map(obj => obj.cnt);
+    if (sales_planfact.length) {
+      this.chart.data.labels = sales_planfact.map(obj => getMonthName(obj.data));
+      this.chart.data.datasets[0].data = sales_planfact.map(obj => obj.leads_fact);
+      this.chart.data.datasets[1].data = sales_planfact.map(obj => obj.sales_planned);
       this.chart.update();
     }
   }

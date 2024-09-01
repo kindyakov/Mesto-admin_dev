@@ -83,6 +83,10 @@ class BaseModal {
     this.modal.setContent(content);
     this.modalBody = this.modal.modal.querySelector('.modal__body')
     this.loader = new Loader(this.modalBody)
+    this.btnOpenPrevModal = this.modalBody.querySelector('.btn-open-prev-modal')
+    this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
+    this.renderElements = this.modalBody.querySelectorAll('[data-render]')
+
     const closeButton = this.modal.modal.querySelector('.tingle-modal__close')
 
     if (closeButton) {
@@ -90,7 +94,6 @@ class BaseModal {
     }
 
     if (this.enablePhotoUpload) {
-      this.btnOpenPrevModal = this.modalBody.querySelector('.btn-open-prev-modal')
       this.isSendFile = false;
       this.file = null;
       this.initPhotoUpload();

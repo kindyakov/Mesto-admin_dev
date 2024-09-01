@@ -1,6 +1,7 @@
 import BaseModal from "../BaseModal.js"
 import content from "./content.html"
 import { renderForm } from "../utils/renderForm.js"
+import { getAgreementTotal } from "../../../settings/request.js";
 
 class ModalRoom extends BaseModal {
   constructor(options = {}) {
@@ -10,13 +11,18 @@ class ModalRoom extends BaseModal {
     })
   }
 
-  renderModal(room) {
-    this.renderElements = this.modalBody.querySelectorAll('[data-render]')
-    this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
+  renderModal(roomId, { rooms }) {
+    const [room] = rooms.filter(room => room.room_id == roomId)
+    this.btnCompleteRent = this.modalBody.querySelector('.btn-complete-rent')
 
     this.attrsModal.length && this.attrsModal.forEach(el => {
       el.setAttribute('room-id', room.room_id)
+      el.setAttribute('agr-id', room.agrid)
     })
+
+    if (room.rentenddate) {
+      this.btnCompleteRent.innerText = 'Изменить дату выезда'
+    }
 
     this.renderElements.length && this.renderElements.forEach(el => renderForm(el, room))
   }
@@ -25,19 +31,20 @@ class ModalRoom extends BaseModal {
     if (!params) return
     try {
       this.loader.enable()
-      let id = ''
+      let agrId = null, roomId = null
 
       if (params instanceof Element) {
-        id = params.getAttribute('user-id')
+        agrId = params.getAttribute('agr-id')
+        roomId = params.getAttribute('room-id')
       } else {
-        id = params
+        [agrId, roomId] = params
       }
 
-      if (!id) return
+      if (!agrId) return
 
-      const data = await getClientTotal(user_id + '/')
+      const data = await getAgreementTotal(agrId)
       if (data) {
-        this.renderModal(data)
+        this.renderModal(roomId, data)
         this.data = data
       }
     } catch (error) {

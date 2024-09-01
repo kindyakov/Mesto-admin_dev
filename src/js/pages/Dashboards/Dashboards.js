@@ -83,10 +83,16 @@ class Dashboards extends Page {
     });
   }
 
-  async render(queryParams = this.queryParams) {
+  onRender() {
+
+  }
+  async render(queryParams = {}) {
     try {
       this.loader.enable()
-      const [dataDashboard = null, dataEntities = null] = await Promise.all([this.getDashboardData(queryParams), this.getData(queryParams)])
+      const [dataDashboard = null, dataEntities = null] = await Promise.all([
+        this.getDashboardData({ ...this.queryParams, ...queryParams }),
+        this.getData(queryParams),
+      ])
 
       if (dataDashboard) {
         this.renderWidgets(dataDashboard)
@@ -96,6 +102,8 @@ class Dashboards extends Page {
       if (this.tables.length && dataEntities) {
         this.actionsTables((table, i) => table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities))
       }
+
+      this.onRender(dataDashboard, dataEntities)
     } catch (error) {
       console.error(error)
       throw error

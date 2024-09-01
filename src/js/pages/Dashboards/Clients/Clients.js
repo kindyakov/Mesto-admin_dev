@@ -2,7 +2,7 @@ import Dashboards from "../Dashboards.js";
 import TableClients from "../../../components/Tables/TableClients/TableClients.js";
 import ChartInfluxCustomers from "../../../components/Charts/ChartInfluxCustomers/ChartInfluxCustomers.js";
 import ChartGenderAge from "../../../components/Charts/СhartGenderAge/СhartGenderAge.js";
-import { getClients, getDashboardClient } from "../../../settings/request.js";
+import { getClients, getDashboardClient, getSalesPlan } from "../../../settings/request.js";
 
 class Clients extends Dashboards {
   constructor({ loader }) {
@@ -24,7 +24,15 @@ class Clients extends Dashboards {
   }
 
   async getDashboardData(queryParams = {}) {
-    return getDashboardClient(queryParams)
+    return Promise.all([getDashboardClient(queryParams), getSalesPlan({ month_or_day: 'month', ...queryParams })])
+  }
+
+  onRender(dataDashboard, dataEntities) {
+    if (dataDashboard) {
+      const [dashboard, salesPlan] = dataDashboard
+      this.renderWidgets(dashboard)
+      this.actionsCharts(chart => chart.render(salesPlan))
+    }
   }
 }
 

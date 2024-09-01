@@ -18,7 +18,7 @@ export function agreementHtml(data) {
         ? data.days_left + ` ${declOfNum(+data.days_left, ['день', 'дня', 'дней'])} до окончания`
         : Math.abs(+data.days_left) + ` ${declOfNum(Math.abs(+data.days_left), ['день', 'дня', 'дней'])} просрочен`
       : 'Не оплачен'}</p>
-    <button class="item-more-detailed" data-agr-id="${data.agrid ? data.agrid : ''}" data-modal="modal-agreement" data-json="${dataStr(data)}"><span>Подробнее</span></button>
+    <button class="item-more-detailed" agr-id="${data.agrid ? data.agrid : ''}" data-modal="modal-agreement"><span>Подробнее</span></button>
   `;
 
   const itemInfo = innerContainer.querySelector('.item-info');

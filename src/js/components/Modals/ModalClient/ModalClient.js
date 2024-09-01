@@ -76,17 +76,17 @@ class ModalClient extends BaseModal {
     if (!params) return
     try {
       this.loader.enable()
-      let user_id = ''
+      let id = ''
 
       if (params instanceof Element) {
-        user_id = params.getAttribute('user-id')
+        id = params.getAttribute('user-id')
       } else {
-        user_id = params
+        id = params
       }
 
-      if (!user_id) return
+      if (!id) return
 
-      const data = await getClientTotal(user_id + '/')
+      const data = await getClientTotal(id + '/')
       if (data) {
         this.renderModal(data)
         this.data = data

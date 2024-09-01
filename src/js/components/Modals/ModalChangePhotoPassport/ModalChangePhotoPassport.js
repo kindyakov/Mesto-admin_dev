@@ -14,19 +14,6 @@ class ModalChangePhotoPassport extends BaseModal {
     this.isSendFile = false
     this.file = null;
     this.userId = null
-
-    // this.init();
-  }
-
-  init() {
-    // if (!this.modalBody) return;
-    // this.btnOpenPrevModal = this.modalBody.querySelector('.btn-open-prev-modal')
-    // this.inputFile = this.modalBody.querySelector('.input-file');
-    // this.label = this.modalBody.querySelector('.modal__upload_lable');
-    // this.img = this.modalBody.querySelector('.img');
-    // this.btnSave = this.modalBody.querySelector('.btn-save');
-    // this.acceptedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-    // this.initPhotoEvents();
   }
 
   onSave() {

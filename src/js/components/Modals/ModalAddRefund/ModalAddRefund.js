@@ -47,27 +47,53 @@ class ModalAddRefund extends BaseModal {
 
       Array.from(formData).forEach(arr => data[arr[0]] = arr[1])
 
-      this.addPayment(data, this.agrId).finally(() => {
-        this.validator.refresh()
-        this.form.reset()
-        this.isEdit = false
-      })
+      this.addPayment(data, this.agrId)
+        .then(({ msg_type = '' }) => {
+          if (msg_type == 'success') {
+            this.close()
+            const prevModal = window.app.modalMap[this.btnOpenPrevModal.getAttribute('data-modal')]
+            prevModal.open(this.agrId)
+          }
+        })
+        .finally(() => {
+          this.validator.refresh()
+          this.form.reset()
+          this.isEdit = false
+        })
+    })
+  }
+
+  renderModal(agrId) {
+    this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
+    this.attrsModal.length && this.attrsModal.forEach(el => {
+      el.setAttribute('agr-id', agrId)
     })
   }
 
   onOpen(params = null) {
     if (!params) return
-    const extractData = this.extractData(params)
-    if (!extractData) return
-    this.agrId = extractData.agrid
+    if (params instanceof Element) {
+      this.agrId = params.getAttribute('agr-id')
+    } else {
+      this.agrId = params
+    }
+
+    if (this.agrId) {
+      this.renderModal(this.agrId)
+    }
+  }
+
+  onClose() {
+    this.agrId = null
   }
 
   async addPayment(data, id) {
     try {
       this.loader.enable()
-      const response = await api.post(`/_add_refund_/${id}`, data)
+      const response = await api.post(`/_add_payment_/${id}`, data)
       if (response.status !== 200) return
       outputInfo(response.data)
+      return response.data
     } catch (error) {
       console.error(error)
     } finally {

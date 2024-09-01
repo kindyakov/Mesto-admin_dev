@@ -18,7 +18,10 @@ const actions = {
     el.classList.remove('confirmed', 'not-confirmed')
     el.classList.add(`${value ? 'confirmed' : 'not-confirmed'}`)
   },
-  'default': (el, value) => el.textContent = value
+  'el': {
+    'date': (el, value) => el.textContent = dateFormatter(value),
+    'default': (el, value) => el.textContent = value
+  }
 }
 
 export function renderForm(el, data) {
@@ -31,7 +34,9 @@ export function renderForm(el, data) {
     actions[el.tagName](el, value)
   } else if (el.classList.contains('wp-status')) {
     actions['wp-status'](el, value)
+  } else if (actions['el'][type]) {
+    actions['el'][type](el, value)
   } else {
-    actions['default'](el, value)
+    actions['el']['default'](el, value)
   }
 }

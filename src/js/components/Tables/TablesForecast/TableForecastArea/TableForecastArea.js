@@ -31,7 +31,7 @@ class TableForecastArea extends BaseTableForecast {
           headerName: 'Выручка план', field: 'revenue_planned', minWidth: 80, flex: 0.5,
           cellRenderer: params => {
             this.addHandleDbClickCell(params)
-            return cellRendererInput(params, { inputmode: 'numeric', })
+            return cellRendererInput(params, { funcFormate: formattingPrice, inputmode: 'numeric', })
           }
         },
         {

@@ -84,8 +84,14 @@ class ModalAgreement extends BaseModal {
     this.renderElements = this.modalBody.querySelectorAll('[data-render]')
     this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
 
+    const dates = rooms
+      .map(room => room.next_payment_date ? new Date(room.next_payment_date) : '')
+      .filter(date => date !== '')
+    const minDate = new Date(Math.min(...dates));
+    agreement.next_payment_date = minDate.toISOString().split('T')[0];
+
     this.attrsModal.length && this.attrsModal.forEach(el => {
-      el.setAttribute('data-json', JSON.stringify(agreement))
+      el.setAttribute('agr-id', agreement.agrid)
     })
 
     this.renderElements.length && this.renderElements.forEach(el => renderForm(el, agreement))
@@ -128,12 +134,11 @@ class ModalAgreement extends BaseModal {
     if (rooms.length) {
       this.contentRooms.innerHTML = ''
       rooms.forEach(room => {
-        const roomData = JSON.stringify(room).replace(/\s+/g, '').replace(/"/g, '&quot;');
         this.contentRooms.insertAdjacentHTML('beforeend', `
           <div class="modal__block_grid-item">
             <span class="item-num">${room.room_id ? '№' + room.room_id : ''}</span>
             <p class="item-info">${room.warehouse_name ? room.warehouse_name : ''}</p>
-            <button class="item-more-detailed" data-json="${roomData}" data-modal="modal-room"><span>Подробнее</span></button>
+            <button class="item-more-detailed" data-modal="modal-room" agr-id="${room.agrid}" room-id="${room.room_id}"><span>Подробнее</span></button>
           </div>`
         )
       })
@@ -186,11 +191,19 @@ class ModalAgreement extends BaseModal {
     if (!params) return
     try {
       this.loader.enable()
-      const extractData = this.extractData(params)
-      if (!extractData) return
-      const data = await getAgreementTotal(extractData.agrid)
+      let id = ''
+
+      if (params instanceof Element) {
+        id = params.getAttribute('agr-id')
+      } else {
+        id = params
+      }
+
+      if (!id) return
+      const data = await getAgreementTotal(id)
       if (data) {
         this.renderModal(data)
+        this.data = data
       }
     } catch (error) {
       console.error(error)
