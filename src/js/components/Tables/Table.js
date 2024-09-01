@@ -44,10 +44,10 @@ class Table {
       onGridReady: (params) => {
         this.gridApi = params.api;
         this.gridColumnApi = params.columnApi;
-        this.tableFooter = document.querySelector(`${selector} .ag-paging-panel`)
-        document.querySelector(`${selector} .ag-paging-row-summary-panel`)?.remove()
-        document.querySelector(`${selector} .ag-paging-page-summary-panel`)?.remove()
-        document.querySelector(`${selector} .ag-paging-page-size`)?.remove()
+        this.tableFooter = options.wrapper.querySelector(`${selector} .ag-paging-panel`)
+        this.tableFooter.querySelector(`${selector} .ag-paging-row-summary-panel`)?.remove()
+        this.tableFooter.querySelector(`${selector} .ag-paging-page-summary-panel`)?.remove()
+        this.tableFooter.querySelector(`${selector} .ag-paging-page-size`)?.remove()
 
         this.init()
       },

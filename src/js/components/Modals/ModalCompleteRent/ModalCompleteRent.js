@@ -5,6 +5,7 @@ import { validate } from "./validate.js";
 import { Select } from "../../../modules/mySelect.js";
 import { outputInfo } from "../../../utils/outputinfo.js";
 import { api } from "../../../settings/api.js";
+import { dateFormatter } from "../../../settings/dateFormatter.js";
 
 class ModalCompleteRent extends BaseModal {
   constructor(options = {}) {
@@ -53,13 +54,17 @@ class ModalCompleteRent extends BaseModal {
       const formData = new FormData(this.form)
       let data = { room_id: this.roomId, comment: null }
 
+      formData.set('leave_date', dateFormatter(formData.get('leave_date'), 'yyyy-MM-dd'))
+      formData.delete('flatpickr-month')
       Array.from(formData).forEach(arr => data[arr[0]] = arr[1])
 
       this.endRent(data).then(({ msg_type = '' }) => {
         if (msg_type == 'success') {
           this.close()
           const prevModal = window.app.modalMap[this.btnOpenPrevModal.getAttribute('data-modal')]
-          prevModal.open([this.agrId, this.roomId])
+          if (this.agrId) {
+            prevModal.open([this.agrId, this.roomId])
+          }
         }
       }).finally(() => {
         this.validator.refresh()
@@ -107,7 +112,7 @@ class ModalCompleteRent extends BaseModal {
       [this.agrId, this.roomId] = params
     }
 
-    if (this.agrId) {
+    if (this.roomId) {
       this.renderModal(this.agrId, this.roomId)
     }
   }

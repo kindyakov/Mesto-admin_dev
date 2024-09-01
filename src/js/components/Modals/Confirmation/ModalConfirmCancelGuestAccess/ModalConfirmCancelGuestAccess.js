@@ -2,16 +2,16 @@ import BaseConfirmationModal from "../BaseConfirmationModal.js"
 import { api } from "../../../../settings/api.js"
 import { outputInfo } from "../../../../utils/outputinfo.js"
 
-class ModalConfirmOpenRoom extends BaseConfirmationModal {
+class ModalConfirmCancelGuestAccess extends BaseConfirmationModal {
   constructor() {
-    super('Вы уверены, что</br>хотите открыть ячейку?', 'modal-confirm-open-room')
+    super('Вы уверены, что</br>хотите отменить гостевой доступ?', 'modal-confirm-cancel-guest-access')
 
     this.room = null
   }
 
   onClick(isConfirm) {
     if (isConfirm && this.room) {
-      this.openRoom(this.room.room_id)
+      this.cancelRoomTest({ room_id: this.room.room_id, user_id: this.room.user_id })
     }
   }
 
@@ -26,10 +26,10 @@ class ModalConfirmOpenRoom extends BaseConfirmationModal {
     this.room = null
   }
 
-  async openRoom(id) {
+  async cancelRoomTest(data) {
     try {
       this.loader.enable()
-      const response = await api.post(`/unlock/${id}`)
+      const response = await api.post('/_cancel_room_test_', data)
       if (response.status !== 200) return
       outputInfo(response.data)
       this.close()
@@ -41,6 +41,6 @@ class ModalConfirmOpenRoom extends BaseConfirmationModal {
   }
 }
 
-const modalConfirmOpenRoom = new ModalConfirmOpenRoom()
+const modalConfirmCancelGuestAccess = new ModalConfirmCancelGuestAccess()
 
-export default modalConfirmOpenRoom
+export default modalConfirmCancelGuestAccess

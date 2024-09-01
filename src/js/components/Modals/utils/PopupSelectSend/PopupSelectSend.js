@@ -13,10 +13,10 @@ export function PopupSelectSend(container, options = {}) {
 
       buttons.length && buttons.forEach(btn => {
         btn.addEventListener('click', function () {
+          instance.hide();
           if (instance.onClick) {
             instance.onClick(this.getAttribute('data-send'));
           }
-          instance.hide();
         });
       });
     },

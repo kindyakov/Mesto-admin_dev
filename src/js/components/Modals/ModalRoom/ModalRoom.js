@@ -20,7 +20,7 @@ class ModalRoom extends BaseModal {
       el.setAttribute('agr-id', room.agrid)
     })
 
-    if (room.rentenddate) {
+    if (room.rentenddate && new Date(room.rentenddate) > new Date()) {
       this.btnCompleteRent.innerText = 'Изменить дату выезда'
     }
 

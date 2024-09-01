@@ -21,7 +21,7 @@ function dataStr(data) {
 function buttonsRoom(data) {
   const buttons = {
     0: `<button class="room__button button" data-json="${dataStr(data)}" data-modal="modal-add-client"><span>Оформить клиенту</span></button>`,
-    0.25: `<button class="room__button button" data-json="${dataStr(data)}" data-modal=""><span>Отменить доступ</span></button>`,
+    0.25: `<button class="room__button button" data-json="${dataStr(data)}" data-modal="modal-confirm-cancel-guest-access"><span>Отменить доступ</span></button>`,
     0.45: ``,
     0.4: `<button class="room__button button" data-json="${dataStr(data)}" data-modal=""><span>Отменить оплату</span></button>`,
     0.5: `<button class="room__button button" data-json="${dataStr(data)}" data-modal="modal-confirmation-client"><span>Подтвердить клиента</span></button>`,
@@ -70,15 +70,20 @@ export function roomHtml(data) {
             </div>
             <div class="room__bottom">
               ${buttonsRoom(data)}
-              ${+data.rented === 0.75 ?
-      `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal=""><span>Ускорить</span></button>` : `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal="modal-confirm-open-room"><span>Открыть</span></button>`}
-            </div>
+              ${+data.rented === 0.75
+      ? `<button class="room__button button transparent" data-modal="modal-complete-rent" agr-id="${data.agrid || ''}" room-id="${data.room_id || ''}">
+          <span>Ускорить</span>
+        </button>`
+      : `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal="modal-confirm-open-room">
+          <span>Открыть ячейку</span>
+        </button>`}
+            </div >
           </div>`
 }
 
 export function rowHtml(data) {
   return `
-  <div class="warehouse__confirmation_row">
+    <div class="warehouse__confirmation_row">
                 <p class="name">${data.fullname ? data.fullname : ''}</p>
                 <span class="span">Выезд:<b>${data.rentenddate ? dateFormatter(data.rentenddate) : ''}</b></span>
                 <button class="button table-button" data-modal="modal-confirmation-departure" data-json="${dataStr(data)}"><span>Подтвердить</span></button>
@@ -87,7 +92,7 @@ export function rowHtml(data) {
 
 export function row2Html(data) {
   return `
-  <div class="warehouse__confirmation_row">
+    <div class="warehouse__confirmation_row">
                 <p class="name">${data.familyname} ${data.firstname} ${data.patronymic}</p>
                 <button class="button table-button" data-modal="modal-passport" user-id="${data.user_id}"><span>Подтвердить</span></button>
               </div>`
