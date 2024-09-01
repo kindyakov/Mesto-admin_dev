@@ -31,7 +31,7 @@ class Clients extends Dashboards {
     if (dataDashboard) {
       const [dashboard, salesPlan] = dataDashboard
       this.renderWidgets(dashboard)
-      this.actionsCharts(chart => chart.render(salesPlan))
+      this.actionsCharts(chart => chart.render(dataDashboard, this.queryParams))
     }
   }
 }

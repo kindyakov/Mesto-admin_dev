@@ -90,6 +90,7 @@ class TablePayments extends Table {
 
     const tippyInstance = actions(button, {
       attrModal: 'modal-agreement',
+      attributes: [['agr-id', params.data.agrid]],
       data: params.data
     })
 
@@ -145,7 +146,7 @@ class TablePayments extends Table {
 
   onRendering({ payments = [], cnt_pages, page, cnt_all }) {
     this.cntAll = cnt_all
-    this.pagination.setPage(page, cnt_pages)
+    this.pagination.setPage(page, cnt_pages, cnt_all)
     this.gridApi.setGridOption('rowData', payments)
     // this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, payments.length])
   }

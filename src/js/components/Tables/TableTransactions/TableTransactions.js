@@ -9,6 +9,13 @@ import { getFormattedDate } from '../../../utils/getFormattedDate.js';
 import { formatPhoneNumber } from '../../../utils/formattingPrice.js';
 import { buildQueryParams } from '../../../utils/buildQueryParams.js';
 
+function subtractMonths(date, months) {
+  const newDate = new Date(date);
+  newDate.setMonth(newDate.getMonth() - months);
+
+  return newDate;
+}
+
 class TableTransactions extends Table {
   constructor(selector, options, params) {
     const defaultOptions = {
@@ -149,9 +156,9 @@ class TableTransactions extends Table {
   onRendering([{ sales = [], cnt_pages, page, cnt_all = 0 }, { sale_channels = [] }]) {
     this.cntAll = cnt_all
     sales.length && sales.forEach(sale => sale.sale_channels = sale_channels)
-    this.pagination.setPage(page, cnt_pages)
+    this.pagination.setPage(page, cnt_pages, cnt_all)
     this.gridApi.setGridOption('rowData', sales)
-    this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, sales.length])
+    // this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, sales.length])
   }
 
   async setData(route, data) {

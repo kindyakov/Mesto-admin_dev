@@ -40,7 +40,7 @@ class TableEmployee extends Table {
 
   }
   onRendering({ timepoints = [], cnt_pages, page, cnt_all = 0 }) {
-    // this.pagination.setPage(page, cnt_pages)
+    // this.pagination.setPage(page, cnt_pages, cnt_all)
     this.cntAll = cnt_all
     this.gridApi.setGridOption('rowData', timepoints)
     this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, timepoints.length])

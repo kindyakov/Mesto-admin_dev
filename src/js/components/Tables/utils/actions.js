@@ -4,6 +4,7 @@ let defaultOptions = {
   tippyInstance: null,
   isEdit: false,
   buttonsIs: [true, true],
+  attributes: [],
   buttons: [
     (options = {}) => {
       const button = document.createElement('button')
@@ -45,7 +46,9 @@ export function actions(button, opt = {}) {
       options.buttons.forEach((func, i) => {
         if (options.buttonsIs[i]) {
           const btn = func()
-          btn.setAttribute('data-json', JSON.stringify(options.data))
+          options.attributes.length && options.attributes.forEach(([key, value]) => {
+            btn.setAttribute(key, value);
+          })
 
           if (btn.classList.contains('btn-open')) {
             btn.setAttribute('data-modal', options.attrModal)

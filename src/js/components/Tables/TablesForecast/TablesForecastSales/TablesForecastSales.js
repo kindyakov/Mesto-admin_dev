@@ -44,7 +44,8 @@ class TablesForecastSales extends BaseTableForecast {
           cellRenderer: params => {
             const { leads_fact, leads_planned } = params.data
             const value = getFormattedNumber(+leads_planned ? (+leads_fact / +leads_planned * 100) : 0)
-            cellColorize(value, params)            
+            cellColorize(value, params)
+            params.setValue(value)
             return value + '%'
           }
         },
@@ -61,6 +62,7 @@ class TablesForecastSales extends BaseTableForecast {
             const { leads_accumulated_fact = 0, leads_accumulated_planned = 0 } = params.data
             const value = getFormattedNumber(+leads_accumulated_planned ? (+leads_accumulated_fact / +leads_accumulated_planned * 100) : 0)
             cellColorize(value, params)
+            params.setValue(value)
             return value + '%'
           }
         },
@@ -80,6 +82,7 @@ class TablesForecastSales extends BaseTableForecast {
             const { sales, sales_planned } = params.data
             const value = getFormattedNumber(+sales_planned ? (+sales / +sales_planned * 100) : 0)
             cellColorize(value, params)
+            params.setValue(value)
             return value + '%'
           }
         },

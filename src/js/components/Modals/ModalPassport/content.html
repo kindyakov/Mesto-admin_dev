@@ -47,30 +47,30 @@
           </div>
         </div>
         <div class="modal__form_item">
-          <span>Статус:</span>
-          <div class="modal__form_wp-input">
-            <select name="approved" data-render="approved" class="init-custom-select"
-              data-special-select="select-passport" disabled>
-              <option value="1">Подтвержден</option>
-              <option value="0">Не подтвержден</option>
-            </select>
-          </div>
-        </div>
-        <div class="modal__form_item">
-          <span>Кем выдан:</span>
-          <div class="modal__form_wp-input wp-input">
-            <input type="text" class="modal__form_input input not-edit" name="issued_by" readonly="true"
-              data-render="issued_by,text" autocomplete="off">
-          </div>
-        </div>
-        <div class="modal__form_item">
           <span>Код подразделения:</span>
           <div class="modal__form_wp-input wp-input">
             <input type="text" class="modal__form_input input not-edit" name="subdivision" readonly="true"
               data-render="subdivision,text" autocomplete="off">
           </div>
         </div>
+        <div class="modal__form_item" style="grid-column: span 2;">
+          <span>Кем выдан:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="issued_by" readonly="true"
+              data-render="issued_by,text" autocomplete="off">
+          </div>
+        </div>
       </form>
+      <div class="modal__form_item">
+        <span>Статус:</span>
+        <div class="modal__form_wp-input">
+          <select name="approved" data-render="approved" class="init-custom-select"
+            data-special-select="select-passport" disabled>
+            <option value="1">Подтвержден</option>
+            <option value="0">Не подтвержден</option>
+          </select>
+        </div>
+      </div>
     </div>
     <div class="modal__block_item">
       <div class="modal__block_img">

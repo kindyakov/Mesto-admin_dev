@@ -1,6 +1,7 @@
 import modalAddClient from "./components/Modals/ModalAddClient/ModalAddClient.js";
 import modalChangePhotoPassport from "./components/Modals/ModalChangePhotoPassport/ModalChangePhotoPassport.js";
 import modalClient from "./components/Modals/ModalClient/ModalClient.js";
+// import modalClientConfirmation from "./components/Modals/ModalClientConfirmation/ModalClientConfirmation.js";
 import modalOldClient from "./components/Modals/ModalOldClient/ModalOldClient.js";
 import modalPassport from "./components/Modals/ModalPassport/ModalPassport.js";
 import modalAgreement from "./components/Modals/ModalAgreement/ModalAgreement.js";
@@ -16,7 +17,6 @@ import modalConfirmationDeparture from "./components/Modals/ModalConfirmationDep
 import modalCreateAgreement from "./components/Modals/ModalCreateAgreement/ModalCreateAgreement.js";
 import modalDownloadPhotoWh from "./components/Modals/ModalDownloadPhotoWh/ModalDownloadPhotoWh.js";
 import modalShowPhotoWh from "./components/Modals/ModalShowPhotoWh/ModalShowPhotoWh.js";
-import modalConfirmationClient from "./components/Modals/ModalConfirmationClient/ModalConfirmationClient.js";
 import modalPhotoRoom from "./components/Modals/ModalPhotoRoom/ModalPhotoRoom.js";
 import modalSelectNextPayment from "./components/Modals/ModalSelectNextPayment/ModalSelectNextPayment.js";
 
@@ -31,6 +31,7 @@ export const modalMap = {
   [getClassModal(modalPassport)]: modalPassport, // Паспорт
   [getClassModal(modalChangePhotoPassport)]: modalChangePhotoPassport, // Загрузка фото паспорта
   [getClassModal(modalClient)]: modalClient, // Клиент
+  // [getClassModal(modalClientConfirmation)]: modalClientConfirmation,
   [getClassModal(modalOldClient)]: modalOldClient, // Старый клиент
   [getClassModal(modalPassport)]: modalPassport, // Паспорт
   [getClassModal(modalAgreement)]: modalAgreement,
@@ -46,7 +47,6 @@ export const modalMap = {
   [getClassModal(modalCreateAgreement)]: modalCreateAgreement,
   [getClassModal(modalDownloadPhotoWh)]: modalDownloadPhotoWh,
   [getClassModal(modalShowPhotoWh)]: modalShowPhotoWh,
-  [getClassModal(modalConfirmationClient)]: modalConfirmationClient,
   [getClassModal(modalConfirmOpenRoom)]: modalConfirmOpenRoom,
   [getClassModal(modalPhotoRoom)]: modalPhotoRoom,
   [getClassModal(modalSelectNextPayment)]: modalSelectNextPayment,

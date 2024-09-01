@@ -2,6 +2,7 @@ import merge from 'lodash.merge'
 import BaseChart from "../BaseChart.js";
 import { getMonthName } from "../../../utils/getFormattedDate.js";
 import { Select } from '../../../modules/mySelect.js';
+import { dateFormatter } from '../../../settings/dateFormatter.js';
 
 class ChartInfluxCustomers extends BaseChart {
   constructor(ctx, addOptions = {}) {
@@ -104,13 +105,18 @@ class ChartInfluxCustomers extends BaseChart {
     }
   }
 
-  render(data) {
-    const { sales_planfact = [] } = data;
+  render([dashboard, salesPlan], params) {
+    const els = this.wpChart.querySelectorAll('[data-render-charts="range-date"]')
+    if (params) {
+      els.length && els.forEach(el => {
+        el.textContent = `${dateFormatter(params.start_date)} - ${dateFormatter(params.end_date)}`
+      })
+    }
 
-    if (sales_planfact.length) {
-      this.chart.data.labels = sales_planfact.map(obj => getMonthName(obj.data));
-      this.chart.data.datasets[0].data = sales_planfact.map(obj => obj.leads_fact);
-      this.chart.data.datasets[1].data = sales_planfact.map(obj => obj.sales_planned);
+    if (salesPlan.sales_planfact.length) {
+      this.chart.data.labels = dashboard.inflow_by_month.map(obj => getMonthName(obj.month));
+      this.chart.data.datasets[0].data = dashboard.inflow_by_month.map(obj => obj.cnt);
+      this.chart.data.datasets[1].data = salesPlan.sales_planfact.map(obj => obj.sales_planned);
       this.chart.update();
     }
   }

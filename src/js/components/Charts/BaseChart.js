@@ -83,6 +83,8 @@ class BaseChart {
 
     this.chart = new Chart(ctx, merge({}, defaultOptions, options));
     this.onExternal = this.onExternal.bind(this)
+    this.wpChart = this.chart.canvas.closest('.chart')
+
     window.addEventListener('resize', () => this.resizeChart())
   }
 

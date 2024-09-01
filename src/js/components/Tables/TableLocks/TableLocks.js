@@ -59,7 +59,7 @@ class TableLocks extends Table {
 
   onRendering({ rooms_x_locks = [], cnt_pages, page, cnt_all = 0 }) {
     this.cntAll = cnt_all
-    this.pagination.setPage(page, cnt_pages)
+    this.pagination.setPage(page, cnt_pages, cnt_all)
     this.gridApi?.setGridOption('rowData', rooms_x_locks)
     // this.gridApi?.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, rooms_x_locks.length])
   }

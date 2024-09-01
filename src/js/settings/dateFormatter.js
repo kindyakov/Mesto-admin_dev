@@ -24,7 +24,7 @@ export function dateFormatter(date, format = "dd.MM.yyyy") {
 
   // Проверка, если преобразование даты прошло неудачно
   if (!(date instanceof Date) || isNaN(date)) {
-    console.error("Invalid date");
+    console.error("Невалидная дата", date);
     return ''; // Возвращаем пустую строку, если дата некорректна
   }
 

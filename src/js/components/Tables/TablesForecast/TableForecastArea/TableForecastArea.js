@@ -69,10 +69,7 @@ class TableForecastArea extends BaseTableForecast {
         },
         {
           headerName: 'Выручка накопленным итогом (план)', field: 'revenue_accumulated_planned', minWidth: 80, flex: 0.5,
-          cellRenderer: params => {
-            this.addHandleDbClickCell(params)
-            return cellRendererInput(params, { funcFormate: formattingPrice, inputmode: 'numeric' })
-          }
+          valueFormatter: params => formattingPrice(params.value)
         },
         {
           headerName: 'Выручка накопленным итогом (факт)', field: 'revenue_accumulated', minWidth: 80, flex: 0.5,

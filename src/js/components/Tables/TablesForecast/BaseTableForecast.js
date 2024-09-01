@@ -56,6 +56,7 @@ class BaseTableForecast extends Table {
 
       if (input.classList.contains('not-edit')) {
         btnEdit.classList.add('_edit');
+        this.validateInput(input)
         this.setReadonly(input, false)
       }
     })
@@ -134,7 +135,7 @@ class BaseTableForecast extends Table {
     if (_input.value) {
       _input.classList.remove('_err');
     } else {
-      _input.classList.add('_err');
+      // _input.classList.add('_err');
     }
 
     return !_input.classList.contains('_err');

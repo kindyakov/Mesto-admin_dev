@@ -89,6 +89,6 @@ export function row2Html(data) {
   return `
   <div class="warehouse__confirmation_row">
                 <p class="name">${data.familyname} ${data.firstname} ${data.patronymic}</p>
-                <button class="button table-button" data-modal="modal-confirmation-client" data-json="${dataStr(data)}"><span>Подтвердить</span></button>
+                <button class="button table-button" data-modal="modal-passport" user-id="${data.user_id}"><span>Подтвердить</span></button>
               </div>`
 }

@@ -18,9 +18,8 @@ class ModalPassport extends BaseModal {
       ...options
     })
 
-    this.selects = new Select({
+    this.selectApproved = new Select({
       uniqueName: 'select-passport',
-      disable: true,
       callbackInput: (optionContent, optionValue, select) => {
         return `<svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-yes"><path d="M1 6L5.66667 10.5L15 1.5" stroke="#0B704E" stroke-width="2"/></svg><svg width="16" height="13" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-no"><path d="M1 9L9 1M9 9L1 1" stroke="#D42424" stroke-width="1.5" /></svg><span>${optionContent}</span><svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>`
       },
@@ -29,6 +28,9 @@ class ModalPassport extends BaseModal {
           ? `<svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6.5" r="5" fill="#DC3545" stroke="white" stroke-width="2" /></svg>`
           : `<svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6.5" r="5" fill="#11B880" stroke="white" stroke-width="2" /></svg>`}
         <span>${optionContent}</span>`
+      },
+      onChange: (e, select, value) => {
+        this.approveClient({ user_id: this.userId, approved: +value })
       }
     })
     this.init()
@@ -57,14 +59,14 @@ class ModalPassport extends BaseModal {
     this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
 
     this.attrsModal.length && this.attrsModal.forEach(el => {
-      el.setAttribute('data-json', JSON.stringify(client))
+      el.setAttribute('user-id', client.user_id)
     })
 
     this.userId = client.user_id
 
     this.renderElements.length && this.renderElements.forEach(el => renderForm(el, client))
 
-    this.selects.setValue(client.approved)
+    this.selectApproved.setValue(client.approved)
   }
 
   async editForm(data) {
@@ -99,6 +101,20 @@ class ModalPassport extends BaseModal {
       }
     } catch (error) {
       console.error(error)
+    } finally {
+      this.loader.disable()
+    }
+  }
+
+  async approveClient(data) {
+    try {
+      this.loader.enable()
+      const response = await api.post('/_approve_client_', data)
+      if (response.status !== 200) return
+      outputInfo(response.data)
+    } catch (error) {
+      console.error(error)
+      throw error
     } finally {
       this.loader.disable()
     }

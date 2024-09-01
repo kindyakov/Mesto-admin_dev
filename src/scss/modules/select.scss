@@ -13,6 +13,9 @@
 	&._disabled {
 		.mySelect__input {
 			cursor: auto;
+			.icon-arrow {
+				opacity: 0;
+			}
 		}
 	}
 

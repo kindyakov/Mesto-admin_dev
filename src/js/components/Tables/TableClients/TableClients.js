@@ -29,14 +29,24 @@ class TableClients extends Table {
         },
         {
           headerName: 'ФИО', field: 'fullname', minWidth: 300, flex: 1,
+          // comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
+          //   // this.changeQueryParams({ sort_column: 'fullname', sort_direction: isInverted ? 'asc' : 'desc' })
+          //   console.log(isInverted)
+          // },
           cellRenderer: params => {
             const wp = cellRendererInput(params, { iconId: 'profile' })
             observeCell(wp, params)
             return wp
           }
         },
-        { headerName: 'Телефон', field: 'username', minWidth: 170, flex: 0.5, cellRenderer: params => cellRendererInput(params, { funcFormate: formatPhoneNumber }) },
-        { headerName: 'Почта', field: 'email', minWidth: 260, flex: 0.5, cellRenderer: params => cellRendererInput(params) },
+        {
+          headerName: 'Телефон', field: 'username', minWidth: 170, flex: 0.5,
+          cellRenderer: params => cellRendererInput(params, { funcFormate: formatPhoneNumber })
+        },
+        {
+          headerName: 'Почта', field: 'email', minWidth: 260, flex: 0.5,
+          cellRenderer: params => cellRendererInput(params)
+        },
         {
           headerName: 'Ячейки', field: 'rooms', minWidth: 90, flex: 0.5,
           cellRenderer: params => {
@@ -129,6 +139,7 @@ class TableClients extends Table {
     const tippyInstance = actions(button, {
       onOpen: () => { },
       attrModal: 'modal-client',
+      attributes: [['user-id', params.data.user_id]],
       data: params.data
     })
 
@@ -186,7 +197,7 @@ class TableClients extends Table {
 
   onRendering({ clients = [], cnt_pages, page, cnt_all = 0 }) {
     this.cntAll = cnt_all
-    this.pagination.setPage(page, cnt_pages)
+    this.pagination.setPage(page, cnt_pages, cnt_all)
     this.gridApi.setGridOption('rowData', clients)
     // this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, 30, clients.length])
   }

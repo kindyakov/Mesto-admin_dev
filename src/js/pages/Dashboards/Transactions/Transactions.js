@@ -3,6 +3,14 @@ import TableAgreements from "../../../components/Tables/TableAgreements/TableAgr
 import TableTransactions from "../../../components/Tables/TableTransactions/TableTransactions.js";
 import ChartConversions from "../../../components/Charts/ChartConversions/ChartConversions.js";
 import { getSales, getSaleChannels, getAgreements, getSalesConversionRates } from "../../../settings/request.js";
+import { dateFormatter } from "../../../settings/dateFormatter.js";
+
+function subtractMonths(date, months) {
+  const newDate = new Date(date);
+  newDate.setMonth(newDate.getMonth() - months);
+
+  return newDate;
+}
 
 class Transactions extends Dashboards {
   constructor({ loader }) {
@@ -37,12 +45,20 @@ class Transactions extends Dashboards {
       page: 'dashboards/transactions'
     });
 
+    this.tables[0].onReadyFunctions.push(function name(context) {
+      context.calendar.setDate([subtractMonths(new Date(), 2), new Date()])
+    })
   }
 
   async getData(queryParams = {}) {
     return Promise.all([
       [
-        await getSales({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams }),
+        await getSales({
+          show_cnt: this.tables[0].gridOptions.paginationPageSize,
+          start_date: dateFormatter(subtractMonths(new Date(), 2), 'yyyy-MM-dd'),
+          end_date: dateFormatter(new Date(), 'yyyy-MM-dd'),
+          ...queryParams
+        }),
         await getSaleChannels()
       ],
       getAgreements({ show_cnt: this.tables[1].gridOptions.paginationPageSize, ...queryParams })

@@ -80,7 +80,7 @@ class TableSalesChannelsEdit extends Table {
 
   onRendering({ sale_channels = [], cnt_all = 0 }) {
     this.cntAll = cnt_all
-    // this.pagination.setPage(page, cnt_pages)
+    // this.pagination.setPage(page, cnt_pages, cnt_all)
     this.gridApi.setGridOption('rowData', sale_channels)
     this.gridApi.setGridOption('paginationPageSize', sale_channels.length + 20)
   }

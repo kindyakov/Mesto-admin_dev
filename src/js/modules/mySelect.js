@@ -32,7 +32,6 @@ export class Select {
       selectMaxWidth: null,
       maxHeightList: null,
       parentEl: null,
-      disable: false,
       onInit: () => { },
       onChange: () => { },
       onOpen: () => { },
@@ -93,10 +92,6 @@ export class Select {
 
       const customSelect = this.customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder, isDisabled, inputHtml, prefix })
       const b479 = window.matchMedia(`(min-width: 479px)`)
-
-      if (this.options.disable) {
-        customSelect.classList.add('_disabled')
-      }
 
       const selectInput = customSelect.querySelector(this.options.selectInput)
       if (selectInput) {
@@ -203,11 +198,14 @@ export class Select {
       const selectInputSpan = select.querySelector(`${this.options.selectInput} span`)
 
       const option = select.querySelector(`[data-value="${optionValue}"]`)
-      if (!option) return console.log(optionValue, 'Такого значения нет в:', select)
+      if (!option) {
+        console.log(optionValue, 'Такого значения нет в:', select)
+        return
+      }
       const optionText = option.textContent
 
       selectInputSpan.classList.remove('placeholder')
-      selectInputSpan.innerText = optionText
+      selectInputSpan.textContent = optionText
       selectInput.setAttribute('data-value', optionValue)
 
       this.disableSelectedOption(select, optionValue)
@@ -242,12 +240,6 @@ export class Select {
     if (defaultSelect) {
       defaultSelect.value = optionValue
       this.selectValue = optionValue
-    }
-  }
-
-  changeSelectDisable(select) {
-    if (select) {
-      select.classList.toggle('_disabled')
     }
   }
 
@@ -295,10 +287,6 @@ export class exSelect extends Select {
 
       const customSelect = this.customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder, isDisabled, inputHtml, prefix })
       const b479 = window.matchMedia(`(min-width: 479px)`)
-
-      if (this.options.disable) {
-        customSelect.classList.add('_disabled')
-      }
 
       if (b479.matches && selectMinWidth) {
         customSelect.style.minWidth = `${+selectMinWidth}px`
