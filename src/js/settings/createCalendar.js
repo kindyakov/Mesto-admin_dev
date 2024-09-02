@@ -34,11 +34,13 @@ export const createCalendar = (input, options = {}) => {
       });
 
       const selectM = instance.calendarContainer.querySelector('.flatpickr-monthDropdown-months');
+
       selectM.classList.add('init-custom-select');
       selectM.setAttribute('name', 'flatpickr-month');
       selectM.setAttribute('data-special-select', `${uniqueId}-select-flatpickr`);
       selectM.setAttribute('data-input-html', '<svg class="icon icon-arrow"><use xlink:href="./img/svg/sprite.svg#arrow"></use></svg>');
       selectM.innerHTML = '';
+
       months.forEach((month, i) => {
         selectM.insertAdjacentHTML('beforeend', `<option class="flatpickr-monthDropdown-month" value="${i}" tabindex="-1">${month}</option>`);
       });
@@ -48,7 +50,16 @@ export const createCalendar = (input, options = {}) => {
         activeIndex: instance.currentMonth,
         maxHeightList: 279,
         selectMinWidth: 130,
-        onChange: (e, select, optionValue) => instance.changeMonth(parseInt(optionValue), false)
+        onChange: (e, select, optionValue) => {
+          if (options.minDate) {
+            const minDate = options.minDate
+            const minMonth = minDate.getMonth()
+            if (+optionValue + 1 <= minMonth) {
+              instance.changeYear(minDate.getFullYear() + 1, false)
+            }
+          }
+          instance.changeMonth(parseInt(optionValue), false)
+        }
       });
     },
     onMonthChange: (selectedDates, dateStr, instance) => handleClickMonthNav(customSelect, instance),
