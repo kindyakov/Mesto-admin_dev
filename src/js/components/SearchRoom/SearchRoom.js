@@ -16,7 +16,9 @@ const defaultOptions = {
 
 class SearchRoom {
   constructor(el, options = {}, params = {}) {
-    this.options = Object.assign({}, defaultOptions, options)
+    this.options = Object.assign({
+      onShow: this.onShow.bind(this)
+    }, defaultOptions, options)
     this.params = Object.assign({}, {
       isOne: false
     }, params)
@@ -24,9 +26,14 @@ class SearchRoom {
     this.tippy = tippy(el, { ...this.options, content: this.content })
     this.timer = null
     this.roomIds = []
+    this.selectedRoomIds = []
     this.onSelect = () => { }
 
     this.init()
+  }
+
+  onShow(instance) {
+    this.searchRoomId()
   }
 
   init() {
@@ -60,12 +67,13 @@ class SearchRoom {
 
     clearTimeout(this.timer)
     this.timer = setTimeout(() => {
-      this.searchRoomId(value)
-    }, 500)
+      const sortRoomIds = value ? this.roomIds.filter(({ room_id }) => room_id.toString().includes(value)) : this.roomIds
+      this.render(sortRoomIds)
+    })
   }
 
   handleClick() {
-    this.onSelect(this.roomIds)
+    this.onSelect(this.selectedRoomIds)
     this.clear()
   }
 
@@ -76,13 +84,13 @@ class SearchRoom {
 
     if (this.params.isOne) {
       if (inputCheckbox.checked) {
-        this.roomIds = [value]
+        this.selectedRoomIds = [value]
       }
     } else {
       if (inputCheckbox.checked) {
-        this.roomIds.push(value)
+        this.selectedRoomIds.push(value)
       } else {
-        this.roomIds = this.roomIds.filter(id => id !== value)
+        this.selectedRoomIds = this.selectedRoomIds.filter(id => id !== value)
       }
     }
   }
@@ -104,35 +112,39 @@ class SearchRoom {
     this.tippy.hide()
     this.contentSearch.innerHTML = ''
     this.inputSearch.value = ''
-    this.roomIds = []
+    this.selectedRoomIds = []
+  }
+
+  render(room_ids) {
+    this.contentSearch.innerHTML = ''
+
+    if (room_ids.length) {
+      this.selectedRoomIds.length && this.selectedRoomIds.forEach(id => {
+        this.contentSearch.insertAdjacentHTML('beforeend', itemHtml(id, true, this.params.isOne ? 'radio' : 'checkbox'))
+      })
+
+      room_ids.forEach(obj => {
+        this.contentSearch.insertAdjacentHTML('beforeend', itemHtml(obj.room_id, undefined, this.params.isOne ? 'radio' : 'checkbox'))
+      })
+    } else {
+      if (this.selectedRoomIds.length) {
+        this.selectedRoomIds.length && this.selectedRoomIds.forEach(id => {
+          this.contentSearch.insertAdjacentHTML('beforeend', itemHtml(id, true, this.params.isOne ? 'radio' : 'checkbox'))
+        })
+      } else {
+        this.contentSearch.innerHTML = `<div class="not-data"><span>Не найдено</span></div>`
+      }
+    }
   }
 
   async searchRoomId(str) {
     try {
       this.loader.enable()
-      const response = await api.get(`/_get_free_room_ids_?search_str=${str}`)
+      const response = await api.get(`/_get_free_room_ids_`) // ?search_str=${str}
       if (response.status !== 200) return
       const { room_ids = [] } = response.data
-
-      this.contentSearch.innerHTML = ''
-
-      if (room_ids.length) {
-        this.roomIds.length && this.roomIds.forEach(id => {
-          this.contentSearch.insertAdjacentHTML('beforeend', itemHtml(id, true, this.params.isOne ? 'radio' : 'checkbox'))
-        })
-
-        room_ids.forEach(obj => {
-          this.contentSearch.insertAdjacentHTML('beforeend', itemHtml(obj.room_id, undefined, this.params.isOne ? 'radio' : 'checkbox'))
-        })
-      } else {
-        if (this.roomIds.length) {
-          this.roomIds.length && this.roomIds.forEach(id => {
-            this.contentSearch.insertAdjacentHTML('beforeend', itemHtml(id, true, this.params.isOne ? 'radio' : 'checkbox'))
-          })
-        } else {
-          this.contentSearch.innerHTML = `<div class="not-data"><span>Не найдено</span></div>`
-        }
-      }
+      this.roomIds = room_ids
+      this.render(room_ids)
     } catch (error) {
       console.error(error)
     } finally {
