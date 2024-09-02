@@ -20,8 +20,14 @@ class ModalRoom extends BaseModal {
       el.setAttribute('agr-id', room.agrid)
     })
 
-    if (room.rentenddate && new Date(room.rentenddate) > new Date()) {
-      this.btnCompleteRent.innerText = 'Изменить дату выезда'
+    this.btnCompleteRent.classList.remove('_none')
+
+    if (room.rentenddate) {
+      if (new Date(room.rentenddate) > new Date()) {
+        this.btnCompleteRent.innerText = 'Изменить дату выезда'
+      } else {
+        this.btnCompleteRent.classList.add('_none')
+      }
     }
 
     this.renderElements.length && this.renderElements.forEach(el => renderForm(el, room))

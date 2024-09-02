@@ -58,7 +58,7 @@
       </form>
     </div>
 
-    <div class="modal__block_item">
+    <div class="modal__block_item block-item-user-f">
       <div class="modal__block_top">
         <h4 class="modal__sub-title">Паспорт</h4>
         <button class="button-text blue modal-close" data-modal="modal-passport" user-id="">
@@ -132,6 +132,75 @@
       </div>
     </div>
 
+    <div class="modal__block_item block-item-user-u _none">
+      <div class="modal__block_top">
+        <h4 class="modal__sub-title">Реквизиты</h4>
+      </div>
+      <form class="modal__form">
+        <div class="modal__passport-form_item">
+          <span>Юридическое наименование</span>
+          <div class="modal__passport-form_wp-input wp-input">
+            <input type="text" data-render="fullname" name="fullname"
+              class="modal__passport-form_input-passport input-passport not-edit" readonly="true" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__passport-form_item">
+          <span>Юридический адрес регистрации</span>
+          <div class="modal__passport-form_wp-input wp-input">
+            <input type="text" data-render="address" name="address"
+              class="modal__passport-form_input-passport input-passport not-edit" readonly="true" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__passport-form_item">
+          <span>Наименование банка</span>
+          <div class="modal__passport-form_wp-input wp-input">
+            <input type="text" data-render="bank" name="bank"
+              class="modal__passport-form_input-passport input-passport not-edit" readonly="true" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__passport-form_item">
+          <span>БИК</span>
+          <div class="modal__passport-form_wp-input wp-input">
+            <input type="text" data-render="bik" name="bik"
+              class="modal__passport-form_input-passport input-passport not-edit" readonly="true" autocomplete="off"
+              inputmode="numeric">
+          </div>
+        </div>
+        <div class="modal__passport-form_item">
+          <span>ИНН</span>
+          <div class="modal__passport-form_wp-input wp-input">
+            <input type="text" data-render="inn" name="inn"
+              class="modal__passport-form_input-passport input-passport not-edit" readonly="true" autocomplete="off"
+              inputmode="numeric">
+          </div>
+        </div>
+        <div class="modal__passport-form_item">
+          <span>КПП</span>
+          <div class="modal__passport-form_wp-input wp-input">
+            <input type="text" data-render="kpp" name="kpp"
+              class="modal__passport-form_input-passport input-passport not-edit" readonly="true" autocomplete="off"
+              inputmode="numeric">
+          </div>
+        </div>
+        <div class="modal__passport-form_item">
+          <span>Расчетный счет</span>
+          <div class="modal__passport-form_wp-input wp-input">
+            <input type="text" data-render="rs" name="rs"
+              class="modal__passport-form_input-passport input-passport not-edit" readonly="true" autocomplete="off"
+              inputmode="numeric">
+          </div>
+        </div>
+        <div class="modal__passport-form_item">
+          <span>Корреспондентский счет</span>
+          <div class="modal__passport-form_wp-input wp-input">
+            <input type="text" data-render="ks" name="ks"
+              class="modal__passport-form_input-passport input-passport not-edit" readonly="true" autocomplete="off"
+              inputmode="numeric">
+          </div>
+        </div>
+      </form>
+    </div>
+
     <div class="modal__block_item">
       <div class="modal__block_top">
         <h4 class="modal__sub-title">Договоры:</h4>
@@ -140,6 +209,5 @@
       </div>
     </div>
   </div>
-  <div class="modal__footer">
-  </div>
+  <div class="modal__footer"></div>
 </div>

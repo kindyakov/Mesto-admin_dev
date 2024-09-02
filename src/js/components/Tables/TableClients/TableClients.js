@@ -29,10 +29,6 @@ class TableClients extends Table {
         },
         {
           headerName: 'ФИО', field: 'fullname', minWidth: 300, flex: 1,
-          // comparator: (valueA, valueB, nodeA, nodeB, isInverted) => {
-          //   // this.changeQueryParams({ sort_column: 'fullname', sort_direction: isInverted ? 'asc' : 'desc' })
-          //   console.log(isInverted)
-          // },
           cellRenderer: params => {
             const wp = cellRendererInput(params, { iconId: 'profile' })
             observeCell(wp, params)
@@ -41,11 +37,11 @@ class TableClients extends Table {
         },
         {
           headerName: 'Телефон', field: 'username', minWidth: 170, flex: 0.5,
-          cellRenderer: params => cellRendererInput(params, { funcFormate: formatPhoneNumber })
+          cellRenderer: params => cellRendererInput(params, { funcFormate: formatPhoneNumber }),
         },
         {
           headerName: 'Почта', field: 'email', minWidth: 260, flex: 0.5,
-          cellRenderer: params => cellRendererInput(params)
+          cellRenderer: params => cellRendererInput(params),
         },
         {
           headerName: 'Ячейки', field: 'rooms', minWidth: 90, flex: 0.5,

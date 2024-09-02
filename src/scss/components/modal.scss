@@ -461,6 +461,11 @@
 		padding: 25px;
 		gap: 20px;
 		border-top: 1.5px solid #e2e8f0;
+
+		&:empty {
+			display: none;
+		}
+
 		@media (max-width: $mdm1) {
 			padding: 10px 20px;
 			gap: 10px;
@@ -778,7 +783,8 @@
 			}
 		}
 
-		&.select-passport, &.select-client-confirmation {
+		&.select-passport,
+		&.select-client-confirmation {
 			.mySelect__input {
 				&[data-value='0'] {
 					background-color: $red-light;

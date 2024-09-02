@@ -51,7 +51,18 @@ class Table {
 
         this.init()
       },
-      onRowSelected: params => this.onRowSelected(params)
+      onRowSelected: params => this.onRowSelected(params),
+      onSortChanged: (params) => {
+        const columnState = params.api.getColumnState();
+        const [sortedColumn] = columnState
+          .filter(col => col.sort) // Фильтруем только отсортированные колонки
+          .map(col => ({ colId: col.colId, sort: col.sort, }));
+
+        if (sortedColumn) {
+          const { colId, sort } = sortedColumn
+          this.changeQueryParams({ sort_column: colId, sort_direction: sort });
+        }
+      },
     }
 
     this.selector = selector

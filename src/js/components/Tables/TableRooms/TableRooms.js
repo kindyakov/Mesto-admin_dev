@@ -3,6 +3,7 @@ import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { getFormattedDate } from '../../../utils/getFormattedDate.js';
 import { createElement } from '../../../settings/createElement.js';
+import { observeCell } from "../utils/observeCell.js";
 
 function typeRoom(rented) {
   const text = {
@@ -24,11 +25,11 @@ function dataStr(data) {
 function buttonsRoom(data) {
   const buttons = {
     0: `<button class="table-button button" data-modal="modal-get-guest-access" data-json="${dataStr(data)}"><span>Гостевой доступ</span></button>`,
-    0.25: `<button class="table-button button" data-modal="" data-json="${dataStr(data)}"><span>Отменить доступ</span></button>`,
+    0.25: `<button class="table-button button" data-modal="modal-confirm-cancel-guest-access" data-json="${dataStr(data)}"><span>Отменить доступ</span></button>`,
     0.4: `<button class="table-button button" data-modal="" data-json="${dataStr(data)}"><span>Отменить оплату</span></button>`,
-    0.5: `<button class="table-button button" data-modal="modal-confirmation-client" data-json="${dataStr(data)}"><span>Подтвердить</span></button>`,
-    0.75: `<button class="table-button button" data-modal="modal-confirmation-departure" data-json="${dataStr(data)}"><span>Подтвердить</span></button>`,
-    1: `<button class="table-button button" data-modal="modal-agreement" data-json="${dataStr(data)}"><span>Открыть договор</span></button>`,
+    0.5: `<button class="table-button button" data-modal="modal-passport" user-id="${data.user_id}"><span>Подтвердить клиента</span></button>`,
+    0.75: `<button class="table-button button" data-modal="modal-confirmation-departure" data-json="${dataStr(data)}"><span>Подтвердить выезд</span></button>`,
+    1: `<button class="table-button button" data-modal="modal-agreement" agr-id="${data.agrid || ''}"><span>Открыть договор</span></button>`,
   }
 
   return buttons[data.rented] ? buttons[data.rented] : ''
@@ -50,14 +51,15 @@ class TableRooms extends Table {
         {
           headerName: 'Клиент', field: 'fullname', minWidth: 300, flex: 1,
           cellRenderer: params => {
-            const span = createElement('p', {
+            const el = createElement('p', {
               classes: ['table-p'], content: `
               <svg class='icon icon-profile'>
                 <use xlink:href='img/svg/sprite.svg#profile'></use>
               </svg>
               <span>${params.value ? params.value : '___'}</span>`
             })
-            return span
+            observeCell(el, params)
+            return el
           }
         },
         {
@@ -94,12 +96,14 @@ class TableRooms extends Table {
           valueFormatter: params => params.value ? getFormattedDate(params.value) : '___'
         },
         {
-          headerName: '', field: '', minWidth: 250, flex: 1, sortable: false, resizable: false,
+          headerName: '', field: '', minWidth: 300, flex: 1, sortable: false, resizable: false,
           cellRenderer: params => {
             const div = createElement('div', {
               classes: ['table-buttons'], content: `${buttonsRoom(params.data)}
             ${+params.data.rented === 0.75
-                  ? `<button class="table-button button transparent" data-modal="" data-json="${dataStr(params.data)}"><span>Ускорить</span></button>`
+                  ? `<button class="table-button button transparent" data-modal="modal-complete-rent" agr-id="${params.data.agrid || ''}" room-id="${params.data.room_id || ''}">
+                      <span>Ускорить</span>
+                    </button>`
                   : `<button class="table-button button transparent" data-modal="modal-confirm-open-room" data-json="${dataStr(params.data)}"><span>Открыть</span></button>`}`
             })
             return div

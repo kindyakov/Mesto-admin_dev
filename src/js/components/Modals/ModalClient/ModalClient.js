@@ -25,6 +25,8 @@ class ModalClient extends BaseModal {
     if (!this.modalBody) return
     this.form = this.modalBody.querySelector('.form-client-data')
     this.validator = validateClient(this.form)
+    this.blockItemUserF = this.modalBody.querySelector('.block-item-user-f')
+    this.blockItemUserU = this.modalBody.querySelector('.block-item-user-u')
   }
 
   onEdit() {
@@ -57,6 +59,15 @@ class ModalClient extends BaseModal {
     agreements.length && agreements.forEach(agreement => {
       this.contentAgreements.insertAdjacentElement('beforeend', agreementHtml(agreement))
     })
+
+    this.blockItemUserF.classList.add('_none')
+    this.blockItemUserU.classList.add('_none')
+
+    if (client.user_type == 'f') {
+      this.blockItemUserF.classList.remove('_none')
+    } else if (client.user_type == 'u') {
+      this.blockItemUserU.classList.remove('_none')
+    }
   }
 
   async editForm(data) {
