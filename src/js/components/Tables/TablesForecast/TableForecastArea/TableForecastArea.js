@@ -51,7 +51,7 @@ class TableForecastArea extends BaseTableForecast {
           headerName: 'Выезды (м²) (план)', field: 'outflow_area', minWidth: 80, flex: 0.5,
           cellRenderer: params => {
             this.addHandleDbClickCell(params)
-            return cellRendererInput(params, { inputmode: 'decimal' })
+            return cellRendererInput(params, { inputmode: 'decimal', funcFormate: val => val.toFixed(1) })
           }
         },
         {
@@ -66,6 +66,7 @@ class TableForecastArea extends BaseTableForecast {
         },
         {
           headerName: 'Заезды (м²) (факт)', field: 'inflow_area', minWidth: 80, flex: 0.5,
+          valueFormatter: ({ value }) => value ? value.toFixed(1) : ''
         },
         {
           headerName: 'Выручка накопленным итогом (план)', field: 'revenue_accumulated_planned', minWidth: 80, flex: 0.5,
@@ -84,6 +85,7 @@ class TableForecastArea extends BaseTableForecast {
         },
         {
           headerName: 'Арендованная площадь (факт)', field: 'rented_area', minWidth: 80, flex: 0.5,
+          valueFormatter: ({ value }) => value ? value.toFixed(1) : ''
         },
         {
           headerName: '% выполнения', field: '', minWidth: 80, flex: 0.6, resizable: false,

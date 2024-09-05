@@ -84,17 +84,10 @@ class ModalAgreement extends BaseModal {
     this.renderElements = this.modalBody.querySelectorAll('[data-render]')
     this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
 
-    const dates = rooms
-      .map(room => room.next_payment_date ? new Date(room.next_payment_date) : '')
-      .filter(date => date !== '')
-    const minDate = new Date(Math.min(...dates));
-    agreement.next_payment_date = minDate.toISOString().split('T')[0];
-
     this.attrsModal.length && this.attrsModal.forEach(el => {
       el.setAttribute('agr-id', agreement.agrid)
     })
 
-    this.renderElements.length && this.renderElements.forEach(el => renderForm(el, agreement))
 
     this.validator = validate(this.form)
 
@@ -136,15 +129,29 @@ class ModalAgreement extends BaseModal {
       rooms.forEach(room => {
         this.contentRooms.insertAdjacentHTML('beforeend', `
           <div class="modal__block_grid-item">
-            <span class="item-num">${room.room_id ? '№' + room.room_id : ''}</span>
+            <span class="item-num">
+              ${room.room_id ? '№' + room.room_id : ''}
+              ${room.rentenddate && new Date(room.rentenddate) < new Date() ? '<i style="font-size: 12px;">(неактивная)</i>' : ''}
+            </span>
             <p class="item-info">${room.warehouse_name ? room.warehouse_name : ''}</p>
             <button class="item-more-detailed" data-modal="modal-room" agr-id="${room.agrid}" room-id="${room.room_id}"><span>Подробнее</span></button>
           </div>`
         )
       })
+
+      const dates = rooms
+        .map(room => room.next_payment_date ? new Date(room.next_payment_date) : '')
+        .filter(date => date !== '')
+
+      if (dates.length) {
+        const minDate = new Date(Math.min(...dates));
+        agreement.next_payment_date = minDate.toISOString().split('T')[0];
+      }
     } else {
       this.contentRooms.innerHTML = `<div class="not-data"><span>Нет ячеек для отображения</span></div>`
     }
+
+    this.renderElements.length && this.renderElements.forEach(el => renderForm(el, agreement))
   }
 
   onEdit() {

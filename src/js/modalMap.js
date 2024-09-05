@@ -22,6 +22,7 @@ import modalSelectNextPayment from "./components/Modals/ModalSelectNextPayment/M
 
 import modalConfirmOpenRoom from "./components/Modals/Confirmation/ModalConfirmOpenRoom/ModalConfirmOpenRoom.js";
 import modalConfirmCancelGuestAccess from "./components/Modals/Confirmation/ModalConfirmCancelGuestAccess/ModalConfirmCancelGuestAccess.js";
+import modalConfirmationDepartureRoom from "./components/Modals/Confirmation/ModalConfirmationDepartureRoom/ModalConfirmationDepartureRoom.js";
 
 function getClassModal({ modal }) {
   return modal.opts.cssClass[0]
@@ -53,4 +54,5 @@ export const modalMap = {
   // Окна с подтверждением
   [getClassModal(modalConfirmOpenRoom)]: modalConfirmOpenRoom,
   [getClassModal(modalConfirmCancelGuestAccess)]: modalConfirmCancelGuestAccess,
+  [getClassModal(modalConfirmationDepartureRoom)]: modalConfirmationDepartureRoom,
 }

@@ -4,6 +4,7 @@ import { api } from "../../../settings/api.js"
 import { renderForm } from "../utils/renderForm.js"
 import { outputInfo } from "../../../utils/outputinfo.js"
 import { formattingPrice } from "../../../utils/formattingPrice.js"
+import modalConfirmationDepartureRoom from "../Confirmation/ModalConfirmationDepartureRoom/ModalConfirmationDepartureRoom.js"
 
 class ModalConfirmationDeparture extends BaseModal {
   constructor(options = {}) {
@@ -16,10 +17,10 @@ class ModalConfirmationDeparture extends BaseModal {
     this.btnChangeReturnAmount = this.modalBody.querySelector('.btn-change-return-amount')
     this.inputReturnAmount = this.modalBody.querySelector('[name="return_amount"]')
 
+    modalConfirmationDepartureRoom.onClick = this.onConfirm.bind(this)
+
     this.btn.addEventListener('click', () => {
-      if (this.roomData) {
-        this.approveLeaving({ room_id: this.roomData.room_id, agrid: this.roomData.agrid })
-      }
+      modalConfirmationDepartureRoom.changePrice(+this.replace(this.inputReturnAmount))
     })
 
     this.inputReturnAmount.addEventListener('input', e => {
@@ -48,11 +49,24 @@ class ModalConfirmationDeparture extends BaseModal {
     })
   }
 
+  onConfirm(isConfirm) {
+    const roomId = this.roomData.room_id
+
+    if (isConfirm && this.roomData) {
+      this.approveLeaving({ room_id: this.roomData.room_id, agrid: this.roomData.agrid })
+      modalConfirmationDepartureRoom.close()
+    } else {
+      this.open(roomId)
+    }
+  }
+
   replace(input) {
     return input.value.replace(/[,\s₽]/g, '')
   }
 
   renderModal(room) {
+    this.roomData = room
+
     this.renderElements = this.modalBody.querySelectorAll('[data-render]')
     this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
 
@@ -61,19 +75,36 @@ class ModalConfirmationDeparture extends BaseModal {
     })
 
     this.renderElements.length && this.renderElements.forEach(el => renderForm(el, room))
+
+    this.inputReturnAmount.removeAttribute('readonly', 'true')
+    this.btn.classList.remove('_confirmed')
+    this.btnChangeReturnAmount.classList.remove('_none')
+
+    if (room.leave_approved) {
+      this.inputReturnAmount.setAttribute('readonly', 'true')
+      this.btnChangeReturnAmount.classList.add('_none')
+      this.btn.classList.add('_confirmed')
+    }
   }
 
   async onOpen(params = null) {
     if (!params) return
     try {
-      const extractData = this.extractData(params)
-      if (!extractData) return
       this.loader.enable()
-      const response = await api.get(`/_get_moving_out_room_info_?room_id=${extractData.room_id}`)
+      let id = ''
+
+      if (params instanceof Element) {
+        id = params.getAttribute('room-id')
+      } else {
+        id = params
+      }
+
+      if (!id) return
+
+      const response = await api.get(`/_get_moving_out_room_info_?room_id=${id}`)
       if (response.status !== 200) return
       const { room = null } = response.data
       if (room) {
-        this.roomData = room
         this.renderModal(room)
       }
     } catch (error) {

@@ -31,7 +31,7 @@ class BaseTableForecast extends Table {
       this.wrapButtons = createElement('div', { classes: ['wrap-buttons'] })
       this.btnCancel = createElement('button', { classes: ['button', 'transparent'], content: `<span>Отменить<span>` })
 
-      this.btnAdd.addEventListener('click', context.addEmptyRow.bind(this))
+      this.btnAdd && this.btnAdd.addEventListener('click', context.addEmptyRow.bind(this))
       this.btnCancel.addEventListener('click', context.handleClickBtnCancel.bind(this))
 
       this.wrapButtons.appendChild(this.btnCancel)

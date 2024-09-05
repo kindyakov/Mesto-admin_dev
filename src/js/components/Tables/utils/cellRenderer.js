@@ -24,7 +24,22 @@ export function cellRendererInput(params, options = {}) {
     attributesStr = attributes.map(attr => `${attr[0]}="${attr[1]}"`).join(' ')
   }
 
-  wpInput.insertAdjacentHTML('beforeend', `<input type="text" name="${name ? name : params.colDef.field}" value="${params.value ? funcFormate(params.value) : ''}" class="input-cell cell-input not-edit" autocomplete="off" readonly="true" inputmode="${inputmode}" ${attributesStr}>${el ? el.outerHTML : ''}`);
+  const input = createElement('input', {
+    classes: ['input-cell', 'cell-input', 'not-edit',],
+    attributes: [
+      ['type', 'text'],
+      ['name', name ? name : params.colDef.field],
+      ['autocomplete', 'off'],
+      ['readonly', 'true'],
+      ['inputmode', inputmode],
+      ...attributes
+    ]
+  })
+
+  input.value = params.value ? funcFormate(params.value) : ''
+  wpInput.insertAdjacentElement('afterbegin', input)
+  wpInput.insertAdjacentHTML('beforeend', `${el ? el.outerHTML : ''}`);
+
   return wpInput;
 }
 

@@ -23,9 +23,9 @@ function buttonsRoom(data) {
     0: `<button class="room__button button" data-json="${dataStr(data)}" data-modal="modal-add-client"><span>Оформить клиенту</span></button>`,
     0.25: `<button class="room__button button" data-json="${dataStr(data)}" data-modal="modal-confirm-cancel-guest-access"><span>Отменить доступ</span></button>`,
     0.45: ``,
-    0.4: `<button class="room__button button" data-json="${dataStr(data)}" data-modal=""><span>Отменить оплату</span></button>`,
+    0.4: `<button class="room__button button" data-modal=""><span>Отменить оплату</span></button>`,
     0.5: `<button class="room__button button" data-modal="modal-passport" user-id="${data.user_id}"><span>Подтвердить клиента</span></button>`,
-    0.75: `<button class="room__button button" data-json="${dataStr(data)}" data-modal="modal-confirmation-departure"><span>Подтвердить выезд</span></button>`,
+    0.75: `<button class="room__button button" data-modal="modal-confirmation-departure" room-id="${data.room_id}"><span>Подтвердить выезд</span></button>`,
     1: ``,
   }
 
@@ -86,7 +86,10 @@ export function rowHtml(data) {
     <div class="warehouse__confirmation_row">
                 <p class="name">${data.fullname ? data.fullname : ''}</p>
                 <span class="span">Выезд:<b>${data.rentenddate ? dateFormatter(data.rentenddate) : ''}</b></span>
-                <button class="button table-button" data-modal="modal-confirmation-departure" data-json="${dataStr(data)}"><span>Подтвердить</span></button>
+                <button class="button table-button" data-modal="modal-confirmation-departure" room-id="${data.room_id}">
+                  <span>Подтвердить</span>
+                  <span>Подтвержден</span>
+                </button>
               </div>`
 }
 

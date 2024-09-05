@@ -2,8 +2,9 @@ import tippy from '../../../../configs/tippy.js'
 import popupContent from './popupContent.html'
 
 export function PopupSelectSend(container, options = {}) {
+  const mergeOptions = Object.assign({ content: popupContent, }, options)
+
   const instance = tippy(container, {
-    content: popupContent,
     trigger: 'manual',
     appendTo: container.parentElement,
     maxWidth: 630,
@@ -20,7 +21,7 @@ export function PopupSelectSend(container, options = {}) {
         });
       });
     },
-    ...options
+    ...mergeOptions
   });
 
   return instance
