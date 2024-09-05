@@ -86,7 +86,7 @@ export function rowHtml(data) {
     <div class="warehouse__confirmation_row">
                 <p class="name">${data.fullname ? data.fullname : ''}</p>
                 <span class="span">Выезд:<b>${data.rentenddate ? dateFormatter(data.rentenddate) : ''}</b></span>
-                <button class="button table-button" data-modal="modal-confirmation-departure" room-id="${data.room_id}">
+                <button class="button table-button ${data.leave_approved ? '_confirmed' : ''}" data-modal="modal-confirmation-departure" room-id="${data.room_id}">
                   <span>Подтвердить</span>
                   <span>Подтвержден</span>
                 </button>

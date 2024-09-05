@@ -78,12 +78,14 @@ class ModalConfirmationDeparture extends BaseModal {
 
     this.inputReturnAmount.removeAttribute('readonly', 'true')
     this.btn.classList.remove('_confirmed')
+    this.btn.setAttribute('data-modal', 'modal-confirmation-departure-room')
     this.btnChangeReturnAmount.classList.remove('_none')
 
     if (room.leave_approved) {
       this.inputReturnAmount.setAttribute('readonly', 'true')
       this.btnChangeReturnAmount.classList.add('_none')
       this.btn.classList.add('_confirmed')
+      this.btn.removeAttribute('data-modal')
     }
   }
 
