@@ -1,8 +1,10 @@
 import Table from "../Table.js";
 
-import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
+import { observeCell } from "../utils/observeCell.js";
+
+import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
 import { downloadFuturePayments } from "../../../settings/request.js";
 
@@ -26,7 +28,11 @@ class TableUpcomingPayments extends Table {
         },
         {
           headerName: 'ФИО', field: 'fullname', minWidth: 350, flex: 1,
-          cellRenderer: params => cellRendererInput(params, { iconId: 'profile' })
+          cellRenderer: params => {
+            const wp = cellRendererInput(params, { iconId: 'profile' })
+            observeCell(wp, params)
+            return wp
+          }
         },
         {
           headerName: 'Договор', field: 'agrid', minWidth: 70, flex: 0.5,

@@ -122,6 +122,12 @@
 
 	&.not-edit {
 		border-color: transparent;
+		&[name='fullname'] {
+			border-color: $blue;
+			&:hover {
+				border-color: transparent;
+			}
+		}
 	}
 }
 
