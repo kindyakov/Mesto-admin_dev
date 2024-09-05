@@ -3,6 +3,7 @@ import content from "./content.html"
 import { api } from "../../../settings/api.js"
 import { renderForm } from "../utils/renderForm.js"
 import { outputInfo } from "../../../utils/outputinfo.js"
+import { formattingPrice } from "../../../utils/formattingPrice.js"
 
 class ModalConfirmationDeparture extends BaseModal {
   constructor(options = {}) {
@@ -12,12 +13,43 @@ class ModalConfirmationDeparture extends BaseModal {
     })
     this.roomData = null
     this.btn = this.modalBody.querySelector('.btn-confirm')
+    this.btnChangeReturnAmount = this.modalBody.querySelector('.btn-change-return-amount')
+    this.inputReturnAmount = this.modalBody.querySelector('[name="return_amount"]')
 
     this.btn.addEventListener('click', () => {
       if (this.roomData) {
         this.approveLeaving({ room_id: this.roomData.room_id, agrid: this.roomData.agrid })
       }
     })
+
+    this.inputReturnAmount.addEventListener('input', e => {
+      const input = e.target
+      const value = parseFloat(this.replace(input))
+      input.value = formattingPrice(value)
+    })
+
+    this.inputReturnAmount.addEventListener('keydown', function (e) {
+      if (e.key === 'Backspace') {
+        e.preventDefault();
+        const input = e.target
+        const value = parseFloat(input.value.replace(/[,\s₽]/g, '').slice(0, -1))
+        input.value = formattingPrice(value)
+      }
+    });
+
+    this.btnChangeReturnAmount.addEventListener('click', () => {
+      if (this.roomData) {
+        this.editReturnAmount({
+          room_id: this.roomData.room_id,
+          agrid: this.roomData.agrid,
+          return_amount: +this.replace(this.inputReturnAmount)
+        })
+      }
+    })
+  }
+
+  replace(input) {
+    return input.value.replace(/[,\s₽]/g, '')
   }
 
   renderModal(room) {
@@ -51,6 +83,20 @@ class ModalConfirmationDeparture extends BaseModal {
     }
   }
 
+  async editReturnAmount(data) {
+    try {
+      this.loader.enable()
+      const response = await api.post('/_edit_return_amount_', data)
+      if (response.status !== 200) return
+      outputInfo(response.data)
+    } catch (error) {
+      console.error(error)
+      throw error
+    } finally {
+      this.loader.disable()
+    }
+  }
+
   async approveLeaving(data) {
     try {
       this.loader.enable()
@@ -61,6 +107,7 @@ class ModalConfirmationDeparture extends BaseModal {
       this.close()
     } catch (error) {
       console.error(error)
+      throw error
     } finally {
       this.loader.disable()
     }

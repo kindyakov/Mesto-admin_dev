@@ -25,7 +25,7 @@
           <span>Номер:</span>
           <div class="modal__form_wp-input wp-input">
             <input type="tel" class="modal__form_input input not-edit" name="username" autocomplete="off"
-              inputmode="tel" readonly="true" data-render="username,username">
+              inputmode="tel" readonly="true" data-render="username,phone">
           </div>
         </div>
         <div class="modal__form_item">
@@ -63,11 +63,19 @@
               inputmode="numeric" readonly="true" data-render="deposit,price">
           </div>
         </div>
+        <div class="modal__form_item">
+          <span>Сумма к возврату:</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input" name="return_amount" autocomplete="off"
+              inputmode="numeric" data-render="return_amount,price">
+          </div>
+        </div>
         <button type="submit" style="display: none;"></button>
       </form>
     </div>
   </div>
   <div class="modal__footer">
+    <button class="button transparent btn-change-return-amount"><span>Изменить сумму к возврату</span></button>
     <button class="button btn-confirm"><span>Подтвердить</span></button>
   </div>
 </div>

@@ -31,6 +31,7 @@ export function validate(form, options) {
 
   const calendar = createCalendar(paymentDate, {
     dateFormat: 'd.m.Y',
+    maxDate: new Date(),
     appendTo: paymentDate.parentElement
   })
 
