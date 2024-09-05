@@ -55,9 +55,9 @@ class WorkingHours extends Page {
 
         if (this.timePoint.start_or_end === 'start') {
           time = 'time_start'
-          photo = 'start_photo_link'
+          photo = 'start'
         } else {
-          photo = 'end_photo_link'
+          photo = 'end'
           time = 'time_end'
         }
 
