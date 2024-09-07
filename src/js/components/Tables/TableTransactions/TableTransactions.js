@@ -152,8 +152,18 @@ class TableTransactions extends Table {
       try {
         this.loader.enable()
         const { question_id, status, channel_id, sale_channel } = params.data
-        await this.setData('/_set_sale_channel_', { question_id, sale_channel_id: channel_id, sale_channel: sale_channel })
-        await this.setData('/_set_status_', { question_id, status })
+        const formDataChannel = new FormData()
+        const formDataStatus = new FormData()
+
+        formDataChannel.set('question_id', question_id)
+        formDataChannel.set('sale_channel_id', question_id)
+        formDataChannel.set('sale_channel', sale_channel)
+
+        formDataStatus.set('question_id', question_id)
+        formDataStatus.set('status', status)
+
+        await this.setData('/_set_sale_channel_', formDataChannel)
+        await this.setData('/_set_status_', formDataStatus)
       } catch (error) {
         console.log(error)
         throw error
@@ -194,9 +204,9 @@ class TableTransactions extends Table {
     // this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, sales.length])
   }
 
-  async setData(route, data) {
+  async setData(route, formData) {
     try {
-      const response = await api.post(`${route}${buildQueryParams(data)}`)
+      const response = await api.post(`${route}`, formData)
       if (response.status !== 200) return null
       this.app.notify.show(response.data)
       return response.data

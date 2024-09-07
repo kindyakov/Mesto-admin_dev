@@ -238,8 +238,6 @@ class ChartSalesChannels extends BaseChart {
       }
     })
 
-    console.log(sortData)
-
     this.chart.update()
   }
 }
