@@ -93,11 +93,11 @@ export const getManagersList = getCreate('/_get_managers_list_')
 
 export const getFinancePlan = getCreate('/_get_finance_plan_')
 
-export const getSalesPlan = getCreate('/_get_sales_plan_')
-
 export const getMessagesHistory = getCreate('/_get_messages_history_')
 
 export const getTimeControlInfo = getCreate('/_get_time_control_info_')
+
+export const getSalesPlan = getCreate('/_get_sales_plan_')
 
 export const getSales = getCreate('/_get_sales_')
 
@@ -106,6 +106,8 @@ export const getSaleChannels = getCreate('/_get_sale_channels_')
 export const getSaleChannelsExpenses = getCreate('/_get_sale_channels_expenses_')
 
 export const getSaleChannelsStats = getCreate('/_get_sale_channels_stats_')
+
+export const getSaleChannelsLeads = getCreate('/_get_sale_channels_leads_')
 
 export const getSalesConversionRates = getCreate('/_get_sales_conversion_rates_')
 // ============================================================================>

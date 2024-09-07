@@ -153,6 +153,15 @@
 			}
 		}
 
+		.table-open-modal[data-modal] {
+			width: 100%;
+			border-bottom: 1px solid $blue;
+			transition: 0.2s;
+			&:hover {
+				border-color: transparent;
+			}
+		}
+
 		@media (max-width: $md2) {
 			padding-left: 10px;
 			padding-right: 10px;

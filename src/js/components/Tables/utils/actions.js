@@ -35,7 +35,7 @@ let defaultOptions = {
 }
 
 export function actions(button, opt = {}) {
-  const options = Object.assign({ toggleEdit, toggleActive }, defaultOptions, opt)
+  const options = Object.assign({ enableEdit, toggleActive }, defaultOptions, opt)
 
   const instance = tippy(button, {
     maxWidth: 180,
@@ -62,7 +62,7 @@ export function actions(button, opt = {}) {
 
       function handleClick(e) {
         if (e.target.closest('.btn-edit-row-table')) {
-          toggleEdit(button)
+          enableEdit(button)
           options.isEdit = true
           options.onEnableEdit(options)
         }
@@ -74,12 +74,12 @@ export function actions(button, opt = {}) {
     },
     onTrigger(instance, event) {
       options.tippyInstance = instance; // Сохраняем ссылку на экземпляр tippy.js
-      if (options.isEdit) {
+      if (button.classList.contains('_edit')) {
         options.onEdit(options)
       }
     },
     onShow(instance) {
-      if (options.isEdit) {
+      if (button.classList.contains('_edit')) {
         return false; // Запрещаем открытие tippy, если редактирование активно
       }
       toggleActive(button)
@@ -89,8 +89,8 @@ export function actions(button, opt = {}) {
     },
   });
 
-  function toggleEdit(button) {
-    button.classList.toggle('_edit');
+  function enableEdit(button) {
+    button.classList.add('_edit');
   }
 
   function toggleActive(button) {

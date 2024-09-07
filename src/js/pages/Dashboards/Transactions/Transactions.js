@@ -3,14 +3,7 @@ import TableAgreements from "../../../components/Tables/TableAgreements/TableAgr
 import TableTransactions from "../../../components/Tables/TableTransactions/TableTransactions.js";
 import ChartConversions from "../../../components/Charts/ChartConversions/ChartConversions.js";
 import { getSales, getSaleChannels, getAgreements, getSalesConversionRates } from "../../../settings/request.js";
-import { dateFormatter } from "../../../settings/dateFormatter.js";
-
-function subtractMonths(date, months) {
-  const newDate = new Date(date);
-  newDate.setMonth(newDate.getMonth() - months);
-
-  return newDate;
-}
+import { dateFormatter, subtractMonths } from "../../../settings/dateFormatter.js";
 
 class Transactions extends Dashboards {
   constructor({ loader }) {
@@ -55,7 +48,7 @@ class Transactions extends Dashboards {
       [
         await getSales({
           show_cnt: this.tables[0].gridOptions.paginationPageSize,
-          start_date: dateFormatter(subtractMonths(new Date(), 2), 'yyyy-MM-dd'),
+          start_date: dateFormatter(this.subtractMonths(new Date(), 2), 'yyyy-MM-dd'),
           end_date: dateFormatter(new Date(), 'yyyy-MM-dd'),
           ...queryParams
         }),

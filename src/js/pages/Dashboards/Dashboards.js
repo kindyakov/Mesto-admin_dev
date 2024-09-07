@@ -16,13 +16,6 @@ function formatePrice(value) {
   return value.toFixed(3) + ' ' + units[unitIndex]
 }
 
-function subtractMonths(date, months) {
-  const newDate = new Date(date);
-  newDate.setMonth(newDate.getMonth() - months);
-
-  return newDate;
-}
-
 class Dashboards extends Page {
   constructor(options) {
     super(options)
@@ -38,7 +31,7 @@ class Dashboards extends Page {
       this.calendars = createCalendar(`[data-content="${options.page}"] .input-date-filter`, {
         mode: "range",
         dateFormat: "d. M, Y",
-        defaultDate: [subtractMonths(new Date(), 2), new Date()],
+        defaultDate: [this.subtractMonths(new Date(), 2), new Date()],
         onChange: (selectedDates, dateStr, instance) => {
           if (selectedDates.length === 2) {
             this.changeQueryParams({
@@ -64,6 +57,13 @@ class Dashboards extends Page {
     }
   }
 
+  subtractMonths(date, months) {
+    const newDate = new Date(date);
+    newDate.setMonth(newDate.getMonth() - months);
+
+    return newDate;
+  }
+
   renderWidgets(data) {
     this.widgets = this.wrapper.querySelectorAll('[data-render-widget]')
 
@@ -86,6 +86,7 @@ class Dashboards extends Page {
   onRender() {
 
   }
+
   async render(queryParams = {}) {
     try {
       this.loader.enable()

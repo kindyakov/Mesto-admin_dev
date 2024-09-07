@@ -1,19 +1,52 @@
 import Table from '../Table.js';
 
 import { actions } from '../utils/actions.js';
-import { cellRendererInput, cellRendererSelect } from '../utils/cellRenderer.js';
+import { cellRendererSelect } from '../utils/cellRenderer.js';
 
 import { api } from "../../../settings/api.js";
 import { createElement } from '../../../settings/createElement.js';
 import { getFormattedDate } from '../../../utils/getFormattedDate.js';
 import { formatPhoneNumber } from '../../../utils/formattingPrice.js';
 import { buildQueryParams } from '../../../utils/buildQueryParams.js';
+import { observeCell } from '../utils/observeCell.js';
 
 function subtractMonths(date, months) {
   const newDate = new Date(date);
   newDate.setMonth(newDate.getMonth() - months);
 
   return newDate;
+}
+
+function moveChannelToFront(arr, id) {
+  const index = arr.findIndex(item => item.channel_id === id);
+
+  if (index !== -1) {
+    const [element] = arr.splice(index, 1);
+    arr.unshift(element);
+  }
+
+  return arr;
+}
+
+function addClassSpan(value) {
+  let strClass = ''
+
+  switch (value) {
+    case 'Не обработан':
+      strClass = 'yellow'
+      break
+    case 'В процессе':
+      strClass = 'blue'
+      break
+    case 'Отказ':
+      strClass = 'red'
+      break
+    case 'Сделка':
+      strClass = 'green'
+      break
+  }
+
+  return strClass
 }
 
 class TableTransactions extends Table {
@@ -33,26 +66,31 @@ class TableTransactions extends Table {
           }
         },
         {
-          headerName: 'Телефон', field: 'username', minWidth: 140, flex: 0.6,
+          headerName: 'Телефон', field: 'username', minWidth: 150, flex: 0.6,
           valueFormatter: params => params.value ? formatPhoneNumber(params.value) : 'нет'
         },
         {
           headerName: 'ФИО', field: 'fullname', minWidth: 250, flex: 1,
-          // cellRenderer: params => cellRendererInput(params, { iconId: 'profile' })
+          cellRenderer: params => {
+            const wp = createElement('div', { classes: ['table-open-modal'], content: params.value })
+            observeCell(wp, params)
+            return wp
+          }
         },
         {
-          headerName: 'Источник', field: 'source', minWidth: 120, flex: 0.5,
+          headerName: 'Источник', field: 'source', minWidth: 130, flex: 0.5,
         },
         {
           headerName: 'Канал продаж', field: 'sale_channel', minWidth: 180, flex: 0.8,
           cellRenderer: params => {
-            const { sale_channels } = params.data
+            const { sale_channels, channel_id } = params.data
             if (!sale_channels.length) return ''
-            const options = sale_channels.map(obj => obj.sale_channel_name)
+            const options = moveChannelToFront(sale_channels, channel_id).map(obj => obj.sale_channel_name)
             params.value = options[0]
             params.setValue(params.value)
             params.data.channel_id = sale_channels[0].channel_id
             const span = createElement('span', { classes: ['table-span-w', 'gray'], content: params.value })
+            this.addHandleDbClickCell(params)
             return cellRendererSelect(params, {
               el: span, options, onSelect: value => {
                 const [filterChannel] = sale_channels.filter(channel => channel.sale_channel_name == value)
@@ -68,32 +106,12 @@ class TableTransactions extends Table {
         {
           headerName: 'Статус', field: 'status', minWidth: 200, flex: 0.8,
           cellRenderer: params => {
-            function addClassSpan(value) {
-              let strClass = ''
-
-              switch (value) {
-                case 'Не обработан':
-                  strClass = 'yellow'
-                  break
-                case 'В процессе':
-                  strClass = 'blue'
-                  break
-                case 'Отказ':
-                  strClass = 'red'
-                  break
-                case 'Сделка':
-                  strClass = 'green'
-                  break
-              }
-
-              return strClass
-            }
-
             let options = [params.value, 'Не обработан', 'В процессе', 'Отказ', 'Сделка']
             options = [...new Set(options.filter(item => item !== null))];
             params.setValue(options[0])
             params.value = options[0]
             const span = createElement('span', { classes: ['table-span-w', addClassSpan(params.value)], content: params.value })
+            this.addHandleDbClickCell(params)
             return cellRendererSelect(params, {
               el: span, options, onSelect: value => {
                 span.classList.remove('yellow', 'blue', 'red', 'green')
@@ -117,8 +135,8 @@ class TableTransactions extends Table {
     const mergedParams = Object.assign({}, defaultParams, params);
     super(selector, mergedOptions, mergedParams);
 
-    this.actionCellRenderer = this.actionCellRenderer.bind(this)
-    this.enableEditing = this.enableEditing.bind(this)
+    // this.actionCellRenderer = this.actionCellRenderer.bind(this)
+    // this.enableEditing = this.enableEditing.bind(this)
   }
 
   actionCellRenderer(params) {
@@ -151,6 +169,21 @@ class TableTransactions extends Table {
     }
 
     return button
+  }
+
+  addHandleDbClickCell({ eGridCell }) {
+    eGridCell.addEventListener('dblclick', e => {
+      const row = eGridCell.closest('.ag-row')
+      const wp = eGridCell.querySelector('.wp-input-cell')
+      const btnEdit = row.querySelector('.button-table-actions')
+
+      if (wp.classList.contains('not-edit')) {
+        btnEdit.classList.add('_edit');
+        wp.classList.remove('not-edit')
+        // this.validateInput(input)
+        // this.setReadonly(input, false)
+      }
+    })
   }
 
   onRendering([{ sales = [], cnt_pages, page, cnt_all = 0 }, { sale_channels = [] }]) {

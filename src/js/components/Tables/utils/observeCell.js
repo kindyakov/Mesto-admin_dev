@@ -1,5 +1,6 @@
 export function observeCell(wp, params) {
-  wp.setAttribute('user-id', params.data.user_id ? params.data.user_id : '')
+  if (!params.data.user_id) return
+  wp.setAttribute('user-id', params.data.user_id || '')
   wp.setAttribute('data-modal', 'modal-client');
   wp.classList.add('cursor-pointer')
 

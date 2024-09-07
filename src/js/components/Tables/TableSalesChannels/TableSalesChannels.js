@@ -9,25 +9,25 @@ class TableSalesChannels extends Table {
           headerName: 'Канал продаж', field: 'sale_channel_name', minWidth: 120, flex: 0.6,
         },
         {
-          headerName: 'Бюджет', field: 'revenue', minWidth: 80, flex: 0.4,
+          headerName: 'Бюджет', field: 'expenses', minWidth: 80, flex: 0.4,
           valueFormatter: params => params.value ? formattingPrice(params.value) : ''
         },
         {
           headerName: 'Все лиды', field: 'leads', minWidth: 80, flex: 0.4,
         },
         {
-          headerName: 'Цена лида', field: '', minWidth: 100, flex: 0.5,
+          headerName: 'Цена лида', field: 'lead_cost', minWidth: 100, flex: 0.5,
           valueFormatter: params => params.value ? formattingPrice(params.value) : ''
         },
         {
-          headerName: 'Количество сделок', field: 'lead_cost', minWidth: 70, flex: 0.4,
+          headerName: 'Количество сделок', field: 'sales', minWidth: 70, flex: 0.4,
         },
         {
           headerName: '% конверсии', field: 'conversion_rate', minWidth: 80, flex: 0.5,
           valueFormatter: params => params.value ? params.value + '%' : ''
         },
         {
-          headerName: 'Выручка', field: 'sales', minWidth: 100, flex: 0.5,
+          headerName: 'Выручка', field: 'revenue', minWidth: 100, flex: 0.5,
           valueFormatter: params => params.value ? formattingPrice(params.value) : ''
         },
         {

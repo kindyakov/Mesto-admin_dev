@@ -2,7 +2,8 @@ import Dashboards from "../Dashboards.js";
 import TableSalesChannels from "../../../components/Tables/TableSalesChannels/TableSalesChannels.js";
 import TableSalesChannelsEdit from "../../../components/Tables/TableSalesChannelsEdit/TableSalesChannelsEdit.js";
 import ChartSalesChannels from "../../../components/Charts/ChartSalesChannels/ChartSalesChannels.js";
-import { getSaleChannelsExpenses, getSaleChannelsStats } from "../../../settings/request.js";
+import { getSaleChannelsExpenses, getSaleChannelsStats, getSaleChannelsLeads, getSalesPlan } from "../../../settings/request.js";
+import { dateFormatter, subtractMonths } from "../../../settings/dateFormatter.js";
 
 class SalesChannels extends Dashboards {
   constructor({ loader }) {
@@ -29,14 +30,27 @@ class SalesChannels extends Dashboards {
       ],
       page: 'dashboards/sales-channels'
     });
+
+    this.tables[1].onReadyFunctions.push(function name(context) {
+      context.calendar.setDate([subtractMonths(new Date(), 2), new Date()])
+    })
   }
 
   async getData(queryParams = {}) {
     return Promise.all([getSaleChannelsExpenses(queryParams), getSaleChannelsStats(queryParams)]);
   }
 
-  async getDashboardData() {
-    return []
+  async getDashboardData(queryParams = {}) {
+    return Promise.all([getSaleChannelsLeads({
+      start_date: dateFormatter(this.subtractMonths(new Date(), 2), 'yyyy-MM-dd'),
+      end_date: dateFormatter(new Date(), 'yyyy-MM-dd'),
+      ...queryParams
+    }),
+    getSalesPlan({
+      start_date: dateFormatter(this.subtractMonths(new Date(), 2), 'yyyy-MM-dd'),
+      end_date: dateFormatter(new Date(), 'yyyy-MM-dd'),
+      ...queryParams
+    })])
   }
 }
 
