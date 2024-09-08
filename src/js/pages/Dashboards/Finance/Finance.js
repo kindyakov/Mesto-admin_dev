@@ -18,7 +18,6 @@ function getFirstAndLastDayOfMonth() {
   return [firstDay, lastDay]
 }
 
-
 class Finance extends Dashboards {
   constructor({ loader }) {
     super({
@@ -42,28 +41,16 @@ class Finance extends Dashboards {
   }
 
   async getDashboardData(queryParams = {}) {
-    return Promise.all([getDashboardFinance(queryParams), getFinancePlan(queryParams)])
+    return Promise.all([getDashboardFinance({ ...this.queryParams, ...queryParams }), getFinancePlan(queryParams)])
   }
 
-  async render(queryParams = {}) {
-    try {
-      this.loader.enable()
 
-      const [dataDashboard = [], dataEntities,] = await Promise.all([this.getDashboardData({ ...this.queryParams, ...queryParams }), this.getData(queryParams)])
+  onRender([dataDashboard, { finance_planfact = [] }], dataEntities) {
+    this.renderWidgets(dataDashboard)
+    this.actionsCharts(chart => chart.render(finance_planfact))
 
-      if (dataDashboard.length) {
-        const [dataWidgets = [], { finance_planfact = [] }] = dataDashboard
-        this.renderWidgets(dataWidgets)
-        this.actionsCharts(chart => chart.render(finance_planfact))
-      }
-
-      if (this.tables.length && dataEntities) {
-        this.actionsTables((table, i) => table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities))
-      }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      this.loader.disable()
+    if (this.tables.length && dataEntities) {
+      this.actionsTables((table, i) => table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities))
     }
   }
 }

@@ -1,27 +1,31 @@
 <div class="main__content content-main" data-content="working-hours">
-  <h2 class="main__title">Учет рабочего времени</h2>
-  <div class="working-hours">
+  <div class="section-list">
+    <h2 class="main__title" style="margin-bottom: 30px;">Учет рабочего времени</h2>
+    <div class="working-hours">
 
+    </div>
   </div>
 
-  <h2 class="main__title">Контроль сотрудников</h2>
-  <div class="table" style="height: 850px;">
-    <div class="table__top">
-      <form class="table__form form-table-search">
-        <label class="main__date-filter">
-          <svg class="icon icon-calendar">
-            <use xlink:href="img/svg/sprite.svg#calendar"></use>
-          </svg>
-          <input type="text" class="input-date-filter flatpickr-input active" name="filter_start_date,filter_end_date"
-            placeholder="Дата" readonly="readonly">
-        </label>
-        <select name="returned" class="init-custom-select" data-special-select="select-filter-table"
-          data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
-          <option value="0">Сотрудник</option>
-          <option value="1">Возвраты</option>
-        </select>
-      </form>
+  <div class="section-table">
+    <h2 class="main__title" style="margin-bottom: 30px;">Контроль сотрудников</h2>
+    <div class="table" style="height: 850px;">
+      <div class="table__top">
+        <form class="table__form form-table-search">
+          <label class="main__date-filter">
+            <svg class="icon icon-calendar">
+              <use xlink:href="img/svg/sprite.svg#calendar"></use>
+            </svg>
+            <input type="text" class="input-date-filter flatpickr-input active" name="filter_start_date,filter_end_date"
+              placeholder="Дата" readonly="readonly">
+          </label>
+          <select name="returned" class="init-custom-select" data-special-select="select-filter-table"
+            data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
+            <option value="0">Сотрудник</option>
+            <option value="1">Возвраты</option>
+          </select>
+        </form>
+      </div>
+      <div class="table__content table-employee ag-theme-quartz" style="height: 100%;"></div>
     </div>
-    <div class="table__content table-employee ag-theme-quartz" style="height: 100%;"></div>
   </div>
 </div>

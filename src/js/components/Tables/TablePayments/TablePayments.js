@@ -11,6 +11,7 @@ import { observeCell } from "../utils/observeCell.js";
 
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
+import { createElement } from '../../../settings/createElement.js';
 
 class TablePayments extends Table {
   constructor(selector, options, params) {
@@ -45,7 +46,7 @@ class TablePayments extends Table {
           headerName: 'Статья учета', field: 'account_article', minWidth: 80, flex: 0.5,
         },
         {
-          headerName: 'Сумма', field: 'amount', minWidth: 90, flex: 0.5,
+          headerName: 'Сумма', field: 'amount', minWidth: 110, flex: 0.5,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-price')
@@ -54,10 +55,10 @@ class TablePayments extends Table {
           }
         },
         {
-          headerName: 'Сотрудник', field: 'manager_name', minWidth: 90, flex: 0.5,
+          headerName: 'Сотрудник', field: 'manager_name', minWidth: 115, flex: 0.5,
         },
         {
-          headerName: 'Физ./Юр.', field: 'user_type', minWidth: 90, flex: 0.5,
+          headerName: 'Физ./Юр.', field: 'user_type', minWidth: 95, flex: 0.5,
           valueFormatter: params => params.value === 'f' ? 'Физ. лицо' : 'Юр. лицо'
         },
         {
@@ -82,15 +83,16 @@ class TablePayments extends Table {
   actionCellRenderer(params) {
     const { agrid, user_type, payment_id } = params.data
     const row = params.eGridCell.closest('.ag-row')
-    const button = document.createElement('button');
-    button.classList.add('button-table-actions');
-
-    button.innerHTML = `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`;
+    const button = createElement('button', {
+      classes: ['button-table-actions'], content: `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`
+    });
     let form
 
     const tippyInstance = actions(button, {
+      buttonsIs: [false, true],
       attrModal: 'modal-agreement',
       attributes: [['agr-id', params.data.agrid]],
+      placement: 'bottom-right',
       data: params.data
     })
 
@@ -167,7 +169,12 @@ class TablePayments extends Table {
   async download(data) {
     try {
       this.loader.enable()
-      let reqData = {}
+      const { returned, filter_start_date = null, filter_end_date = null } = this.queryParams
+      let reqData = { returned }
+
+      if (filter_start_date && filter_end_date) {
+        reqData = { ...reqData, filter_start_date, filter_end_date }
+      }
 
       if (data.length) {
         const payment_ids = data.map(obj => obj.payment_id)

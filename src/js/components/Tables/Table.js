@@ -136,6 +136,9 @@ class Table {
     }
 
     if (this.selects) {
+      this.selects.selects.forEach(select => {
+        this.queryParams[select.name] = select.value
+      })
       this.selects.onChange = (e, select, value) => this.changeQueryParams({ [select.getAttribute('data-name')]: value })
     }
 
@@ -179,13 +182,12 @@ class Table {
 
   // Обработчик клика по кнопке "Выгрузить в excel"
   handleBtnUploadExcel() {
-    // if (this.selectedRows.length) {
-    // ? Выполнить запрос на скачивание excel файла
-    this.download(this.selectedRows)
-    this.gridApi.deselectAll()
-    // } else {
-    // outputInfo({ msg: 'Выберите в таблице строчку', msg_type: 'warning' })
-    // }
+    if (this.selectedRows.length) {
+      this.download(this.selectedRows)
+      this.gridApi.deselectAll()
+    } else {
+      this.app.notify.show({ msg: 'Вы не выбрали элементы для выгрузки', msg_type: 'warning' })
+    }
   }
 
   handleRowSelected() {

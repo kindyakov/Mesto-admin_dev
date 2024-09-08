@@ -1,5 +1,5 @@
 <div class="main__content content-main" data-content="dashboards/finance">
-  <form class="main__filter form-filter-dashboards" style="justify-content: flex-end;">
+  <form class="main__filter form-filter-dashboards">
     <label class="main__date-filter">
       <svg class='icon icon-calendar'>
         <use xlink:href='img/svg/sprite.svg#calendar'></use>
@@ -23,31 +23,17 @@
   </form>
 
   <div class="widgets">
-    <div class="widgets__item">
+    <div class="widgets__item col-2">
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
       <div class="widgets__item_content">
         <span class="value" data-render-widget="this_month_revenue"></span>
-        <span class="name">Выручка текущего периода</span>
+        <span class="name">Выручка текущего <u class="hover-line" data-render-tippy="dates">периода</u></span>
       </div>
-    </div>
-    <div class="widgets__item">
-      <div class="widgets__item_img">
-        <img src="img/icons/coins.png" alt="Иконка">
-      </div>
-      <div class="widgets__item_content">
-        <span class="value" data-render-widget="reestr_sum"></span>
-        <span class="name">Средств в реестре</span>
-      </div>
-    </div>
-    <div class="widgets__item">
-      <div class="widgets__item_img">
-        <img src="img/icons/coins.png" alt="Иконка">
-      </div>
-      <div class="widgets__item_content">
+      <div class="widgets__item_content last">
         <span class="value" data-render-widget="revenue"></span>
-        <span class="name">Выручка за выбранный период</span>
+        <span class="name">Выручка за выбранный <u class="hover-line" data-render-tippy="dates">период</u></span>
       </div>
     </div>
     <div class="widgets__item">
@@ -59,6 +45,16 @@
         <span class="name">Текущая средняя ставка аренды</span>
       </div>
     </div>
+    <div class="widgets__item">
+      <div class="widgets__item_img">
+        <img src="img/icons/coins.png" alt="Иконка">
+      </div>
+      <div class="widgets__item_content">
+        <span class="value" data-render-widget="reestr_sum"></span>
+        <span class="name">Средств в реестре</span>
+      </div>
+    </div>
+
     <div class="widgets__item">
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">

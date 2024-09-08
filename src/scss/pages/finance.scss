@@ -5,10 +5,20 @@
 		}
 
 		&__item {
-			@media (min-width: $md3) {
-				&:last-child {
-					grid-column-start: 3;
+			&.col-2 {
+				grid-column: span 2;
+			}
+			@media (max-width: $md5) {
+				&.col-2 {
+					grid-column: span 1;
+					.widgets__item_content.last {
+						grid-column: span 2;
+						padding-left: 50px;
+					}
 				}
+				// &:last-child {
+				// 	grid-column-start: 3;
+				// }
 			}
 		}
 	}

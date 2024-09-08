@@ -97,6 +97,8 @@ export const getMessagesHistory = getCreate('/_get_messages_history_')
 
 export const getTimeControlInfo = getCreate('/_get_time_control_info_')
 
+export const getWorkersManager = getCreate('/_get_workers_')
+
 export const getSalesPlan = getCreate('/_get_sales_plan_')
 
 export const getSales = getCreate('/_get_sales_')

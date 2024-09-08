@@ -89,7 +89,6 @@ class TableAgreements extends Table {
 
     this.actionCellRenderer = this.actionCellRenderer.bind(this)
     this.enableEditing = this.enableEditing.bind(this)
-
     this.onChangeTypeUser = this.params.onChangeTypeUser
   }
 
@@ -122,7 +121,8 @@ class TableAgreements extends Table {
   async download(data) {
     try {
       this.loader.enable()
-      let reqData = {}
+      const { active, user_type } = this.queryParams
+      let reqData = { active, user_type }
 
       if (data.length) {
         const agrIds = data.map(obj => obj.agrid)

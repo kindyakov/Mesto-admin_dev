@@ -76,6 +76,27 @@ body {
 	fill: #000;
 }
 
+.hover-line {
+	position: relative;
+	cursor: pointer;
+	&::before {
+		content: '';
+		position: absolute;
+		top: 100%;
+		left: 0;
+		height: 1px;
+		width: 100%;
+		background-color: $blue;
+		transition: 0.2s;
+	}
+
+	&:hover {
+		&::before {
+			opacity: 0;
+		}
+	}
+}
+
 [data-fancybox] {
 	cursor: pointer;
 }

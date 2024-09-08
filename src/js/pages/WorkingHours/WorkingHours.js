@@ -7,7 +7,7 @@ import modalDownloadPhotoWh from "../../components/Modals/ModalDownloadPhotoWh/M
 
 import { api } from "../../settings/api.js";
 import { getCurrentTimeString } from '../../utils/getCurrentTimeString.js';
-import { getTimeControlInfo } from '../../settings/request.js';
+import { getTimeControlInfo, getWorkersManager } from '../../settings/request.js';
 
 class WorkingHours extends Page {
   constructor({ loader }) {
@@ -30,6 +30,9 @@ class WorkingHours extends Page {
 
     this.timePoints = []
     this.timePoint = null
+
+    this.sectionList = this.wrapper.querySelector('.section-list')
+    this.sectionTable = this.wrapper.querySelector('.section-table')
 
     this.init()
   }
@@ -90,11 +93,18 @@ class WorkingHours extends Page {
     }
   }
 
-  onRender(data) {
-    const { timepoints = [] } = data
-
+  onRender([{ timepoints = [] }, { manager, managers }]) {
     this.timePoints = timepoints
     this.workingHours.innerHTML = ''
+
+    this.sectionList.classList.add('_none')
+    this.sectionTable.classList.add('_none')
+
+    if (manager.needs_time_control) {
+      this.sectionList.classList.remove('_none')
+    } else {
+      this.sectionTable.classList.remove('_none')
+    }
 
     if (timepoints.length) {
       this.checkAndInsert(timepoints)
@@ -132,7 +142,7 @@ class WorkingHours extends Page {
   }
 
   async getData(params = {}) {
-    return getTimeControlInfo(params)
+    return await Promise.all([getTimeControlInfo(params), getWorkersManager(params)]) // getWorkersManager(params)
   }
 }
 

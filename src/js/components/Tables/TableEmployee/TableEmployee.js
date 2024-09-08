@@ -17,11 +17,15 @@ class TableEmployee extends Table {
           cellRenderer: params => {
             const div = createElement('div', {
               classes: ['wrap-photo-report'], content: `
-              <div data-src="${params.data.start_photo_link}" data-fancybox="table-employee" data-caption="Фото начало рабочего дня </br>Время: ${params.data.time_start}</br>Сотрудник: ${params.data.manager_fullname}">
+              <div data-src="${params.data.start_photo_link}" data-fancybox="table-employee" data-caption="Фото начало рабочего дня </br>
+                Время: ${params.data.time_start}</br>
+                Сотрудник: ${params.data.manager_fullname}">
                 <img src="${params.data.start_photo_link}"/>
               </div>
               ${params.data.end_photo_link ? `
-              <div data-src="${params.data.end_photo_link}" data-fancybox="table-employee" data-caption="Фото завершения рабочего дня </br>Время: ${params.data.time_end}</br>Сотрудник: ${params.data.manager_fullname}">
+              <div data-src="${params.data.end_photo_link}" data-fancybox="table-employee" data-caption="Фото завершения рабочего дня </br>
+                Время: ${params.data.time_end}</br>
+                Сотрудник: ${params.data.manager_fullname}">
                 <img src="${params.data.end_photo_link}"/>
               </div>`: ''}`
             })

@@ -13,7 +13,7 @@ export function agreementHtml(data) {
   innerContainer.classList.add('modal__block_grid-item');
   innerContainer.innerHTML = `
     <span class="item-num">${data.agrid ? '№' + data.agrid : ''}</span>
-    <p class="item-info">${data.days_left
+    <p class="item-info ${data.days_left ? 'hover-line' : ''}">${data.days_left
       ? +data.days_left > 0
         ? data.days_left + ` ${declOfNum(+data.days_left, ['день', 'дня', 'дней'])} до окончания`
         : Math.abs(+data.days_left) + ` ${declOfNum(Math.abs(+data.days_left), ['день', 'дня', 'дней'])} просрочен`
@@ -28,6 +28,7 @@ export function agreementHtml(data) {
       trigger: 'mouseenter',
       placement: 'top',
       arrow: true,
+      offset: [0, 0],
       content: `<span class="tippy-info-span tippy-info-date">${getFormattedDate(data.next_payment_date)}</span>`,
     });
   }

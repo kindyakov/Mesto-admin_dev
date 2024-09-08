@@ -2,6 +2,7 @@ import BaseModal from "../BaseModal.js"
 import content from './content.html'
 import { renderForm } from "../utils/renderForm.js"
 import { getAgreementTotal } from "../../../settings/request.js";
+import { formattingPrice } from "../../../utils/formattingPrice.js";
 
 class ModalFinancialInformation extends BaseModal {
   constructor(options = {}) {
@@ -19,8 +20,13 @@ class ModalFinancialInformation extends BaseModal {
     this.attrsModal.length && this.attrsModal.forEach(el => {
       el.setAttribute('data-json', JSON.stringify(room))
     })
-
-    this.renderElements.length && this.renderElements.forEach(el => renderForm(el, room))
+    
+    this.renderElements.length && this.renderElements.forEach(el => {
+      renderForm(el, room)
+      if (room.leave_approved && el.name == 'deposit') {
+        el.value = formattingPrice(room.return_amount)
+      }
+    })
   }
 
   async onOpen(params = null) {

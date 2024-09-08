@@ -1,6 +1,6 @@
 .main__content[data-content='list-clients'] {
 	.table {
-		@media (max-width: $md4) {
+		@media (max-width: $md3) {
 			&__top {
 				flex-direction: column;
 			}

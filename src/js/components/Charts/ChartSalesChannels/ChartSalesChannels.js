@@ -225,7 +225,7 @@ class ChartSalesChannels extends BaseChart {
       }
 
       if (leadsList) {
-        const { color } = this.colors[i]
+        const { color } = this.colors[i] || { color: '#6f7d90' }
 
         leadsList.insertAdjacentHTML('beforeend', `
             <div class="chart__item-info">

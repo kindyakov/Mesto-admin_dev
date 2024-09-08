@@ -4,6 +4,13 @@
   <div class="table" style="height: 850px;">
     <div class="table__top">
       <form class="table__form form-table-search">
+        <select name="active" class="init-custom-select" data-special-select="select-filter-table"
+          data-select-min-width="115"
+          data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
+          <option value="1">Активные</option>
+          <option value="-1">Неактивные</option>
+          <option value="0">Все</option>
+        </select>
         <select name="user_type" class="init-custom-select" data-special-select="select-filter-table"
           data-select-min-width="115"
           data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">

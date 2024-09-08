@@ -214,7 +214,8 @@ class TableClients extends Table {
   async download(data) {
     try {
       this.loader.enable()
-      let reqData = {}
+      const { active, user_type } = this.queryParams
+      let reqData = { active, user_type }
 
       if (data.length) {
         const userIds = data.map(obj => obj.user_id)

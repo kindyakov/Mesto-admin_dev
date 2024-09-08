@@ -42,7 +42,9 @@ class ChartMonthlyRevenue extends BaseChart {
                 size: 12,
               },
               callback: function (value, index, values) {
-                const [y, m, d] = this.chart.data.labels[index].split('-')
+                const date = this.chart.data.labels[index]
+                if (!date) return ''
+                const [y, m, d] = date.split('-')
                 return `${d}-${m}`; // Число и месяц в две строки
               }
             }

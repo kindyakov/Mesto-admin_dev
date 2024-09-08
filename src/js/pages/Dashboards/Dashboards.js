@@ -2,10 +2,11 @@ import Page from "../Page.js"
 import { Select } from "../../modules/mySelect.js"
 import { createCalendar } from "../../settings/createCalendar.js"
 import { dateFormatter } from "../../settings/dateFormatter.js";
+import tippy from '../../configs/tippy.js'
 
 function formatePrice(value) {
   if (!value) return ''
-  const units = ['', 'тыс', 'млн', 'млрд', 'трлн']
+  const units = ['', 'тыс.', 'млн.', 'млрд.', 'трлн.']
   let unitIndex = 0
 
   while (value >= 1000 && unitIndex < units.length - 1) {
@@ -13,7 +14,7 @@ function formatePrice(value) {
     unitIndex++
   }
 
-  return value.toFixed(3) + ' ' + units[unitIndex]
+  return value.toFixed(1) + ' ' + units[unitIndex]
 }
 
 class Dashboards extends Page {
@@ -24,6 +25,8 @@ class Dashboards extends Page {
     this.widgets = this.wrapper.querySelectorAll('[data-render-widget]')
 
     if (this.formFilter) {
+      this.app.defaultDate = this.app.defaultDate || [this.subtractMonths(new Date(), 2), new Date()]
+
       this.selectFilter = new Select({
         uniqueName: 'select-filter-main',
         parentEl: this.wrapper
@@ -31,9 +34,10 @@ class Dashboards extends Page {
       this.calendars = createCalendar(`[data-content="${options.page}"] .input-date-filter`, {
         mode: "range",
         dateFormat: "d. M, Y",
-        defaultDate: [this.subtractMonths(new Date(), 2), new Date()],
+        defaultDate: this.app.defaultDate,
         onChange: (selectedDates, dateStr, instance) => {
           if (selectedDates.length === 2) {
+            this.app.defaultDate = selectedDates
             this.changeQueryParams({
               start_date: dateFormatter(selectedDates[0], 'yyyy-MM-dd'),
               end_date: dateFormatter(selectedDates[1], 'yyyy-MM-dd')
@@ -66,6 +70,28 @@ class Dashboards extends Page {
 
   renderWidgets(data) {
     this.widgets = this.wrapper.querySelectorAll('[data-render-widget]')
+    const tippys = this.wrapper.querySelectorAll('[data-render-tippy]')
+    const { start_date, end_date } = this.queryParams
+
+    if (tippys.length) {
+      tippys.forEach(el => {
+        const [name] = el.getAttribute('data-render-tippy').split(',')
+        const newContent = `<span class="tippy-info-span tippy-info-date">${dateFormatter(start_date)} - ${dateFormatter(end_date)}</span>`
+
+        if (el._tippy) {
+          el._tippy.setContent(newContent)
+        } else {
+          tippy(el, {
+            content: newContent,
+            trigger: 'mouseenter',
+            offset: [0, 0],
+            placement: 'top-start',
+            arrow: true,
+            interactive: false,
+          })
+        }
+      })
+    }
 
     if (!this.widgets.length) return
     this.widgets.forEach(widget => {
@@ -73,7 +99,7 @@ class Dashboards extends Page {
       const [name, str] = params.split(',')
       const value = data[name] ? data[name] + `${str ? str : ''}` : 'В процессе доработки'
       if (!data[name]) {
-        widget.style.fontSize = '16px'
+        // widget.style.fontSize = '16px'
       }
       if (name === 'revenue' || name === 'this_month_revenue' || name === 'reestr_sum') {
         widget.innerText = Number.isInteger(+value) ? formatePrice(+value) + ' ₽' : ''
@@ -102,6 +128,10 @@ class Dashboards extends Page {
 
       if (this.tables.length && dataEntities) {
         this.actionsTables((table, i) => table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities))
+      }
+
+      if (this.calendars && this.app.defaultDate) {
+        this.calendars.setDate(this.app.defaultDate)
       }
 
       this.onRender(dataDashboard, dataEntities)
