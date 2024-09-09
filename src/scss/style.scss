@@ -78,6 +78,7 @@ body {
 
 .hover-line {
 	position: relative;
+	display: inline-block;
 	cursor: pointer;
 	&::before {
 		content: '';
