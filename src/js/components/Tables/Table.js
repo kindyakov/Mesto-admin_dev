@@ -44,7 +44,10 @@ class Table {
       onGridReady: (params) => {
         this.gridApi = params.api;
         this.gridColumnApi = params.columnApi;
+        this.tableHeader = options.wrapper.querySelector(`${selector} .ag-header`)
         this.tableFooter = options.wrapper.querySelector(`${selector} .ag-paging-panel`)
+        this.checkboxInputHeader = this.tableHeader.querySelector('.ag-checkbox-input')
+
         this.tableFooter.querySelector(`${selector} .ag-paging-row-summary-panel`)?.remove()
         this.tableFooter.querySelector(`${selector} .ag-paging-page-summary-panel`)?.remove()
         this.tableFooter.querySelector(`${selector} .ag-paging-page-size`)?.remove()
@@ -119,6 +122,8 @@ class Table {
 
   events() {
     if (this.btnTableUploadExcel) {
+      console.log()
+
       this.btnTableUploadExcel.addEventListener('click', this.handleBtnUploadExcel.bind(this))
     }
 
@@ -183,15 +188,14 @@ class Table {
   // Обработчик клика по кнопке "Выгрузить в excel"
   handleBtnUploadExcel() {
     if (this.selectedRows.length) {
-      this.download(this.selectedRows)
+      this.download(this.selectedRows, this.checkboxInputHeader.checked)
       this.gridApi.deselectAll()
     } else {
       this.app.notify.show({ msg: 'Вы не выбрали элементы для выгрузки', msg_type: 'warning' })
     }
   }
 
-  handleRowSelected() {
-
+  handleRowSelected(currentData) {
   }
 
   enableEditing(row) {

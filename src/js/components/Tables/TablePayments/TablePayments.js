@@ -166,7 +166,7 @@ class TablePayments extends Table {
     }
   }
 
-  async download(data) {
+  async download(data, isAll) {
     try {
       this.loader.enable()
       const { returned, filter_start_date = null, filter_end_date = null } = this.queryParams
@@ -176,12 +176,11 @@ class TablePayments extends Table {
         reqData = { ...reqData, filter_start_date, filter_end_date }
       }
 
-      if (data.length) {
-        const payment_ids = data.map(obj => obj.payment_id)
-        reqData.all_payments = 0
-        reqData.payment_ids = payment_ids
-      } else {
+      if (isAll) {
         reqData.all_payments = 1
+      } else {
+        const payment_ids = data.map(obj => obj.payment_id)
+        reqData = { ...reqData, all_payments: 0, payment_ids }
       }
 
       const res = await downloadPayments(reqData)

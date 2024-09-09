@@ -118,18 +118,17 @@ class TableAgreements extends Table {
     this.gridApi.setGridOption('rowData', agreements)
   }
 
-  async download(data) {
+  async download(data, isAll) {
     try {
       this.loader.enable()
       const { active, user_type } = this.queryParams
       let reqData = { active, user_type }
 
-      if (data.length) {
-        const agrIds = data.map(obj => obj.agrid)
-        reqData.all_agrs = 0
-        reqData.agrids = agrIds
-      } else {
+      if (isAll) {
         reqData.all_agrs = 1
+      } else {
+        const agrIds = data.map(obj => obj.agrid)
+        reqData = { ...reqData, agrIds, all_agrs: 0 }
       }
 
       const res = await downloadAgreement(reqData)

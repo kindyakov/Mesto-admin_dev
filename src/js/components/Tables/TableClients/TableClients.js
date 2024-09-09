@@ -211,18 +211,17 @@ class TableClients extends Table {
     }
   }
 
-  async download(data) {
+  async download(data, isAll) {
     try {
       this.loader.enable()
       const { active, user_type } = this.queryParams
       let reqData = { active, user_type }
 
-      if (data.length) {
-        const userIds = data.map(obj => obj.user_id)
-        reqData.all_clients = 0
-        reqData.user_ids = userIds
-      } else {
+      if (isAll) {
         reqData.all_clients = 1
+      } else {
+        const user_ids = data.map(obj => obj.user_id)
+        reqData = { ...reqData, user_ids, all_clients: 0 }
       }
 
       const res = await downloadClient(reqData)
