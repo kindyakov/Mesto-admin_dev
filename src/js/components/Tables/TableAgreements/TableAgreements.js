@@ -46,7 +46,7 @@ class TableAgreements extends Table {
           }
         },
         {
-          headerName: 'Ячейки', field: 'room_ids', minWidth: 90, flex: 0.5,
+          headerName: 'Ячейки', field: 'room_names', minWidth: 90, flex: 0.5,
           cellRenderer: params => {
             const span = createElement('span', { classes: ['span-rooms-id'], content: `нет` })
             if (params.value) {

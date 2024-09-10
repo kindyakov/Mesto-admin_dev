@@ -8,7 +8,7 @@ class TableLocks extends Table {
     const defaultOptions = {
       columnDefs: [
         {
-          headerName: 'Номер ячейки', field: 'room_id', width: 120, resizable: false,
+          headerName: 'Номер ячейки', field: 'room_name', width: 120, resizable: false,
           cellRenderer: params => {
             const span = document.createElement('span')
             span.classList.add('table-span-agrid')
