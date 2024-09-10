@@ -1,3 +1,4 @@
+import axios from "axios";
 import { api } from "./api.js";
 import { buildQueryParams } from "../utils/buildQueryParams.js";
 import { getFormattedDate } from "../utils/getFormattedDate.js";
@@ -118,6 +119,16 @@ export const getClientTotal = getCreateTotal('/_get_client_total_')
 
 export const getAgreementTotal = getCreateTotal('/_get_agreement_total_')
 
+export const getScheme = async (warehouse, floor) => {
+  try {
+    const response = await axios.get(`${location.origin}/assets/schemes/${warehouse}/${floor}.html`)
+    if (response.status !== 200) return null
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
 // ============================================================================>
 
 export const downloadPayments = downloadCreate('/download_payments', { nameFile: `Платежи от` })

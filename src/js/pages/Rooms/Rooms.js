@@ -3,7 +3,7 @@ import Page from "../Page.js"
 import Scheme from "../../components/Scheme/Scheme.js";
 import TableRooms from "../../components/Tables/TableRooms/TableRooms.js";
 import FilterRooms from "../../components/Filters/FilterRooms/FilterRooms.js";
-import { getRooms, getMovingOutClients, getNonApprovedClients } from "../../settings/request.js";
+import { getRooms, getScheme, getMovingOutClients, getNonApprovedClients } from "../../settings/request.js";
 
 import { Select } from "../../modules/mySelect.js";
 import { Tabs } from "../../modules/myTabs.js"
@@ -40,7 +40,6 @@ class Rooms extends Page {
     this.currentRented = null
 
     this.warehouseScheme = new Scheme(this.wrapper)
-    this.selectWarehouseFloors = new Select({ uniqueName: 'select-warehouse-floors', parentEl: this.wrapper })
     this.filterRooms = new FilterRooms([...this.wrapper.querySelectorAll('.btn-set-filters')])
     this.tabs = new Tabs({
       classBtnActive: '_active',
@@ -54,6 +53,22 @@ class Rooms extends Page {
     this.timerInput = null
     this.inputSearch = this.wrapper.querySelector('.input-table-search')
     this.roomsContent = this.wrapper.querySelector('.rooms')
+
+    this.ready()
+  }
+
+  ready() {
+    const { num_of_floors } = this.app.warehouse
+    const select = this.wrapper.querySelector('select[name="floors"]')
+    select.innerHTML = ''
+
+    for (let i = 0; i < num_of_floors; i++) {
+      select.insertAdjacentHTML('beforeend', `<option value="${i + 1}">${i + 1} этаж</option>`)
+    }
+
+    if (num_of_floors >= 2) {
+      this.selectWarehouseFloors = new Select({ uniqueName: 'select-warehouse-floors', parentEl: this.wrapper })
+    }
 
     this.event()
   }
@@ -73,9 +88,11 @@ class Rooms extends Page {
     })
 
     // Изменение этажа
-    this.selectWarehouseFloors.onChange = (e, select, value) => {
-      this.warehouseScheme.changeActive(+value)
-      this.changeQueryParams({ floor: +value })
+    if (this.selectWarehouseFloors) {
+      this.selectWarehouseFloors.onChange = (e, select, value) => {
+        // this.warehouseScheme.changeActive(+value)
+        this.changeQueryParams({ floor: +value })
+      }
     }
 
     this.filterRooms.onApply = filterParams => this.changeQueryParams(filterParams)
@@ -123,7 +140,7 @@ class Rooms extends Page {
     e.preventDefault()
     const cell = e.target.closest('.warehouse__svg-cell')
     const cellNum = +cell.getAttribute('data-cell-num')
-    const [currentRoom] = this.planRooms.filter(room => room.room_id == cellNum)
+    const [currentRoom] = this.planRooms.filter(room => room.room_name == cellNum)
 
     if (cell.classList.contains('_selected')) {
       this.changeSelectRooms('remove', currentRoom)
@@ -135,7 +152,7 @@ class Rooms extends Page {
   handleClickRemoveRoom(e) {
     const btn = e.target.closest('.btn-remove-room')
     const roomId = +btn.getAttribute('data-room-id')
-    const [currentRoom] = this.planRooms.filter(room => room.room_id == roomId)
+    const [currentRoom] = this.planRooms.filter(room => room.room_name == roomId)
     this.changeSelectRooms('remove', currentRoom)
   }
 
@@ -148,7 +165,7 @@ class Rooms extends Page {
       this.resizeScrollableContent()
     }
 
-    const currentCell = this.wrapper.querySelector(`[data-cell-num="${room.room_id}"]`)
+    const currentCell = this.wrapper.querySelector(`[data-cell-num="${room.room_name}"]`)
 
     const actions = {
       add: room => {
@@ -158,7 +175,7 @@ class Rooms extends Page {
       },
       remove: room => {
         currentCell.classList.remove('_selected')
-        this.selectRooms = this.selectRooms.filter(_room => +_room.room_id !== +room.room_id)
+        this.selectRooms = this.selectRooms.filter(_room => +_room.room_name !== +room.room_name)
         renderRooms()
       }
     }
@@ -172,14 +189,14 @@ class Rooms extends Page {
     this.selectsRoomsContent.style.height = (maxHeight + 6) + 'px';
   }
 
-  onRender(dataRooms) {
+  onRender([dataRooms, scheme]) {
     this.roomsContent.innerHTML = ''
 
     if (dataRooms) {
       const { rooms = [], plan_rooms = [] } = dataRooms
 
-      this.planRooms = uniqBy([...this.planRooms, ...plan_rooms], 'room_id')
-      this.warehouseScheme.render(dataRooms)
+      this.planRooms = uniqBy([...this.planRooms, ...plan_rooms], 'room_name')
+      this.warehouseScheme.render(scheme, dataRooms)
 
       if (rooms.length) {
         rooms.forEach(room => {
@@ -195,7 +212,11 @@ class Rooms extends Page {
   }
 
   async getData(queryParams = {}) {
-    return getRooms({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams })
+    const { warehouse_id = 1, floor = 1 } = queryParams
+    return Promise.all([
+      getRooms({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams }),
+      getScheme(warehouse_id, floor)
+    ])
   }
 
   async renderConfirmation() {

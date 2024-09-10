@@ -67,7 +67,7 @@
       </div>
 
       <div class="warehouse__filters">
-        <select name="floors" class="init-custom-select" data-special-select="select-warehouse-floors"
+        <select name="floors" class="init-custom-select _none" data-special-select="select-warehouse-floors"
           data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
           <option value="1">1 этаж</option>
           <option value="2">2 этаж</option>
@@ -81,12 +81,8 @@
       </div>
     </div>
 
-    <div class="warehouse__schemes">
-      <div class="warehouse__wrap-scheme wrap-scheme _active">
-        @@include('../../schemes/scheme-1.html',{'pathPrefix':'@@webRoot/'})
-      </div>
-      <div class="warehouse__wrap-scheme wrap-scheme">
-        @@include('../../schemes/scheme-2.html',{'pathPrefix':'@@webRoot/'})
+    <div class="warehouse__schemes" style="min-height: 370px;">
+      <div class="warehouse__wrap-scheme wrap-scheme _active" style="min-width: 1100px;">
       </div>
     </div>
   </div>

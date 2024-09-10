@@ -3,9 +3,8 @@ import Scheme from "../../../components/Scheme/Scheme.js";
 import ChartAreaRentedCells from "../../../components/Charts/ChartAreaRentedCells/ChartAreaRentedCells.js";
 import ChartCellOccupancy from "../../../components/Charts/ChartCellOccupancy/ChartCellOccupancy.js";
 import FilterRooms from "../../../components/Filters/FilterRooms/FilterRooms.js";
-import { getRooms, } from "../../../settings/request.js";
+import { getRooms, getScheme, getDashboardWarehouse, getFinancePlan } from "../../../settings/request.js";
 import { Select } from "../../../modules/mySelect.js";
-import { getDashboardWarehouse, getFinancePlan } from "../../../settings/request.js";
 
 class Warehouse extends Dashboards {
   constructor({ loader }) {
@@ -24,8 +23,19 @@ class Warehouse extends Dashboards {
 
   init() {
     if (!this.wrapper) return
-    this.selectWarehouseFloors = new Select({ uniqueName: 'select-warehouse-floors', parentEl: this.wrapper })
     this.filterRooms = new FilterRooms(this.wrapper.querySelector('.btn-set-filters'))
+
+    const { num_of_floors } = this.app.warehouse
+    const select = this.wrapper.querySelector('select[name="floors"]')
+    select.innerHTML = ''
+
+    for (let i = 0; i < num_of_floors; i++) {
+      select.insertAdjacentHTML('beforeend', `<option value="${i + 1}">${i + 1} этаж</option>`)
+    }
+
+    if (num_of_floors >= 2) {
+      this.selectWarehouseFloors = new Select({ uniqueName: 'select-warehouse-floors', parentEl: this.wrapper })
+    }
 
     this.events()
   }
@@ -37,8 +47,10 @@ class Warehouse extends Dashboards {
       }
     })
 
-    this.selectWarehouseFloors.onChange = (e, select, value) => {
-      this.warehouseScheme.changeActive(+value)
+    if (this.selectWarehouseFloors) {
+      this.selectWarehouseFloors.onChange = (e, select, value) => {
+        this.changeQueryParams({ floor: +value })
+      }
     }
 
     this.filterRooms.onApply = filterParams => this.renderScheme(filterParams)
@@ -66,17 +78,28 @@ class Warehouse extends Dashboards {
     });
   }
 
+  async getData(queryParams = {}) {
+    const { warehouse_id = 1, floor = 1 } = queryParams
+    return Promise.all([
+      getRooms(queryParams),
+      getScheme(warehouse_id, floor)
+    ])
+  }
+
   async render() {
     try {
       this.loader.enable()
-      const [dataDashboard, dataRooms, { finance_planfact = [] }] = await Promise.all([getDashboardWarehouse(), getRooms(), getFinancePlan()])
+      const [dataDashboard, { finance_planfact = [] }, [dataRooms, scheme]] = await Promise.all([
+        getDashboardWarehouse(), getFinancePlan(),
+        this.getData(this.queryParams)
+      ])
 
       dataDashboard.finance_planfact = finance_planfact
       this.renderWidgets(dataDashboard)
       this.actionsCharts(chart => chart.render(dataDashboard))
 
       if (dataRooms) {
-        this.warehouseScheme.render(dataRooms)
+        this.warehouseScheme.render(scheme, dataRooms)
       }
     } catch (error) {
       console.error(error)

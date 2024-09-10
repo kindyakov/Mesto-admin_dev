@@ -36,9 +36,9 @@ export function roomHtml(data) {
   return `
   <div class="warehouse__body_room room">
             <div class="room__top">
-              <span>Ячейка: №${data.room_id ? data.room_id : ''}</span>
-              ${data.remove ? `<button class="room__remove btn-remove-room" data-room-id="${data.room_id}"></button>` : ''}
-            </div>
+              <span>Ячейка: №${data.room_name || ''}</span>
+              ${data.remove ? `<button class="room__remove btn-remove-room" data-room-id="${data.room_name || ''} "></button>` : ''}
+            </div >
             <div class="room__content">
               <div class="room__content_prices">
                 <span class="price">${data.price ? formattingPrice(data.price) + ' / мес.' : ''}</span>
@@ -77,7 +77,7 @@ export function roomHtml(data) {
       : `<button class="room__button button transparent" data-json="${dataStr(data)}" data-modal="modal-confirm-open-room">
           <span>Открыть ячейку</span>
         </button>`}
-            </div >
+            </div>
           </div>`
 }
 

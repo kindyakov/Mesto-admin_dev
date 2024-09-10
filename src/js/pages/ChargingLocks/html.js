@@ -27,7 +27,7 @@ export function cardHtml(data) {
   return `
   <div class="locks__card">
       <div class="locks__card_top">
-        <span class="num">Ячейка: №${data.room_id ? data.room_id : ''}</span>
+        <span class="num">Ячейка: №${data.room_name || ''}</span>
         <span class="update-date">${updateDate}</span>
       </div>
       <div class="locks__card_img">

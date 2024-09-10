@@ -130,7 +130,7 @@ class ModalAgreement extends BaseModal {
         this.contentRooms.insertAdjacentHTML('beforeend', `
           <div class="modal__block_grid-item">
             <span class="item-num">
-              ${room.room_id ? '№' + room.room_id : ''}
+              ${room.room_name ? '№' + room.room_name : ''}
               ${room.rentenddate && new Date(room.rentenddate) < new Date() ? '<i style="font-size: 12px;">(неактивная)</i>' : ''}
             </span>
             <p class="item-info">${room.warehouse_name ? room.warehouse_name : ''}</p>

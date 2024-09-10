@@ -197,36 +197,42 @@
 		font-weight: 700;
 
 		&[data-rented='0'] {
-			rect {
+			rect,
+			path {
 				fill: #00ffae;
 			}
 			&._selected {
-				rect {
+				rect,
+				path {
 					fill: $green-light;
 				}
 			}
 		}
 
 		&[data-rented='0.4'] {
-			rect {
+			rect,
+			path {
 				fill: #ff00ee;
 			}
 			&._selected {
-				rect {
+				rect,
+				path {
 					fill: #f1cfef;
 				}
 			}
 		}
 
 		&[data-rented='0.25'] {
-			rect {
+			rect,
+			path {
 				fill: #324afc;
 			}
 			text {
 				fill: #fff;
 			}
 			&._selected {
-				rect {
+				rect,
+				path {
 					fill: $blue-light;
 				}
 				text {
@@ -236,33 +242,39 @@
 		}
 
 		&[data-rented='0.5'] {
-			rect {
+			rect,
+			path {
 				fill: #f57227;
 			}
 			&._selected {
-				rect {
+				rect,
+				path {
 					fill: #fab893;
 				}
 			}
 		}
 
 		&[data-rented='1'] {
-			rect {
+			rect,
+			path {
 				fill: #ff6e6e;
 			}
 			&._selected {
-				rect {
+				rect,
+				path {
 					fill: $red-light;
 				}
 			}
 		}
 
 		&[data-rented='0.75'] {
-			rect {
+			rect,
+			path {
 				fill: rgb(253, 199, 62);
 			}
 			&._selected {
-				rect {
+				rect,
+				path {
 					fill: $yellow-light;
 				}
 			}

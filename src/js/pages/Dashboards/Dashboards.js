@@ -113,6 +113,10 @@ class Dashboards extends Page {
 
   }
 
+  getDashboardData() {
+    return []
+  }
+
   async render(queryParams = {}) {
     try {
       this.loader.enable()

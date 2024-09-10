@@ -6,14 +6,15 @@ class WarehousesSelect {
     this.select = document.querySelector('[data-special-select="warehouse-select"]')
     this.selectCustom = new Select({
       uniqueName: 'warehouse-select',
-      onChange: this.onChange,
+      onChange: this.onChange.bind(this),
       callbackInput: value => {
         return `<img src="./img/svg/warehouse.svg" alt="Склад" width="20" height="20"><span style="flex: 1 1 auto">${value}</span><svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>`
       },
     })
 
     this.mainLoader = document.querySelector('.body-loader')
-    this.warehouseStorage = null
+    this.warehouseStorage = JSON.parse(sessionStorage.getItem('warehouse'))
+
     this.warehouses = []
   }
 
@@ -48,12 +49,13 @@ class WarehousesSelect {
 
       if (warehouses.length) {
         const warehouseStorage = this.getStorageWarehouse()
+
         this.select.innerHTML = warehouses.map(warehouse => `<option value="${warehouse.warehouse_id}">${warehouse.warehouse_name}</option>`).join('')
 
         let activeIndex = 0;
 
         if (warehouseStorage) {
-          activeIndex = warehouses.findIndex(warehouse => warehouse.warehouse_id === warehouseStorage.warehouse_id)
+          activeIndex = warehouses.findIndex(warehouse => warehouse.warehouse_id === warehouseStorage.warehouse_id) ?? 0
         } else {
           this.setStorageWarehouse(warehouses[activeIndex])
         }

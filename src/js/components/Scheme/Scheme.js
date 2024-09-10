@@ -1,19 +1,16 @@
-// import SchemeMobile from "./SchemeMobile.js"
-
 class Scheme {
   constructor(wrapper) {
     this.wrapper = wrapper
+    this.wrapScheme = wrapper.querySelector('.wrap-scheme')
     this.schemes = wrapper.querySelectorAll('.scheme')
-    // this.schemeMobile = new SchemeMobile(wrapper)
-    
+
     this.numRooms = {}
 
     this.init()
   }
 
   init() {
-    if (!this.schemes.length) return
-    this.cells = this.wrapper.querySelectorAll('.warehouse__svg-cell')
+
   }
 
   changeActive(floor) {
@@ -53,9 +50,12 @@ class Scheme {
     })
   }
 
-  render(data) {
-    if (!this.schemes.length) return
+  render(scheme, data) {
+    if (!this.wrapScheme) return
     const { plan_rooms } = data
+
+    this.wrapScheme.innerHTML = scheme
+    this.cells = this.wrapScheme.querySelectorAll('.warehouse__svg-cell')
 
     this.setNumRooms(plan_rooms)
     this.actionsCell(({ cell, cellId }) => {
@@ -69,7 +69,7 @@ class Scheme {
 
   setNumRooms(rooms) {
     this.numRooms = {}
-    rooms.forEach(room => this.numRooms[room.room_id] = room)
+    rooms.forEach(room => this.numRooms[room.room_name] = room)
   }
 }
 

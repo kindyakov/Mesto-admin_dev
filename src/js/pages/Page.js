@@ -8,7 +8,7 @@ class Page {
 
     this.tables = []
     this.charts = []
-    this.queryParams = {}
+    this.queryParams = { warehouse_id: this.app.warehouse.warehouse_id }
     if (tables.length) {
       tables.forEach(table => {
         const { TableComponent, tableSelector, options = {}, params = {} } = table
@@ -40,7 +40,7 @@ class Page {
   }
 
   events() {
-    
+
   }
 
   changeQueryParams(params, table = null) {
