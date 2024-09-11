@@ -25,7 +25,10 @@ function buttonsRoom(data) {
     0.45: ``,
     0.4: `<button class="room__button button" data-modal=""><span>Отменить оплату</span></button>`,
     0.5: `<button class="room__button button" data-modal="modal-passport" user-id="${data.user_id}"><span>Подтвердить клиента</span></button>`,
-    0.75: `<button class="room__button button" data-modal="modal-confirmation-departure" room-id="${data.room_id}"><span>Подтвердить выезд</span></button>`,
+    0.75: `<button class="room__button button ${data.leave_approved ? '_confirmed' : ''}" data-modal="modal-confirmation-departure" room-id="${data.room_id}">
+            <span>Подтвердить выезд</span>
+            <span>Выезд подтвержден</span>
+          </button>`,
     1: ``,
   }
 
