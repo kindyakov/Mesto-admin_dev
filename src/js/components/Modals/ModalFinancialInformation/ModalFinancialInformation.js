@@ -20,11 +20,11 @@ class ModalFinancialInformation extends BaseModal {
     this.attrsModal.length && this.attrsModal.forEach(el => {
       el.setAttribute('data-json', JSON.stringify(room))
     })
-    
+
     this.renderElements.length && this.renderElements.forEach(el => {
       renderForm(el, room)
-      if (room.leave_approved && el.name == 'deposit') {
-        el.value = formattingPrice(room.return_amount)
+      if (el.name == 'deposit') {
+        el.value = `${el.value} / ${formattingPrice(room.return_amount)}`
       }
     })
   }

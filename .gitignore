@@ -4,3 +4,4 @@ Desktop.ini
 *.zip
 yarn.lock
 package-lock.json
+.env

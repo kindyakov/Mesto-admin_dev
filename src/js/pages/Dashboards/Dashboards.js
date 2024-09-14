@@ -71,12 +71,16 @@ class Dashboards extends Page {
   renderWidgets(data) {
     this.widgets = this.wrapper.querySelectorAll('[data-render-widget]')
     const tippys = this.wrapper.querySelectorAll('[data-render-tippy]')
-    const { start_date, end_date } = this.queryParams
 
     if (tippys.length) {
       tippys.forEach(el => {
-        const [name] = el.getAttribute('data-render-tippy').split(',')
-        const newContent = `<span class="tippy-info-span tippy-info-date">${dateFormatter(start_date)} - ${dateFormatter(end_date)}</span>`
+        const [name, type] = el.getAttribute('data-render-tippy').split(',')
+
+        const newContent = `<span class="tippy-info-span tippy-info-date">
+        ${type == 'start'
+            ? `${dateFormatter(new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-1`))}`
+            : `${dateFormatter(new Date())}`}
+        </span>`
 
         if (el._tippy) {
           el._tippy.setContent(newContent)

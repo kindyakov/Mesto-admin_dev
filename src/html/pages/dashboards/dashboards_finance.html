@@ -6,20 +6,6 @@
       </svg>
       <input type="text" class="input-date-filter" name="date" placeholder="Дата">
     </label>
-    <!-- <div class="main__selects-filter">
-      <select class="init-custom-select" data-special-select="select-filter-main" name="plan"
-        data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
-        <option value="1">Склад 1</option>
-        <option value="2">Склад 2</option>
-        <option value="3">Склад 3</option>
-      </select>
-      <select class="init-custom-select" data-special-select="select-filter-main" name="month"
-        data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
-        <option value="month">За месяц</option>
-        <option value="2">Option 2</option>
-        <option value="3">Option 3</option>
-      </select>
-    </div> -->
   </form>
 
   <div class="widgets">
@@ -29,20 +15,24 @@
       </div>
       <div class="widgets__item_content">
         <span class="value" data-render-widget="this_month_revenue"></span>
-        <span class="name">Выручка текущего <u class="hover-line" data-render-tippy="dates">периода</u></span>
+        <span class="name">Выручка текущего <u class="hover-line" data-render-tippy="dates,start">периода</u></span>
       </div>
       <div class="widgets__item_content last">
         <span class="value" data-render-widget="revenue"></span>
-        <span class="name">Выручка за выбранный <u class="hover-line" data-render-tippy="dates">период</u></span>
+        <span class="name">Выручка за выбранный <u class="hover-line" data-render-tippy="dates,end">период</u></span>
       </div>
     </div>
-    <div class="widgets__item">
+    <div class="widgets__item col-2">
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
       <div class="widgets__item_content">
         <span class="value" data-render-widget="current_avg_price_per_room, ₽/м²"></span>
         <span class="name">Текущая средняя ставка аренды</span>
+      </div>
+      <div class="widgets__item_content last">
+        <span class="value" data-render-widget="avg_price_per_room, ₽/м²"></span>
+        <span class="name">Средняя ставка за выбранный период</span>
       </div>
     </div>
     <div class="widgets__item">
@@ -52,16 +42,6 @@
       <div class="widgets__item_content">
         <span class="value" data-render-widget="reestr_sum"></span>
         <span class="name">Средств в реестре</span>
-      </div>
-    </div>
-
-    <div class="widgets__item">
-      <div class="widgets__item_img">
-        <img src="img/icons/coins.png" alt="Иконка">
-      </div>
-      <div class="widgets__item_content">
-        <span class="value" data-render-widget="avg_price_per_room, ₽/м²"></span>
-        <span class="name">Средняя ставка за выбранный период</span>
       </div>
     </div>
   </div>
