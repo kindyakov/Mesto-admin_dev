@@ -25,7 +25,7 @@ function buttonsRoom(data) {
     0.45: ``,
     0.4: `<button class="room__button button" data-modal=""><span>Отменить оплату</span></button>`,
     0.5: `<button class="room__button button" data-modal="modal-passport" user-id="${data.user_id}"><span>Подтвердить клиента</span></button>`,
-    0.75: `<button class="room__button button ${data.leave_approved ? '_confirmed' : ''}" data-modal="modal-confirmation-departure" room-id="${data.room_id}">
+    0.75: `<button class="room__button button ${data.leave_approved ? '_confirmed' : ''}" data-modal="modal-confirmation-departure" room-id="${data.room_id}" agr-id="${data.agrid}">
             <span>Подтвердить выезд</span>
             <span>Выезд подтвержден</span>
           </button>`,
@@ -89,7 +89,7 @@ export function rowHtml(data) {
     <div class="warehouse__confirmation_row">
                 <p class="name">${data.fullname ? data.fullname : ''}</p>
                 <span class="span">Выезд:<b>${data.rentenddate ? dateFormatter(data.rentenddate) : ''}</b></span>
-                <button class="button table-button ${data.leave_approved ? '_confirmed' : ''}" data-modal="modal-confirmation-departure" room-id="${data.room_id}">
+                <button class="button table-button ${data.leave_approved ? '_confirmed' : ''}" data-modal="modal-confirmation-departure" room-id="${data.room_id}" agr-id="${data.agrid}">
                   <span>Подтвердить</span>
                   <span>Подтвержден</span>
                 </button>

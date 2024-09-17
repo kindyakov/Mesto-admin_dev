@@ -93,17 +93,19 @@ class ModalConfirmationDeparture extends BaseModal {
     if (!params) return
     try {
       this.loader.enable()
-      let id = ''
+      let roomId = null, agrId = null
 
       if (params instanceof Element) {
-        id = params.getAttribute('room-id')
+        roomId = params.getAttribute('room-id')
+        agrId = params.getAttribute('agr-id')
       } else {
-        id = params
+        roomId = params.roomId
+        agrId = params.roomId
       }
 
-      if (!id) return
+      if (!roomId || !agrId) return
 
-      const response = await api.get(`/_get_moving_out_room_info_?room_id=${id}`)
+      const response = await api.get(`/_get_moving_out_room_info_?room_id=${roomId}&agrid=${agrId}`)
       if (response.status !== 200) return
       const { room = null } = response.data
       if (room) {

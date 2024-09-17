@@ -28,7 +28,10 @@ function buttonsRoom(data) {
     0.25: `<button class="table-button button" data-modal="modal-confirm-cancel-guest-access" data-json="${dataStr(data)}"><span>Отменить доступ</span></button>`,
     0.4: `<button class="table-button button" data-modal="" data-json="${dataStr(data)}"><span>Отменить оплату</span></button>`,
     0.5: `<button class="table-button button" data-modal="modal-passport" user-id="${data.user_id}"><span>Подтвердить клиента</span></button>`,
-    0.75: `<button class="table-button button" data-modal="modal-confirmation-departure" data-json="${dataStr(data)}"><span>Подтвердить выезд</span></button>`,
+    0.75: `<button class="table-button button ${data.leave_approved ? '_confirmed' : ''}" data-modal="modal-confirmation-departure" room-id="${data.room_id}" agr-id="${data.agrid}">
+      <span>Подтвердить выезд</span>
+      <span>Выезд Подтвержден</span>
+    </button>`,
     1: `<button class="table-button button" data-modal="modal-agreement" agr-id="${data.agrid || ''}"><span>Открыть договор</span></button>`,
   }
 
