@@ -156,7 +156,7 @@ class TableTransactions extends Table {
         const formDataStatus = new FormData()
 
         formDataChannel.set('question_id', question_id)
-        formDataChannel.set('sale_channel_id', question_id)
+        formDataChannel.set('sale_channel_id', channel_id)
         formDataChannel.set('sale_channel', sale_channel)
 
         formDataStatus.set('question_id', question_id)
