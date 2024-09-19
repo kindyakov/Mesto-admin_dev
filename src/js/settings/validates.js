@@ -33,11 +33,16 @@ export const inputValidator = {
       }
     }
 
-    input.value = formatPrice(input.value)
+    function handleInput() {
+      input.value = formatPrice(input.value)
+    }
+
+    input.removeEventListener('input', handleInput)
+    input.addEventListener('input', handleInput)
 
     input.removeEventListener('keydown', handleKeydown)
     input.addEventListener('keydown', handleKeydown);
-    
+
     return input
   }
 };

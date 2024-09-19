@@ -869,6 +869,46 @@
 			left: auto;
 			right: 0;
 		}
+		&:has(.btn-edit-value) {
+			display: flex;
+
+			.input-passport {
+				padding: 5px;
+				max-width: 90px;
+			}
+
+			.btn-edit-value {
+				cursor: pointer;
+				flex-shrink: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 30px;
+				border: 1px solid #eee;
+				border-left: none;
+
+				.icon-save {
+					display: none;
+					stroke: $blue;
+				}
+
+				&:hover {
+					.icon {
+						stroke: $blue;
+					}
+				}
+
+				&._is-edit {
+					.icon-save {
+						display: inline-flex;
+					}
+
+					.icon-edit {
+						display: none;
+					}
+				}
+			}
+		}
 	}
 }
 

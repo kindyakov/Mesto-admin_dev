@@ -3,23 +3,27 @@
     <div class="modal__header_auto">
       <h3 class="modal__title">Детали договора (№<span data-render="agrid"></span>):</h3>
     </div>
-    <span>Предстоящий платеж: <span data-render="next_payment_date,date"></span></span>
+    <div style="display: flex; align-items: center; gap: 5px;">
+      <span style="font-size: 14px;">Предстоящий платеж:</span>
+      <div class="wp-input">
+        <input type="text" name="next_payment_date" class="input-passport" data-render="next_payment_date,date"
+          readonly="true" autocomplete="off">
+        <button class="button-text btn-edit-value">
+          <svg class="icon icon-edit">
+            <use xlink:href="img/svg/sprite.svg#edit"></use>
+          </svg>
+          <svg class="icon icon-save">
+            <use xlink:href="img/svg/sprite.svg#save"></use>
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
   <div class="modal__block">
 
     <div class="modal__block_item">
       <div class="modal__block_top">
         <h4 class="modal__sub-title">О клиенте:</h4>
-        <!-- <button class="button-text btn-edit-data">
-          <span class="span-edit">Редактировать</span>
-          <span class="span-save">Сохранить</span>
-          <svg class='icon icon-edit'>
-            <use xlink:href='img/svg/sprite.svg#edit'></use>
-          </svg>
-          <svg class='icon icon-save'>
-            <use xlink:href='img/svg/sprite.svg#save'></use>
-          </svg>
-        </button> -->
       </div>
       <form class="modal__form form-agreement-data">
         <div class="modal__form_item grid-column-2">

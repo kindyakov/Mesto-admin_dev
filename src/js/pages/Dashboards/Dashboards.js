@@ -3,6 +3,7 @@ import { Select } from "../../modules/mySelect.js"
 import { createCalendar } from "../../settings/createCalendar.js"
 import { dateFormatter } from "../../settings/dateFormatter.js";
 import tippy from '../../configs/tippy.js'
+import { inputValidator } from "../../settings/validates.js";
 
 function formatePrice(value) {
   if (!value) return ''
@@ -46,6 +47,18 @@ class Dashboards extends Page {
         }
       })
 
+      this.inputsFilter = this.wrapper.querySelectorAll('.input-filter')
+
+      this.inputsFilter.length && this.inputsFilter.forEach(input => {
+        let timer
+        input.addEventListener('input', () => {
+          clearTimeout(timer)
+          timer = setTimeout(() => {
+            this.changeQueryParams({ [input.name]: input.value })
+          }, 600);
+        })
+      })
+
       this.queryParams = {
         start_date: dateFormatter(this.calendars.selectedDates[0], 'yyyy-MM-dd'),
         end_date: dateFormatter(this.calendars.selectedDates[1], 'yyyy-MM-dd'),
@@ -75,11 +88,12 @@ class Dashboards extends Page {
     if (tippys.length) {
       tippys.forEach(el => {
         const [name, type] = el.getAttribute('data-render-tippy').split(',')
+        const { start_date, end_date } = this.queryParams
 
         const newContent = `<span class="tippy-info-span tippy-info-date">
         ${type == 'start'
             ? `${dateFormatter(new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-1`))}`
-            : `${dateFormatter(new Date())}`}
+            : `${dateFormatter(start_date)} - ${dateFormatter(end_date)}`}
         </span>`
 
         if (el._tippy) {

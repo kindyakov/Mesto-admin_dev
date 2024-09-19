@@ -74,6 +74,10 @@ body {
 	width: 20px;
 	height: 20px;
 	fill: #000;
+
+	&.icon-edit {
+		stroke: #000;
+	}
 }
 
 .hover-line {

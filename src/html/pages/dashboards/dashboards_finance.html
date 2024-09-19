@@ -1,14 +1,27 @@
 <div class="main__content content-main" data-content="dashboards/finance">
-  <form class="main__filter form-filter-dashboards">
+  <form class="main__filter form-filter-dashboards" style="justify-content: stretch;">
     <label class="main__date-filter">
       <svg class='icon icon-calendar'>
         <use xlink:href='img/svg/sprite.svg#calendar'></use>
       </svg>
       <input type="text" class="input-date-filter" name="date" placeholder="Дата">
     </label>
+    <div class="filter__block_content" style="max-width: 200px; position: relative;">
+      <span style="position: absolute; left: 0; bottom: 100%; font-size: 12px;">Площадь:</span>
+      <div class="filter__wp-input">
+        <span class="pref">от</span>
+        <input type="number" name="start_area" value="0" class="filter__input input-filter" inputmode="decimal"
+          autocomplete="off" step="0.1" min="0" max="1000" data-step="0.1" style="height: 40px; font-size: 14px;">
+      </div>
+      <div class="filter__wp-input">
+        <span class="pref">до</span>
+        <input type="number" name="end_area" value="1000" class="filter__input input-filter" inputmode="decimal"
+          autocomplete="off" step="0.1" min="0" max="1000" data-step="0.1" style="height: 40px; font-size: 14px;">
+      </div>
+    </div>
   </form>
 
-  <div class="widgets">
+  <div class=" widgets">
     <div class="widgets__item col-2">
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">

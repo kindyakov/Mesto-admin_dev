@@ -88,7 +88,6 @@ class ModalAgreement extends BaseModal {
       el.setAttribute('agr-id', agreement.agrid)
     })
 
-
     this.validator = validate(this.form)
 
     this.agrId = agreement.agrid
@@ -168,6 +167,13 @@ class ModalAgreement extends BaseModal {
     return data
   }
 
+  onSaveValue({ input, name }) {
+    const formData = new FormData()
+    formData.set('agrid', this.agrId)
+    formData.set(name, dateFormatter(input.value, 'yyyy-MM-dd'))
+    this.editNextPaymentDate(formData)
+  }
+
   handleClickConfirmation(isConfirm) {
     if (isConfirm) {
 
@@ -212,6 +218,19 @@ class ModalAgreement extends BaseModal {
         this.renderModal(data)
         this.data = data
       }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      this.loader.disable()
+    }
+  }
+
+  async editNextPaymentDate(formData) {
+    try {
+      this.loader.enable()
+      const response = await api.post('/_edit_next_payment_date_', formData)
+      if (response.status !== 200) return
+      outputInfo(response.data)
     } catch (error) {
       console.error(error)
     } finally {

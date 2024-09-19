@@ -3,6 +3,12 @@ import { Russian } from "flatpickr/dist/l10n/ru.js"
 import { Select } from "../modules/mySelect.js";
 
 const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь',]
+const positions = {
+  left: 'top: calc(100% + 5px); left: 0; right: auto;',
+  right: 'top: calc(100% + 5px); left: auto; right: 0;',
+  top: ``,
+  bottom: ``,
+}
 
 export const createCalendar = (input, options = {}) => {
   if (!input) return
@@ -11,6 +17,7 @@ export const createCalendar = (input, options = {}) => {
   }
 
   let customSelect, uniqueId = Math.random()
+  const position = options.position || 'left'
 
   function handleClickMonthNav(customSelect, instance) {
     customSelect.setValue(instance.currentMonth);
@@ -70,7 +77,7 @@ export const createCalendar = (input, options = {}) => {
       function (selectedDates, dateStr, instance) {
         if (instance.config.appendTo?.classList.contains('wp-input')) {
           setTimeout(() => {
-            instance.calendarContainer.style.cssText = 'top: calc(100% + 5px); left: 0; right: auto;'
+            instance.calendarContainer.style.cssText = positions[position]
           })
         }
       },

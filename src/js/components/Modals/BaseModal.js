@@ -1,6 +1,8 @@
 import { Loader } from "../../modules/myLoader.js";
 import { outputInfo } from "../../utils/outputinfo.js";
 import { dateFormatter } from "../../settings/dateFormatter.js";
+import { createCalendar } from '../../settings/createCalendar.js';
+import { inputValidator } from "../../settings/validates.js";
 
 // Базовый класс для модального окна
 class BaseModal {
@@ -46,6 +48,9 @@ class BaseModal {
     return {}
   }
 
+  onSaveValue() {
+  }
+
   checkValue() {
     const inputs = this.form.querySelectorAll('input')
     let isValue = false
@@ -86,6 +91,7 @@ class BaseModal {
     this.btnOpenPrevModal = this.modalBody.querySelector('.btn-open-prev-modal')
     this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
     this.renderElements = this.modalBody.querySelectorAll('[data-render]')
+    this.buttonsEditValue = this.modalBody.querySelectorAll('.btn-edit-value')
 
     const closeButton = this.modal.modal.querySelector('.tingle-modal__close')
 
@@ -109,6 +115,30 @@ class BaseModal {
       if (e.target.closest('.btn-edit-data')) {
         this.handleClickEdit(e)
       }
+    })
+
+    this.buttonsEditValue.length && this.buttonsEditValue.forEach(btn => {
+      const wpInput = btn.closest('.wp-input')
+      const input = wpInput.querySelector('input')
+      const [name, type] = input.dataset.render.split(' ')[0].split(',')
+
+      inputValidator[type]?.(input)
+
+      const calendar = ((type, input) => {
+        if (type == 'date') {
+          const calendar = createCalendar(input, {
+            dateFormat: 'd.m.Y',
+            appendTo: input.parentElement, position: 'right'
+          })
+          calendar.setDate(input.value, true, "d.m.Y");
+          calendar.set('clickOpens', false)
+          return calendar
+        }
+
+        return null
+      })(type, input)
+
+      btn.addEventListener('click', () => this.handleClickEditValue({ btn, input, name, type, calendar }))
     })
   }
 
@@ -189,6 +219,25 @@ class BaseModal {
       this.isEdit = true
       this.enableEditInput(this.form)
     }
+  }
+
+  handleClickEditValue(options) {
+    const { btn, calendar, input } = options
+    const is = btn.classList.toggle('_is-edit')
+    is ? input.removeAttribute('readonly') : input.setAttribute('readonly', true)
+
+    if (calendar) {
+      calendar.setDate(new Date(dateFormatter(calendar.input.value, 'yyyy-MM-dd')))
+      calendar.set('clickOpens', is)
+    }
+
+    if (is || !input.value) {
+      btn.classList.add('_is-edit')
+      calendar && calendar.set('clickOpens', true)
+      return
+    }
+
+    this.onSaveValue(options)
   }
 
   enableEditInput(form = null) {
