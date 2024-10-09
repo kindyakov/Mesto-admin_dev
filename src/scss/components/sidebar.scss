@@ -17,9 +17,8 @@
 
 .sidebar {
 	background-color: #1c2434;
-	width: 100%;
-	max-width: 290px;
-	min-width: 290px;
+	width: 290px;
+	flex-shrink: 0;
 	height: 100vh;
 	overflow-y: auto;
 	position: relative;

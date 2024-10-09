@@ -94,10 +94,21 @@
 				}
 			}
 
+			&.purple {
+				&::after {
+					background-color: rgba(255, 0, 238, 0.2);
+					animation-delay: 2s;
+				}
+
+				&::before {
+					background-color: #ff00ee;
+				}
+			}
+
 			&.blue {
 				&::after {
 					background-color: $blue-light;
-					animation-delay: 0.2s;
+					animation-delay: 0.4s;
 				}
 				&::before {
 					background-color: $blue;
@@ -107,7 +118,7 @@
 			&.orange {
 				&::after {
 					background-color: rgba(245, 115, 39, 0.2);
-					animation-delay: 0.4s;
+					animation-delay: 0.6s;
 				}
 				&::before {
 					background-color: #f57227;
@@ -117,7 +128,7 @@
 			&.red {
 				&::after {
 					background-color: $red-light;
-					animation-delay: 0.6s;
+					animation-delay: 0.8s;
 				}
 				&::before {
 					background-color: $red;
@@ -127,7 +138,7 @@
 			&.yellow {
 				&::after {
 					background-color: $yellow-light;
-					animation-delay: 0.6s;
+					animation-delay: 1s;
 				}
 				&::before {
 					background-color: $yellow;

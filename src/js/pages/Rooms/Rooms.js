@@ -128,7 +128,7 @@ class Rooms extends Page {
   handleClickFilterScheme(e) {
     const btn = e.target.closest('.btn-filter-scheme')
     const btnActive = this.wrapper.querySelector('.btn-filter-scheme._active')
-    const rented = btn.getAttribute('data-rented')
+    const rented = btn.getAttribute('data-rented').split(';')
 
     btn.classList.add('_active')
     btnActive?.classList.remove('_active')

@@ -67,17 +67,17 @@ class TableUpcomingPayments extends Table {
     this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length])
   }
 
-  async download(data) {
+  async download(data, isAll) {
     try {
       this.loader.enable()
       let reqData = {}
 
-      if (data.length) {
+      if (isAll) {
+        reqData.all_payments = 1
+      } else {
         const writeIds = data.map(obj => obj.write_off_id)
         reqData.all_payments = 0
         reqData.write_off_ids = writeIds
-      } else {
-        reqData.all_payments = 1
       }
 
       const res = await downloadFuturePayments(reqData)
