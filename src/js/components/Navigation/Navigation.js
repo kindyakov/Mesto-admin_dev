@@ -20,7 +20,8 @@ class Navigation {
       'payments': 'Payments/Payments.js',
       'agreements': 'Agreements/Agreements.js',
       'list-clients': 'ListClients/ListClients.js',
-      'messages': 'Messages/Messages.js'
+      'messages': 'Messages/Messages.js',
+      'open': 'Open/Open.js',
     };
     this.loader = new Loader(document.querySelector('.main'), {
       customSelector: '_main-loader'
