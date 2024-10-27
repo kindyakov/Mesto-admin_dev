@@ -1,14 +1,14 @@
 import { formatPhoneNumber, formattingPrice } from "../../utils/formattingPrice.js";
 import { dateFormatter } from "../../settings/dateFormatter.js";
 
-function typeRoom({ rented, rentenddate }) {
+function typeRoom({ rented, rentenddate, next_payment_date }) {
   const text = {
-    0: 'Свободно',
-    0.25: 'Гостевые',
-    0.4: 'Не оплачено',
-    0.5: 'Забронировано',
-    0.75: `Выезд: ${rentenddate ? dateFormatter(rentenddate) : ''}`,
-    1: 'Занято',
+    0: '<span class="text">Свободно</span>',
+    0.25: '<span class="text">Гостевые</span>',
+    0.4: '<span class="text">Не оплачено</span>',
+    0.5: '<span class="text">Забронировано</span>',
+    0.75: `<span class="text">Выезд: ${rentenddate ? dateFormatter(rentenddate) : ''}</span>`,
+    1: `<span class="text">Занято</span><span class="text">Оплачено по: ${next_payment_date ? dateFormatter(next_payment_date) : ''}</span>`,
   }
 
   return text[rented] ? text[rented] : ''
@@ -45,7 +45,7 @@ export function roomHtml(data) {
             <div class="room__content">
               <div class="room__content_prices">
                 <span class="price">${data.price ? formattingPrice(data.price) + ' / мес.' : ''}</span>
-                <span class="text">${typeRoom(data)}</span>
+                ${typeRoom(data)}
               </div>
               <div class="room__content_sizes">
                 <b>${data.volume ? data.volume + ' м<sup>3</sup>' : ''}</b>

@@ -3,6 +3,7 @@ import Scheme from "../../../components/Scheme/Scheme.js";
 import ChartAreaRentedCells from "../../../components/Charts/ChartAreaRentedCells/ChartAreaRentedCells.js";
 import ChartCellOccupancy from "../../../components/Charts/ChartCellOccupancy/ChartCellOccupancy.js";
 import FilterRooms from "../../../components/Filters/FilterRooms/FilterRooms.js";
+import SelectRooms from "../../../components/SelectRooms/SelectRooms.js";
 import { getRooms, getScheme, getDashboardWarehouse, getFinancePlan } from "../../../settings/request.js";
 import { Select } from "../../../modules/mySelect.js";
 
@@ -17,7 +18,7 @@ class Warehouse extends Dashboards {
     });
 
     this.warehouseScheme = new Scheme(this.wrapper)
-
+    this.selectRooms = new SelectRooms(this.wrapper)
     this.currentRented = null
   }
 
@@ -99,6 +100,7 @@ class Warehouse extends Dashboards {
       this.actionsCharts(chart => chart.render(dataDashboard))
 
       if (dataRooms) {
+        this.selectRooms.setRooms(dataRooms.plan_rooms)
         this.warehouseScheme.render(scheme, dataRooms)
       }
     } catch (error) {

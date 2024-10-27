@@ -3,7 +3,7 @@ import { Select } from "../../modules/mySelect.js"
 import { createCalendar } from "../../settings/createCalendar.js"
 import { dateFormatter } from "../../settings/dateFormatter.js";
 import tippy from '../../configs/tippy.js'
-import { inputValidator } from "../../settings/validates.js";
+// import { inputValidator } from "../../settings/validates.js";
 
 function formatePrice(value) {
   if (!value) return ''
@@ -92,7 +92,7 @@ class Dashboards extends Page {
 
         const newContent = `<span class="tippy-info-span tippy-info-date">
         ${type == 'start'
-            ? `${dateFormatter(new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-1`))}`
+            ? `${dateFormatter(new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-1`))} - ${dateFormatter(end_date)}`
             : `${dateFormatter(start_date)} - ${dateFormatter(end_date)}`}
         </span>`
 

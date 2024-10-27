@@ -1,15 +1,14 @@
-import uniqBy from 'lodash.uniqby'
 import Page from "../Page.js"
 import Scheme from "../../components/Scheme/Scheme.js";
 import TableRooms from "../../components/Tables/TableRooms/TableRooms.js";
 import FilterRooms from "../../components/Filters/FilterRooms/FilterRooms.js";
+import SelectRooms from '../../components/SelectRooms/SelectRooms.js';
 import { getRooms, getScheme, getMovingOutClients, getNonApprovedClients } from "../../settings/request.js";
 
 import { Select } from "../../modules/mySelect.js";
 import { Tabs } from "../../modules/myTabs.js"
 
 import { roomHtml, rowHtml, row2Html } from "./html.js";
-import { createElement } from "../../settings/createElement.js";
 
 function extractNumbers(str) {
   const nonDigitRegex = /\D/g;
@@ -47,6 +46,7 @@ class Rooms extends Page {
       specialSelector: '.room-tabs',
       uniqueName: true,
     })
+    this.selectRooms = new SelectRooms(this.wrapper)
 
     this.selectsRoomsContent = this.wrapper.querySelector('.selects-rooms')
     this.formFilterRoom = this.wrapper.querySelector('.form-filter-room')
@@ -78,13 +78,6 @@ class Rooms extends Page {
       if (e.target.closest('.btn-filter-scheme:not(._active)')) {
         this.handleClickFilterScheme(e)
       }
-      if (e.target.closest('.warehouse__svg-cell[data-rented]')) {
-        this.handleClickCell(e)
-      }
-
-      if (e.target.closest('.btn-remove-room')) {
-        this.handleClickRemoveRoom(e)
-      }
     })
 
     // Изменение этажа
@@ -107,7 +100,6 @@ class Rooms extends Page {
       }
     }
 
-    window.addEventListener('resize', this.resizeScrollableContent.bind(this))
   }
 
   handleSubmit(e) {
@@ -136,66 +128,13 @@ class Rooms extends Page {
     this.changeQueryParams({ rented })
   }
 
-  handleClickCell(e) {
-    e.preventDefault()
-    const cell = e.target.closest('.warehouse__svg-cell')
-    const cellNum = +cell.getAttribute('data-cell-num')
-    const [currentRoom] = this.planRooms.filter(room => room.room_name == cellNum)
-
-    if (cell.classList.contains('_selected')) {
-      this.changeSelectRooms('remove', currentRoom)
-    } else {
-      this.changeSelectRooms('add', currentRoom)
-    }
-  }
-
-  handleClickRemoveRoom(e) {
-    const btn = e.target.closest('.btn-remove-room')
-    const roomId = +btn.getAttribute('data-room-id')
-    const [currentRoom] = this.planRooms.filter(room => room.room_name == roomId)
-    this.changeSelectRooms('remove', currentRoom)
-  }
-
-  changeSelectRooms(type, room) {
-    const renderRooms = () => {
-      const html = this.selectRooms.map(_room => roomHtml({ ..._room, remove: true })).join('')
-      const div = createElement('div', { classes: ['wrap-scroll'], content: html })
-      this.selectsRoomsContent.innerHTML = div.outerHTML
-      this.selectsRoomsContent.scrollIntoView({ block: "center", behavior: "smooth" })
-      this.resizeScrollableContent()
-    }
-
-    const currentCell = this.wrapper.querySelector(`[data-cell-num="${room.room_name}"]`)
-
-    const actions = {
-      add: room => {
-        this.selectRooms.unshift(room)
-        currentCell.classList.add('_selected')
-        renderRooms()
-      },
-      remove: room => {
-        currentCell.classList.remove('_selected')
-        this.selectRooms = this.selectRooms.filter(_room => +_room.room_name !== +room.room_name)
-        renderRooms()
-      }
-    }
-
-    actions[type]?.(room)
-  }
-
-  resizeScrollableContent() {
-    const children = Array.from(this.selectsRoomsContent.querySelectorAll('.room'))
-    const maxHeight = children.reduce((max, child) => Math.max(max, child.offsetHeight), 0)
-    this.selectsRoomsContent.style.height = (maxHeight + 6) + 'px';
-  }
-
   onRender([dataRooms, scheme]) {
     this.roomsContent.innerHTML = ''
 
     if (dataRooms) {
       const { rooms = [], plan_rooms = [] } = dataRooms
 
-      this.planRooms = uniqBy([...this.planRooms, ...plan_rooms], 'room_name')
+      this.selectRooms.setRooms(plan_rooms)
       this.warehouseScheme.render(scheme, dataRooms)
 
       if (rooms.length) {

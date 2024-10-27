@@ -2,6 +2,7 @@ import Dashboards from "../Dashboards.js";
 import TableUpcomingPayments from "../../../components/Tables/TableUpcomingPayments/TableUpcomingPayments.js"
 import ChartMonthlyRevenue from "../../../components/Charts/ChartMonthlyRevenue/ChartMonthlyRevenue.js";
 import { getDashboardFinance, getFuturePayments, getFinancePlan } from "../../../settings/request.js";
+import RangeSlider from "../../../components/RangeSlider/RangeSlider.js";
 
 function getFirstAndLastDayOfMonth() {
   const today = new Date();
@@ -34,6 +35,7 @@ class Finance extends Dashboards {
       ],
       page: 'dashboards/finance'
     });
+
   }
 
   async getData(queryParams = {}) {
@@ -45,6 +47,49 @@ class Finance extends Dashboards {
   }
 
 
+  initRanges({ dataDashboard, finance_planfact, dataEntities }) {
+
+    console.log(finance_planfact)
+
+    if (finance_planfact?.length) {
+      finance_planfact.map(({ data, revenue }) => {
+
+      })
+    }
+
+    this.rangeFact = new RangeSlider(this.wrapper.querySelector('.range-fact'), {
+      start: 27,
+      connect: true,
+      range: {
+        'min': 1,
+        'max': 31
+      },
+      tooltips: true,
+      pips: {
+        mode: 'count',
+        values: 31,
+        density: 3,
+        stepped: true
+      }
+    })
+
+    this.rangePlan = new RangeSlider(this.wrapper.querySelector('.range-plan'), {
+      start: 20,
+      connect: true,
+      range: {
+        'min': 0,
+        'max': 31
+      },
+      tooltips: true,
+      pips: {
+        mode: 'count',
+        values: 31,
+        density: 3,
+        stepped: true
+      }
+    })
+  }
+
   onRender([dataDashboard, { finance_planfact = [] }], dataEntities) {
     this.renderWidgets(dataDashboard)
     this.actionsCharts(chart => chart.render(finance_planfact))
@@ -52,6 +97,8 @@ class Finance extends Dashboards {
     if (this.tables.length && dataEntities) {
       this.actionsTables((table, i) => table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities))
     }
+
+    this.initRanges({ dataDashboard, finance_planfact, dataEntities })
   }
 }
 
