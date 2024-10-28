@@ -29,10 +29,15 @@
 }
 
 .noUi-marker-horizontal.noUi-marker-large {
-	height: 8px;
+	height: 6px;
 	transform: translate(0, -2px);
 }
 
 .noUi-value {
+	font-size: 12px;
+	// margin-left: -2px;
+}
+
+.noUi-tooltip {
 	font-size: 14px;
 }

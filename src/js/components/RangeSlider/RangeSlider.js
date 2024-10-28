@@ -31,17 +31,17 @@ class RangeSlider {
 	}
 
 	// Внутренний метод, который вызывает пользовательский метод, если он определен
-	_onSliderUpdate(values, handle) {
+	_onSliderUpdate(values, handle, unencoded, tap, positions, noUiSlider) {
 		if (typeof this.onSliderUpdate === 'function') {
-			this.onSliderUpdate(values, handle);
+			this.onSliderUpdate({ values, handle, unencoded, tap, positions, noUiSlider });
 		} else {
 		}
 	}
 
 	// Внутренний метод, который вызывает пользовательский метод, если он определен
-	_onSliderSlide(values, handle) {
+	_onSliderSlide(values, handle, unencoded, tap, positions, noUiSlider) {
 		if (typeof this.onSliderSlide === 'function') {
-			this.onSliderSlide(values, handle);
+			this.onSliderSlide({ values, handle, unencoded, tap, positions, noUiSlider });
 		} else {
 		}
 	}

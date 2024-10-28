@@ -49,13 +49,17 @@
             data-render-tippy="dates,end">период</u></span>
       </div>
     </div>
-    <div class="widgets__item">
+    <div class="widgets__item col-2">
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
       <div class="widgets__item_content">
         <span class="value" data-render-widget="reestr_sum"></span>
         <span class="name">Средств в реестре</span>
+      </div>
+      <div class="widgets__item_content">
+        <span class="value" data-render-widget="rest_in_reestr"></span>
+        <span class="name">Осталось в реестре</span>
       </div>
     </div>
     <div class="widgets__item">
@@ -81,11 +85,11 @@
   <div class="ranges">
     <div class="ranges__item">
       <span>Факт</span>
-      <div class="range range-fact" data-name=""></div>
+      <div class="range range-fact" style="pointer-events: none;"></div>
     </div>
     <div class="ranges__item">
       <span>План</span>
-      <div class="range range-plan" data-name=""></div>
+      <div class="range range-plan"></div>
     </div>
   </div>
 
