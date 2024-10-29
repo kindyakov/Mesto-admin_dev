@@ -114,12 +114,14 @@ class Dashboards extends Page {
     if (!this.widgets.length) return
     this.widgets.forEach(widget => {
       const params = widget.getAttribute('data-render-widget')
+      const isPrice = widget.getAttribute('price') == ''
+
       const [name, str] = params.split(',')
       const value = data[name] ? data[name] + `${str ? str : ''}` : 'В процессе доработки'
       if (!data[name]) {
         // widget.style.fontSize = '16px'
       }
-      if (name === 'revenue' || name === 'this_month_revenue' || name === 'reestr_sum') {
+      if (isPrice) {
         widget.innerText = Number.isInteger(+value) ? formatePrice(+value) + ' ₽' : ''
       } else {
         widget.innerHTML = value

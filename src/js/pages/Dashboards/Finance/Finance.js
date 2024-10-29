@@ -53,7 +53,7 @@ class Finance extends Dashboards {
     const year = today.getFullYear();
     const month = today.getMonth(); // месяц начинается с 0
     const lastDayOfCurrentMonth = new Date(year, month + 1, 0);
-    let revenue = 0
+    let revenue = 0, tooltipFact = null
 
     const options = {
       start: today.getDate(),
@@ -82,14 +82,14 @@ class Finance extends Dashboards {
 
     if (dataDashboard?.revenue_by_month.length) {
       this.rangeFact = new RangeSlider(this.wrapper.querySelector('.range-fact'), options)
-      const tooltip = this.rangeFact.sliderElement.querySelector('.noUi-tooltip')
+      tooltipFact = this.rangeFact.sliderElement.querySelector('.noUi-tooltip')
       const [data] = dataDashboard.revenue_by_month.filter(item => {
         const date = new Date(item.month);
         return date.getFullYear() === year && (date.getMonth()) === month;
       });
       if (data) {
         revenue = data.revenue
-        tooltip.innerText = formattingPrice(revenue)
+        tooltipFact.innerText = formattingPrice(revenue)
       }
     }
 
@@ -103,7 +103,7 @@ class Finance extends Dashboards {
       let cumulativeRevenue = 0;
 
       filteredData.forEach((item, i) => {
-        cumulativeRevenue += item.revenue;
+        cumulativeRevenue += item.revenue_planned;
         dailyRevenues[i] = cumulativeRevenue;
       });
 
@@ -114,9 +114,9 @@ class Finance extends Dashboards {
         const value = dailyRevenues[+Math.round(values[handle]) - 1];
         tooltip.innerText = formattingPrice(value)
         if (revenue => value) {
-          tooltip.style.cssText = `color: #0b704e; background-color: #cff1e6;`
+          tooltipFact.style.cssText = `color: #0b704e; background-color: #cff1e6;`
         } else {
-          tooltip.style.cssText = `color: #d42424; background-color: #ffdbdb;`
+          tooltipFact.style.cssText = `color: #d42424; background-color: #ffdbdb;`
         }
       }
 

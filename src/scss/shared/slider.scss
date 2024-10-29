@@ -30,12 +30,12 @@
 
 .noUi-marker-horizontal.noUi-marker-large {
 	height: 6px;
-	transform: translate(0, -2px);
+	transform: translate(-2px, -2px);
 }
 
 .noUi-value {
 	font-size: 12px;
-	// margin-left: -2px;
+	margin-left: -2px;
 }
 
 .noUi-tooltip {
