@@ -59,7 +59,7 @@
         <span class="value" data-render-widget="reestr_sum" price></span>
         <span class="name">Средств в реестре</span>
       </div>
-      <div class="widgets__item_content">
+      <div class="widgets__item_content last">
         <span class="value" data-render-widget="rest_in_reestr" price></span>
         <span class="name">Осталось в реестре</span>
       </div>
@@ -86,7 +86,7 @@
     </div>
   </div>
 
-  <div class="ranges">
+  <!-- <div class="ranges">
     <div class="ranges__item">
       <span>Факт</span>
       <div class="range range-fact" style="pointer-events: none;"></div>
@@ -95,21 +95,82 @@
       <span>План</span>
       <div class="range range-plan"></div>
     </div>
-  </div>
+  </div> -->
 
   <div class="charts">
+    <div class="chart" style="flex: 1 1 50%; width: 100%; height: 380px;">
+      <div class="chart__header" style="align-items: center; flex-wrap: wrap;">
+        <h4 class="chart__title" style="flex: 1 1 100%;">Сборы по реестру</h4>
+        <div class="chart__info-calc">
+          <p><b>Факт:</b> <span class="fact-value"></span></p>
+          <p><b>План:</b> <span class="plan-value"></span></p>
+          <p><b>Дельта:</b> <span class="delta-value"></span></p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 25px;">
+          <div class="chart__info">
+            <p>
+              <i class="circle fact"></i>
+              <span>Факт</span>
+            </p>
+            <p>
+              <i class="circle plan"></i>
+              <span style="color: #3d50e0;">План</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="chart__body">
+        <canvas id="chart-registration-fees" style="max-height: 260px;"></canvas>
+        <div id="tooltip-registration-fees" class="chart-tooltip"></div>
+      </div>
+    </div>
+    <div class="chart" style="flex: 1 1 50%; width: 100%; height: 380px;">
+      <div class="chart__header" style="align-items: center; flex-wrap: wrap;">
+        <h4 class="chart__title" style="flex: 1 1 100%;">Сборы по новым клиентам</h4>
+        <div class="chart__info-calc">
+          <p><b>Факт:</b> <span class="fact-value"></span></p>
+          <p><b>План:</b> <span class="plan-value"></span>
+            <button class="button btn-set-plan">
+              <svg class="icon icon-edit edit" style="stroke: #fff;">
+                <use xlink:href="img/svg/sprite.svg#edit"></use>
+              </svg>
+            </button>
+          </p>
+          <p><b>Дельта:</b> <span class="delta-value"></span></p>
+        </div>
+        <div class="" style="display: flex; align-items: center; gap: 25px;">
+          <div class="chart__info">
+            <p>
+              <i class="circle fact"></i>
+              <span>Факт</span>
+            </p>
+            <p>
+              <i class="circle"></i>
+              <span style="color: #3d50e0;">План</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="chart__body">
+        <canvas id="chart-fees-new-customers" style="max-height: 260px;"></canvas>
+        <div id="tooltip-fees-new-customers" class="chart-tooltip"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="charts">
     <div class="chart" style="flex: 1 1 auto; width: 100%; height: 380px;">
       <div class="chart__header" style="align-items: center;">
         <h4 class="chart__title">
-          Выручка за период: <span data-render-widget="revenue"></span>
-          <!-- <div class="frame up" style="transform: translate(0, -10%);">
+          Выручка за период: <span data-render-widget="revenue" price></span>
+          <div class="frame up" style="transform: translate(0, -10%);">
             <span>0,23%</span>
             <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M3.49967 1.914L0.817673 4.596L0.110674 3.889L3.99967 3.67785e-06L7.88867 3.889L7.18167 4.596L4.49967 1.914L4.49967 8L3.49967 8L3.49967 1.914Z"
                 fill="white" />
             </svg>
-          </div> -->
+          </div>
         </h4>
         <div class="" style="display: flex; align-items: center; gap: 25px;">
           <div class="chart__info">
@@ -134,7 +195,7 @@
         <div id="tooltip-monthly-revenue" class="chart-tooltip"></div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <div class="dashboards__table _my-accordion" data-accordion-open data-max-height="482">
     <button class="dashboards__table-toggle btn-toggle-table _my-accordion-control">

@@ -97,6 +97,14 @@ class BaseChart {
   onExternal(tooltipEl, chart, tooltip) {
 
   }
+
+  createLinearGradient(colorOne, colorTwo) {
+    const gradient = this.ctx.getContext("2d").createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, colorOne);
+    gradient.addColorStop(1, colorTwo);
+
+    return gradient
+  }
 }
 
 export default BaseChart;

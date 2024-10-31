@@ -17,16 +17,16 @@ class ChartMonthlyRevenue extends BaseChart {
     const defaultOptions = {
       type: 'bar',
       data: {
-        labels: [], // Все дни месяца
+        labels: [],
         datasets: [{
           label: 'Факт',
-          data: [], // Замените на ваши фактические данные
+          data: [],
           backgroundColor: '#3c50e0',
           color: '#3c50e0',
           barThickness: 6
         }, {
           label: 'План',
-          data: [], // Замените на ваши данные плана
+          data: [],
           backgroundColor: '#6f7d90',
           color: '#6f7d90',
           barThickness: 6
@@ -104,10 +104,10 @@ class ChartMonthlyRevenue extends BaseChart {
     tooltipEl.insertAdjacentHTML('afterbegin', `<div><svg class="icon icon-calendar" style="width: 12px; height: 12px; fill: gray; margin-right: 2px;"><use xlink:href="img/svg/sprite.svg#calendar"></use></svg><span style="font-size: 12px; text-align: center;">${dateFormatter(date)}</span></div>`)
   }
 
-  render(data) {
-    this.chart.data.labels = data.length ? data.map(obj => obj.data) : [] // Array.from({ length: data.length }, (_, i) => i + 1)
-    this.chart.data.datasets[0].data = data.length ? data.map(obj => obj.revenue) : []
-    this.chart.data.datasets[1].data = data.length ? data.map(obj => obj.revenue_planned) : []
+  render([dataDashboard, { finance_planfact = [] }]) {
+    this.chart.data.labels = finance_planfact.length ? finance_planfact.map(obj => obj.data) : [] 
+    this.chart.data.datasets[0].data = finance_planfact.length ? finance_planfact.map(obj => obj.revenue) : []
+    this.chart.data.datasets[1].data = finance_planfact.length ? finance_planfact.map(obj => obj.revenue_planned) : []
     this.chart.update()
   }
 }

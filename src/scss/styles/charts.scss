@@ -93,6 +93,21 @@
 		}
 	}
 
+	&__info-calc {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		font-size: 14px;
+		> p {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+		}
+		.button {
+			padding: 4px;
+		}
+	}
+
 	&__header-flex {
 		display: flex;
 		gap: 25px;

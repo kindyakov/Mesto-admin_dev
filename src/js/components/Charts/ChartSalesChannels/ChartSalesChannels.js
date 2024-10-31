@@ -9,7 +9,7 @@ function generateRandomData(length, min, max) {
 function createDatasets({ data, label, color, gradient, params = {} }) {
   return {
     label,
-    data, // Замените на ваши фактические данные
+    data,
     borderColor: color,
     color: color,
     pointBackgroundColor: '#fff',

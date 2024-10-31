@@ -75,7 +75,7 @@ class BaseFilter {
         step: 1
       });
 
-      range.onSliderSlide = (values, i) => this.handleSliderSlide(values, i, range);
+      range.onSliderSlide = ({ values, handle }) => this.handleSliderSlide(values, handle, range);
       this.rangeSlider.push(range);
     });
 

@@ -107,7 +107,7 @@ class TableForecastArea extends BaseTableForecast {
     const defaultParams = {
       isPagination: false,
       endpoint: '/_set_finance_plan_',
-      keysQueryParams: ['revenue', 'revenue_accumulated', 'outflow_area', 'inflow_area', 'rented_area']
+      keysQueryParams: ['revenue_planned', 'revenue_accumulated', 'outflow_area', 'inflow_area', 'rented_area']
     }
 
     const mergedOptions = Object.assign({}, defaultOptions, options);

@@ -78,6 +78,8 @@
 		flex-direction: column;
 		width: 100%;
 		gap: 25px;
+		// position: sticky;
+		// top: 0px;
 		@media (max-width: $md2) {
 			padding-bottom: 80px;
 		}

@@ -45,4 +45,9 @@
 			}
 		}
 	}
+	@media (max-width: $md3) {
+		.chart__header {
+			flex-direction: row;
+		}
+	}
 }

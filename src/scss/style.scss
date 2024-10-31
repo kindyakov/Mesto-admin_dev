@@ -110,6 +110,55 @@ body {
 	cursor: pointer;
 }
 
+.circle {
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	color: $blue;
+	border: 1px solid currentColor;
+
+	&::before {
+		content: '';
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background-color: currentColor;
+	}
+}
+
+.text-success,
+.text-error,
+.text-warning {
+	font-size: 14px;
+	padding: 2px 4px;
+	border-radius: 4px;
+	border: 1px solid currentColor;
+}
+
+.text-success {
+	color: $green;
+	background: $green-light;
+}
+
+.text-error {
+	color: $red;
+	background: $red-light;
+}
+
+.text-warning {
+	color: $yellow;
+	background: $yellow-light;
+}
+
 // shared
 @import 'shared/input';
 @import 'shared/button';

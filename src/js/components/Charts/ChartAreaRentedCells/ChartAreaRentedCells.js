@@ -16,7 +16,7 @@ class ChartAreaRentedCells extends BaseChart {
         labels: ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сент', 'Окт', 'Нояб', 'Дек'], // Все дни месяца
         datasets: [{
           label: 'Факт',
-          data: [], // Замените на ваши фактические данные
+          data: [],
           borderColor: '#3c50e0',
           color: '#3c50e0',
           pointBackgroundColor: '#fff',
@@ -26,7 +26,7 @@ class ChartAreaRentedCells extends BaseChart {
           tension: 0.6
         }, {
           label: 'План',
-          data: [], // Замените на ваши данные плана
+          data: [],
           borderColor: '#6f7d90',
           color: '#6f7d90',
           pointRadius: 0,
@@ -59,8 +59,8 @@ class ChartAreaRentedCells extends BaseChart {
         },
         plugins: {
           // tooltip: {
-            // mode: 'index',
-            // intersect: true
+          // mode: 'index',
+          // intersect: true
           // },
           // Для заштрихованной области можно использовать плагин, например, chartjs-plugin-annotation
         }
@@ -101,7 +101,10 @@ class ChartAreaRentedCells extends BaseChart {
     const dataI = tooltip.dataPoints[0].dataIndex
     const date = chart.data.labels[dataI]
     const values = tooltipEl.querySelectorAll('.value')
-    values.forEach(val => val.innerText = val.innerText + ' м²')
+    values.forEach(val => {
+      val.innerText = parseFloat(val.innerText).toFixed(1) + ' м²'
+    })
+
     tooltipEl.insertAdjacentHTML('afterbegin', `<div><svg class="icon icon-calendar" style="width: 12px; height: 12px; fill: gray; margin-right: 2px;"><use xlink:href="img/svg/sprite.svg#calendar"></use></svg><span style="font-size: 12px; text-align: center;">${dateFormatter(date)}</span></div>`)
   }
 
