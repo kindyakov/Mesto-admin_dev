@@ -3,6 +3,7 @@ import { Select } from "../../modules/mySelect.js"
 import { createCalendar } from "../../settings/createCalendar.js"
 import { dateFormatter } from "../../settings/dateFormatter.js";
 import tippy from '../../configs/tippy.js'
+import { formattingPrice } from "../../utils/formattingPrice.js";
 // import { inputValidator } from "../../settings/validates.js";
 
 function formatePrice(value) {
@@ -115,6 +116,7 @@ class Dashboards extends Page {
     this.widgets.forEach(widget => {
       const params = widget.getAttribute('data-render-widget')
       const isPrice = widget.getAttribute('price') == ''
+      const isPrice2 = widget.getAttribute('price2') == ''
 
       const [name, str] = params.split(',')
       const value = data[name] ? data[name] + `${str ? str : ''}` : 'В процессе доработки'
@@ -123,6 +125,8 @@ class Dashboards extends Page {
       }
       if (isPrice) {
         widget.innerText = Number.isInteger(+value) ? formatePrice(+value) + ' ₽' : ''
+      } else if (isPrice2) {
+        widget.innerText = value ? formattingPrice(parseFloat(value)) + str : ''
       } else {
         widget.innerHTML = value
       }

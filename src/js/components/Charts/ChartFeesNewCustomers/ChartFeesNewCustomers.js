@@ -146,6 +146,7 @@ class ChartFeesNewCustomers extends BaseChart {
     const month = new Date().getMonth();
     const days_number = new Date(year, month + 1, 0).getDate();
 
+    const planValue = this.wpChart.querySelector('.plan-value')
     const deltaValue = this.wpChart.querySelector('.delta-value')
     const btnSetPlan = this.wpChart.querySelector('.btn-set-plan')
 
@@ -155,7 +156,7 @@ class ChartFeesNewCustomers extends BaseChart {
     const delta = currentD.revenue_new_accumulated - currentD.revenue_accumulated_planned
 
     this.wpChart.querySelector('.fact-value').innerText = formattingPrice(fact)
-    this.wpChart.querySelector('.plan-value').innerText = formattingPrice(plan)
+    planValue.value = formattingPrice(plan)
     deltaValue.innerText = formattingPrice(delta)
 
     if (delta > 0) {
@@ -167,7 +168,22 @@ class ChartFeesNewCustomers extends BaseChart {
     }
 
     btnSetPlan.addEventListener('click', () => {
-      this.setFinancePlan({ revenue_planned: currentD.revenue_planned, data: currentD.data })
+      if (planValue.value) {
+        planValue.style.backgroundColor = ''
+        this.setFinancePlan({
+          revenue_planned: planValue.value.replace(/\D/g, ''),
+          data: currentD.data,
+          month_or_day: 'month'
+        })
+      } else {
+        planValue.style.backgroundColor = '#ffdbdb'
+      }
+    })
+  }
+
+  onExternal(tooltipEl, chart, tooltip, dataI) {
+    tooltipEl.querySelectorAll('.value')?.forEach(el => {
+      el.innerText = formattingPrice(parseFloat(el.innerText))
     })
   }
 
@@ -176,7 +192,7 @@ class ChartFeesNewCustomers extends BaseChart {
     this.chart.data.datasets[0].data = finance_planfact.length ? finance_planfact.map(obj => obj.revenue_new_accumulated) : []
     this.chart.data.datasets[1].data = finance_planfact.length ? finance_planfact.map(obj => obj.revenue_accumulated_planned) : []
 
-    const circle = this.wpChart.querySelector('.circle.fact')
+    const circle = this.wpChart.querySelector('._circle.fact')
     let gradient, borderColor, color
 
     if (this.chart.data.datasets[0].data.at(-1) > this.chart.data.datasets[1].data.at(-1)) {
@@ -200,10 +216,10 @@ class ChartFeesNewCustomers extends BaseChart {
     this.chart.update()
   }
 
-  async setFinancePlan(queryParams) {
+  async setFinancePlan(data) {
     try {
       this.loader.enable()
-      const response = await api.post(`/set_finance_plan${buildQueryParams(queryParams)}`,)
+      const response = await api.post(`/_set_finance_plan_`, data)
       if (response.status !== 200) return
       window.app.notify.show(response.data)
     } catch (error) {

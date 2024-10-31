@@ -32,9 +32,9 @@
             price>периода</u></span>
       </div>
       <div class="widgets__item_content last">
-        <span class="value" data-render-widget="revenue" price></span>
-        <span class="name">Выручка за выбранный <u class="hover-line" data-render-tippy="dates,end"
-            price>период</u></span>
+        <span class="value" data-render-widget="this_month_new_clients_revenue" price></span>
+        <span class="name">Выручка от новых клиентов текущего <u class="hover-line"
+            data-render-tippy="dates,start">периода</u></span>
       </div>
     </div>
     <div class="widgets__item col-2">
@@ -42,13 +42,12 @@
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
       <div class="widgets__item_content">
-        <span class="value" data-render-widget="current_avg_price_per_room, ₽/м²"></span>
+        <span class="value" data-render-widget="current_avg_price_per_room,/м²" price2></span>
         <span class="name">Текущая средняя ставка аренды</span>
       </div>
       <div class="widgets__item_content last">
-        <span class="value" data-render-widget="avg_price_per_room, ₽/м²"></span>
-        <span class="name">Средняя ставка за выбранный <u class="hover-line"
-            data-render-tippy="dates,end">период</u></span>
+        <span class="value" data-render-widget="avg_price_per_room,/м²" price2></span>
+        <span class="name">Средняя ставка за все время</span>
       </div>
     </div>
     <div class="widgets__item col-2">
@@ -64,24 +63,17 @@
         <span class="name">Осталось в реестре</span>
       </div>
     </div>
-    <div class="widgets__item">
+    <div class="widgets__item col-2">
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
       <div class="widgets__item_content">
-        <span class="value" data-render-widget="this_month_new_clients_revenue" price></span>
-        <span class="name">Выручка от новых клиентов текущего <u class="hover-line"
-            data-render-tippy="dates,start">периода</u></span>
+        <span class="value" data-render-widget="this_month_revenue_rent" price></span>
+        <span class="name">Сборы по аренде текущего <u class="hover-line" data-render-tippy="dates,start" price>периода</u></span>
       </div>
-    </div>
-    <div class="widgets__item">
-      <div class="widgets__item_img">
-        <img src="img/icons/coins.png" alt="Иконка">
-      </div>
-      <div class="widgets__item_content">
-        <span class="value" data-render-widget="new_clients_revenue" price></span>
-        <span class="name">Выручка от новых клиентов за выбранный <u class="hover-line"
-            data-render-tippy="dates,end">период</u></span>
+      <div class="widgets__item_content last">
+        <span class="value" data-render-widget="this_month_revenue_deposit" price></span>
+        <span class="name">Сборы по депозитам текущего <u class="hover-line" data-render-tippy="dates,start" price>периода</u></span>
       </div>
     </div>
   </div>
@@ -98,22 +90,22 @@
   </div> -->
 
   <div class="charts">
-    <div class="chart" style="flex: 1 1 50%; width: 100%; height: 380px;">
+    <div class="chart" style="flex: 1 1 50%; width: 100%; min-height: 400px;">
       <div class="chart__header" style="align-items: center; flex-wrap: wrap;">
         <h4 class="chart__title" style="flex: 1 1 100%;">Сборы по реестру</h4>
         <div class="chart__info-calc">
           <p><b>Факт:</b> <span class="fact-value"></span></p>
           <p><b>План:</b> <span class="plan-value"></span></p>
-          <p><b>Дельта:</b> <span class="delta-value"></span></p>
+          <p><b>Отклонение:</b> <span class="delta-value"></span></p>
         </div>
         <div style="display: flex; align-items: center; gap: 25px;">
           <div class="chart__info">
             <p>
-              <i class="circle fact"></i>
+              <i class="_circle fact"></i>
               <span>Факт</span>
             </p>
             <p>
-              <i class="circle plan"></i>
+              <i class="_circle plan"></i>
               <span style="color: #3d50e0;">План</span>
             </p>
           </div>
@@ -124,28 +116,28 @@
         <div id="tooltip-registration-fees" class="chart-tooltip"></div>
       </div>
     </div>
-    <div class="chart" style="flex: 1 1 50%; width: 100%; height: 380px;">
+    <div class="chart" style="flex: 1 1 50%; width: 100%; min-height: 400px;">
       <div class="chart__header" style="align-items: center; flex-wrap: wrap;">
         <h4 class="chart__title" style="flex: 1 1 100%;">Сборы по новым клиентам</h4>
         <div class="chart__info-calc">
           <p><b>Факт:</b> <span class="fact-value"></span></p>
-          <p><b>План:</b> <span class="plan-value"></span>
+          <p><b>План:</b> <input type="text" class="plan-value input-passport" style="width: 110px;">
             <button class="button btn-set-plan">
               <svg class="icon icon-edit edit" style="stroke: #fff;">
                 <use xlink:href="img/svg/sprite.svg#edit"></use>
               </svg>
             </button>
           </p>
-          <p><b>Дельта:</b> <span class="delta-value"></span></p>
+          <p><b>Отклонение:</b> <span class="delta-value"></span></p>
         </div>
         <div class="" style="display: flex; align-items: center; gap: 25px;">
           <div class="chart__info">
             <p>
-              <i class="circle fact"></i>
+              <i class="_circle fact"></i>
               <span>Факт</span>
             </p>
             <p>
-              <i class="circle"></i>
+              <i class="_circle"></i>
               <span style="color: #3d50e0;">План</span>
             </p>
           </div>

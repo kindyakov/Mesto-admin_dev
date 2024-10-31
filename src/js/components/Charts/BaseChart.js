@@ -69,10 +69,11 @@ class BaseChart {
               });
 
               tooltipEl.style.opacity = 1;
+              
+              this.onExternal(tooltipEl, chart, tooltip, dataI)
+
               tooltipEl.style.left = (chart.canvas.offsetLeft + tooltip.caretX) - tooltipEl.clientWidth - 6 + 'px';
               tooltipEl.style.top = (chart.canvas.offsetTop + tooltip.caretY) - tooltipEl.clientHeight - 6 + 'px';
-
-              this.onExternal(tooltipEl, chart, tooltip)
             }
           }
         },
@@ -94,7 +95,7 @@ class BaseChart {
     }
   }
 
-  onExternal(tooltipEl, chart, tooltip) {
+  onExternal(tooltipEl, chart, tooltip, dataI) {
 
   }
 

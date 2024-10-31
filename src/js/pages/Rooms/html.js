@@ -48,7 +48,10 @@ export function roomHtml(data) {
                 ${typeRoom(data)}
               </div>
               <div class="room__content_sizes">
-                <b>${data.volume ? data.volume + ' м<sup>3</sup>' : ''}</b>
+                <p>
+                  <b>${data.volume ? data.volume + ' м<sup>3</sup>' : ''}</b>
+                  <b style="margin-left: 10px;">${data.area ? data.area + ' м<sup>2</sup>' : ''}</b>
+                </p>
                 <span>${data.dimensions ? data.dimensions : ''} — ${data.floor ? data.floor + ' этаж' : ''}</span>
               </div>
               ${data.rented == 0 ? '' : `

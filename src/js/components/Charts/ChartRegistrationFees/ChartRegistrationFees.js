@@ -95,7 +95,13 @@ class ChartRegistrationFees extends BaseChart {
       deltaValue.classList.add('text-warning')
     } else {
       deltaValue.classList.add('text-error')
-    }   
+    }
+  }
+
+  onExternal(tooltipEl, chart, tooltip, dataI) {
+    tooltipEl.querySelectorAll('.value')?.forEach(el => {
+      el.innerText = formattingPrice(parseFloat(el.innerText))
+    })
   }
 
   render([dataDashboard, { finance_planfact = [] }]) {
@@ -103,7 +109,7 @@ class ChartRegistrationFees extends BaseChart {
     this.chart.data.datasets[0].data = finance_planfact.length ? finance_planfact.map(obj => obj.revenue_reestr_accumulated) : []
     this.chart.data.datasets[1].data = finance_planfact.length ? finance_planfact.map((obj, i) => ((i + 1) + dataDashboard.reestr_sum / finance_planfact.length * (i + 1)).toFixed(0)) : []
 
-    const circle = this.wpChart.querySelector('.circle.fact')
+    const circle = this.wpChart.querySelector('._circle.fact')
     let gradient, borderColor, color
 
     if (this.chart.data.datasets[0].data.at(-1) > this.chart.data.datasets[1].data.at(-1)) {
