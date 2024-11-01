@@ -70,87 +70,21 @@ class ChartFeesNewCustomers extends BaseChart {
             }
           },
         },
-        plugins: {
-          legend: {
-            display: false
-          },
-          tooltip: {
-            enabled: false,
-            position: 'average',
-            external: context => {
-              const { chart, tooltip } = context;
-              const tooltipEl = chart.canvas.parentNode.querySelector('.chart-tooltip');
-
-              if (!tooltipEl) return;
-
-              if (tooltip.opacity === 0) {
-                tooltipEl.style.opacity = 0;
-                return;
-              }
-
-              tooltipEl.innerHTML = '';
-
-              // Получаем индекс данных по оси X, даже если курсор не наведен на точку
-              const xValue = chart.scales.x.getValueForPixel(tooltip.caretX);
-              const dataI = Math.floor(xValue);
-
-              // Проверка, что индекс данных в пределах массива
-              if (dataI >= 0 && dataI < chart.data.labels.length) {
-                chart.data.datasets.forEach(obj => {
-                  const el = createElement('div', {
-                    content: `<b style="background: ${obj.color};"></b><span class="value">${obj.data[dataI]}</span>`
-                  });
-                  tooltipEl.appendChild(el);
-                });
-
-                tooltipEl.style.opacity = 1;
-                tooltipEl.style.left = `${chart.canvas.offsetLeft + tooltip.caretX - tooltipEl.clientWidth - 6}px`;
-                tooltipEl.style.top = `${chart.canvas.offsetTop + tooltip.caretY - tooltipEl.clientHeight - 6}px`;
-
-                this.onExternal(tooltipEl, chart, tooltip);
-              }
-            }
-          }
-        },
       },
     }
 
     super(ctx, merge({}, defaultOptions, addOptions));
     this.ctx = ctx
-
-    // this.chart.canvas.addEventListener('mousemove', (event) => {
-    //   const { offsetX, offsetY } = event;
-    //   const xScale = this.chart.scales.x;
-    //   const yScale = this.chart.scales.y;
-
-    //   if (offsetY >= yScale.top && offsetY <= yScale.bottom) {
-    //     // Генерация данных для tooltip на уровне оси Y
-    //     const tooltip = {
-    //       caretX: offsetX,
-    //       caretY: offsetY,
-    //       opacity: 1,
-    //       dataPoints: [{
-    //         dataIndex: xScale.getValueForPixel(offsetX)
-    //       }]
-    //     };
-
-    //     this.chart.tooltip.positioners.average = () => tooltip;
-    //     this.chart.tooltip.update();
-    //   }
-    // });
-
   }
 
   calc(dataDashboard, finance_planfact) {
-    const year = new Date().getFullYear();
-    const month = new Date().getMonth();
-    const days_number = new Date(year, month + 1, 0).getDate();
+    const currentDay = new Date().getDate();
 
     const planValue = this.wpChart.querySelector('.plan-value')
     const deltaValue = this.wpChart.querySelector('.delta-value')
     const btnSetPlan = this.wpChart.querySelector('.btn-set-plan')
 
-    const [currentD] = finance_planfact.filter((d, i) => (i + 1) == days_number)
+    const [currentD] = finance_planfact.filter((d, i) => (i + 1) == currentDay)
     const fact = currentD?.revenue_new_accumulated || 0
     const plan = currentD?.revenue_accumulated_planned || 0
     const delta = currentD.revenue_new_accumulated - currentD.revenue_accumulated_planned

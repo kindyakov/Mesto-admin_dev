@@ -74,14 +74,12 @@ class ChartRegistrationFees extends BaseChart {
   }
 
   calc(dataDashboard, finance_planfact) {
-    const year = new Date().getFullYear();
-    const month = new Date().getMonth();
-    const days_number = new Date(year, month + 1, 0).getDate();
-
-    const [currentD] = finance_planfact.filter((d, i) => (i + 1) == days_number)
+    const currentDay = new Date().getDate();
+    
+    const [currentD] = finance_planfact.filter((d, i) => (i + 1) == currentDay)
     const fact = currentD?.revenue_new_accumulated || 0
-    const plan = (dataDashboard.reestr_sum / finance_planfact.length * days_number) || 0
-    const delta = currentD.revenue_reestr_accumulated - dataDashboard.reestr_sum / finance_planfact.length * days_number
+    const plan = (dataDashboard.reestr_sum / finance_planfact.length * currentDay) || 0
+    const delta = currentD.revenue_reestr_accumulated - dataDashboard.reestr_sum / finance_planfact.length * currentDay
 
     const deltaValue = this.wpChart.querySelector('.delta-value')
 
