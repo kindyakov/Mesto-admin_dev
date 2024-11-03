@@ -15,7 +15,10 @@ class Navigation {
       'charging-locks': 'ChargingLocks/ChargingLocks.js',
       'users': 'Users/Users.js',
       'working-hours': 'WorkingHours/WorkingHours.js',
+      'prices-rooms': 'PricesRooms/PricesRooms.js',
       'forecast': 'Forecast/Forecast.js',
+      'mesto-plan': 'MestoPlan/MestoPlan.js',
+      'mesto-budget': 'MestoBudget/MestoBudget.js',
       'rooms': 'Rooms/Rooms.js',
       'payments': 'Payments/Payments.js',
       'agreements': 'Agreements/Agreements.js',
@@ -26,7 +29,7 @@ class Navigation {
     this.loader = new Loader(document.querySelector('.main'), {
       customSelector: '_main-loader'
     });
-    this.sidebarAccordion = new Accordion({ uniqueName: 'sidebar-accordion', isAccordion: false });
+    this.sidebarAccordion = new Accordion({ uniqueName: 'sidebar-accordion' });
     this.modulesCache = {};  // Добавляем кэш для загруженных модулей
     this.md1200 = window.matchMedia(`(max-width: 1200px)`)
   }

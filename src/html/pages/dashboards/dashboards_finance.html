@@ -69,11 +69,13 @@
       </div>
       <div class="widgets__item_content">
         <span class="value" data-render-widget="this_month_revenue_rent" price></span>
-        <span class="name">Сборы по аренде текущего <u class="hover-line" data-render-tippy="dates,start" price>периода</u></span>
+        <span class="name">Сборы по аренде текущего <u class="hover-line" data-render-tippy="dates,start"
+            price>периода</u></span>
       </div>
       <div class="widgets__item_content last">
         <span class="value" data-render-widget="this_month_revenue_deposit" price></span>
-        <span class="name">Сборы по депозитам текущего <u class="hover-line" data-render-tippy="dates,start" price>периода</u></span>
+        <span class="name">Сборы по депозитам текущего <u class="hover-line" data-render-tippy="dates,start"
+            price>периода</u></span>
       </div>
     </div>
   </div>
@@ -88,6 +90,32 @@
       <div class="range range-plan"></div>
     </div>
   </div> -->
+
+  <div class="visualization">
+    <div class="chart__info">
+      <p>
+        <i class="_circle fact"></i>
+        <span>Факт</span>
+      </p>
+      <p>
+        <i class="_circle plan" style="color: green;"></i>
+        <span>План</span>
+      </p>
+      <p>
+        <i class="_circle plan" style="color: gray;"></i>
+        <span>Осталось внести</span>
+      </p>
+    </div>
+    <div class="visualization__content">
+      <div class="visualization__item visualization-fact">
+      </div>
+      <div class="visualization__item visualization-plan" style="color: #E03D3D; background: rgba(255, 207, 207, 0.8);">
+      </div>
+      <div class="visualization__item visualization-remains-deposit"
+        style="color: gray; background: rgba(218, 218, 218, 0.2);">
+      </div>
+    </div>
+  </div>
 
   <div class="charts">
     <div class="chart" style="flex: 1 1 50%; width: 100%; min-height: 400px;">

@@ -159,6 +159,25 @@ body {
 	background: $yellow-light;
 }
 
+.wrapper-google-table {
+	width: 100%;
+	overflow-x: auto;
+}
+
+.google-table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+	
+	th,
+	td {
+		font-size: 14px;
+		padding: 10px;
+		border: 1px solid #32353c;
+		border-collapse: collapse;
+	}
+}
+
 // shared
 @import 'shared/input';
 @import 'shared/button';
@@ -189,6 +208,7 @@ body {
 @import 'styles/table';
 @import 'styles/widgets';
 @import 'styles/ranges';
+@import 'styles/visualization';
 
 // Страницы
 @import 'pages/dashboards';

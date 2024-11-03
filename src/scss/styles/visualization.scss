@@ -1,0 +1,23 @@
+.visualization {
+	&__content {
+		width: 100%;
+		height: 150px;
+		display: flex;
+		margin-top: 15px;
+    gap: 1px;
+	}
+
+	&__item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		color: $blue;
+		border: 2px solid currentColor;
+		background-color: #d8dcf8;
+    font-size: 16px;
+    font-weight: 700;
+		flex: 1 1 auto;
+		border-radius: 10px;
+	}
+}

@@ -217,6 +217,15 @@ export const fixedSideBar = () => {
       const rect = sidebarContent.getBoundingClientRect();
       const parentRect = wrapper.getBoundingClientRect();
 
+
+      if (rect.height >  window.innerHeight) {
+        if (isFixed) {
+          sidebarContent.removeAttribute('style');
+          isFixed = false;
+        }
+        return;
+      }
+
       if (!isFixed && window.scrollY + paddingTop >= topRect && parentRect.bottom - rect.height >= paddingTop) {
         sidebarContent.style.cssText = `position: fixed; top: ${paddingTop}px; left: ${rect.left}px; max-width: ${rect.width}px;`
         isFixed = true;

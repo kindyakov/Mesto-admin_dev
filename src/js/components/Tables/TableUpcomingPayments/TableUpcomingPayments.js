@@ -7,6 +7,7 @@ import { observeCell } from "../utils/observeCell.js";
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
 import { downloadFuturePayments } from "../../../settings/request.js";
+import { createElement } from "../../../settings/createElement.js";
 
 class TableUpcomingPayments extends Table {
   constructor(selector, options, params) {
@@ -20,9 +21,10 @@ class TableUpcomingPayments extends Table {
         {
           headerName: 'Сумма', field: 'price', minWidth: 80, flex: 0.5,
           cellRenderer: params => {
-            const span = document.createElement('span')
-            span.classList.add('table-span-price')
-            span.innerHTML = params.value ? formattingPrice(params.value) : 'нет'
+            const span = createElement('span', {
+              classes: ['table-span-price'],
+              content: params.value ? formattingPrice(params.value) : 'нет',
+            })
             return cellRendererInput(params, { el: span })
           }
         },
@@ -37,14 +39,26 @@ class TableUpcomingPayments extends Table {
         {
           headerName: 'Договор', field: 'agrid', minWidth: 70, flex: 0.5,
           cellRenderer: params => {
-            const span = document.createElement('span')
-            span.classList.add('table-span-agrid')
-            span.textContent = params.value ? addPrefixToNumbers(params.value) : 'нет'
+            const span = createElement('span', {
+              classes: ['table-span-agrid'],
+              content: params.value ? addPrefixToNumbers(params.value) : 'нет',
+            })
             return cellRendererInput(params, { el: span })
           }
         },
         {
-          headerName: 'Вид поступления', field: 'type', minWidth: 90, flex: 0.5,
+          headerName: 'Площадь', field: 'area', minWidth: 50, flex: 0.3,
+          valueFormatter: params => `${params.value} м²`
+        },
+        {
+          headerName: 'Средняя ставка', field: 'price_1m', minWidth: 70, flex: 0.5,
+          cellRenderer: params => {
+            const span = createElement('span', {
+              classes: ['table-span-price'],
+              content: params.value ? formattingPrice(params.value) : 'нет',
+            })
+            return cellRendererInput(params, { el: span })
+          }
         },
         {
           headerName: 'Физ./Юр.', field: 'user_type', minWidth: 90, flex: 0.5, resizable: false,

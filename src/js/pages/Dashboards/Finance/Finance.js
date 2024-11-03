@@ -4,6 +4,7 @@ import TableUpcomingPayments from "../../../components/Tables/TableUpcomingPayme
 import ChartRegistrationFees from "../../../components/Charts/ChartRegistrationFees/ChartRegistrationFees.js";
 import ChartFeesNewCustomers from "../../../components/Charts/ChartFeesNewCustomers/ChartFeesNewCustomers.js";
 import { getDashboardFinance, getFuturePayments, getFinancePlan } from "../../../settings/request.js";
+import { formattingPrice } from "../../../utils/formattingPrice.js";
 // import RangeSlider from "../../../components/RangeSlider/RangeSlider.js";
 // import { formattingPrice } from "../../../utils/formattingPrice.js";
 
@@ -115,6 +116,37 @@ class Finance extends Dashboards {
   //   }
   // }
 
+  visualization({ dataDashboard, finance_planfact, dataEntities }) {
+    const fact = this.wrapper.querySelector('.visualization-fact')
+    const plan = this.wrapper.querySelector('.visualization-plan')
+    const remainsDeposit = this.wrapper.querySelector('.visualization-remains-deposit')
+
+    const currentDay = new Date().getDate();
+    const [currentD] = finance_planfact.filter((d, i) => (i + 1) == currentDay)
+
+    const factV = dataDashboard.this_month_revenue || 0
+    const planV = parseFloat((currentD.revenue_accumulated_planned + dataDashboard.reestr_sum / finance_planfact.length * currentDay).toFixed(0)) || 0
+    const remainsDepositV = (finance_planfact.at(-1).revenue_accumulated_planned + dataDashboard.reestr_sum) || 0
+    const sum = factV + planV + remainsDepositV
+
+    fact.textContent = formattingPrice(factV)
+    plan.textContent = formattingPrice(planV)
+    remainsDeposit.textContent = formattingPrice(remainsDepositV)
+
+    function findPercentageOfTotal(part, total) {
+      return (part / total) * 100;
+    }
+
+    fact.style.width = `${findPercentageOfTotal(factV, sum)}%`
+    plan.style.width = `${findPercentageOfTotal(planV, sum)}%`
+    remainsDeposit.style.width = `${findPercentageOfTotal(remainsDepositV, sum)}%`
+
+    if (planV < factV) {
+      plan.style.color = "#19D06D"
+      plan.style.background = 'rgba(206, 254, 228, 0.8)'
+    }
+  }
+
   onRender([dataDashboard, { finance_planfact = [] }], dataEntities) {
     this.renderWidgets(dataDashboard)
     this.actionsCharts(chart => chart.loader = this.loader)
@@ -124,6 +156,7 @@ class Finance extends Dashboards {
     }
 
     // this.initRanges({ dataDashboard, finance_planfact, dataEntities })
+    this.visualization({ dataDashboard, finance_planfact, dataEntities })
   }
 }
 
