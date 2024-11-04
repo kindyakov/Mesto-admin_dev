@@ -16,7 +16,7 @@ class MestoPlan extends Page {
         ['src', 'https://docs.google.com/spreadsheets/d/1pJStDxaxum2__G4Rr0WdH-MAXa1ARYIxZeWhpzETC2c/edit?usp=sharing?widget=true&amp;headers=false']
       ]
     })
-
+    
     this.wrapper.appendChild(this.iframe)
     setTimeout(() => this.loader.enable())
     this.iframe.onload = () => {

@@ -27,14 +27,14 @@
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
       <div class="widgets__item_content">
-        <span class="value" data-render-widget="this_month_revenue" price></span>
-        <span class="name">Выручка текущего <u class="hover-line" data-render-tippy="dates,start"
-            price>периода</u></span>
+        <span class="value" data-render-widget="revenue" price></span>
+        <span class="name">Выручка за выбранный<u class="hover-line" data-render-tippy="dates,end"
+            price>период</u></span>
       </div>
       <div class="widgets__item_content last">
-        <span class="value" data-render-widget="this_month_new_clients_revenue" price></span>
-        <span class="name">Выручка от новых клиентов текущего <u class="hover-line"
-            data-render-tippy="dates,start">периода</u></span>
+        <span class="value" data-render-widget="new_clients_revenue" price></span>
+        <span class="name">Выручка от новых клиентов за выбранный <u class="hover-line"
+            data-render-tippy="dates,end">период</u></span>
       </div>
     </div>
     <div class="widgets__item col-2">
@@ -43,7 +43,7 @@
       </div>
       <div class="widgets__item_content">
         <span class="value" data-render-widget="current_avg_price_per_room,/м²" price2></span>
-        <span class="name">Текущая средняя ставка аренды</span>
+        <span class="name">Средняя ставка аренды за выбранный <u class="hover-line" data-render-tippy="dates,end">период</u></span>
       </div>
       <div class="widgets__item_content last">
         <span class="value" data-render-widget="avg_price_per_room,/м²" price2></span>
@@ -68,14 +68,14 @@
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
       <div class="widgets__item_content">
-        <span class="value" data-render-widget="this_month_revenue_rent" price></span>
-        <span class="name">Сборы по аренде текущего <u class="hover-line" data-render-tippy="dates,start"
-            price>периода</u></span>
+        <span class="value" data-render-widget="revenue_rent" price></span>
+        <span class="name">Сборы по аренде за выбранный <u class="hover-line" data-render-tippy="dates,end"
+            price>период</u></span>
       </div>
       <div class="widgets__item_content last">
-        <span class="value" data-render-widget="this_month_revenue_deposit" price></span>
-        <span class="name">Сборы по депозитам текущего <u class="hover-line" data-render-tippy="dates,start"
-            price>периода</u></span>
+        <span class="value" data-render-widget="revenue_deposit" price></span>
+        <span class="name">Сборы по депозитам за выбранный <u class="hover-line" data-render-tippy="dates,end"
+            price>период</u></span>
       </div>
     </div>
   </div>
@@ -98,7 +98,7 @@
         <span>Факт</span>
       </p>
       <p>
-        <i class="_circle plan" style="color: green;"></i>
+        <i class="_circle plan" style="color: #E03D3D;"></i>
         <span>План</span>
       </p>
       <p>
@@ -106,13 +106,18 @@
         <span>Осталось внести</span>
       </p>
     </div>
+    <div style="position: relative; width: 100%; height: 15px;">
+      <p class="visualization-difference difference-fact-plan text-warning"
+        style="transform: translateX(-50%); position: absolute;"></p>
+      <p class="visualization-difference text-warning needs-collected-mont" style="position: absolute; right: 0;"></p>
+    </div>
     <div class="visualization__content">
       <div class="visualization__item visualization-fact">
       </div>
-      <div class="visualization__item visualization-plan" style="color: #E03D3D; background: rgba(255, 207, 207, 0.8);">
+      <div class="visualization__item visualization-plan" style="color: #E03D3D; background: rgba(255, 207, 207, 1);">
       </div>
       <div class="visualization__item visualization-remains-deposit"
-        style="color: gray; background: rgba(218, 218, 218, 0.2);">
+        style="color: gray; background: rgb(238, 238, 238);">
       </div>
     </div>
   </div>

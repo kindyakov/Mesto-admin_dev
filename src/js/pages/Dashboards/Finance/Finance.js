@@ -117,18 +117,25 @@ class Finance extends Dashboards {
   // }
 
   visualization({ dataDashboard, finance_planfact, dataEntities }) {
+    const visualization = this.wrapper.querySelector('.visualization')
     const fact = this.wrapper.querySelector('.visualization-fact')
     const plan = this.wrapper.querySelector('.visualization-plan')
     const remainsDeposit = this.wrapper.querySelector('.visualization-remains-deposit')
+    const differenceFactPlan = this.wrapper.querySelector('.difference-fact-plan')
+    const needsCollectedMont = this.wrapper.querySelector('.needs-collected-mont')
 
     const currentDay = new Date().getDate();
     const [currentD] = finance_planfact.filter((d, i) => (i + 1) == currentDay)
 
     const factV = dataDashboard.this_month_revenue || 0
     const planV = parseFloat((currentD.revenue_accumulated_planned + dataDashboard.reestr_sum / finance_planfact.length * currentDay).toFixed(0)) || 0
-    const remainsDepositV = (finance_planfact.at(-1).revenue_accumulated_planned + dataDashboard.reestr_sum) || 0
+    const needsCollectedMontV = (finance_planfact.at(-1).revenue_accumulated_planned + dataDashboard.reestr_sum) || 0
+    const remainsDepositV = needsCollectedMontV - Math.max(factV, planV)
+    const differenceFactPlanV = planV - factV
     const sum = factV + planV + remainsDepositV
 
+    differenceFactPlan.textContent = formattingPrice(differenceFactPlanV)
+    needsCollectedMont.textContent = formattingPrice(needsCollectedMontV)
     fact.textContent = formattingPrice(factV)
     plan.textContent = formattingPrice(planV)
     remainsDeposit.textContent = formattingPrice(remainsDepositV)
@@ -138,12 +145,17 @@ class Finance extends Dashboards {
     }
 
     fact.style.width = `${findPercentageOfTotal(factV, sum)}%`
-    plan.style.width = `${findPercentageOfTotal(planV, sum)}%`
-    remainsDeposit.style.width = `${findPercentageOfTotal(remainsDepositV, sum)}%`
+    plan.style.width = `calc(${findPercentageOfTotal(planV, sum)}% + 15px)`
+    remainsDeposit.style.width = `calc(${findPercentageOfTotal(remainsDepositV, sum)}% + 30px)`
+
+    differenceFactPlan.style.left = `${(findPercentageOfTotal(factV, sum) + findPercentageOfTotal(planV, sum)) / 2}%`
+    plan.style.left = `${findPercentageOfTotal(factV, sum)}%`
+    remainsDeposit.style.left = `${(findPercentageOfTotal(factV, sum) + findPercentageOfTotal(planV, sum))}%`
 
     if (planV < factV) {
       plan.style.color = "#19D06D"
       plan.style.background = 'rgba(206, 254, 228, 0.8)'
+      visualization.querySelector('._circle plan').style.color = "#19D06D"
     }
   }
 

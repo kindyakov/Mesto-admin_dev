@@ -137,7 +137,8 @@ body {
 
 .text-success,
 .text-error,
-.text-warning {
+.text-warning,
+.text-info {
 	font-size: 14px;
 	padding: 2px 4px;
 	border-radius: 4px;
@@ -159,6 +160,11 @@ body {
 	background: $yellow-light;
 }
 
+.text-info {
+	color: $blue;
+	background: $blue-light;
+}
+
 .wrapper-google-table {
 	width: 100%;
 	overflow-x: auto;
@@ -168,7 +174,7 @@ body {
 	border-collapse: collapse;
 	border-spacing: 0;
 	width: 100%;
-	
+
 	th,
 	td {
 		font-size: 14px;

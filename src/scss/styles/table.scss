@@ -233,6 +233,14 @@
 		border-radius: 22px;
 		padding: 6px 10px;
 		line-height: 100%;
+		&.warning {
+			color: $yellow;
+			background-color: $yellow-light;
+		}
+		&.error {
+			color: $red;
+			background-color: $red-light;
+		}
 	}
 
 	.table-span-agrid {

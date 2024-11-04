@@ -22,7 +22,7 @@ class TableUpcomingPayments extends Table {
           headerName: 'Сумма', field: 'price', minWidth: 80, flex: 0.5,
           cellRenderer: params => {
             const span = createElement('span', {
-              classes: ['table-span-price'],
+              classes: ['table-span-price', new Date(params.data.write_off_date) >= new Date() ? 'warning' : 'error'],
               content: params.value ? formattingPrice(params.value) : 'нет',
             })
             return cellRendererInput(params, { el: span })

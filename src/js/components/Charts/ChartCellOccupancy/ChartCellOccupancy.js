@@ -133,7 +133,7 @@ class ChartCellOccupancy extends BaseChart {
     this.widgets.length && this.widgets.forEach(widget => {
       const rented = +widget.getAttribute('data-chart-widget')
       const [currentData = null] = rented_cnt.filter(obj => +obj.rented === rented)
-      widget.innerText = currentData ? `${currentData.rate}%` : '0%'
+      widget.innerText = currentData ? `${currentData.rate.toFixed(2)}%` : '0%'
     })
 
     this.chart.update()
