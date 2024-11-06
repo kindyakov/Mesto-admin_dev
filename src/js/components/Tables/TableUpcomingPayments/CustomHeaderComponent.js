@@ -7,7 +7,7 @@ class CustomHeaderComponent {
       return value
     }
     // Устанавливаем значение заголовка на основе params
-    this.eGui.innerHTML = `<span>${this.getHeaderName()}</span>`;
+    this.eGui.innerHTML = `<span style="color: #4f5b67;font-size:12px;">${this.getHeaderName()}</span>`;
   }
 
   getHeaderName() {

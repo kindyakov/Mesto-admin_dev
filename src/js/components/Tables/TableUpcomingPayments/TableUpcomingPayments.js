@@ -63,7 +63,7 @@ class TableUpcomingPayments extends Table {
           }
         },
         {
-          headerName: 'Площадь', field: 'area', minWidth: 160, flex: 0.3,
+          headerName: 'Площадь', field: 'area', minWidth: 150, flex: 0.3,
           valueFormatter: params => `${params.value} м²`,
           headerComponent: CustomHeaderComponent,
           headerComponentParams: {
@@ -72,7 +72,7 @@ class TableUpcomingPayments extends Table {
           },
         },
         {
-          headerName: 'Средняя ставка', field: 'price_1m', minWidth: 180, flex: 0.5,
+          headerName: 'Средняя ставка', field: 'price_1m', minWidth: 165, flex: 0.5,
           cellRenderer: params => {
             const span = createElement('span', {
               classes: ['table-span-price'],
