@@ -1,4 +1,5 @@
 import Table from "../Table.js";
+import CustomHeaderComponent from "./CustomHeaderComponent.js";
 
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
@@ -15,18 +16,28 @@ class TableUpcomingPayments extends Table {
       columnDefs: [
         { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
         {
-          headerName: 'Дата платежа', field: 'write_off_date', minWidth: 140, flex: 0.5,
+          headerName: 'Дата платежа', field: 'write_off_date', minWidth: 140, flex: 0.2,
           cellRenderer: params => cellRendererInput(params, { funcFormate: getFormattedDate, iconId: 'calendar' })
         },
         {
-          headerName: 'Сумма', field: 'price', minWidth: 80, flex: 0.5,
+          headerName: 'Сумма', field: 'price', minWidth: 150, flex: 0.5,
           cellRenderer: params => {
             const span = createElement('span', {
-              classes: ['table-span-price', new Date(params.data.write_off_date) >= new Date() ? 'warning' : 'error'],
+              classes: ['table-span-price'],
               content: params.value ? formattingPrice(params.value) : 'нет',
             })
+
+            if (!params.data.real_payment) {
+              span.classList.add(new Date(params.data.write_off_date) >= new Date() ? 'warning' : 'error')
+            }
+
             return cellRendererInput(params, { el: span })
-          }
+          },
+          headerComponent: CustomHeaderComponent,
+          headerComponentParams: {
+            headersDataKey: 'sum_amount',
+            valueFormatter: value => formattingPrice(value)
+          },
         },
         {
           headerName: 'ФИО', field: 'fullname', minWidth: 350, flex: 1,
@@ -34,10 +45,15 @@ class TableUpcomingPayments extends Table {
             const wp = cellRendererInput(params, { iconId: 'profile' })
             observeCell(wp, params)
             return wp
-          }
+          },
+          headerComponent: CustomHeaderComponent,
+          headerComponentParams: {
+            headersDataKey: 'cnt',
+            valueFormatter: value => value
+          },
         },
         {
-          headerName: 'Договор', field: 'agrid', minWidth: 70, flex: 0.5,
+          headerName: 'Договор', field: 'agrid', minWidth: 90, flex: 0.5,
           cellRenderer: params => {
             const span = createElement('span', {
               classes: ['table-span-agrid'],
@@ -47,18 +63,28 @@ class TableUpcomingPayments extends Table {
           }
         },
         {
-          headerName: 'Площадь', field: 'area', minWidth: 50, flex: 0.3,
-          valueFormatter: params => `${params.value} м²`
+          headerName: 'Площадь', field: 'area', minWidth: 160, flex: 0.3,
+          valueFormatter: params => `${params.value} м²`,
+          headerComponent: CustomHeaderComponent,
+          headerComponentParams: {
+            headersDataKey: 'sum_area',
+            valueFormatter: value => value + ' м²'
+          },
         },
         {
-          headerName: 'Средняя ставка', field: 'price_1m', minWidth: 70, flex: 0.5,
+          headerName: 'Средняя ставка', field: 'price_1m', minWidth: 180, flex: 0.5,
           cellRenderer: params => {
             const span = createElement('span', {
               classes: ['table-span-price'],
               content: params.value ? formattingPrice(params.value) : 'нет',
             })
             return cellRendererInput(params, { el: span })
-          }
+          },
+          headerComponent: CustomHeaderComponent,
+          headerComponentParams: {
+            headersDataKey: 'avg_price',
+            valueFormatter: value => formattingPrice(value)
+          },
         },
         {
           headerName: 'Физ./Юр.', field: 'user_type', minWidth: 90, flex: 0.5, resizable: false,
@@ -74,9 +100,10 @@ class TableUpcomingPayments extends Table {
     super(selector, mergedOptions, mergedParams);
   }
 
-  onRendering({ agreements = [], cnt_pages, page, cnt_all = 0 }) {
+  onRendering({ agreements = [], cnt_pages, page, cnt_all = 0, ...data }) {
     this.cntAll = cnt_all
     this.pagination.setPage(page, cnt_pages, cnt_all)
+    this.gridApi.setGridOption('headersData', data)
     this.gridApi.setGridOption('rowData', agreements)
     this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length])
   }

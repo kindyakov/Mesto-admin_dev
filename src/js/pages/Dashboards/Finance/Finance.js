@@ -1,8 +1,9 @@
 import Dashboards from "../Dashboards.js";
 import TableUpcomingPayments from "../../../components/Tables/TableUpcomingPayments/TableUpcomingPayments.js"
 // import ChartMonthlyRevenue from "../../../components/Charts/ChartMonthlyRevenue/ChartMonthlyRevenue.js";
-import ChartRegistrationFees from "../../../components/Charts/ChartRegistrationFees/ChartRegistrationFees.js";
-import ChartFeesNewCustomers from "../../../components/Charts/ChartFeesNewCustomers/ChartFeesNewCustomers.js";
+// import ChartRegistrationFees from "../../../components/Charts/ChartRegistrationFees/ChartRegistrationFees.js";
+// import ChartFeesNewCustomers from "../../../components/Charts/ChartFeesNewCustomers/ChartFeesNewCustomers.js";
+import ChartRevenue from "../../../components/Charts/ChartRevenue/ChartRevenue.js";
 import { getDashboardFinance, getFuturePayments, getFinancePlan } from "../../../settings/request.js";
 import { formattingPrice } from "../../../utils/formattingPrice.js";
 // import RangeSlider from "../../../components/RangeSlider/RangeSlider.js";
@@ -31,16 +32,24 @@ class Finance extends Dashboards {
         {
           tableSelector: '.table-payments',
           TableComponent: TableUpcomingPayments,
+          options: {
+            paginationPageSize: 15
+          },
           params: { getData: getFuturePayments }
         }
       ],
       charts: [
-        { id: 'chart-registration-fees', ChartComponent: ChartRegistrationFees },
-        { id: 'chart-fees-new-customers', ChartComponent: ChartFeesNewCustomers },
-        // { id: 'chart-monthly-revenue', ChartComponent: ChartMonthlyRevenue },
+        // { id: 'chart-registration-fees', ChartComponent: ChartRegistrationFees },
+        // { id: 'chart-fees-new-customers', ChartComponent: ChartFeesNewCustomers },
+        { id: 'chart-revenue', ChartComponent: ChartRevenue },
       ],
       page: 'dashboards/finance'
     });
+
+    this.actionsCharts(chart => {
+      chart.loader = this.loader
+      chart.app = this.app
+    })
   }
 
   async getData(queryParams = {}) {
@@ -116,28 +125,37 @@ class Finance extends Dashboards {
   //   }
   // }
 
+  onHandleScrollTo({ params }) {
+    const [table] = this.tables
+    params = JSON.parse(params)
+    table.selects.setValue(params.real_payment)
+    table.changeQueryParams(params)
+  }
+
   visualization({ dataDashboard, finance_planfact, dataEntities }) {
     const visualization = this.wrapper.querySelector('.visualization')
     const fact = this.wrapper.querySelector('.visualization-fact')
-    const plan = this.wrapper.querySelector('.visualization-plan')
+    // const plan = this.wrapper.querySelector('.visualization-plan')
     const remainsDeposit = this.wrapper.querySelector('.visualization-remains-deposit')
     const differenceFactPlan = this.wrapper.querySelector('.difference-fact-plan')
     const needsCollectedMont = this.wrapper.querySelector('.needs-collected-mont')
 
     const currentDay = new Date().getDate();
-    const [currentD] = finance_planfact.filter((d, i) => (i + 1) == currentDay)
+    const [currentD] = finance_planfact.filter(obj => new Date(obj.data).toDateString() == new Date().toDateString())
+    const data = currentD ? currentD : finance_planfact.at(-1)
+    console.log()
 
-    const factV = dataDashboard.this_month_revenue || 0
-    const planV = parseFloat((currentD.revenue_accumulated_planned + dataDashboard.reestr_sum / finance_planfact.length * currentDay).toFixed(0)) || 0
-    const needsCollectedMontV = (finance_planfact.at(-1).revenue_accumulated_planned + dataDashboard.reestr_sum) || 0
-    const remainsDepositV = needsCollectedMontV - Math.max(factV, planV)
+    const factV = data.revenue_reestr_accumulated || 0
+    const planV = data.reest_plan_accumulated // parseFloat((currentD.revenue_accumulated_planned + dataDashboard.reestr_sum / finance_planfact.length * currentDay).toFixed(0)) || 0
+    const needsCollectedMontV = dataDashboard.reestr_sum || 0
+    const remainsDepositV = needsCollectedMontV - factV
     const differenceFactPlanV = planV - factV
-    const sum = factV + planV + remainsDepositV
+    const sum = factV + remainsDepositV
 
     differenceFactPlan.textContent = formattingPrice(differenceFactPlanV)
     needsCollectedMont.textContent = formattingPrice(needsCollectedMontV)
     fact.textContent = formattingPrice(factV)
-    plan.textContent = formattingPrice(planV)
+    // plan.textContent = formattingPrice(planV)
     remainsDeposit.textContent = formattingPrice(remainsDepositV)
 
     function findPercentageOfTotal(part, total) {
@@ -145,23 +163,24 @@ class Finance extends Dashboards {
     }
 
     fact.style.width = `${findPercentageOfTotal(factV, sum)}%`
-    plan.style.width = `calc(${findPercentageOfTotal(planV, sum)}% + 15px)`
+    // plan.style.width = `calc(${findPercentageOfTotal(planV, sum)}% + 15px)`
     remainsDeposit.style.width = `calc(${findPercentageOfTotal(remainsDepositV, sum)}% + 30px)`
 
-    differenceFactPlan.style.left = `${(findPercentageOfTotal(factV, sum) + findPercentageOfTotal(planV, sum)) / 2}%`
-    plan.style.left = `${findPercentageOfTotal(factV, sum)}%`
-    remainsDeposit.style.left = `${(findPercentageOfTotal(factV, sum) + findPercentageOfTotal(planV, sum))}%`
+    differenceFactPlan.style.left = `${findPercentageOfTotal(factV, sum) / 2}%`
+    // plan.style.left = `${findPercentageOfTotal(factV, sum)}%`
+    remainsDeposit.style.left = `${(findPercentageOfTotal(factV, sum))}%`
 
     if (planV < factV) {
-      plan.style.color = "#19D06D"
-      plan.style.background = 'rgba(206, 254, 228, 0.8)'
-      visualization.querySelector('._circle plan').style.color = "#19D06D"
+      differenceFactPlan.classList.remove('text-error')
+      differenceFactPlan.classList.add('text-success')
+      // plan.style.color = "#19D06D"
+      // plan.style.background = 'rgba(206, 254, 228, 1)'
+      // visualization.querySelector('._circle plan').style.color = "#19D06D"
     }
   }
 
   onRender([dataDashboard, { finance_planfact = [] }], dataEntities) {
     this.renderWidgets(dataDashboard)
-    this.actionsCharts(chart => chart.loader = this.loader)
 
     if (this.tables.length && dataEntities) {
       this.actionsTables((table, i) => table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities))

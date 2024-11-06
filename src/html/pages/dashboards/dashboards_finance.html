@@ -26,7 +26,7 @@
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
-      <div class="widgets__item_content">
+      <div class="widgets__item_content" scroll-to='.dashboards__table;{"real_payment":"1"}'>
         <span class="value" data-render-widget="revenue" price></span>
         <span class="name">Выручка за выбранный<u class="hover-line" data-render-tippy="dates,end"
             price>период</u></span>
@@ -43,7 +43,8 @@
       </div>
       <div class="widgets__item_content">
         <span class="value" data-render-widget="current_avg_price_per_room,/м²" price2></span>
-        <span class="name">Средняя ставка аренды за выбранный <u class="hover-line" data-render-tippy="dates,end">период</u></span>
+        <span class="name">Средняя ставка аренды за выбранный <u class="hover-line"
+            data-render-tippy="dates,end">период</u></span>
       </div>
       <div class="widgets__item_content last">
         <span class="value" data-render-widget="avg_price_per_room,/м²" price2></span>
@@ -54,11 +55,11 @@
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
-      <div class="widgets__item_content">
+      <div class="widgets__item_content" scroll-to='.dashboards__table;{"real_payment":"-1"}'>
         <span class="value" data-render-widget="reestr_sum" price></span>
         <span class="name">Средств в реестре</span>
       </div>
-      <div class="widgets__item_content last">
+      <div class="widgets__item_content last" scroll-to='.dashboards__table;{"real_payment":"0"}'>
         <span class="value" data-render-widget="rest_in_reestr" price></span>
         <span class="name">Осталось в реестре</span>
       </div>
@@ -78,6 +79,15 @@
             price>период</u></span>
       </div>
     </div>
+    <div class="widgets__item">
+      <div class="widgets__item_img">
+        <img src="img/icons/coins.png" alt="Иконка">
+      </div>
+      <div class="widgets__item_content">
+        <span class="value" data-render-widget="revenue_deposit_today" price></span>
+        <span class="name">Сборы по депозитам сегодня</span>
+      </div>
+    </div>
   </div>
 
   <!-- <div class="ranges">
@@ -92,30 +102,31 @@
   </div> -->
 
   <div class="visualization">
+    <h4 class="chart__title" style="flex: 1 1 100%;">Сборы по реестру за <span date-range></span></h4>
     <div class="chart__info">
       <p>
         <i class="_circle fact"></i>
-        <span>Факт</span>
+        <span>Сборы по реестру</span>
       </p>
-      <p>
+      <!-- <p>
         <i class="_circle plan" style="color: #E03D3D;"></i>
         <span>План</span>
-      </p>
+      </p> -->
       <p>
         <i class="_circle plan" style="color: gray;"></i>
-        <span>Осталось внести</span>
+        <span>Осталось собрать</span>
       </p>
     </div>
     <div style="position: relative; width: 100%; height: 15px;">
-      <p class="visualization-difference difference-fact-plan text-warning"
+      <p class="visualization-difference difference-fact-plan text-error"
         style="transform: translateX(-50%); position: absolute;"></p>
-      <p class="visualization-difference text-warning needs-collected-mont" style="position: absolute; right: 0;"></p>
+      <p class="visualization-difference text-info needs-collected-mont" style="position: absolute; right: 0;"></p>
     </div>
     <div class="visualization__content">
       <div class="visualization__item visualization-fact">
       </div>
-      <div class="visualization__item visualization-plan" style="color: #E03D3D; background: rgba(255, 207, 207, 1);">
-      </div>
+      <!-- <div class="visualization__item visualization-plan" style="color: #E03D3D; background: rgba(255, 207, 207, 1);">
+      </div> -->
       <div class="visualization__item visualization-remains-deposit"
         style="color: gray; background: rgb(238, 238, 238);">
       </div>
@@ -123,7 +134,7 @@
   </div>
 
   <div class="charts">
-    <div class="chart" style="flex: 1 1 50%; width: 100%; min-height: 400px;">
+    <!-- <div class="chart" style="flex: 1 1 50%; width: 100%; min-height: 400px;">
       <div class="chart__header" style="align-items: center; flex-wrap: wrap;">
         <h4 class="chart__title" style="flex: 1 1 100%;">Сборы по реестру</h4>
         <div class="chart__info-calc">
@@ -180,6 +191,45 @@
         <canvas id="chart-fees-new-customers" style="max-height: 260px;"></canvas>
         <div id="tooltip-fees-new-customers" class="chart-tooltip"></div>
       </div>
+    </div> -->
+    <div class="chart" style="flex: 1 1 50%; width: 100%; min-height: 400px;">
+      <div class="chart__header" style="align-items: center; flex-wrap: wrap;">
+        <div style="flex: 1 1 100%; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+          <h4 class="chart__title">Выручка за <span date-range></span></h4>
+          <div class="chart__info-calc">
+            <p>
+              <b>План на месяц:</b> <input type="text" name="revenue_planned" class="plan-month-value input-passport"
+                style="width: 110px;">
+              <button class="button btn-set-plan">
+                <svg class="icon icon-edit edit" style="stroke: #fff;">
+                  <use xlink:href="img/svg/sprite.svg#edit"></use>
+                </svg>
+              </button>
+            </p>
+          </div>
+        </div>
+        <div class="chart__info-calc">
+          <p><b>Факт:</b> <span class="fact-value"></span></p>
+          <p><b>План:</b> <span class="plan-value"></span></p>
+          <p><b>Отклонение:</b> <span class="delta-value"></span></p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 25px;">
+          <div class="chart__info">
+            <p>
+              <i class="_circle fact"></i>
+              <span>Факт</span>
+            </p>
+            <p>
+              <i class="_circle plan"></i>
+              <span style="color: #3d50e0;">План</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="chart__body">
+        <canvas id="chart-revenue" style="max-height: 260px;"></canvas>
+        <div id="tooltip-revenue" class="chart-tooltip"></div>
+      </div>
     </div>
   </div>
 
@@ -222,14 +272,14 @@
     </div>
   </div> -->
 
-  <div class="dashboards__table _my-accordion" data-accordion-open data-max-height="482">
+  <div class="dashboards__table _my-accordion" data-accordion-open data-max-height="845">
     <button class="dashboards__table-toggle btn-toggle-table _my-accordion-control">
-      <span>Предстоящие плановые платежи</span>
+      <span>Платежи</span>
       <svg class='icon icon-arrow-fill'>
         <use xlink:href='img/svg/sprite.svg#arrow-fill'></use>
       </svg>
     </button>
-    <div class="table _my-accordion-content" style="height: 482px; max-height: none;">
+    <div class="table _my-accordion-content" style="height: 841px; max-height: none;">
       <div class="table__top">
         <form class="table__form form-table-search">
           <div class="wp-input wp-input-search">
@@ -241,6 +291,13 @@
               </svg>
             </button>
           </div>
+          <select name="real_payment" class="init-custom-select" data-special-select="select-filter-table"
+            data-select-min-width="160"
+            data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
+            <option value="-1">Все</option>
+            <option value="1">Платежи</option>
+            <option value="0">Плановые платежи</option>
+          </select>
         </form>
         <div class="table__buttuns">
           <button class="table__button button-table btn-table-upload-excel" data-count>

@@ -74,6 +74,18 @@ class Dashboards extends Page {
         this.changeQueryParams(data)
       }
     }
+
+    this.wrapper.addEventListener('click', e => {
+      const el = e.target.closest('[scroll-to]')
+      if (el) {
+        const [selector, params] = el.getAttribute('scroll-to').split(';')
+        const toEl = this.wrapper.querySelector(selector)
+        if (toEl) {
+          toEl.scrollIntoView({ block: "center", behavior: "smooth" });
+          this.onHandleScrollTo({ el, toEl, params })
+        }
+      }
+    })
   }
 
   subtractMonths(date, months) {
@@ -86,6 +98,7 @@ class Dashboards extends Page {
   renderWidgets(data) {
     this.widgets = this.wrapper.querySelectorAll('[data-render-widget]')
     const tippys = this.wrapper.querySelectorAll('[data-render-tippy]')
+    const dateRange = this.wrapper.querySelectorAll('[date-range]')
 
     if (tippys.length) {
       tippys.forEach(el => {
@@ -113,6 +126,10 @@ class Dashboards extends Page {
       })
     }
 
+    dateRange.length && dateRange.forEach(el => {
+      el.textContent = `${dateFormatter(this.app.defaultDate[0], 'dd MMMM yyyy')} - ${dateFormatter(this.app.defaultDate[1], 'dd MMMM yyyy')}`
+    })
+
     if (!this.widgets.length) return
     this.widgets.forEach(widget => {
       const params = widget.getAttribute('data-render-widget')
@@ -132,6 +149,10 @@ class Dashboards extends Page {
         widget.innerHTML = value
       }
     });
+  }
+
+  onHandleScrollTo() {
+
   }
 
   onRender() {
