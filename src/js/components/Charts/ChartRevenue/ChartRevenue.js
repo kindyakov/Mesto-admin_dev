@@ -70,7 +70,43 @@ class ChartRevenue extends BaseChart {
             }
           },
         },
+        plugins: {
+          tooltip: {
+            mode: 'index', // Показ по оси X, не по точкам
+            intersect: false // Чтобы tooltip показывался вне пересечения с точкой
+          }
+        },
+        hover: {
+          mode: 'index', // При наведении - также по оси X
+          intersect: false
+        }
       },
+      plugins: [{
+        id: 'verticalLine', // Уникальный идентификатор плагина
+        afterDraw: (chart) => {
+          if (chart.tooltip._active && chart.tooltip._active.length) {
+            const ctx = chart.ctx;
+            ctx.save();
+
+            // Получаем первую активную точку для построения линии
+            const activePoint = chart.tooltip._active[0];
+            const x = activePoint.element.x;
+            const topY = chart.scales.y.top;
+            const bottomY = chart.scales.y.bottom;
+
+            // Рисуем вертикальную линию
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(x, topY);
+            ctx.lineTo(x, bottomY);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)'; // Полупрозрачный черный
+            ctx.stroke();
+
+            ctx.restore();
+          }
+        }
+      }]
     }
 
     super(ctx, merge({}, defaultOptions, addOptions));
