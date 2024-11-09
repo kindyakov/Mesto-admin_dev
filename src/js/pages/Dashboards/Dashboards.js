@@ -16,7 +16,7 @@ function formatePrice(value) {
     unitIndex++
   }
 
-  return value.toFixed(1) + ' ' + units[unitIndex]
+  return value.toFixed(0) + ' ' + units[unitIndex]
 }
 
 class Dashboards extends Page {

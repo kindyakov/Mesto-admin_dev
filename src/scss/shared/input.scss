@@ -293,10 +293,20 @@
 	}
 }
 
+.wrapper-checkbox {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	user-select: none;
+	font-size: 14px;
+	font-weight: 500;
+}
+
 .input-checkbox {
 	display: none;
 	&:checked + .label-checkbox {
 		border-color: $blue;
+		background-color: $blue;
 		.icon {
 			opacity: 1;
 		}
@@ -314,11 +324,18 @@
 	border: 1px solid #64748b;
 	border-radius: 4px;
 	user-select: none;
+	cursor: pointer;
 	.icon {
 		width: 12px;
 		height: 12px;
-		stroke: $blue;
-		fill: $blue;
+		stroke: #fff;
+		fill: #fff;
 		opacity: 0;
+		transition: 0.2s;
+	}
+
+	&:hover {
+		border-color: $blue;
+		background-color: $blue-light;
 	}
 }

@@ -19,9 +19,33 @@
           autocomplete="off" step="0.1" min="0" max="1000" data-step="0.1" style="height: 40px; font-size: 14px;">
       </div>
     </div>
+    <div class="filter__block_content" style="position: relative; max-width: 200px;">
+      <label class="wrapper-checkbox">
+        <input type="checkbox" name="without-large-cells" class="input-checkbox" id="dashboards-finance-checkbox-1">
+        <label class="label-checkbox" for="dashboards-finance-checkbox-1">
+          <svg class='icon'>
+            <use xlink:href='img/svg/sprite.svg#check-3'></use>
+          </svg>
+        </label>
+        <p>Без больших ячеек</p>
+      </label>
+    </div>
   </form>
 
   <div class="widgets">
+    <div class="widgets__item col-2">
+      <div class="widgets__item_img">
+        <img src="img/icons/coins.png" alt="Иконка">
+      </div>
+      <div class="widgets__item_content" scroll-to='.dashboards__table;{"real_payment":"-1"}'>
+        <span class="value" data-render-widget="reestr_sum" price></span>
+        <span class="name">Средств в реестре</span>
+      </div>
+      <div class="widgets__item_content last" scroll-to='.dashboards__table;{"real_payment":"0"}'>
+        <span class="value" data-render-widget="rest_in_reestr" price></span>
+        <span class="name">Осталось в реестре</span>
+      </div>
+    </div>
     <div class="widgets__item col-2">
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
@@ -42,26 +66,14 @@
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
       <div class="widgets__item_content">
-        <span class="value" data-render-widget="current_avg_price_per_room,/м²" price2></span>
-        <span class="name">Средняя ставка аренды за выбранный <u class="hover-line"
-            data-render-tippy="dates,end">период</u></span>
+        <span class="value" data-render-widget="new_clients_revenue_rent" price></span>
+        <span class="name">Сборы по аренде от новых клиентов за выбранный <u class="hover-line"
+            data-render-tippy="dates,end" price>период</u></span>
       </div>
       <div class="widgets__item_content last">
-        <span class="value" data-render-widget="avg_price_per_room,/м²" price2></span>
-        <span class="name">Средняя ставка за все время</span>
-      </div>
-    </div>
-    <div class="widgets__item col-2">
-      <div class="widgets__item_img">
-        <img src="img/icons/coins.png" alt="Иконка">
-      </div>
-      <div class="widgets__item_content" scroll-to='.dashboards__table;{"real_payment":"-1"}'>
-        <span class="value" data-render-widget="reestr_sum" price></span>
-        <span class="name">Средств в реестре</span>
-      </div>
-      <div class="widgets__item_content last" scroll-to='.dashboards__table;{"real_payment":"0"}'>
-        <span class="value" data-render-widget="rest_in_reestr" price></span>
-        <span class="name">Осталось в реестре</span>
+        <span class="value" data-render-widget="new_clients_revenue_deposit" price></span>
+        <span class="name">Сборы по депозитам от новых клиентов за выбранный <u class="hover-line"
+            data-render-tippy="dates,end">период</u></span>
       </div>
     </div>
     <div class="widgets__item col-2">
@@ -79,13 +91,27 @@
             price>период</u></span>
       </div>
     </div>
+    <div class="widgets__item col-2">
+      <div class="widgets__item_img">
+        <img src="img/icons/coins.png" alt="Иконка">
+      </div>
+      <div class="widgets__item_content">
+        <span class="value" data-render-widget="current_avg_price_per_room,/м²" price2></span>
+        <span class="name">Средняя ставка аренды за выбранный <u class="hover-line"
+            data-render-tippy="dates,end">период</u></span>
+      </div>
+      <div class="widgets__item_content last">
+        <span class="value" data-render-widget="avg_price_per_room,/м²" price2></span>
+        <span class="name">Средняя ставка за все время</span>
+      </div>
+    </div>
     <div class="widgets__item">
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
       <div class="widgets__item_content">
         <span class="value" data-render-widget="revenue_deposit_today" price></span>
-        <span class="name">Сборы по депозитам сегодня</span>
+        <span class="name">Текущая сумма депозитов</span>
       </div>
     </div>
   </div>

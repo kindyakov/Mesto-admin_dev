@@ -91,7 +91,7 @@ class ChartRevenue extends BaseChart {
 
     this.wpChart.querySelector('.fact-value').innerText = formattingPrice(fact)
     this.wpChart.querySelector('.plan-value').innerText = formattingPrice(plan)
-    planMonthValue.value = formattingPrice(finance_planfact.at(-1).revenue_accumulated)
+    planMonthValue.value = formattingPrice(finance_planfact.at(-1).revenue_accumulated_planned)
     deltaValue.innerText = formattingPrice(delta)
 
     if (delta > 0) {
@@ -127,13 +127,16 @@ class ChartRevenue extends BaseChart {
     this.chart.data.datasets[0].data = finance_planfact.length ? finance_planfact.map(obj => obj.revenue_accumulated) : []
     this.chart.data.datasets[1].data = finance_planfact.length ? finance_planfact.map(obj => obj.revenue_accumulated_planned) : []
 
+    const [currentD] = finance_planfact.filter(obj => new Date(obj.data).toDateString() == new Date().toDateString())
+    const data = currentD ? currentD : finance_planfact.at(-1)
+
     const circle = this.wpChart.querySelector('._circle.fact')
     let gradient, borderColor, color
 
-    if (this.chart.data.datasets[0].data.at(-1) > this.chart.data.datasets[1].data.at(-1)) {
+    if (data.revenue_accumulated > data.revenue_accumulated_planned) {
       gradient = this.createLinearGradient('rgba(206, 254, 228, 0.4)', 'rgba(206, 254, 228, 0.8)')
       borderColor = color = '#19D06D'
-    } else if (this.chart.data.datasets[0].data.at(-1) == this.chart.data.datasets[1].data.at(-1)) {
+    } else if (data.revenue_accumulated > data.revenue_accumulated_planned) {
       gradient = this.createLinearGradient('rgba(255, 253, 205, 0.4)', 'rgba(255, 253, 205, 0.8)')
       borderColor = color = '#FFF95F'
     } else {

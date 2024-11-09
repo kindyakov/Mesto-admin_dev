@@ -9,21 +9,6 @@ import { formattingPrice } from "../../../utils/formattingPrice.js";
 // import RangeSlider from "../../../components/RangeSlider/RangeSlider.js";
 // import { formattingPrice } from "../../../utils/formattingPrice.js";
 
-function getFirstAndLastDayOfMonth() {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-
-  // Создаем дату для первого дня месяца
-  const firstDay = new Date(year, month, 1);
-
-  // Создаем дату для следующего месяца и вычитаем один день,
-  // чтобы получить последний день текущего месяца
-  const lastDay = new Date(year, month + 1, 0);
-
-  return [firstDay, lastDay]
-}
-
 class Finance extends Dashboards {
   constructor({ loader }) {
     super({
@@ -50,6 +35,9 @@ class Finance extends Dashboards {
       chart.loader = this.loader
       chart.app = this.app
     })
+
+    const inputCheckbox = this.wrapper.querySelector('[name="without-large-cells"]')
+    inputCheckbox && inputCheckbox.addEventListener('change', this.handleChangeInput.bind(this))
   }
 
   async getData(queryParams = {}) {
@@ -60,6 +48,32 @@ class Finance extends Dashboards {
     return Promise.all([getDashboardFinance({ ...this.queryParams, ...queryParams }), getFinancePlan(queryParams)])
   }
 
+
+  handleChangeInput({ target }) {
+    const [inputStartArea, inputEndArea] = Array.from(this.inputsFilter).map(input => {
+      if (['start_area', 'end_area'].includes(input.name)) {
+        return input
+      }
+    })
+
+    let attrName = 'data-old-value'
+
+    let oldStartAreaV = inputStartArea.getAttribute(attrName) || inputStartArea.value
+    let oldEndAreaV = inputEndArea.getAttribute(attrName) || inputEndArea.value
+
+    if (target.checked) {
+      inputStartArea.setAttribute(attrName, inputStartArea.value)
+      inputEndArea.setAttribute(attrName, inputEndArea.value)
+
+      inputStartArea.value = 0
+      inputEndArea.value = 40
+    } else {
+      inputStartArea.value = oldStartAreaV
+      inputEndArea.value = oldEndAreaV
+    }
+
+    this.changeQueryParams({ start_area: inputStartArea.value, end_area: inputEndArea.value })
+  }
 
   // initRanges({ dataDashboard, finance_planfact, dataEntities }) {
   //   const today = new Date();
