@@ -19,6 +19,7 @@ class Warehouse extends Dashboards {
 
     this.warehouseScheme = new Scheme(this.wrapper)
     this.selectRooms = new SelectRooms(this.wrapper)
+
     this.currentRented = null
   }
 
@@ -80,7 +81,7 @@ class Warehouse extends Dashboards {
   }
 
   async getData(queryParams = {}) {
-    const { warehouse_id = 1, floor = 1 } = queryParams
+    const { warehouse_id = this.app.warehouse.warehouse_id, floor = 1 } = queryParams
     return Promise.all([
       getRooms(queryParams),
       getScheme(warehouse_id, floor)
@@ -91,7 +92,7 @@ class Warehouse extends Dashboards {
     try {
       this.loader.enable()
       const [dataDashboard, { finance_planfact = [] }, [dataRooms, scheme]] = await Promise.all([
-        getDashboardWarehouse(), getFinancePlan(),
+        getDashboardWarehouse(this.queryParams), getFinancePlan(),
         this.getData(this.queryParams)
       ])
 

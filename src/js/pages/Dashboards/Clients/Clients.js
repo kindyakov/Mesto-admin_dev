@@ -1,7 +1,7 @@
 import Dashboards from "../Dashboards.js";
 import TableClients from "../../../components/Tables/TableClients/TableClients.js";
-import ChartInfluxCustomers from "../../../components/Charts/ChartInfluxCustomers/ChartInfluxCustomers.js";
-import ChartGenderAge from "../../../components/Charts/СhartGenderAge/СhartGenderAge.js";
+// import ChartInfluxCustomers from "../../../components/Charts/ChartInfluxCustomers/ChartInfluxCustomers.js";
+// import ChartGenderAge from "../../../components/Charts/СhartGenderAge/СhartGenderAge.js";
 import { getClients, getDashboardClient, getSalesPlan } from "../../../settings/request.js";
 
 class Clients extends Dashboards {
@@ -9,12 +9,19 @@ class Clients extends Dashboards {
     super({
       loader,
       tables: [
-        { tableSelector: '.table-clients', TableComponent: TableClients, params: { getData: getClients } }
+        {
+          tableSelector: '.table-clients',
+          TableComponent: TableClients,
+          params: { getData: getClients },
+          options: {
+            paginationPageSize: 15
+          },
+        }
       ],
-      charts: [
-        { id: 'chart-influx-customers', ChartComponent: ChartInfluxCustomers },
-        { id: 'chart-gender-age', ChartComponent: ChartGenderAge },
-      ],
+      // charts: [
+      //   { id: 'chart-influx-customers', ChartComponent: ChartInfluxCustomers },
+      //   { id: 'chart-gender-age', ChartComponent: ChartGenderAge },
+      // ],
       page: 'dashboards/clients'
     });
   }

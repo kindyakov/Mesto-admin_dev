@@ -58,30 +58,20 @@ class ChartCellOccupancy extends BaseChart {
     this.countCellsEl = this.wp.querySelector('.count-cells b')
     this.widgets = this.wp.querySelectorAll('[data-chart-widget]')
 
+    const func = (floor) => {
+      const filterRooms = this.rooms.filter(room => room.floor == floor)
+      this.countCellsEl.textContent = filterRooms.length
+
+      this.chart.data.datasets[0].data = [
+        this.dataFilter(this.rooms, 0, floor),
+        this.dataFilter(this.rooms, 0.5, floor),
+        this.dataFilter(this.rooms, 1, floor),
+      ]
+
+      this.chart.update();
+    }
+
     this.datasets = {
-      1: () => {
-        const filterRooms = this.rooms.filter(room => room.floor === 1)
-        this.countCellsEl.textContent = filterRooms.length
-
-        this.chart.data.datasets[0].data = [
-          this.dataFilter(this.rooms, 0, 1),
-          this.dataFilter(this.rooms, 0.5, 1),
-          this.dataFilter(this.rooms, 1, 1),
-        ]
-        this.chart.update();
-      },
-      2: () => {
-        const filterRooms = this.rooms.filter(room => room.floor === 2)
-        this.countCellsEl.textContent = filterRooms.length
-
-        this.chart.data.datasets[0].data = [
-          this.dataFilter(this.rooms, 0, 2),
-          this.dataFilter(this.rooms, 0.5, 2),
-          this.dataFilter(this.rooms, 1, 2),
-        ]
-        this.chart.update();
-
-      },
       all: () => {
         this.countCellsEl.textContent = this.rooms.length
         this.chart.data.datasets[0].data = [
@@ -93,22 +83,32 @@ class ChartCellOccupancy extends BaseChart {
       },
     };
 
-    this.selects = new Select({ uniqueName: 'select-chart-cell-occupancy', selectMinWidth: 125 });
-    this.selects.onChange = this.handleSelectChange.bind(this);
+    this.selectSort = this.wpChart.querySelector('select[name="sort"]')
+    this.selectSort.style.display = 'none'
+
+    if (this.app.warehouse.num_of_floors > 1) {
+      this.selectSort.innerHTML = new Array(this.app.warehouse.num_of_floors).fill(0).map((c, i) => {
+        this.datasets[i + 1] = func
+        return `<option value="${i + 1}">${i + 1} этаж</option>`
+      })
+      this.selectSort.insertAdjacentHTML('afterbegin', `<option value="all">Все этажи</option>`)
+      this.selects = new Select({ uniqueName: 'select-chart-cell-occupancy', selectMinWidth: 125 });
+      this.selects.onChange = this.handleSelectChange.bind(this);
+    }
   }
 
   handleSelectChange(e, select, value) {
     if (this.datasets[value]) {
-      this.datasets[value]();
+      this.datasets[value]?.(value)
     }
   }
 
   dataFilter(rooms, rented, floor = false) {
     let data = []
     if (floor) {
-      data = rooms.filter(room => +room.rented === rented && +room.floor === floor)
+      data = rooms.filter(room => room.rented == rented && room.floor == floor)
     } else {
-      data = rooms.filter(room => +room.rented === rented)
+      data = rooms.filter(room => room.rented == rented)
     }
     return data.length
   }

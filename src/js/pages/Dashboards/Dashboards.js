@@ -142,7 +142,7 @@ class Dashboards extends Page {
         // widget.style.fontSize = '16px'
       }
       if (isPrice) {
-        widget.innerText = Number.isInteger(+value) ? formatePrice(+value) + ' ₽' : ''
+        widget.innerText = Number.isInteger(+value) ? formattingPrice(+value) : ''
       } else if (isPrice2) {
         widget.innerText = value ? formattingPrice(parseFloat(value)) + str : ''
       } else {

@@ -60,7 +60,6 @@ class Table {
         const [sortedColumn] = columnState
           .filter(col => col.sort) // Фильтруем только отсортированные колонки
           .map(col => ({ colId: col.colId, sort: col.sort, }));
-
         if (sortedColumn) {
           const { colId, sort } = sortedColumn
           this.changeQueryParams({ sort_column: colId, sort_direction: sort });

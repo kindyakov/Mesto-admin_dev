@@ -20,7 +20,7 @@ class TableUpcomingPayments extends Table {
           cellRenderer: params => cellRendererInput(params, { funcFormate: getFormattedDate, iconId: 'calendar' })
         },
         {
-          headerName: 'Сумма', field: 'price', minWidth: 150, flex: 0.5,
+          headerName: 'Сумма', field: 'price', minWidth: 155, flex: 0.5,
           cellRenderer: params => {
             const span = createElement('span', {
               classes: ['table-span-price'],
@@ -49,7 +49,6 @@ class TableUpcomingPayments extends Table {
           headerComponent: CustomHeaderComponent,
           headerComponentParams: {
             headersDataKey: 'cnt',
-            valueFormatter: value => value
           },
         },
         {
@@ -63,7 +62,7 @@ class TableUpcomingPayments extends Table {
           }
         },
         {
-          headerName: 'Площадь', field: 'area', minWidth: 150, flex: 0.3,
+          headerName: 'Площадь', field: 'area', minWidth: 155, flex: 0.3,
           valueFormatter: params => `${params.value} м²`,
           headerComponent: CustomHeaderComponent,
           headerComponentParams: {
@@ -72,7 +71,7 @@ class TableUpcomingPayments extends Table {
           },
         },
         {
-          headerName: 'Средняя ставка', field: 'price_1m', minWidth: 165, flex: 0.5,
+          headerName: 'Средняя ставка', field: 'price_1m', minWidth: 180, flex: 0.5,
           cellRenderer: params => {
             const span = createElement('span', {
               classes: ['table-span-price'],

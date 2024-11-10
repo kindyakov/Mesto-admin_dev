@@ -58,11 +58,14 @@ class ChartAreaRentedCells extends BaseChart {
           },
         },
         plugins: {
-          // tooltip: {
-          // mode: 'index',
-          // intersect: true
-          // },
-          // Для заштрихованной области можно использовать плагин, например, chartjs-plugin-annotation
+          tooltip: {
+            mode: 'index', // Показ по оси X, не по точкам
+            intersect: false // Чтобы tooltip показывался вне пересечения с точкой
+          }
+        },
+        hover: {
+          mode: 'index', // При наведении - также по оси X
+          intersect: false
         }
       },
     }

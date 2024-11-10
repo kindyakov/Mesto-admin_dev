@@ -69,7 +69,7 @@ class BaseChart {
               });
 
               tooltipEl.style.opacity = 1;
-              
+
               this.onExternal(tooltipEl, chart, tooltip, dataI)
 
               tooltipEl.style.left = (chart.canvas.offsetLeft + tooltip.caretX) - tooltipEl.clientWidth - 6 + 'px';
@@ -80,11 +80,38 @@ class BaseChart {
         responsive: true,
         maintainAspectRatio: false,
       },
+      plugins: [{
+        id: 'verticalLine', // Уникальный идентификатор плагина
+        afterDraw: (chart) => {
+          if (chart.config.type == 'line' && chart.tooltip._active && chart.tooltip._active.length) {
+            const ctx = chart.ctx;
+            ctx.save();
+
+            // Получаем первую активную точку для построения линии
+            const activePoint = chart.tooltip._active[0];
+            const x = activePoint.element.x;
+            const topY = chart.scales.y.top;
+            const bottomY = chart.scales.y.bottom;
+
+            // Рисуем вертикальную линию
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(x, topY);
+            ctx.lineTo(x, bottomY);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)'; // Полупрозрачный черный
+            ctx.stroke();
+
+            ctx.restore();
+          }
+        }
+      }],
     };
 
     this.chart = new Chart(ctx, merge({}, defaultOptions, options));
     this.onExternal = this.onExternal.bind(this)
     this.wpChart = this.chart.canvas.closest('.chart')
+    this.app = window.app
 
     window.addEventListener('resize', () => this.resizeChart())
   }

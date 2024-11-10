@@ -101,6 +101,31 @@
 	.ag-header-cell {
 	}
 
+	.custom-header {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		height: 100%;
+		cursor: pointer;
+		width: 100%;
+
+		.ag-icon {
+			display: none;
+		}
+
+		&[data-sort='asc'] {
+			.ag-icon-asc {
+				display: inline;
+			}
+		}
+
+		&[data-sort='desc'] {
+			.ag-icon-desc {
+				display: inline;
+			}
+		}
+	}
+
 	.ag-cell {
 		display: flex;
 		align-items: center;
