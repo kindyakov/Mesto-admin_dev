@@ -144,6 +144,16 @@
 					background-color: $yellow;
 				}
 			}
+
+			&.brown {
+				&::after {
+					background-color: rgba(160, 82, 45, 0.3);
+					animation-delay: 1.2s;
+				}
+				&::before {
+					background-color: rgb(160, 82, 45);
+				}
+			}
 		}
 
 		&_content {
