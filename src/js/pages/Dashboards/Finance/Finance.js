@@ -141,6 +141,7 @@ class Finance extends Dashboards {
 
   onHandleScrollTo({ params }) {
     const [table] = this.tables
+    if (!params) return
     params = JSON.parse(params)
     table.selects.setValue(params.real_payment)
     table.changeQueryParams(params)

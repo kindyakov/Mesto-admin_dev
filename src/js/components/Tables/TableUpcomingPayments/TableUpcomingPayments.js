@@ -20,7 +20,7 @@ class TableUpcomingPayments extends Table {
           cellRenderer: params => cellRendererInput(params, { funcFormate: getFormattedDate, iconId: 'calendar' })
         },
         {
-          headerName: 'Сумма', field: 'price', minWidth: 155, flex: 0.5,
+          headerName: 'Сумма', field: 'price', minWidth: 180, flex: 0.5,
           cellRenderer: params => {
             const span = createElement('span', {
               classes: ['table-span-price'],
@@ -33,11 +33,11 @@ class TableUpcomingPayments extends Table {
 
             return cellRendererInput(params, { el: span })
           },
-          headerComponent: CustomHeaderComponent,
-          headerComponentParams: {
-            headersDataKey: 'sum_amount',
-            valueFormatter: value => formattingPrice(value)
-          },
+          // headerComponent: CustomHeaderComponent,
+          // headerComponentParams: {
+          //   headersDataKey: 'sum_amount',
+          //   valueFormatter: value => formattingPrice(value)
+          // },
         },
         {
           headerName: 'ФИО', field: 'fullname', minWidth: 350, flex: 1,
@@ -45,10 +45,6 @@ class TableUpcomingPayments extends Table {
             const wp = cellRendererInput(params, { iconId: 'profile' })
             observeCell(wp, params)
             return wp
-          },
-          headerComponent: CustomHeaderComponent,
-          headerComponentParams: {
-            headersDataKey: 'cnt',
           },
         },
         {
@@ -62,16 +58,11 @@ class TableUpcomingPayments extends Table {
           }
         },
         {
-          headerName: 'Площадь', field: 'area', minWidth: 155, flex: 0.3,
+          headerName: 'Площадь', field: 'area', minWidth: 180, flex: 0.3,
           valueFormatter: params => `${params.value} м²`,
-          headerComponent: CustomHeaderComponent,
-          headerComponentParams: {
-            headersDataKey: 'sum_area',
-            valueFormatter: value => value + ' м²'
-          },
         },
         {
-          headerName: 'Средняя ставка', field: 'price_1m', minWidth: 180, flex: 0.5,
+          headerName: 'Средняя ставка', field: 'price_1m', minWidth: 200, flex: 0.5,
           cellRenderer: params => {
             const span = createElement('span', {
               classes: ['table-span-price'],
@@ -79,17 +70,13 @@ class TableUpcomingPayments extends Table {
             })
             return cellRendererInput(params, { el: span })
           },
-          headerComponent: CustomHeaderComponent,
-          headerComponentParams: {
-            headersDataKey: 'avg_price',
-            valueFormatter: value => formattingPrice(value)
-          },
         },
         {
           headerName: 'Физ./Юр.', field: 'user_type', minWidth: 90, flex: 0.5, resizable: false,
           valueFormatter: params => params.value === 'f' ? 'Физ. лицо' : 'Юр. лицо'
         },
       ],
+      suppressColumnVirtualisation: true,
     };
 
     const defaultParams = {}
@@ -99,12 +86,45 @@ class TableUpcomingPayments extends Table {
     super(selector, mergedOptions, mergedParams);
   }
 
+  renderTextHeader(data) {
+    const headersTable = this.table.querySelectorAll('.ag-header-cell')
+
+    const func = (th, callback) => {
+      const label = th.querySelector('.ag-header-cell-label')
+
+      if (label.querySelector('.text-info')) return
+      const spanText = th.querySelector('.ag-header-cell-text')
+      let hName = spanText.innerText
+      spanText.remove()
+
+      const header = createElement('div', {
+        classes: ['ag-header-cell-text', 'custom-header'],
+        content: `${hName} <span class="text-info" style="font-size:12px;">${callback()}</span>`
+      })
+
+      label.prepend(header)
+    }
+
+    const obj = {
+      2: th => func(th, () => formattingPrice(data.sum_amount)),
+      3: th => func(th, () => data.cnt),
+      5: th => func(th, () => data.sum_area + ' м²'),
+      6: th => func(th, () => formattingPrice(data.avg_price)),
+    }
+
+    headersTable.length && headersTable.forEach((th, i) => {
+      obj[i]?.(th)
+    })
+
+  }
+
   onRendering({ agreements = [], cnt_pages, page, cnt_all = 0, ...data }) {
     this.cntAll = cnt_all
     this.pagination.setPage(page, cnt_pages, cnt_all)
     this.gridApi.setGridOption('headersData', data)
     this.gridApi.setGridOption('rowData', agreements)
     this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length])
+    this.renderTextHeader(data)
   }
 
   async download(data, isAll) {

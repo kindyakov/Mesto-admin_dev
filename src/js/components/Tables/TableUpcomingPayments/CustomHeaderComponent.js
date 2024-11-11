@@ -46,7 +46,7 @@ class CustomHeaderComponent {
   }
 
   destroy() {
-    this.eGui.removeEventListener('click', this.handleSort);
+    // this.eGui.removeEventListener('click', this.handleSort);
   }
 }
 

@@ -21,6 +21,9 @@ class Warehouse extends Dashboards {
     this.selectRooms = new SelectRooms(this.wrapper)
 
     this.currentRented = null
+
+    const inputCheckbox = this.wrapper.querySelector('[name="without-large-cells"]')
+    inputCheckbox && inputCheckbox.addEventListener('change', this.handleChangeInput.bind(this))
   }
 
   init() {
@@ -79,6 +82,17 @@ class Warehouse extends Dashboards {
       widget.innerText = currentData ? `${currentData.rate.toFixed(2)}% (${currentData.cnt.toFixed(0)}, ${+currentData.area.toFixed(1)} м²)` : '0% (0)'
     });
   }
+
+  handleChangeInput({ target }) {
+    let data = { start_area: 0, end_area: 1000 }
+
+    if (target.checked) {
+      data.end_area = 40
+    }
+    
+    this.changeQueryParams(data)
+  }
+
 
   async getData(queryParams = {}) {
     const { warehouse_id = this.app.warehouse.warehouse_id, floor = 1 } = queryParams

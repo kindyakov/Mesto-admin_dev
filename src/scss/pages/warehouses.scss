@@ -105,6 +105,14 @@
 			}
 		}
 
+		&[data-rented='0.95'] {
+			.circle {
+				&::after {
+					background-color: rgb(160, 82, 45);
+				}
+			}
+		}
+
 		&[data-rented='-1'] {
 		}
 
@@ -275,6 +283,19 @@
 				rect,
 				path {
 					fill: $yellow-light;
+				}
+			}
+		}
+
+		&[data-rented='0.95'] {
+			rect,
+			path {
+				fill: rgb(160, 82, 45);
+			}
+			&._selected {
+				rect,
+				path {
+					fill: rgba(160, 81, 45, 0.3);
 				}
 			}
 		}
