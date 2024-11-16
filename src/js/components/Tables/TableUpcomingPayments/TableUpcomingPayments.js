@@ -40,7 +40,7 @@ class TableUpcomingPayments extends Table {
           // },
         },
         {
-          headerName: 'ФИО', field: 'fullname', minWidth: 350, flex: 1,
+          headerName: 'ФИО', field: 'fullname', minWidth: 300, flex: 1,
           cellRenderer: params => {
             const wp = cellRendererInput(params, { iconId: 'profile' })
             observeCell(wp, params)
@@ -90,6 +90,9 @@ class TableUpcomingPayments extends Table {
         }
       ],
       suppressColumnVirtualisation: true,
+      suppressHorizontalScroll: false,
+      // suppressPaginationPanel: true,
+      suppressScrollOnNewData: false,
     };
 
     const defaultParams = {}

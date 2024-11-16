@@ -62,6 +62,7 @@ export class Select {
     }
 
     this.selectsCustom = []
+    this.value = ''
 
     if (this.selects.length) {
 
@@ -69,6 +70,7 @@ export class Select {
       this.options.isDev && console.log(`Ошибка: не найден select c классом "${this.options.initSelect}"`)
       return
     }
+
 
     this.init()
   }
@@ -111,7 +113,7 @@ export class Select {
       if (selectMaxWidth) {
 
       }
-
+      this.selectValue = select.value
       this.selectsCustom.push(customSelect)
     })
 
@@ -237,6 +239,7 @@ export class Select {
   changeSelectOption(select, optionValue) {
     const selectName = select.getAttribute('data-name')
     const defaultSelect = document.querySelector(`${this.options.initSelect}[name="${selectName}"]`)
+
     if (defaultSelect) {
       defaultSelect.value = optionValue
       this.selectValue = optionValue

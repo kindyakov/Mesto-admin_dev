@@ -44,9 +44,6 @@ class ChargingLocks extends Page {
     this.customSelect.onChange = (e, select, value) => {
       this.wrapper.querySelectorAll('.locks-content')?.forEach(el => el.classList.add('_none'))
       this.wrapper.querySelector(`[data-locks-content="${value}"]`)?.classList.remove('_none')
-      if (value == 'map') {
-        this.changeQueryParams({ show_cnt: this.pagination.cntAll, type: 'map' })
-      }
     }
 
     this.inputSearch && this.inputSearch.addEventListener('input', this.handleInputSearch.bind(this))
@@ -61,7 +58,7 @@ class ChargingLocks extends Page {
   async getData(queryParams = {}) {
     let getSchemeArr = []
 
-    if (queryParams.type == 'map') {
+    if (this.customSelect.selectValue == 'map') {
       const floors = Array.from({ length: this.app.warehouse.num_of_floors }, (_, index) => index + 1);
 
       for (const floor of floors) {
@@ -69,7 +66,7 @@ class ChargingLocks extends Page {
         getSchemeArr.push(scheme)
       }
 
-      delete queryParams.type;
+      queryParams = { show_cnt: this.pagination.cntAll || 1000, ...queryParams }
     }
 
     return Promise.all(
@@ -101,6 +98,7 @@ class ChargingLocks extends Page {
       cells.length && cells.forEach(cell => {
         const [room = null] = rooms_x_locks.filter(room => room.room_name == cell.getAttribute('data-cell-num'))
         if (!room) return
+
         if (50 <= room.electric_quantity <= 100) {
           cell.dataset.rented = 0
         } else if (20 <= room.electric_quantity <= 49) {

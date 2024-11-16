@@ -11,12 +11,12 @@
       </button>
     </div>
     <div class="main__selects-filter">
-      <select class="init-custom-select" data-special-select="select-change-display" name="sort"
+      <select class="init-custom-select" data-special-select="select-change-display" name="type-display"
         data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>"
         data-prefix="Отображение:">
+        <option value="map">Карта</option>
         <option value="tile">Плиткой</option>
         <option value="table">Таблицей</option>
-        <option value="map">Карта</option>
       </select>
       <button class="warehouse__button button-table btn-set-sort">
         <span>Сортировка</span>
@@ -28,7 +28,7 @@
     </div>
   </div>
 
-  <div class="locks locks-content" data-locks-content="tile">
+  <div class="locks locks-content _none" data-locks-content="tile">
     <div class="locks__content"></div>
     <div class="locks__footer footer-pagging">
 
@@ -40,7 +40,7 @@
 
   </div>
 
-  <div class="maps-locks locks-content _none" data-locks-content="map">
+  <div class="maps-locks locks-content" data-locks-content="map">
     <div class="chart__info" style="flex-wrap: wrap; margin-bottom: 15px;">
       <p>
         <i class="_circle" style="color: #00ffae;"></i>
