@@ -2,7 +2,7 @@ import { Select } from "../../modules/mySelect.js"
 import { getWarehousesInfo } from "../../settings/request.js"
 
 class WarehousesSelect {
-  constructor() {
+  constructor({ mainLoader }) {
     this.select = document.querySelector('[data-special-select="warehouse-select"]')
     this.selectCustom = new Select({
       uniqueName: 'warehouse-select',
@@ -12,7 +12,7 @@ class WarehousesSelect {
       },
     })
 
-    this.mainLoader = document.querySelector('.body-loader')
+    this.mainLoader = mainLoader || document.querySelector('.body-loader')
     this.warehouseStorage = JSON.parse(sessionStorage.getItem('warehouse'))
 
     this.warehouses = []

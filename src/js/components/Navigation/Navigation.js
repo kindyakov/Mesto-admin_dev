@@ -1,43 +1,34 @@
 import { Loader } from "../../modules/myLoader.js";
 import { Accordion } from "../../modules/myAccordion.js";
+import { pages } from "../../configs/pages.js";
 
 class Navigation {
   constructor() {
     this.navLinks = document.querySelectorAll('[data-path]');
     this.contents = document.querySelectorAll('.content-main');
-    this.pages = {
-      'dashboards/clients': 'Dashboards/Clients/Clients.js',
-      'dashboards/finance': 'Dashboards/Finance/Finance.js',
-      'dashboards/marketing': 'Dashboards/Marketing/Marketing.js',
-      'dashboards/warehouse': 'Dashboards/Warehouse/Warehouse.js',
-      'dashboards/transactions': 'Dashboards/Transactions/Transactions.js',
-      'dashboards/sales-channels': 'Dashboards/SalesChannels/SalesChannels.js',
-      'charging-locks': 'ChargingLocks/ChargingLocks.js',
-      'users': 'Users/Users.js',
-      'working-hours': 'WorkingHours/WorkingHours.js',
-      'prices-rooms': 'PricesRooms/PricesRooms.js',
-      'forecast': 'Forecast/Forecast.js',
-      'mesto-plan': 'MestoPlan/MestoPlan.js',
-      'mesto-budget': 'MestoBudget/MestoBudget.js',
-      'rooms': 'Rooms/Rooms.js',
-      'payments': 'Payments/Payments.js',
-      'agreements': 'Agreements/Agreements.js',
-      'list-clients': 'ListClients/ListClients.js',
-      'messages': 'Messages/Messages.js',
-      'open': 'Open/Open.js',
-    };
+
     this.loader = new Loader(document.querySelector('.main'), {
       customSelector: '_main-loader'
     });
     this.sidebarAccordion = new Accordion({ uniqueName: 'sidebar-accordion' });
     this.modulesCache = {};  // Добавляем кэш для загруженных модулей
     this.md1200 = window.matchMedia(`(max-width: 1200px)`)
+
+    this.defaultPage = pages.rooms;
   }
 
-  init({ warehouse, notify, user }) {
+  async init({ warehouse, notify, user }) {
     this.warehouse = warehouse
     this.notify = notify
     this.user = user
+
+    Object.keys(pages).forEach(page => {
+      pages[page]?.accessCheck({
+        tab: this.getTab(page),
+        content: this.getContent(page),
+        user: this.user
+      })
+    })
 
     // Добавляем обработчики событий на ссылки навигации
     this.navLinks.forEach(link => {
@@ -53,11 +44,19 @@ class Navigation {
     if (initialPath) {
       this.loadContent(initialPath);
     } else {
-      const defaultPath = Object.keys(this.pages)[0];
-      window.location.hash = defaultPath;
+      window.location.hash = this.defaultPage.path;
     }
   }
 
+  getTab(path) {
+    let [tab = null] = Array.from(this.navLinks).filter(link => link.dataset.path == path)
+    return tab
+  }
+
+  getContent(path) {
+    let [content = null] = Array.from(this.contents).filter(content => content.dataset.content == path)
+    return content
+  }
 
   closeSideBar() {
     const body = document.body
@@ -88,22 +87,36 @@ class Navigation {
     this.loadContent(path);
   }
 
-  loadContent(path) {
-    if (!this.pages[path]) {
-      console.error('Маршрут не найден:', path);
+  loadContent(pageName) {
+    if (!pages[pageName]) {
+      console.error('Страница не найдена', pageName);
       return;
     }
 
-    this.loader.enable();
-    this.switchingTabs(path);
+    const path = pages[pageName].path
+    const tab = this.getTab(pageName)
+    const content = this.getContent(pageName)
 
-    if (this.modulesCache[path]) {
+    const isAccess = pages[pageName].accessCheck({
+      tab, content, user: this.user, page: this.modulesCache[pageName] || null
+    })
+
+    // Выполнится если нет прав доступа
+    if (!isAccess) {
+      window.location.hash = this.defaultPage.path;
+      return
+    }
+
+    this.loader.enable();
+    this.switchingTabs(pageName);
+
+    if (this.modulesCache[pageName]) {
       // Если модуль уже загружен, вызываем только render
       this.loader.disable();
-      this.modulesCache[path].render();
+      this.modulesCache[pageName].render();
     } else {
       // Загружаем модуль и сохраняем его в кэш
-      import(`../../pages/${this.pages[path]}`)
+      import(`../../pages/${path}`)
         .then(module => {
           this.loader.disable();
 
@@ -114,7 +127,7 @@ class Navigation {
             user: this.user
           });
 
-          this.modulesCache[path] = page;  // Сохраняем модуль в кэш
+          this.modulesCache[pageName] = page;  // Сохраняем модуль в кэш
           page.render();
         })
         .catch(error => {

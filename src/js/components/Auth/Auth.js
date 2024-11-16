@@ -23,7 +23,7 @@ class Auth {
     this.validator = validate(this.form)
 
     this.loader = new Loader(document.querySelector('.modal-auth .modal__body'))
-    this.mainLoader = document.querySelector('.body-loader')
+    this.mainLoader = options.mainLoader || document.querySelector('.body-loader')
 
     this.isAuth = false
     this.user = null
@@ -60,12 +60,14 @@ class Auth {
 
   checkAuth() {
     const token = getCookie('token')
+    const manager = getCookie('manager') ? JSON.parse(getCookie('manager')) : {}
+
     let isAuth = Boolean(token && token.startsWith('Bearer'))
 
     if (isAuth) {
       const tokenData = JSON.parse(atob(token.split('.')[1]))
       const tokenExpiration = new Date(tokenData.exp * 1000)
-      this.user = tokenData
+      this.user = { ...tokenData, manager }
 
       if (this.currentDate > tokenExpiration) {
         deleteCookie('token');
@@ -137,14 +139,17 @@ class Auth {
 
       if (response.status !== 200) return
 
-      const { msg, msg_type, access_token, expiration_time } = this.user = response.data
+      const { msg, msg_type, access_token, expiration_time, manager } = this.user = response.data
 
       this.notify.show(response.data)
 
       if (msg_type === 'success') {
         this.isAuth = true
         api.defaults.headers.Authorization = `Bearer ${access_token}`
+
         document.cookie = `token=Bearer ${access_token}; max-age=${expiration_time}; path=/`;
+        document.cookie = `manager=${JSON.stringify(manager)}; max-age=${expiration_time}; path=/`
+
         this.modal.close()
         this.startExpirationTimer(new Date(this.currentDate.getTime() + expiration_time * 1000))
         this.onAuth(response.data)

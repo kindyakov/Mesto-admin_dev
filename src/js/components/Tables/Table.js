@@ -35,6 +35,7 @@ class Table {
       rowSelection: 'multiple', // Включение множественного выбора строк
       rowHeight: 60,
       domLayout: 'normal',
+      localeText: translations,
       getLocaleText: this.getLocaleText,
       onCellClicked: (params) => {
         if (params.column.colId === 'checkboxSelection') {

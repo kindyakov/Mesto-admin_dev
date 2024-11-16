@@ -14,10 +14,13 @@ class TableUpcomingPayments extends Table {
   constructor(selector, options, params) {
     const defaultOptions = {
       columnDefs: [
-        { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, },
+        { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, filter: false },
         {
           headerName: 'Дата платежа', field: 'write_off_date', minWidth: 140, flex: 0.2,
-          cellRenderer: params => cellRendererInput(params, { funcFormate: getFormattedDate, iconId: 'calendar' })
+          cellRenderer: params => cellRendererInput(params, { funcFormate: getFormattedDate, iconId: 'calendar' }),
+          filterRenderer: e => {
+       
+          }
         },
         {
           headerName: 'Сумма', field: 'price', minWidth: 180, flex: 0.5,
@@ -72,11 +75,11 @@ class TableUpcomingPayments extends Table {
           },
         },
         {
-          headerName: 'Физ./Юр.', field: 'user_type', minWidth: 90, flex: 0.5, resizable: false,
+          headerName: 'Физ./Юр.', field: 'user_type', minWidth: 90, flex: 0.5,
           valueFormatter: params => params.value === 'f' ? 'Физ. лицо' : 'Юр. лицо'
         },
         {
-          headerName: 'Депозит', field: 'deposit', minWidth: 150, flex: 0.5, resizable: false,
+          headerName: 'Депозит', field: 'deposit', minWidth: 150, flex: 0.5,
           cellRenderer: params => {
             const span = createElement('span', {
               classes: ['table-span-price'],
@@ -86,13 +89,23 @@ class TableUpcomingPayments extends Table {
           },
         },
         {
-          headerName: 'Осталось дней', field: 'days_left', minWidth: 90, flex: 0.5, resizable: false,
+          headerName: 'Осталось дней', field: 'days_left', minWidth: 90, flex: 0.5,
         }
       ],
       suppressColumnVirtualisation: true,
-      suppressHorizontalScroll: false,
-      // suppressPaginationPanel: true,
-      suppressScrollOnNewData: false,
+      onFilterOpened: (e) => {
+        console.log(e, e.column.colDef.field)
+        const filterWrapper = e.eGui.querySelector('.ag-filter-body-wrapper')
+
+        e.column.colDef.filterRenderer?.(e)
+      }, // сработает при открытие окна с фильтром
+      onFilterChanged: (e) => {
+        console.log(e,'Фильтр закрыт или изменен');
+      }, // Фильтр закрыт или изменен
+      defaultColDef: {
+        filter: "agTextColumnFilter",
+        // floatingFilter: true, // Добавляет панельку под заголовком
+      },
     };
 
     const defaultParams = {}

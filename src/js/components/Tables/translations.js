@@ -15,4 +15,44 @@ export const translations = {
   previousPage: "Предыдущая страница",
   thousandSeparator: ",",
   to: "до",
+  ariaPageSizeSelectorLabel: 'Размер страницы',
+  ariaFilterColumn: "Нажмите CTRL ENTER, чтобы открыть фильтр",
+  ariaFilterMenuOpen: "Откройте меню фильтра",
+  ariaFilterInput:"Входной сигнал фильтра",
+
+  more: 'Ещё',
+  next: 'Следующая',
+  last: 'Последняя',
+  first: 'Первая',
+  previous: 'Предыдущая',
+  loadingOoo: 'Загрузка...',
+
+  // Тексты фильтров
+  applyFilter: 'Применить фильтр',
+  equals: 'Равно',
+  notEqual: 'Не равно',
+  contains: 'Содержит',
+  notContains: 'Не содержит',
+  startsWith: 'Начинается с',
+  endsWith: 'Заканчивается на',
+  andCondition: 'И',
+  orCondition: 'ИЛИ',
+
+  // Тексты фильтрации
+  filterOoo: 'Фильтр...',
+  filterContains: 'Содержит',
+  filterNotContains: 'Не содержит',
+  filterEquals: 'Равно',
+  filterNotEqual: 'Не равно',
+  filterStartsWith: 'Начинается с',
+  filterEndsWith: 'Заканчивается на',
+  filterApply: 'Применить',
+  filterReset: 'Сбросить',
+
+  // Тексты для меню
+  selectAll: 'Выбрать всё',
+  selectAllSearchResults: 'Выбрать все результаты поиска',
+  searchOoo: 'Поиск...',
+  blanks: 'Пусто',
+  noMatches: 'Совпадений нет',
 };

@@ -18,10 +18,12 @@ window.app = {
   logsModal: []
 }
 
+const mainLoader = document.querySelector('.body-loader')
 const notify = new Notification()
+
+const auth = new Auth({ modalMap, notify, mainLoader })
+const warehousesSelect = new WarehousesSelect({ mainLoader })
 const nav = new Navigation();
-const auth = new Auth({ modalMap, notify })
-const warehousesSelect = new WarehousesSelect()
 
 let isFirstLoad = true
 
@@ -29,21 +31,25 @@ Fancybox.defaults.Hash = false;
 window.app.auth = auth
 window.app.notify = notify
 
-function appInit(user) {
-  if (isFirstLoad) {
-    useDynamicAdapt()
-    fixedSideBar()
-    burger({ selectorNav: '.sidebar' })
-    initializeModalTriggers(modalMap)
-    Fancybox.bind("[data-fancybox]")
-
-    new Accordion({ isAccordion: false })
-    warehousesSelect.render().then(warehouse => {
+async function appInit(user) {
+  try {
+    if (isFirstLoad) {
+      useDynamicAdapt()
+      fixedSideBar()
+      burger({ selectorNav: '.sidebar' })
+      initializeModalTriggers(modalMap)
+      Fancybox.bind("[data-fancybox]")
+      document.querySelector('.header__user_info .name').textContent = user.manager.manager_fullname
+      
+      new Accordion({ isAccordion: false })
+      const warehouse = await warehousesSelect.render()
       nav.init({ warehouse, notify, user })
-    })
-  }
+    }
 
-  isFirstLoad = false
+    isFirstLoad = false
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 if (auth.isAuth) {

@@ -97,14 +97,11 @@ class WorkingHours extends Page {
     this.timePoints = timepoints
     this.workingHours.innerHTML = ''
 
-    this.sectionList.classList.add('_none')
-    this.sectionTable.classList.add('_none')
-
-    if (manager.needs_time_control) {
-      this.sectionList.classList.remove('_none')
-    } else {
-      this.sectionTable.classList.remove('_none')
-    }
+    // if (manager.needs_time_control) {
+    //   this.sectionList.classList.remove('_none')
+    // } else {
+    //   this.sectionTable.classList.remove('_none')
+    // }
 
     if (timepoints.length) {
       this.checkAndInsert(timepoints)

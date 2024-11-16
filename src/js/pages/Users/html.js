@@ -33,26 +33,58 @@ export function accessesPopupHtml(data) {
   return `
   <div class="accesses-popup">
     <h5 class="accesses-popup__title">Доступы</h5>
-    <div class="accesses-popup__content">
-      <label>
-        <input type="checkbox" name="can_add_clients_agrs" ${data.can_add_clients_agrs ? 'checked' : ''}>
-        <p>Можно создавать договоры клиентам</p>
-      </label>
-      <label>
-        <input type="checkbox" name="can_add_edit_payments" ${data.can_add_edit_payments ? 'checked' : ''}>
-        <p>Можно редактировать платежи</p>
-      </label>
-      <label>
-        <input type="checkbox" name="can_approve_clients" ${data.can_approve_clients ? 'checked' : ''}>
-        <p>Можно подтверждать паспортные данные</p>
-      </label>
-      <label>
-        <input type="checkbox" name="can_edit_clients" ${data.can_edit_clients ? 'checked' : ''}>
-        <p>Можно редактировать клиентов</p>
-      </label>
+    <div class="accesses-popup__content" style="max-height: 200px;overflow-y: auto;">
       <label>
         <input type="checkbox" name="can_set_accesses" ${data.can_set_accesses ? 'checked' : ''}>
         <p>Можно устанавливать доступы</p>
+      </label>  
+      <label>
+        <input type="checkbox" name="can_see_users" ${data.can_see_users ? 'checked' : ''}>
+        <p>Можно смотреть вкладку <u>Пользователи</u></p>
+      </label>
+      <label>
+        <input type="checkbox" name="can_see_users_worktime" ${data.can_see_users_worktime ? 'checked' : ''}>
+        <p>Можно смотреть рабочее время остальных</p>
+      </label>
+      <label>
+        <input type="checkbox" name="needs_time_control" ${data.needs_time_control ? 'checked' : ''}>
+        <p>Нужен контроль рабочего времени</p>
+      </label>
+      <label>
+        <input type="checkbox" name="can_see_room_prices" ${data.can_see_room_prices ? 'checked' : ''}>
+        <p>Можно смотреть вкладку <u>Цены ячеек</u></p>
+      </label>
+      <label>
+        <input type="checkbox" name="can_see_dasboards" ${data.can_see_dasboards ? 'checked' : ''}>
+        <p>Можно смотреть раздел <u>Дашборды</u></p>
+      </label>
+      <label>
+        <input type="checkbox" name="can_edit_payments" ${data.can_edit_payments ? 'checked' : ''}>
+        <p>Можно редактировать платежи</p>
+      </label>
+      <label>
+        <input type="checkbox" name="can_edit_next_payment_date" ${data.can_edit_next_payment_date ? 'checked' : ''}>
+        <p>Можно редактировать даты предстоящих платежей</p>
+      </label>
+      <label>
+        <input type="checkbox" name="can_add_returns" ${data.can_add_returns ? 'checked' : ''}>
+        <p>Можно добавлять возвраты</p>
+      </label>
+      <label>
+        <input type="checkbox" name="can_edit_agreement_price" ${data.can_edit_agreement_price ? 'checked' : ''}>
+        <p>Можно редактировать стоимость аренды в договоре</p>
+      </label>
+      <label>
+        <input type="checkbox" name="can_edit_agreement_deposit" ${data.can_edit_agreement_deposit ? 'checked' : ''}>
+        <p>Можно редактировать депозит в договоре</p>
+      </label>
+      <label>
+        <input type="checkbox" name="can_change_moving_out_date" ${data.can_change_moving_out_date ? 'checked' : ''}>
+        <p>Можно планировать выезд клиента</p>
+      </label>
+      <label>
+        <input type="checkbox" name="can_change_return_amount" ${data.can_change_return_amount ? 'checked' : ''}>
+        <p>Можно менять сумму к возврату при выезде</p>
       </label>
     </div>
   </div>`
