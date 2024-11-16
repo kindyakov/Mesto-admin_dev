@@ -1,5 +1,5 @@
 import Table from "../Table.js";
-import CustomHeaderComponent from "./CustomHeaderComponent.js";
+// import CustomHeaderComponent from "./CustomHeaderComponent.js";
 
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
@@ -75,6 +75,19 @@ class TableUpcomingPayments extends Table {
           headerName: 'Физ./Юр.', field: 'user_type', minWidth: 90, flex: 0.5, resizable: false,
           valueFormatter: params => params.value === 'f' ? 'Физ. лицо' : 'Юр. лицо'
         },
+        {
+          headerName: 'Депозит', field: 'deposit', minWidth: 150, flex: 0.5, resizable: false,
+          cellRenderer: params => {
+            const span = createElement('span', {
+              classes: ['table-span-price'],
+              content: params.value ? formattingPrice(params.value) : '',
+            })
+            return cellRendererInput(params, { el: span })
+          },
+        },
+        {
+          headerName: 'Осталось дней', field: 'days_left', minWidth: 90, flex: 0.5, resizable: false,
+        }
       ],
       suppressColumnVirtualisation: true,
     };
@@ -110,6 +123,7 @@ class TableUpcomingPayments extends Table {
       3: th => func(th, () => data.cnt),
       5: th => func(th, () => data.sum_area + ' м²'),
       6: th => func(th, () => formattingPrice(data.avg_price)),
+      8: th => func(th, () => formattingPrice(data.sum_deposit)),
     }
 
     headersTable.length && headersTable.forEach((th, i) => {

@@ -16,6 +16,7 @@
         data-prefix="Отображение:">
         <option value="tile">Плиткой</option>
         <option value="table">Таблицей</option>
+        <option value="map">Карта</option>
       </select>
       <button class="warehouse__button button-table btn-set-sort">
         <span>Сортировка</span>
@@ -27,14 +28,37 @@
     </div>
   </div>
 
-  <div class="locks">
+  <div class="locks locks-content" data-locks-content="tile">
     <div class="locks__content"></div>
     <div class="locks__footer footer-pagging">
 
     </div>
   </div>
 
-  <div class="warehouse__table table-locks table ag-theme-quartz _none" style="height: 710px;">
+  <div class="warehouse__table table-locks table ag-theme-quartz locks-content _none" data-locks-content="table"
+    style="height: 710px;">
 
+  </div>
+
+  <div class="maps-locks locks-content _none" data-locks-content="map">
+    <div class="chart__info" style="flex-wrap: wrap; margin-bottom: 15px;">
+      <p>
+        <i class="_circle" style="color: #00ffae;"></i>
+        <span>50-100%</span>
+      </p>
+      <p>
+        <i class="_circle" style="color: rgb(253, 199, 62);"></i>
+        <span>20-50%</span>
+      </p>
+      <p>
+        <i class="_circle" style="color: #ff6e6e;"></i>
+        <span>0-20%</span>
+      </p>
+      <p>
+        <i class="_circle" style="color: #D9D9D9;"></i>
+        <span>нет замка</span>
+      </p>
+    </div>
+    <div class="schemes" style="display: flex;flex-direction: column;gap: 30px;"></div>
   </div>
 </div>

@@ -29,6 +29,15 @@
 			}
 		}
 	}
+
+	.warehouse__schemes {
+		position: relative;
+	}
+
+	.warehouse__svg-cell {
+		cursor: default;
+		pointer-events: none;
+	}
 }
 
 .locks {
