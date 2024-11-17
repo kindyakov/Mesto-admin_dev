@@ -139,7 +139,11 @@ class CustomFilter {
       el.insertAdjacentElement('afterbegin', column.colDef.checkbox[i])
     });
 
-    const wpButtons = createElement('div', { attributes: [['style', `display:flex;gap:5px;justify-content:flex-end;`]] })
+
+    const wpButtons = filterWrapper.querySelector('.wp-buttons') ? filterWrapper.querySelector('.wp-buttons') : createElement('div', {
+      classes: ['wp-buttons'],
+      attributes: [['style', `display:flex;gap:5px;justify-content:flex-end;`]]
+    })
 
     wpButtons.appendChild(this.btnOk)
     wpButtons.appendChild(this.btnCancel)
