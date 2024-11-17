@@ -14,7 +14,7 @@ class Navigation {
     this.modulesCache = {};  // Добавляем кэш для загруженных модулей
     this.md1200 = window.matchMedia(`(max-width: 1200px)`)
 
-    this.defaultPage = pages.rooms;
+    this.defaultPage = Object.keys(pages).filter(key => key == 'rooms');
   }
 
   async init({ warehouse, notify, user }) {
@@ -44,7 +44,7 @@ class Navigation {
     if (initialPath) {
       this.loadContent(initialPath);
     } else {
-      window.location.hash = this.defaultPage.path;
+      window.location.hash = this.defaultPage.at(0);
     }
   }
 
@@ -103,7 +103,7 @@ class Navigation {
 
     // Выполнится если нет прав доступа
     if (!isAccess) {
-      window.location.hash = this.defaultPage.path;
+      window.location.hash = this.defaultPage.at(0);
       return
     }
 

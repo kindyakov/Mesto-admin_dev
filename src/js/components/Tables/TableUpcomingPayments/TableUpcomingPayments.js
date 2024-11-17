@@ -1,5 +1,8 @@
+
 import Table from "../Table.js";
 // import CustomHeaderComponent from "./CustomHeaderComponent.js";
+import CustomFilterComponent from "./CustomFilterComponent.js";
+import CustomFilter from "./CustomFilter.js";
 
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
@@ -17,13 +20,16 @@ class TableUpcomingPayments extends Table {
         { headerCheckboxSelection: true, checkboxSelection: true, width: 50, resizable: false, sortable: false, filter: false },
         {
           headerName: 'Дата платежа', field: 'write_off_date', minWidth: 140, flex: 0.2,
+          // filter: 'agDateColumnFilter',
           cellRenderer: params => cellRendererInput(params, { funcFormate: getFormattedDate, iconId: 'calendar' }),
-          filterRenderer: e => {
-       
+          filterRenderer: params => {
+            console.log(params)
+
           }
         },
         {
           headerName: 'Сумма', field: 'price', minWidth: 180, flex: 0.5,
+          filter: 'agNumberColumnFilter',
           cellRenderer: params => {
             const span = createElement('span', {
               classes: ['table-span-price'],
@@ -52,6 +58,7 @@ class TableUpcomingPayments extends Table {
         },
         {
           headerName: 'Договор', field: 'agrid', minWidth: 90, flex: 0.5,
+          filter: 'agNumberColumnFilter',
           cellRenderer: params => {
             const span = createElement('span', {
               classes: ['table-span-agrid'],
@@ -62,10 +69,12 @@ class TableUpcomingPayments extends Table {
         },
         {
           headerName: 'Площадь', field: 'area', minWidth: 180, flex: 0.3,
+          filter: 'agNumberColumnFilter',
           valueFormatter: params => `${params.value} м²`,
         },
         {
           headerName: 'Средняя ставка', field: 'price_1m', minWidth: 200, flex: 0.5,
+          filter: 'agNumberColumnFilter',
           cellRenderer: params => {
             const span = createElement('span', {
               classes: ['table-span-price'],
@@ -80,6 +89,7 @@ class TableUpcomingPayments extends Table {
         },
         {
           headerName: 'Депозит', field: 'deposit', minWidth: 150, flex: 0.5,
+          filter: 'agNumberColumnFilter',
           cellRenderer: params => {
             const span = createElement('span', {
               classes: ['table-span-price'],
@@ -90,21 +100,30 @@ class TableUpcomingPayments extends Table {
         },
         {
           headerName: 'Осталось дней', field: 'days_left', minWidth: 90, flex: 0.5,
+          filter: 'agNumberColumnFilter',
         }
       ],
       suppressColumnVirtualisation: true,
       onFilterOpened: (e) => {
-        console.log(e, e.column.colDef.field)
         const filterWrapper = e.eGui.querySelector('.ag-filter-body-wrapper')
+        const data = e.api.getGridOption('rowData')
+        const currentData = data.map(obj => obj[e.column.colDef.field])
+        this.customFilter.gridApi = this.gridApi
+        this.customFilter.render({ ...e, filterWrapper, currentData, data })
+        this.customFilter.onOk = (data) => {
+          this.changeQueryParams({ filters: data })
+          console.log({ filters: data })
 
-        e.column.colDef.filterRenderer?.(e)
+        }
       }, // сработает при открытие окна с фильтром
       onFilterChanged: (e) => {
-        console.log(e,'Фильтр закрыт или изменен');
+        console.log('Фильтр закрыт или изменен');
       }, // Фильтр закрыт или изменен
       defaultColDef: {
         filter: "agTextColumnFilter",
-        // floatingFilter: true, // Добавляет панельку под заголовком
+        floatingFilter: true, // Добавляет панельку под заголовком
+        closeOnApply: true,
+        // filter: 'agSetColumnFilter'
       },
     };
 
@@ -113,6 +132,8 @@ class TableUpcomingPayments extends Table {
     const mergedOptions = Object.assign({}, defaultOptions, options);
     const mergedParams = Object.assign({}, defaultParams, params);
     super(selector, mergedOptions, mergedParams);
+
+    this.customFilter = new CustomFilter(this.gridApi)
   }
 
   renderTextHeader(data) {

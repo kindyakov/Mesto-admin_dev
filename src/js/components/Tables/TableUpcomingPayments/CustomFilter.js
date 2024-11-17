@@ -1,61 +1,152 @@
 import { createElement } from "../../../settings/createElement.js";
 
-
-
 class CustomFilter {
-  init(params) {
-    this.params = params;
-    this.gui = createElement('div');
-    this.gui.innerHTML = `
-      <div class="custom-filter">
-        <label>Поиск:</label>
-        <input type="text" id="filter-input" placeholder="Введите значение">
-        <button id="filter-apply">Применить</button>
-        <button id="filter-reset">Сбросить</button>
-      </div>
-    `;
+  constructor(gridApi) {
+    this.gridApi = gridApi
+    this.checkboxes = []
 
-    this.inputElement = this.gui.querySelector('#filter-input');
-    this.applyButton = this.gui.querySelector('#filter-apply');
-    this.resetButton = this.gui.querySelector('#filter-reset');
+    this.timer = null
 
-    // Привязка событий
-    this.applyButton.addEventListener('click', () => this.applyFilter());
-    this.resetButton.addEventListener('click', () => this.resetFilter());
+    this.btnOk = createElement('button', { classes: ['button', 'table-button'], content: 'Ок' })
+    this.btnCancel = createElement('button', { classes: ['button', 'table-button', 'transparent'], content: 'Отмена' })
+
+    this.btnOk.addEventListener('click', e => this.handleClickBtnOk(e))
+    this.btnCancel.addEventListener('click', e => this.handleClickBtnCancel(e))
+    console.log(this.gridApi)
+
   }
 
-  applyFilter() {
-    const filterValue = this.inputElement.value.toLowerCase();
-    this.params.filterChangedCallback(); // Уведомляем таблицу о смене фильтра
-    this.filterValue = filterValue;
+  onOk() {
+
   }
 
-  resetFilter() {
-    this.inputElement.value = '';
-    this.filterValue = null;
-    this.params.filterChangedCallback();
+  onChange() {
+
   }
 
-  doesFilterPass(params) {
-    const { api, colDef, column, columnApi, context } = this.params;
-    const value = params.data[colDef.field];
-    return this.filterValue ? value.toLowerCase().includes(this.filterValue) : true;
+  handleChange(e) {
+    const input = e.target
+
+    if (input.classList.contains('all')) {
+      this.checkboxes.forEach(checkbox => {
+        checkbox.checked = input.checked
+      })
+    }
+
+    this.onChange({ value: input.value })
   }
 
-  isFilterActive() {
-    return this.filterValue != null && this.filterValue !== '';
+  handleClickBtnOk(e) {
+    const form = e.target.closest('form')
+    const formData = new FormData(form)
+    let data = {}
+
+    Array.from(formData).forEach(([key, value]) => {
+      if (!data[key]) {
+        data[key] = []
+      }
+
+      value && data[key].push(value)
+    })
+
+
+    this.closeFilter(this.params.column.colDef.field)
+
+    this.onOk(data)
   }
 
-  getModel() {
-    return this.filterValue ? { value: this.filterValue } : null;
+  handleClickBtnCancel(e) {
+
   }
 
-  setModel(model) {
-    this.filterValue = model ? model.value : null;
-    this.inputElement.value = this.filterValue || '';
+  closeFilter(columnField) {
+    // const filterInstance = gridOptions.api.getFilterInstance(columnField);
+    this.gridApi.hidePopupMenu()
+    // if (filterInstance) {
+    //   gridOptions.api.hidePopup(); // Скрывает текущее всплывающее окно
+    //   console.log(`Фильтр для колонки "${columnField}" закрыт`);
+    // }
   }
 
-  getGui() {
-    return this.gui;
+  createCheckbox({ val, name, i }) {
+    return createElement('input', {
+      classes: ['input-checkbox'],
+      attributes: [
+        ['type', 'checkbox'],
+        ['name', name],
+        ['value', val],
+        ['id', `filter-checkbox-${name}-${i}`]
+      ]
+    })
+  }
+
+  htmlColList({ currentData, name }) {
+    return `
+    <ul class="col-data-list">
+      <li>
+        <label class="wrapper-checkbox">
+          <label class="label-checkbox" for="filter-checkbox-${name}-0">
+            <svg class="icon">
+              <use xlink:href="img/svg/sprite.svg#check-3"></use>
+            </svg>
+          </label>
+          <p>Выделить все</p>
+        </label>
+      </li>
+      ${currentData.map((val, i) =>
+      `<li>
+        <label class="wrapper-checkbox">
+          <label class="label-checkbox" for="filter-checkbox-${name}-${i + 1}">
+            <svg class="icon">
+              <use xlink:href="img/svg/sprite.svg#check-3"></use>
+            </svg>
+          </label>
+          <p>${val}</p>
+        </label>
+      </li>
+      `).join('')}
+    </ul>`
+  }
+
+  render(params) {
+    const { filterWrapper, currentData, data, column } = params
+    let customFilter = null, name = column.colDef.field
+    column.colDef.checkbox = column.colDef.checkbox || []
+
+    if (filterWrapper.querySelector('.custom-filter')) {
+      customFilter = filterWrapper.querySelector('.custom-filter')
+    } else {
+      customFilter = createElement('div', { classes: ['custom-filter'] })
+      filterWrapper.appendChild(customFilter)
+    }
+
+    customFilter.innerHTML = this.htmlColList({ currentData, name })
+
+    if (!column.colDef.checkbox.length) {
+      const checkboxAll = this.createCheckbox({ val: '', name, i: 0 }) // чекбокс который выделает все чекбоксы
+      checkboxAll.classList.add('all')
+      checkboxAll.addEventListener('change', e => this.handleChange(e))
+      column.colDef.checkbox.push(checkboxAll)
+
+      currentData.map((val, i) => {
+        const checkbox = this.createCheckbox({ val, name, i: i + 1 })
+        checkbox.addEventListener('change', e => this.handleChange(e))
+        column.colDef.checkbox.push(checkbox)
+      })
+    }
+
+    customFilter.querySelectorAll('.wrapper-checkbox').forEach((el, i) => {
+      el.insertAdjacentElement('afterbegin', column.colDef.checkbox[i])
+    });
+
+    const wpButtons = createElement('div', { attributes: [['style', `display:flex;gap:5px;justify-content:flex-end;`]] })
+
+    wpButtons.appendChild(this.btnOk)
+    wpButtons.appendChild(this.btnCancel)
+    filterWrapper.appendChild(wpButtons)
+    this.checkboxes = column.colDef.checkbox
+    this.params = params
   }
 }
+
+export default CustomFilter

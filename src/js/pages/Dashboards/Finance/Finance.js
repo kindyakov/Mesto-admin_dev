@@ -158,7 +158,6 @@ class Finance extends Dashboards {
     const currentDay = new Date().getDate();
     const [currentD] = finance_planfact.filter(obj => new Date(obj.data).toDateString() == new Date().toDateString())
     const data = currentD ? currentD : finance_planfact.at(-1)
-    console.log()
 
     const factV = data.revenue_reestr_accumulated || 0
     const planV = data.reest_plan_accumulated // parseFloat((currentD.revenue_accumulated_planned + dataDashboard.reestr_sum / finance_planfact.length * currentDay).toFixed(0)) || 0

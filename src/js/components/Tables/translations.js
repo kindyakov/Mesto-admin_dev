@@ -35,6 +35,8 @@ export const translations = {
   notContains: 'Не содержит',
   startsWith: 'Начинается с',
   endsWith: 'Заканчивается на',
+  blank: 'Пустой',
+  notBlank: 'Не пустой',
   andCondition: 'И',
   orCondition: 'ИЛИ',
 
@@ -48,7 +50,7 @@ export const translations = {
   filterEndsWith: 'Заканчивается на',
   filterApply: 'Применить',
   filterReset: 'Сбросить',
-
+  between: 'Между',
   // Тексты для меню
   selectAll: 'Выбрать всё',
   selectAllSearchResults: 'Выбрать все результаты поиска',
