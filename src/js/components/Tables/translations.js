@@ -18,7 +18,7 @@ export const translations = {
   ariaPageSizeSelectorLabel: 'Размер страницы',
   ariaFilterColumn: "Нажмите CTRL ENTER, чтобы открыть фильтр",
   ariaFilterMenuOpen: "Откройте меню фильтра",
-  ariaFilterInput:"Входной сигнал фильтра",
+  ariaFilterInput: "Входной сигнал фильтра",
 
   more: 'Ещё',
   next: 'Следующая',
@@ -39,6 +39,13 @@ export const translations = {
   notBlank: 'Не пустой',
   andCondition: 'И',
   orCondition: 'ИЛИ',
+  lessThan: 'Меньше',
+  greaterThan: 'Больше',
+  lessThanOrEqual: 'Меньше или равно',
+  greaterThanOrEqual: 'Больше или равно',
+  inRange: 'В диапазоне',
+  inRangeStart: 'Начало диапазона',
+  inRangeEnd: 'Конец диапазона',
 
   // Тексты фильтрации
   filterOoo: 'Фильтр...',

@@ -4,7 +4,7 @@ import TableUpcomingPayments from "../../../components/Tables/TableUpcomingPayme
 // import ChartRegistrationFees from "../../../components/Charts/ChartRegistrationFees/ChartRegistrationFees.js";
 // import ChartFeesNewCustomers from "../../../components/Charts/ChartFeesNewCustomers/ChartFeesNewCustomers.js";
 import ChartRevenue from "../../../components/Charts/ChartRevenue/ChartRevenue.js";
-import { getDashboardFinance, getFuturePayments, getFinancePlan } from "../../../settings/request.js";
+import { getDashboardFinance, getFuturePayments, getFinancePlan, postFuturePayments } from "../../../settings/request.js";
 import { formattingPrice } from "../../../utils/formattingPrice.js";
 // import RangeSlider from "../../../components/RangeSlider/RangeSlider.js";
 // import { formattingPrice } from "../../../utils/formattingPrice.js";
@@ -20,7 +20,9 @@ class Finance extends Dashboards {
           options: {
             paginationPageSize: 15
           },
-          params: { getData: getFuturePayments }
+          params: {
+            getData: postFuturePayments
+          }
         }
       ],
       charts: [
@@ -41,7 +43,7 @@ class Finance extends Dashboards {
   }
 
   async getData(queryParams = {}) {
-    return getFuturePayments({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams });
+    return postFuturePayments({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams });
   }
 
   async getDashboardData(queryParams = {}) {

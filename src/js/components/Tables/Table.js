@@ -142,9 +142,9 @@ class Table {
 
     if (this.selects) {
       this.selects.selects.forEach(select => {
-        this.queryParams[select.name] = select.value
+        this.queryParams[select.name] = +select.value
       })
-      this.selects.onChange = (e, select, value) => this.changeQueryParams({ [select.getAttribute('data-name')]: value })
+      this.selects.onChange = (e, select, value) => this.changeQueryParams({ [select.getAttribute('data-name')]: +value })
     }
 
     if (this.calendar) {

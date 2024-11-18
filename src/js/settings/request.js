@@ -30,6 +30,19 @@ function getCreateTotal(rout) {
   }
 }
 
+function postCreate(rout) {
+  return async function (data = {}) {
+    try {
+      const response = await api.post(rout, data)
+      if (response.status !== 200) return null
+      return response.data
+    } catch (error) {
+      console.error(error)
+      throw error
+    }
+  }
+}
+
 function downloadCreate(rout, opts = {}) {
   const options = {
     nameFile: `Файл от`,
@@ -113,6 +126,10 @@ export const getSaleChannelsStats = getCreate('/_get_sale_channels_stats_')
 export const getSaleChannelsLeads = getCreate('/_get_sale_channels_leads_')
 
 export const getSalesConversionRates = getCreate('/_get_sales_conversion_rates_')
+// ============================================================================>
+
+export const postFuturePayments = postCreate('/_get_future_payments_')
+
 // ============================================================================>
 
 export const getClientTotal = getCreateTotal('/_get_client_total_')

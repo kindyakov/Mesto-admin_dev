@@ -1,7 +1,7 @@
-
+import uniqBy from 'lodash.uniqby'
 import Table from "../Table.js";
 // import CustomHeaderComponent from "./CustomHeaderComponent.js";
-import CustomFilterComponent from "./CustomFilterComponent.js";
+// import CustomFilterComponent from "./CustomFilterComponent.js";
 import CustomFilter from "./CustomFilter.js";
 
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
@@ -10,8 +10,11 @@ import { observeCell } from "../utils/observeCell.js";
 
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
+
 import { downloadFuturePayments } from "../../../settings/request.js";
 import { createElement } from "../../../settings/createElement.js";
+
+import tippy from '../../../configs/tippy.js'
 
 class TableUpcomingPayments extends Table {
   constructor(selector, options, params) {
@@ -22,10 +25,6 @@ class TableUpcomingPayments extends Table {
           headerName: 'Дата платежа', field: 'write_off_date', minWidth: 140, flex: 0.2,
           // filter: 'agDateColumnFilter',
           cellRenderer: params => cellRendererInput(params, { funcFormate: getFormattedDate, iconId: 'calendar' }),
-          filterRenderer: params => {
-            console.log(params)
-
-          }
         },
         {
           headerName: 'Сумма', field: 'price', minWidth: 180, flex: 0.5,
@@ -42,6 +41,59 @@ class TableUpcomingPayments extends Table {
 
             return cellRendererInput(params, { el: span })
           },
+          filterRenderer: params => {
+            const targetChild = params.filterWrapper.children[1]
+            if (params.filterWrapper.querySelector('.dropdown-target')) return
+            const dropdownTarget = createElement('div', {
+              classes: ['dropdown-target'],
+              content: `<p>Фильтр по цвету</p><svg class="icon icon-arrow"><use xlink:href="img/svg/sprite.svg#arrow"></use></svg>`
+            })
+
+            const instanceTippy = tippy(dropdownTarget, {
+              maxWidth: 150,
+              placement: 'right-start',
+              offset: [0, 12],
+              // appendTo: params.filterWrapper.closest('.ag-popup'),
+              trigger: 'mouseenter',
+              onCreate(instance) {
+                const content = instance.popper.querySelector('.tippy-content')
+                content.style.cssText = `display:flex;flex-direction:column;gap:5px;padding:15px;border: 1px solid #dddcdc;border-radius: 4px;`
+                const dataBtn = [
+                  { bg: '#CFF1E6', color: '#0b704e', value: 1 },
+                  { bg: '#FCF1D6', color: '#efbb34', value: 0 },
+                  { bg: '#FFDBDB', color: '#d42424', value: 2 }
+                ]
+
+                dataBtn.forEach(obj => {
+                  const btn = createElement('button', {
+                    classes: ['btn-rect'],
+                    attributes: [['style', `color: ${obj.color};background: ${obj.bg};`]]
+                  })
+                  btn.addEventListener('click', e => handleCLick(e, obj))
+                  content.appendChild(btn)
+                  obj.btn = btn
+                })
+
+                function handleCLick(e, obj) {
+                  e.stopPropagation()
+                  const btnActive = content.querySelector('._active')
+
+                  if (btnActive && btnActive == e.target) {
+                    btnActive.classList.remove('_active')
+                    return
+                  }
+
+                  btnActive?.classList.remove('_active')
+                  e.target.classList.add('_active')
+                  // this.queryParams obj.value
+                }
+
+                instance.popper.addEventListener('mousedown', e => e.stopPropagation());
+              },
+            })
+
+            targetChild.insertAdjacentElement('afterend', dropdownTarget);
+          }
           // headerComponent: CustomHeaderComponent,
           // headerComponentParams: {
           //   headersDataKey: 'sum_amount',
@@ -107,13 +159,11 @@ class TableUpcomingPayments extends Table {
       onFilterOpened: (e) => {
         const filterWrapper = e.eGui.querySelector('.ag-filter-body-wrapper')
         const data = e.api.getGridOption('rowData')
-        const currentData = data.map(obj => obj[e.column.colDef.field])
+        const currentData = uniqBy(data.map(obj => obj[e.column.colDef.field]))
         this.customFilter.gridApi = this.gridApi
         this.customFilter.render({ ...e, filterWrapper, currentData, data })
-        this.customFilter.onOk = (data) => {
-          this.changeQueryParams({ filters: data })
-          console.log({ filters: data })
-
+        this.customFilter.onChange = (data) => {
+          this.changeQueryParams(data)
         }
       }, // сработает при открытие окна с фильтром
       onFilterChanged: (e) => {
@@ -123,6 +173,7 @@ class TableUpcomingPayments extends Table {
         filter: "agTextColumnFilter",
         floatingFilter: true, // Добавляет панельку под заголовком
         closeOnApply: true,
+        sortable: false,
         // filter: 'agSetColumnFilter'
       },
     };

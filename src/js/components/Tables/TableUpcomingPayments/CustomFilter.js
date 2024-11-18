@@ -1,9 +1,12 @@
+import merge from "lodash.merge";
 import { createElement } from "../../../settings/createElement.js";
+import { determineType } from "../../../utils/determineType.js";
 
 class CustomFilter {
   constructor(gridApi) {
     this.gridApi = gridApi
     this.checkboxes = []
+    this.inputsRadio = []
 
     this.timer = null
 
@@ -12,8 +15,8 @@ class CustomFilter {
 
     this.btnOk.addEventListener('click', e => this.handleClickBtnOk(e))
     this.btnCancel.addEventListener('click', e => this.handleClickBtnCancel(e))
-    console.log(this.gridApi)
 
+    this.reqData = { filters: {} }
   }
 
   onOk() {
@@ -24,7 +27,14 @@ class CustomFilter {
 
   }
 
-  handleChange(e) {
+  handleChangeRadio(e) {
+    this.inputsRadio.length && this.inputsRadio.forEach(input => {
+      if (e.target == input) return
+      input.checked = false
+    })
+  }
+
+  handleChangeCheckbox(e) {
     const input = e.target
 
     if (input.classList.contains('all')) {
@@ -32,31 +42,56 @@ class CustomFilter {
         checkbox.checked = input.checked
       })
     }
-
-    this.onChange({ value: input.value })
   }
 
   handleClickBtnOk(e) {
     const form = e.target.closest('form')
     const formData = new FormData(form)
-    let data = {}
+    let data = { enable_filter: 1, filters: {} }
 
     Array.from(formData).forEach(([key, value]) => {
-      if (!data[key]) {
-        data[key] = []
-      }
+      if (key.split('-').length == 2) {
+        key = key.split('-')[1]
 
-      value && data[key].push(value)
+        if (!data.filters[key]) {
+          data.filters[key] = []
+        }
+
+        value && data.filters[key].push(value)
+      } else {
+        data[key] = value
+        data.sort_column = this.params.column.colDef.field
+      }
     })
 
+    this.reqData = merge(this.reqData, data)
 
     this.closeFilter(this.params.column.colDef.field)
 
-    this.onOk(data)
+    this.onChange(this.reqData)
   }
 
   handleClickBtnCancel(e) {
+    const form = e.target.closest('form')
+    const key = this.params.column.colDef.field
 
+    Array.from(form).forEach(el => {
+      if (el.tagName === 'INPUT') {
+        el.checked = false
+      }
+    })
+
+    if (this.reqData.filters) {
+      delete this.reqData.filters?.[key]
+
+      if (!Object.keys(this.reqData.filters).length) {
+        delete this.reqData.filters
+        delete this.reqData.enable_filter
+      }
+    }
+
+    this.closeFilter(key)
+    this.onChange(this.reqData)
   }
 
   closeFilter(columnField) {
@@ -76,6 +111,17 @@ class CustomFilter {
         ['name', name],
         ['value', val],
         ['id', `filter-checkbox-${name}-${i}`]
+      ]
+    })
+  }
+
+  createRadio({ val, name }) {
+    return createElement('input', {
+      attributes: [
+        ['type', 'radio'],
+        ['name', 'sort_direction'],
+        ['value', val],
+        ['id', `filter-radio-${name}-${val}`]
       ]
     })
   }
@@ -108,9 +154,58 @@ class CustomFilter {
     </ul>`
   }
 
-  render(params) {
+  htmlSort({ name, str }) {
+    return `
+    <label class="label-radio" for="filter-radio-${name}-asc">
+      ${str.asc}
+    </label>
+    <label class="label-radio" for="filter-radio-${name}-desc">
+      ${str.desc}
+    </label>`
+  }
+
+  renderSort(params) {
     const { filterWrapper, currentData, data, column } = params
-    let customFilter = null, name = column.colDef.field
+    column.colDef.sort = column.colDef.sort || []
+    let typeData = determineType(currentData[0]);
+
+    const sortStr = {
+      number: {
+        asc: '↓ Сортировать по возрастанию',
+        desc: '↑ Сортировать по убыванию'
+      },
+      string: {
+        asc: '↓ Сортировать от А до Я',
+        desc: '↑ Сортировать от Я до А'
+      },
+    }
+
+    const wpSort = filterWrapper.querySelector('.wp-sort') ? filterWrapper.querySelector('.wp-sort') : createElement('div', {
+      classes: ['wp-sort'],
+      attributes: [['style', `display:flex;gap:5px;flex-direction: column;`]],
+      content: this.htmlSort({ name: column.colDef.field, str: sortStr[typeData] })
+    })
+
+    !filterWrapper.querySelector('.wp-sort') && filterWrapper.appendChild(wpSort)
+
+    if (!column.colDef.sort.length) {
+      const values = Object.keys(sortStr[typeData])
+      for (let i = 0; i < 2; i++) {
+        const radio = this.createRadio({ val: values[i], name: column.colDef.field })
+        column.colDef.sort.push(radio)
+        radio.addEventListener('change', e => this.handleChangeRadio(e))
+      }
+      this.inputsRadio.push(...column.colDef.sort)
+    }
+
+    wpSort.querySelectorAll('.label-radio').forEach((el, i) => {
+      el.insertAdjacentElement('beforebegin', column.colDef.sort[i])
+    })
+  }
+
+  renderCheckbox(params) {
+    const { filterWrapper, currentData, data, column } = params
+    let customFilter = null, name = 'filter-' + column.colDef.field
     column.colDef.checkbox = column.colDef.checkbox || []
 
     if (filterWrapper.querySelector('.custom-filter')) {
@@ -125,12 +220,12 @@ class CustomFilter {
     if (!column.colDef.checkbox.length) {
       const checkboxAll = this.createCheckbox({ val: '', name, i: 0 }) // чекбокс который выделает все чекбоксы
       checkboxAll.classList.add('all')
-      checkboxAll.addEventListener('change', e => this.handleChange(e))
+      checkboxAll.addEventListener('change', e => this.handleChangeCheckbox(e))
       column.colDef.checkbox.push(checkboxAll)
 
       currentData.map((val, i) => {
         const checkbox = this.createCheckbox({ val, name, i: i + 1 })
-        checkbox.addEventListener('change', e => this.handleChange(e))
+        checkbox.addEventListener('change', e => this.handleChangeCheckbox(e))
         column.colDef.checkbox.push(checkbox)
       })
     }
@@ -139,17 +234,26 @@ class CustomFilter {
       el.insertAdjacentElement('afterbegin', column.colDef.checkbox[i])
     });
 
+    this.checkboxes = column.colDef.checkbox
+  }
+
+  render(params) {
+    const { filterWrapper, currentData, data, column } = params
 
     const wpButtons = filterWrapper.querySelector('.wp-buttons') ? filterWrapper.querySelector('.wp-buttons') : createElement('div', {
       classes: ['wp-buttons'],
       attributes: [['style', `display:flex;gap:5px;justify-content:flex-end;`]]
     })
 
+    this.renderSort(params)
+    this.renderCheckbox(params)
+
     wpButtons.appendChild(this.btnOk)
     wpButtons.appendChild(this.btnCancel)
     filterWrapper.appendChild(wpButtons)
-    this.checkboxes = column.colDef.checkbox
     this.params = params
+
+    params.column.colDef.filterRenderer?.(params)
   }
 }
 
