@@ -586,11 +586,10 @@
 				font-weight: 400;
 				white-space: nowrap;
 				p {
-					display: -webkit-box;
-					-webkit-line-clamp: 1;
-					-webkit-box-orient: vertical;
-					overflow: hidden;
 					max-width: 200px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					word-break: break-word;
 				}
 			}
 

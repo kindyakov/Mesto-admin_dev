@@ -1,4 +1,5 @@
 import merge from "lodash.merge";
+import mergeWith from "lodash.mergewith";
 import { createElement } from "../../../settings/createElement.js";
 import { determineType } from "../../../utils/determineType.js";
 
@@ -64,7 +65,13 @@ class CustomFilter {
       }
     })
 
-    this.reqData = merge(this.reqData, data, this.params.queryParams)
+    this.reqData = mergeWith(this.reqData, data, this.params.queryParams,
+      (objValue, srcValue) => {
+        if (Array.isArray(objValue)) {
+          return srcValue; // Заменяем массив вместо объединения
+        }
+      }
+    )
 
     this.closeFilter(this.params.column.colDef.field)
 

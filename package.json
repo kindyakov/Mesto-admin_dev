@@ -77,6 +77,7 @@
     "inputmask": "^5.0.8",
     "just-validate": "^4.3.0",
     "lodash.merge": "^4.6.2",
+    "lodash.mergewith": "^4.6.2",
     "lodash.uniqby": "^4.7.0",
     "tippy.js": "^6.3.7",
     "uuid": "^10.0.0"
