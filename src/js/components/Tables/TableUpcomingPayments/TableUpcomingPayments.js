@@ -1,5 +1,6 @@
 import uniqBy from 'lodash.uniqby'
 import Table from "../Table.js";
+import merge from "lodash.merge";
 // import CustomHeaderComponent from "./CustomHeaderComponent.js";
 // import CustomFilterComponent from "./CustomFilterComponent.js";
 import CustomFilter from "./CustomFilter.js";
@@ -42,12 +43,16 @@ class TableUpcomingPayments extends Table {
             return cellRendererInput(params, { el: span })
           },
           filterRenderer: params => {
+            params.queryParams = params.queryParams || {}
             const targetChild = params.filterWrapper.children[1]
+
             if (params.filterWrapper.querySelector('.dropdown-target')) return
+
             const dropdownTarget = createElement('div', {
               classes: ['dropdown-target'],
               content: `<p>Фильтр по цвету</p><svg class="icon icon-arrow"><use xlink:href="img/svg/sprite.svg#arrow"></use></svg>`
             })
+            const select = this.selects
 
             const instanceTippy = tippy(dropdownTarget, {
               maxWidth: 150,
@@ -59,33 +64,40 @@ class TableUpcomingPayments extends Table {
                 const content = instance.popper.querySelector('.tippy-content')
                 content.style.cssText = `display:flex;flex-direction:column;gap:5px;padding:15px;border: 1px solid #dddcdc;border-radius: 4px;`
                 const dataBtn = [
-                  { bg: '#CFF1E6', color: '#0b704e', value: 1 },
-                  { bg: '#FCF1D6', color: '#efbb34', value: 0 },
-                  { bg: '#FFDBDB', color: '#d42424', value: 2 }
+                  { bg: '#CFF1E6', color: '#0b704e', real_payment: 1 },
+                  { bg: '#FCF1D6', color: '#efbb34', real_payment: 0 },
+                  { bg: '#FFDBDB', color: '#d42424', real_payment: 2 },
+                  { bg: '#fff', color: '#3C50E0', real_payment: -1 },
                 ]
 
                 dataBtn.forEach(obj => {
                   const btn = createElement('button', {
                     classes: ['btn-rect'],
-                    attributes: [['style', `color: ${obj.color};background: ${obj.bg};`]]
+                    attributes: [['style', `color: ${obj.color};background: ${obj.bg};`]],
+                    content: obj.content ? obj.content : ''
                   })
                   btn.addEventListener('click', e => handleCLick(e, obj))
                   content.appendChild(btn)
                   obj.btn = btn
                 })
 
-                function handleCLick(e, obj) {
+                function handleCLick(e, { real_payment, bg, color }) {
                   e.stopPropagation()
                   const btnActive = content.querySelector('._active')
 
                   if (btnActive && btnActive == e.target) {
                     btnActive.classList.remove('_active')
+                    dropdownTarget.removeAttribute('style')
                     return
                   }
 
                   btnActive?.classList.remove('_active')
                   e.target.classList.add('_active')
-                  // this.queryParams obj.value
+
+                  dropdownTarget.style.cssText = `background: ${bg};border-color: ${color};`
+
+                  params.queryParams = merge(params.queryParams, { real_payment })
+                  select.setValue(real_payment)
                 }
 
                 instance.popper.addEventListener('mousedown', e => e.stopPropagation());

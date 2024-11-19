@@ -64,7 +64,7 @@ class CustomFilter {
       }
     })
 
-    this.reqData = merge(this.reqData, data)
+    this.reqData = merge(this.reqData, data, this.params.queryParams)
 
     this.closeFilter(this.params.column.colDef.field)
 
