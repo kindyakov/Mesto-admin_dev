@@ -122,8 +122,6 @@ class Table {
 
   events() {
     if (this.btnTableUploadExcel) {
-      console.log()
-
       this.btnTableUploadExcel.addEventListener('click', this.handleBtnUploadExcel.bind(this))
     }
 

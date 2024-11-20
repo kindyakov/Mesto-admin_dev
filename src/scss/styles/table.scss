@@ -533,6 +533,15 @@
 				border-color: $blue;
 			}
 		}
+
+		.input {
+			padding: 6px 8px;
+			font-size: 14px;
+			border-color: #dddcdc;
+			&:focus {
+				border-color: $blue;
+			}
+		}
 	}
 
 	.custom-filter {
@@ -547,6 +556,8 @@
 		gap: 5px;
 		overflow-y: auto;
 		max-height: 170px;
+		min-height: 100px;
+		height: 100%;
 		padding-left: 10px;
 		li {
 			position: relative;

@@ -95,6 +95,9 @@ class CustomFilter {
     Array.from(form).forEach(el => {
       if (el.tagName === 'INPUT') {
         el.checked = false
+        if (el.classList.contains('input-search')) {
+          el.value = ''
+        }
       }
     })
 
@@ -111,6 +114,32 @@ class CustomFilter {
     this.onChange(this.reqData)
   }
 
+  handleInputSearch(e, params) {
+    const { filterWrapper, currentData, data, fullCurrentData, column } = params
+    const listValues = filterWrapper.querySelector('.col-data-list')
+    const items = listValues.querySelectorAll('li')
+    const searchStr = e.target.value.toLowerCase().trim()
+
+    items.forEach(item => {
+      const input = item.querySelector('input')
+      const value = input.value.toLowerCase().trim()
+
+      if (input.classList.contains('all')) return
+
+      if (value.search(searchStr) !== -1) {
+        item.classList.remove('_none')
+        input.disabled = false
+      } else {
+        item.classList.add('_none')
+        input.disabled = true
+      }
+    })
+
+    function insertMark(string, pos, len) {
+      return string.slice(0, pos) + '<mark>' + string.slice(pos, pos + len) + '</mark>' + string.slice(pos + len);
+    }
+  }
+
   closeFilter(columnField) {
     // const filterInstance = gridOptions.api.getFilterInstance(columnField);
     this.gridApi.hidePopupMenu()
@@ -120,17 +149,22 @@ class CustomFilter {
     // }
   }
 
-  createCheckbox({ val, name, i }) {
-    return createElement('input', {
+  createCheckbox({ val, name, i = 0, checked = false }) {
+    let input = createElement('input', {
       classes: ['input-checkbox'],
       attributes: [
         ['type', 'checkbox'],
         ['name', name],
         ['value', val],
         ['id', `filter-checkbox-${name}-${i}`],
-        ['checked', true],
       ]
     })
+
+    if (checked) {
+      input.checked = checked
+    }
+
+    return input
   }
 
   updateCheckboxId(input, newIndex) {
@@ -192,6 +226,28 @@ class CustomFilter {
     </label>`
   }
 
+  renderInputSearch(params) {
+    const { filterWrapper, currentData, data, column } = params
+
+    const defaultInput = filterWrapper.querySelector('.ag-filter-body')
+    defaultInput?.classList.add('_none')
+
+    if (filterWrapper.querySelector('.input-search')) return
+    defaultInput.insertAdjacentHTML('afterend', `<div class="wp-input"></div>`)
+    const wpInput = filterWrapper.querySelector('.wp-input')
+    const input = createElement('input', {
+      classes: ['input', 'input-search'],
+      attributes: [
+        ['type', 'text'],
+        ['autocomplete', 'off'],
+        ['placeholder', 'Поиск']
+      ],
+    })
+
+    wpInput.appendChild(input)
+    input.addEventListener('input', e => this.handleInputSearch(e, params))
+  }
+
   renderSort(params) {
     const { filterWrapper, currentData, data, column } = params
     column.colDef.sort = column.colDef.sort || []
@@ -232,8 +288,8 @@ class CustomFilter {
   }
 
   renderCheckbox(params) {
-    const { filterWrapper, currentData, data, column } = params
-    let customFilter = null, name = 'filter-' + column.colDef.field
+    const { filterWrapper, currentData, data, fullCurrentData, column } = params
+    let customFilter = null, name = 'filter-' + column.colDef.field, key = column.colDef.field
     column.colDef.checkbox = column.colDef.checkbox || {}
 
     if (filterWrapper.querySelector('.custom-filter')) {
@@ -243,16 +299,17 @@ class CustomFilter {
       filterWrapper.appendChild(customFilter)
     }
 
-    customFilter.innerHTML = this.htmlColList({ currentData, name })
+    customFilter.innerHTML = this.htmlColList({ currentData: fullCurrentData, name })
 
     if (!Object.keys(column.colDef.checkbox).length) {
-      const checkboxAll = this.createCheckbox({ val: '', name, i: 0 }) // чекбокс который выделает все чекбоксы
+      const checkboxAll = this.createCheckbox({ val: '', name }) // чекбокс который выделает все чекбоксы
       checkboxAll.classList.add('all')
       checkboxAll.addEventListener('change', e => this.handleChangeCheckbox(e))
       column.colDef.checkbox.all = checkboxAll
 
-      currentData.map((val, i) => {
-        const checkbox = this.createCheckbox({ val, name, i: i + 1 })
+      fullCurrentData.forEach((val, i) => {
+        let checked = currentData.includes(val)
+        const checkbox = this.createCheckbox({ val, name, i: i + 1, checked })
         checkbox.addEventListener('change', e => this.handleChangeCheckbox(e))
         column.colDef.checkbox[val] = checkbox
       })
@@ -262,9 +319,8 @@ class CustomFilter {
 
     labels[0].insertAdjacentElement('afterbegin', column.colDef.checkbox.all)
 
-    currentData.forEach((val, i) => {
+    fullCurrentData.forEach((val, i) => {
       const index = labels[i + 1].dataset.i
-
       let checkbox = column.colDef.checkbox[val]
 
       if (!checkbox) {
@@ -289,6 +345,7 @@ class CustomFilter {
       attributes: [['style', `display:flex;gap:5px;justify-content:flex-end;`]]
     })
 
+    this.renderInputSearch(params)
     this.renderSort(params)
     this.renderCheckbox(params)
 

@@ -43,7 +43,7 @@ class Finance extends Dashboards {
   }
 
   async getData(queryParams = {}) {
-    return postFuturePayments({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams });
+    return postFuturePayments({ show_cnt: 1000, ...queryParams });
   }
 
   async getDashboardData(queryParams = {}) {

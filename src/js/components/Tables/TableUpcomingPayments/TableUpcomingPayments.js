@@ -170,16 +170,18 @@ class TableUpcomingPayments extends Table {
       onFilterOpened: (e) => {
         const filterWrapper = e.eGui.querySelector('.ag-filter-body-wrapper')
         const data = e.api.getGridOption('rowData')
+        const fullCurrentData = uniqBy(this.data.map(obj => obj[e.column.colDef.field]))
         const currentData = uniqBy(data.map(obj => obj[e.column.colDef.field]))
+
         this.customFilter.gridApi = this.gridApi
-        this.customFilter.render({ ...e, filterWrapper, currentData, data })
+        this.customFilter.render({ ...e, filterWrapper, currentData, data, fullCurrentData })
         this.customFilter.onChange = (data) => {
           this.changeQueryParams(data)
         }
       }, // сработает при открытие окна с фильтром
       onFilterChanged: (e) => {
-        console.log('Фильтр закрыт или изменен');
-      }, // Фильтр закрыт или изменен
+        console.log('Фильтр изменен');
+      },
       defaultColDef: {
         filter: "agTextColumnFilter",
         floatingFilter: true, // Добавляет панельку под заголовком
@@ -187,6 +189,7 @@ class TableUpcomingPayments extends Table {
         sortable: false,
         // filter: 'agSetColumnFilter'
       },
+      // pagination: false,
     };
 
     const defaultParams = {}
@@ -231,13 +234,83 @@ class TableUpcomingPayments extends Table {
 
   }
 
+  changePagination({ page = 1, show_cnt = this.gridOptions.paginationPageSize, data = this.data }) {
+    const cntAll = data.length
+    const cntPages = Math.ceil(cntAll / show_cnt)
+
+    const startIndex = (page - 1) * show_cnt;
+    const endIndex = startIndex + show_cnt;
+
+    const currentData = data.slice(startIndex, endIndex);
+
+    this.pagination.setPage(page, cntPages, cntAll)
+    this.gridApi.setGridOption('rowData', currentData)
+  }
+
   onRendering({ agreements = [], cnt_pages, page, cnt_all = 0, ...data }) {
+    this.data = agreements
     this.cntAll = cnt_all
-    this.pagination.setPage(page, cnt_pages, cnt_all)
-    this.gridApi.setGridOption('headersData', data)
-    this.gridApi.setGridOption('rowData', agreements)
+    this.customFilter.data = agreements
+    // this.gridApi.setGridOption('headersData', data)
+    // this.gridApi.setGridOption('rowData', agreements)
     this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length])
     this.renderTextHeader(data)
+    this.changePagination({ page })
+  }
+
+  filterAndSortData(data, params) {
+    const { real_payment, filters = {}, sort_column, sort_direction } = params;
+
+    let result = data;
+
+    // Фильтрация по real_payment
+    if (real_payment !== undefined && real_payment !== -1) {
+      result = result.filter(item => item.real_payment === real_payment);
+    }
+
+    // Фильтрация по объекту filters
+    if (filters && Object.keys(filters).length > 0) {
+      result = result.filter(item => {
+        return Object.entries(filters).every(([key, values]) => {
+          if (Array.isArray(values)) {
+            return values.includes(String(item[key])); // Приводим к строке для совпадения
+          }
+          return true; // Пропускаем фильтр, если формат некорректный
+        });
+      });
+    }
+
+    // Сортировка
+    if (sort_column && sort_direction) {
+      result.sort((a, b) => {
+        const valA = a[sort_column];
+        const valB = b[sort_column];
+
+        if (sort_direction === "asc") {
+          return valA > valB ? 1 : valA < valB ? -1 : 0;
+        } else if (sort_direction === "desc") {
+          return valA < valB ? 1 : valA > valB ? -1 : 0;
+        }
+        return 0; // Если sort_direction некорректен
+      });
+    }
+
+    return result;
+  }
+
+  async tableRendering(queryParams = {}) {
+    try {
+      // this.loader.enable()
+      const data = this.filterAndSortData(this.data, queryParams)
+      console.log(queryParams)
+
+      this.changePagination({ ...queryParams, data })
+      // this.onRendering(data)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      // this.loader.disable()
+    }
   }
 
   async download(data, isAll) {
