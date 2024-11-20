@@ -1,12 +1,10 @@
-// import merge from "lodash.merge";
+import merge from "lodash.merge";
 import mergeWith from "lodash.mergewith";
 import { createElement } from "../../../settings/createElement.js";
 import { determineType } from "../../../utils/determineType.js";
-import merge from "lodash.merge";
 
 class CustomFilter {
-  constructor(gridApi) {
-    this.gridApi = gridApi
+  constructor() {
     this.checkboxes = []
     this.inputsRadio = []
 
@@ -134,10 +132,6 @@ class CustomFilter {
         input.disabled = true
       }
     })
-
-    function insertMark(string, pos, len) {
-      return string.slice(0, pos) + '<mark>' + string.slice(pos, pos + len) + '</mark>' + string.slice(pos + len);
-    }
   }
 
   closeFilter(columnField) {
@@ -338,7 +332,7 @@ class CustomFilter {
   }
 
   render(params) {
-    const { filterWrapper, currentData, data, column } = params
+    const { filterWrapper } = params
 
     const wpButtons = filterWrapper.querySelector('.wp-buttons') ? filterWrapper.querySelector('.wp-buttons') : createElement('div', {
       classes: ['wp-buttons'],

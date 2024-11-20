@@ -19,15 +19,12 @@ export const translations = {
   ariaFilterColumn: "Нажмите CTRL ENTER, чтобы открыть фильтр",
   ariaFilterMenuOpen: "Откройте меню фильтра",
   ariaFilterInput: "Входной сигнал фильтра",
-
   more: 'Ещё',
   next: 'Следующая',
   last: 'Последняя',
   first: 'Первая',
   previous: 'Предыдущая',
   loadingOoo: 'Загрузка...',
-
-  // Тексты фильтров
   applyFilter: 'Применить фильтр',
   equals: 'Равно',
   notEqual: 'Не равно',
@@ -47,7 +44,6 @@ export const translations = {
   inRangeStart: 'Начало диапазона',
   inRangeEnd: 'Конец диапазона',
 
-  // Тексты фильтрации
   filterOoo: 'Фильтр...',
   filterContains: 'Содержит',
   filterNotContains: 'Не содержит',
@@ -58,7 +54,7 @@ export const translations = {
   filterApply: 'Применить',
   filterReset: 'Сбросить',
   between: 'Между',
-  // Тексты для меню
+
   selectAll: 'Выбрать всё',
   selectAllSearchResults: 'Выбрать все результаты поиска',
   searchOoo: 'Поиск...',

@@ -1,8 +1,5 @@
 import uniqBy from 'lodash.uniqby'
 import Table from "../Table.js";
-import merge from "lodash.merge";
-// import CustomHeaderComponent from "./CustomHeaderComponent.js";
-// import CustomFilterComponent from "./CustomFilterComponent.js";
 import CustomFilter from "./CustomFilter.js";
 
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
@@ -175,8 +172,8 @@ class TableUpcomingPayments extends Table {
 
         this.customFilter.gridApi = this.gridApi
         this.customFilter.render({ ...e, filterWrapper, currentData, data, fullCurrentData })
-        this.customFilter.onChange = (data) => {
-          this.changeQueryParams(data)
+        this.customFilter.onChange = (queryParams) => {
+          this.changeQueryParams(queryParams)
         }
       }, // сработает при открытие окна с фильтром
       onFilterChanged: (e) => {
@@ -189,7 +186,6 @@ class TableUpcomingPayments extends Table {
         sortable: false,
         // filter: 'agSetColumnFilter'
       },
-      // pagination: false,
     };
 
     const defaultParams = {}
@@ -198,7 +194,7 @@ class TableUpcomingPayments extends Table {
     const mergedParams = Object.assign({}, defaultParams, params);
     super(selector, mergedOptions, mergedParams);
 
-    this.customFilter = new CustomFilter(this.gridApi)
+    this.customFilter = new CustomFilter()
   }
 
   renderTextHeader(data) {
@@ -251,8 +247,6 @@ class TableUpcomingPayments extends Table {
     this.data = agreements
     this.cntAll = cnt_all
     this.customFilter.data = agreements
-    // this.gridApi.setGridOption('headersData', data)
-    // this.gridApi.setGridOption('rowData', agreements)
     this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length])
     this.renderTextHeader(data)
     this.changePagination({ page })
@@ -263,8 +257,7 @@ class TableUpcomingPayments extends Table {
 
     let result = data;
 
-    // Фильтрация по real_payment
-    if (real_payment !== undefined && real_payment !== -1) {
+    if (real_payment !== -1) {
       result = result.filter(item => item.real_payment === real_payment);
     }
 
@@ -298,19 +291,11 @@ class TableUpcomingPayments extends Table {
     return result;
   }
 
-  async tableRendering(queryParams = {}) {
-    try {
-      // this.loader.enable()
-      const data = this.filterAndSortData(this.data, queryParams)
-      console.log(queryParams)
+  tableRendering(queryParams = {}) {
+    const data = this.filterAndSortData(this.data, queryParams)
+    console.log({ params: queryParams, fullData: this.data })
 
-      this.changePagination({ ...queryParams, data })
-      // this.onRendering(data)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      // this.loader.disable()
-    }
+    this.changePagination({ ...queryParams, data })
   }
 
   async download(data, isAll) {
