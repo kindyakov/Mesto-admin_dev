@@ -1,7 +1,8 @@
-import merge from "lodash.merge";
+// import merge from "lodash.merge";
 import mergeWith from "lodash.mergewith";
 import { createElement } from "../../../settings/createElement.js";
 import { determineType } from "../../../utils/determineType.js";
+import merge from "lodash.merge";
 
 class CustomFilter {
   constructor(gridApi) {
@@ -39,9 +40,18 @@ class CustomFilter {
     const input = e.target
 
     if (input.classList.contains('all')) {
-      this.checkboxes.forEach(checkbox => {
+      Object.values(this.checkboxes).forEach(checkbox => {
         checkbox.checked = input.checked
       })
+    } else {
+      let flag = true
+      Object.values(this.checkboxes).forEach(checkbox => {
+        if (!checkbox.checked && !checkbox.classList.contains('all')) {
+          flag = false
+        }
+      })
+
+      this.checkboxes.all.checked = flag
     }
   }
 
@@ -60,12 +70,12 @@ class CustomFilter {
 
         value && data.filters[key].push(value)
       } else {
-        data[key] = value
+        data[key] = !isNaN(+value) ? +value : value
         data.sort_column = this.params.column.colDef.field
       }
     })
 
-    this.reqData = mergeWith(this.reqData, data, this.params.queryParams,
+    this.reqData = mergeWith(this.reqData, data,
       (objValue, srcValue) => {
         if (Array.isArray(objValue)) {
           return srcValue; // Заменяем массив вместо объединения
@@ -117,9 +127,20 @@ class CustomFilter {
         ['type', 'checkbox'],
         ['name', name],
         ['value', val],
-        ['id', `filter-checkbox-${name}-${i}`]
+        ['id', `filter-checkbox-${name}-${i}`],
+        ['checked', true],
       ]
     })
+  }
+
+  updateCheckboxId(input, newIndex) {
+    if (!input || !input.id) {
+      console.error('Передан некорректный элемент или отсутствует атрибут id');
+      return;
+    }
+
+    const newId = input.id.replace(/-\d+$/, `-${newIndex}`);
+    input.id = newId;
   }
 
   createRadio({ val, name }) {
@@ -137,7 +158,7 @@ class CustomFilter {
     return `
     <ul class="col-data-list">
       <li>
-        <label class="wrapper-checkbox">
+        <label class="wrapper-checkbox" data-i="0">
           <label class="label-checkbox" for="filter-checkbox-${name}-0">
             <svg class="icon">
               <use xlink:href="img/svg/sprite.svg#check-3"></use>
@@ -148,7 +169,7 @@ class CustomFilter {
       </li>
       ${currentData.map((val, i) =>
       `<li>
-        <label class="wrapper-checkbox">
+        <label class="wrapper-checkbox" data-i="${i + 1}">
           <label class="label-checkbox" for="filter-checkbox-${name}-${i + 1}">
             <svg class="icon">
               <use xlink:href="img/svg/sprite.svg#check-3"></use>
@@ -213,7 +234,7 @@ class CustomFilter {
   renderCheckbox(params) {
     const { filterWrapper, currentData, data, column } = params
     let customFilter = null, name = 'filter-' + column.colDef.field
-    column.colDef.checkbox = column.colDef.checkbox || []
+    column.colDef.checkbox = column.colDef.checkbox || {}
 
     if (filterWrapper.querySelector('.custom-filter')) {
       customFilter = filterWrapper.querySelector('.custom-filter')
@@ -224,22 +245,38 @@ class CustomFilter {
 
     customFilter.innerHTML = this.htmlColList({ currentData, name })
 
-    if (!column.colDef.checkbox.length) {
+    if (!Object.keys(column.colDef.checkbox).length) {
       const checkboxAll = this.createCheckbox({ val: '', name, i: 0 }) // чекбокс который выделает все чекбоксы
       checkboxAll.classList.add('all')
       checkboxAll.addEventListener('change', e => this.handleChangeCheckbox(e))
-      column.colDef.checkbox.push(checkboxAll)
+      column.colDef.checkbox.all = checkboxAll
 
       currentData.map((val, i) => {
         const checkbox = this.createCheckbox({ val, name, i: i + 1 })
         checkbox.addEventListener('change', e => this.handleChangeCheckbox(e))
-        column.colDef.checkbox.push(checkbox)
+        column.colDef.checkbox[val] = checkbox
       })
     }
 
-    customFilter.querySelectorAll('.wrapper-checkbox').forEach((el, i) => {
-      el.insertAdjacentElement('afterbegin', column.colDef.checkbox[i])
-    });
+    const labels = customFilter.querySelectorAll('.wrapper-checkbox')
+
+    labels[0].insertAdjacentElement('afterbegin', column.colDef.checkbox.all)
+
+    currentData.forEach((val, i) => {
+      const index = labels[i + 1].dataset.i
+
+      let checkbox = column.colDef.checkbox[val]
+
+      if (!checkbox) {
+        checkbox = this.createCheckbox({ val, name, i: index })
+        checkbox.addEventListener('change', e => this.handleChangeCheckbox(e))
+        column.colDef.checkbox[val] = checkbox
+      } else {
+        this.updateCheckboxId(checkbox, index)
+      }
+
+      labels[i + 1].insertAdjacentElement('afterbegin', column.colDef.checkbox[val])
+    })
 
     this.checkboxes = column.colDef.checkbox
   }
@@ -258,9 +295,10 @@ class CustomFilter {
     wpButtons.appendChild(this.btnOk)
     wpButtons.appendChild(this.btnCancel)
     filterWrapper.appendChild(wpButtons)
-    this.params = params
 
     params.column.colDef.filterRenderer?.(params)
+
+    this.params = merge(this.params, params)
   }
 }
 

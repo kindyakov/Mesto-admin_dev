@@ -43,15 +43,15 @@ class TableUpcomingPayments extends Table {
             return cellRendererInput(params, { el: span })
           },
           filterRenderer: params => {
-            params.queryParams = params.queryParams || {}
             const targetChild = params.filterWrapper.children[1]
 
             if (params.filterWrapper.querySelector('.dropdown-target')) return
 
             const dropdownTarget = createElement('div', {
               classes: ['dropdown-target'],
-              content: `<p>Фильтр по цвету</p><svg class="icon icon-arrow"><use xlink:href="img/svg/sprite.svg#arrow"></use></svg>`
+              content: `<input type="text" name="real_payment" value="-1" style="display:none;"><p>Фильтр по цвету</p><svg class="icon icon-arrow"><use xlink:href="img/svg/sprite.svg#arrow"></use></svg>`
             })
+            const input = dropdownTarget.querySelector('input')
             const select = this.selects
 
             const instanceTippy = tippy(dropdownTarget, {
@@ -95,8 +95,7 @@ class TableUpcomingPayments extends Table {
                   e.target.classList.add('_active')
 
                   dropdownTarget.style.cssText = `background: ${bg};border-color: ${color};`
-
-                  params.queryParams = merge(params.queryParams, { real_payment })
+                  input.value = real_payment
                   select.setValue(real_payment)
                 }
 
