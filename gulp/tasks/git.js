@@ -17,6 +17,10 @@ export const createRepo = (done) => {
     return
   }
 
+  if (!process.env.GITHUB_TOKEN) {
+    throw new Error("GITHUB_TOKEN не задан. Установите его в переменных окружения.");
+  }
+
   const octokit = new Octokit({
     auth: process.env.GITHUB_TOKEN,
   });
