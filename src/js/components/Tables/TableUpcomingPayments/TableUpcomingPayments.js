@@ -1,10 +1,13 @@
 import uniqBy from 'lodash.uniqby'
+import merge from "lodash.merge";
+
 import Table from "../Table.js";
-import CustomFilter from "./CustomFilter.js";
+import CustomFilter from "./CustomFilter/CustomFilter.js";
 
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
 import { observeCell } from "../utils/observeCell.js";
+import { createDaysLeftElement } from '../utils/createDaysLeftElement.js';
 
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
@@ -85,13 +88,14 @@ class TableUpcomingPayments extends Table {
                   if (btnActive && btnActive == e.target) {
                     btnActive.classList.remove('_active')
                     dropdownTarget.removeAttribute('style')
+                    input.value = ''
                     return
                   }
 
                   btnActive?.classList.remove('_active')
                   e.target.classList.add('_active')
 
-                  dropdownTarget.style.cssText = `background: ${bg};border-color: ${color};`
+                  dropdownTarget.style.cssText = `background:${bg};border-color:${color};`
                   input.value = real_payment
                   select.setValue(real_payment)
                 }
@@ -101,6 +105,10 @@ class TableUpcomingPayments extends Table {
             })
 
             targetChild.insertAdjacentElement('afterend', dropdownTarget);
+
+            params.column.colDef.clearCustomFilter = () => {
+              dropdownTarget.removeAttribute('style')
+            }
           }
           // headerComponent: CustomHeaderComponent,
           // headerComponentParams: {
@@ -159,21 +167,51 @@ class TableUpcomingPayments extends Table {
           },
         },
         {
-          headerName: 'Осталось дней', field: 'days_left', minWidth: 90, flex: 0.5,
+          headerName: 'Осталось дней', field: 'days_left', minWidth: 100, flex: 0.5,
           filter: 'agNumberColumnFilter',
+          cellRenderer: params => createDaysLeftElement(params)
         }
       ],
       suppressColumnVirtualisation: true,
       onFilterOpened: (e) => {
+        const field = e.column.colDef.field
         const filterWrapper = e.eGui.querySelector('.ag-filter-body-wrapper')
         const data = e.api.getGridOption('rowData')
-        const fullCurrentData = uniqBy(this.data.map(obj => obj[e.column.colDef.field]))
-        const currentData = uniqBy(data.map(obj => obj[e.column.colDef.field]))
+        const fullCurrentData = uniqBy(this.data.map(obj => obj[field]))
+        const currentData = uniqBy(data.map(obj => obj[field]))
+        let dataWithoutCurrentFilter = []
 
+
+        if (this.queryParams.filters) {
+          if (Object.keys(this.queryParams.filters).length == 1 && Object.keys(this.queryParams.filters)[0] == field) {
+            dataWithoutCurrentFilter = fullCurrentData.filter(value => !currentData.includes(value))
+          } else if (Object.keys(this.queryParams.filters).length >= 2) {
+            dataWithoutCurrentFilter = this.filterAndSortData(this.data, {
+              ...this.queryParams,
+              filters: Object.keys(this.queryParams.filters).reduce((filteredObj, key) => {
+                if (key !== field) {
+                  filteredObj[key] = this.queryParams.filters[key];
+                }
+                return filteredObj;
+              }, {})
+            })
+              .map(obj => obj[field])
+              .filter(value => !currentData.includes(value))
+          }
+        }
+
+        const params = { ...e, filterWrapper, currentData, data, fullCurrentData, dataWithoutCurrentFilter }
+
+        this.customFilter.init(params)
         this.customFilter.gridApi = this.gridApi
-        this.customFilter.render({ ...e, filterWrapper, currentData, data, fullCurrentData })
+        this.customFilter.render(params)
         this.customFilter.onChange = (queryParams) => {
-          this.changeQueryParams(queryParams)
+          // this.changeQueryParams(queryParams)
+          this.queryParams = queryParams
+          this.tableRendering(queryParams)
+        }
+        this.customFilter.onChangeColumnParams = (params) => {
+          e.column.colDef.filterValues = merge(e.column.colDef.filterValues || {}, params)
         }
       }, // сработает при открытие окна с фильтром
       onFilterChanged: (e) => {
@@ -186,9 +224,10 @@ class TableUpcomingPayments extends Table {
         sortable: false,
         // filter: 'agSetColumnFilter'
       },
+      pagination: false,
     };
 
-    const defaultParams = {}
+    const defaultParams = { isPagination: false }
 
     const mergedOptions = Object.assign({}, defaultOptions, options);
     const mergedParams = Object.assign({}, defaultParams, params);
@@ -239,8 +278,8 @@ class TableUpcomingPayments extends Table {
 
     const currentData = data.slice(startIndex, endIndex);
 
-    this.pagination.setPage(page, cntPages, cntAll)
-    this.gridApi.setGridOption('rowData', currentData)
+    // this.pagination.setPage(page, cntPages, cntAll)
+    this.gridApi.setGridOption('rowData', data)
   }
 
   onRendering({ agreements = [], cnt_pages, page, cnt_all = 0, ...data }) {
@@ -253,7 +292,7 @@ class TableUpcomingPayments extends Table {
   }
 
   filterAndSortData(data, params) {
-    const { real_payment, filters = {}, sort_column, sort_direction } = params;
+    const { real_payment = -1, filters = {}, sort_column, sort_direction } = params;
 
     let result = data;
 
@@ -265,7 +304,7 @@ class TableUpcomingPayments extends Table {
     if (filters && Object.keys(filters).length > 0) {
       result = result.filter(item => {
         return Object.entries(filters).every(([key, values]) => {
-          if (Array.isArray(values)) {
+          if (Array.isArray(values) && values.length) {
             return values.includes(String(item[key])); // Приводим к строке для совпадения
           }
           return true; // Пропускаем фильтр, если формат некорректный
@@ -287,13 +326,14 @@ class TableUpcomingPayments extends Table {
         return 0; // Если sort_direction некорректен
       });
     }
+    console.log(params)
 
     return result;
   }
 
   tableRendering(queryParams = {}) {
     const data = this.filterAndSortData(this.data, queryParams)
-    console.log({ params: queryParams, fullData: this.data })
+    // console.log({ params: queryParams, filteredData: data, fullData: this.data })
 
     this.changePagination({ ...queryParams, data })
   }

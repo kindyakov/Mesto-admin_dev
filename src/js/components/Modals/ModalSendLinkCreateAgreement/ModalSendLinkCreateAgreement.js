@@ -7,10 +7,10 @@ import { api } from "../../../settings/api.js"
 import { outputInfo } from "../../../utils/outputinfo.js"
 import { PopupSelectSend } from "../utils/PopupSelectSend/PopupSelectSend.js"
 
-class ModalCreateAgreement extends BaseModal {
+class ModalSendLinkCreateAgreement extends BaseModal {
   constructor(options = {}) {
     super(content, {
-      cssClass: ['modal-create-agreement'],
+      cssClass: ['modal-send-link-create-agreement'],
       ...options,
     })
 
@@ -148,6 +148,6 @@ class ModalCreateAgreement extends BaseModal {
   }
 }
 
-const modalCreateAgreement = new ModalCreateAgreement()
+const modalSendLinkCreateAgreement = new ModalSendLinkCreateAgreement()
 
-export default modalCreateAgreement
+export default modalSendLinkCreateAgreement

@@ -5,8 +5,9 @@ import { actions } from '../utils/actions.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
 import { observeCell } from "../utils/observeCell.js";
+import { createDaysLeftElement } from '../utils/createDaysLeftElement.js';
 
-import { formattingPrice } from '../../../utils/formattingPrice.js';
+import { formattingPrice, formatPhoneNumber } from '../../../utils/formattingPrice.js';
 import { getFormattedDate } from '../../../utils/getFormattedDate.js';
 import { downloadAgreement } from '../../../settings/request.js';
 import { createElement } from '../../../settings/createElement.js';
@@ -32,6 +33,14 @@ class TableAgreements extends Table {
             observeCell(wp, params)
             return wp
           }
+        },
+        {
+          headerName: 'Телефон', field: 'username', minWidth: 160, flex: 0.5,
+          cellRenderer: params => cellRendererInput(params, { funcFormate: formatPhoneNumber }),
+        },
+        {
+          headerName: 'Почта', field: 'email', minWidth: 200, flex: 0.5,
+          cellRenderer: params => cellRendererInput(params),
         },
         {
           headerName: 'Дата начала', field: 'agrbegdate', minWidth: 130, flex: 0.6,
@@ -71,9 +80,13 @@ class TableAgreements extends Table {
           headerName: 'Способ оплаты', field: 'last_payment_type', minWidth: 100, flex: 0.5,
         },
         {
+          headerName: 'Осталось дней', field: 'days_left', minWidth: 90, flex: 0.5,
+          cellRenderer: params => createDaysLeftElement(params)
+        },
+        {
           headerName: 'Действия', field: 'actions', width: 90,
           cellRenderer: params => this.actionCellRenderer(params), resizable: false, sortable: false
-        }
+        },
       ],
     };
 

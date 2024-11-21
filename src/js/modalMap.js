@@ -14,7 +14,7 @@ import modalBookRoom from "./components/Modals/ModalBookRoom/ModalBookRoom.js";
 import modalGetGuestAccess from "./components/Modals/ModalGetGuestAccess/ModalGetGuestAccess.js";
 import modalCreatePersonalAccount from "./components/Modals/ModalCreatePersonalAccount/ModalCreatePersonalAccount.js";
 import modalConfirmationDeparture from "./components/Modals/ModalConfirmationDeparture/ModalConfirmationDeparture.js";
-import modalCreateAgreement from "./components/Modals/ModalCreateAgreement/ModalCreateAgreement.js";
+import modalSendLinkCreateAgreement from "./components/Modals/ModalSendLinkCreateAgreement/ModalSendLinkCreateAgreement.js";
 import modalDownloadPhotoWh from "./components/Modals/ModalDownloadPhotoWh/ModalDownloadPhotoWh.js";
 import modalShowPhotoWh from "./components/Modals/ModalShowPhotoWh/ModalShowPhotoWh.js";
 import modalPhotoRoom from "./components/Modals/ModalPhotoRoom/ModalPhotoRoom.js";
@@ -46,7 +46,7 @@ export const modalMap = {
   [getClassModal(modalGetGuestAccess)]: modalGetGuestAccess,
   [getClassModal(modalCreatePersonalAccount)]: modalCreatePersonalAccount,
   [getClassModal(modalConfirmationDeparture)]: modalConfirmationDeparture,
-  [getClassModal(modalCreateAgreement)]: modalCreateAgreement,
+  [getClassModal(modalSendLinkCreateAgreement)]: modalSendLinkCreateAgreement,
   [getClassModal(modalDownloadPhotoWh)]: modalDownloadPhotoWh,
   [getClassModal(modalShowPhotoWh)]: modalShowPhotoWh,
   [getClassModal(modalPhotoRoom)]: modalPhotoRoom,

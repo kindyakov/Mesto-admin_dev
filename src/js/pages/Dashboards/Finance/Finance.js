@@ -18,7 +18,7 @@ class Finance extends Dashboards {
           tableSelector: '.table-payments',
           TableComponent: TableUpcomingPayments,
           options: {
-            paginationPageSize: 15
+            paginationPageSize: 1000
           },
           params: {
             getData: postFuturePayments
