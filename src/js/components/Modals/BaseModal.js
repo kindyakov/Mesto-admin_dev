@@ -48,6 +48,10 @@ class BaseModal {
     return {}
   }
 
+  onHandleClick(e) {
+
+  }
+
   onSaveValue() {
   }
 
@@ -115,6 +119,8 @@ class BaseModal {
       if (e.target.closest('.btn-edit-data')) {
         this.handleClickEdit(e)
       }
+
+      this.onHandleClick(e)
     })
 
     this.buttonsEditValue.length && this.buttonsEditValue.forEach(btn => {

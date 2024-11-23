@@ -19,6 +19,7 @@ import modalDownloadPhotoWh from "./components/Modals/ModalDownloadPhotoWh/Modal
 import modalShowPhotoWh from "./components/Modals/ModalShowPhotoWh/ModalShowPhotoWh.js";
 import modalPhotoRoom from "./components/Modals/ModalPhotoRoom/ModalPhotoRoom.js";
 import modalSelectNextPayment from "./components/Modals/ModalSelectNextPayment/ModalSelectNextPayment.js";
+import modalCreateAgreement from "./components/Modals/ModalCreateAgreement/ModalCreateAgreement.js";
 
 import modalConfirmOpenRoom from "./components/Modals/Confirmation/ModalConfirmOpenRoom/ModalConfirmOpenRoom.js";
 import modalConfirmCancelGuestAccess from "./components/Modals/Confirmation/ModalConfirmCancelGuestAccess/ModalConfirmCancelGuestAccess.js";
@@ -51,6 +52,7 @@ export const modalMap = {
   [getClassModal(modalShowPhotoWh)]: modalShowPhotoWh,
   [getClassModal(modalPhotoRoom)]: modalPhotoRoom,
   [getClassModal(modalSelectNextPayment)]: modalSelectNextPayment,
+  [getClassModal(modalCreateAgreement)]: modalCreateAgreement,
   // Окна с подтверждением
   [getClassModal(modalConfirmOpenRoom)]: modalConfirmOpenRoom,
   [getClassModal(modalConfirmCancelGuestAccess)]: modalConfirmCancelGuestAccess,
