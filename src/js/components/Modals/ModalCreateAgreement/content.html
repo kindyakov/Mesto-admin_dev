@@ -6,48 +6,56 @@
   </div>
   <div class="modal__rendering">
     <div class="modal__rendering_content">
-      <div class="button-container-1" style="display:flex;gap:20px;width:100%;">
+      <div class="button-container step-content button-container-1" style="display:flex;gap:10px;width:100%;flex-wrap:wrap;">
         <button class="button select-btn" data-value="old_client" style="flex: 1 1 auto;">Старый клиент</button>
         <button class="button select-btn" data-value="new_client" style="flex: 1 1 auto;">Новый клиент</button>
       </div>
-      <form class="modal__form form-old-client _none">
+      <form class="modal__form form-old-client step-content _none">
         <div class="modal__form_item grid-column-2">
           <span>ФИО</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="text" class="modal__form_input input" name="fullname" data-render="fullname"
-              autocomplete="off">
+            <input type="text" class="modal__form_input input" name="fullname" data-render="fullname" autocomplete="off"
+              autofocus>
+            <ul class="dropdown-list"></ul>
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Номер ячейки:</span>
+          <div class="modal__form_wp-input wp-input">
+            <div class="custom-input select-room-id" disabled></div>
           </div>
         </div>
         <div class="modal__form_item">
           <span>Номер договора</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="text" class="modal__form_input input" name="agrid" autocomplete="off">
+            <input type="text" class="modal__form_input input" name="agrid" autocomplete="off" disabled>
           </div>
         </div>
         <div class="modal__form_item">
           <span>Стоимость аренды ячеек в договоре</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="number" class="modal__form_input input" name="price" autocomplete="off">
+            <input type="number" class="modal__form_input input hide-arrow" name="price" autocomplete="off"
+              inputmode="numeric" disabled>
           </div>
         </div>
         <div class="modal__form_item">
           <span>Дата начала договора</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="text" class="modal__form_input input" name="agrbegdate" autocomplete="off">
+            <input type="text" class="modal__form_input input" name="agrbegdate" autocomplete="off" disabled>
           </div>
         </div>
         <div class="modal__form_item">
           <span>Дата окончания договора</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="text" class="modal__form_input input" name="agrbegdate" autocomplete="off">
+            <input type="text" class="modal__form_input input" name="agrenddate" autocomplete="off" disabled>
           </div>
         </div>
         <div class="modal__form_item">
           <span>Способ аренды ячеек в договоре</span>
           <label class="wrapper-checkbox">
             <input class="input-checkbox" type="radio" name="week_or_month" value="week"
-              id="modal-create-agreement-radio-1" checked>
-            <label class="label-checkbox" for="modal-create-agreement-radio-1">
+              id="modal-create-agreement-radio-week_or_month" checked disabled>
+            <label class="label-checkbox" for="modal-create-agreement-radio-week_or_month">
               <svg class="icon">
                 <use xlink:href="img/svg/sprite.svg#check-3"></use>
               </svg>
@@ -56,8 +64,8 @@
           </label>
           <label class="wrapper-checkbox">
             <input class="input-checkbox" type="radio" name="week_or_month" value="month"
-              id="modal-create-agreement-radio-2">
-            <label class="label-checkbox" for="modal-create-agreement-radio-2">
+              id="modal-create-agreement-radio-week_or_month-1" disabled>
+            <label class="label-checkbox" for="modal-create-agreement-radio-week_or_month-1">
               <svg class="icon">
                 <use xlink:href="img/svg/sprite.svg#check-3"></use>
               </svg>
@@ -66,17 +74,18 @@
           </label>
         </div>
         <div class="modal__form_item">
-          <span>Дата окончания договора</span>
+          <span>Стоимость дополнительного оборудования</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="text" class="modal__form_input input" name="agrenddate" autocomplete="off">
+            <input type="number" class="modal__form_input input hide-arrow" name="equipment_price" inputmode="numeric"
+              autocomplete="off" disabled>
           </div>
         </div>
         <div class="modal__form_item">
           <span>Метрика размера</span>
           <label class="wrapper-checkbox">
-            <input class="input-checkbox" type="radio" name="m2_or_m3" value="m2" id="modal-create-agreement-radio-3"
-              checked>
-            <label class="label-checkbox" for="modal-create-agreement-radio-1">
+            <input class="input-checkbox" type="radio" name="m2_or_m3" value="m2"
+              id="modal-create-agreement-radio-m2_or_m3" checked disabled>
+            <label class="label-checkbox" for="modal-create-agreement-radio-m2_or_m3">
               <svg class="icon">
                 <use xlink:href="img/svg/sprite.svg#check-3"></use>
               </svg>
@@ -84,8 +93,9 @@
             <p>Площадь (m2)</p>
           </label>
           <label class="wrapper-checkbox">
-            <input class="input-checkbox" type="radio" name="m2_or_m3" value="m3" id="modal-create-agreement-radio-4">
-            <label class="label-checkbox" for="modal-create-agreement-radio-4">
+            <input class="input-checkbox" type="radio" name="m2_or_m3" value="m3"
+              id="modal-create-agreement-radio-m2_or_m3-1" disabled>
+            <label class="label-checkbox" for="modal-create-agreement-radio-m2_or_m3-1">
               <svg class="icon">
                 <use xlink:href="img/svg/sprite.svg#check-3"></use>
               </svg>
@@ -93,19 +103,26 @@
             <p>Объем (m3)</p>
           </label>
         </div>
-        <div class="modal__form_item">
-          <span>Стоимость дополнительного оборудования</span>
-          <div class="modal__form_wp-input wp-input">
-            <input type="number" class="modal__form_input input" name="equipment_price" autocomplete="off">
-          </div>
-        </div>
-        <button class="button grid-column-2" type="submit">Создать договор</button>
+        <button class="button grid-column-2" type="submit" disabled>Создать договор</button>
       </form>
-      <div class="button-container-2 _none" style="display:flex;gap:20px;width:100%;">
+      <div class="button-container button-container-2 step-content _none" style="display:flex;gap:10px;width:100%;flex-wrap:wrap;">
         <button class="button select-btn" data-value="f" style="flex: 1 1 auto;">Физическое лицо</button>
         <button class="button select-btn" data-value="u" style="flex: 1 1 auto;">Юридическое лицо</button>
       </div>
-      <form class="modal__form form-f-client _none">
+      <form class="modal__form form-f-client step-content _none">
+        <div class="modal__form_item">
+          <span>Число мес.</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="number" class="modal__form_input input hide-arrow" name="num_monthes" autocomplete="off"
+              inputmode="numeric">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Номер ячейки:</span>
+          <div class="modal__form_wp-input wp-input">
+            <div class="custom-input select-room-id"></div>
+          </div>
+        </div>
         <h4 class="title-form grid-column-2">Данные клиента</h4>
         <div class="modal__form_item">
           <span>Фамилия</span>
@@ -132,7 +149,7 @@
           </div>
         </div>
         <div class="modal__form_item">
-          <span>Дата рождения</span>
+          <span>Номер телефона</span>
           <div class="modal__form_wp-input wp-input">
             <input type="tel" class="modal__form_input input" name="username" autocomplete="off" inputmode="tel">
           </div>
@@ -140,7 +157,7 @@
         <div class="modal__form_item">
           <span>Почта</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="email" class="modal__form_input input" name="email" autocomplete="off">
+            <input type="email" class="modal__form_input input" name="email" autocomplete="off" inputmode="email">
           </div>
         </div>
         <div class="modal__form_item">
@@ -153,13 +170,13 @@
         <div class="modal__form_item">
           <span>Серия паспорта</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="number" class="modal__form_input input" name="series" autocomplete="off">
+            <input type="text" class="modal__form_input input" name="series" autocomplete="off" inputmode="numeric">
           </div>
         </div>
         <div class="modal__form_item">
           <span>Номер паспорта</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="number" class="modal__form_input input" name="no" autocomplete="off">
+            <input type="text" class="modal__form_input input" name="no" autocomplete="off" inputmode="numeric">
           </div>
         </div>
         <div class="modal__form_item">
@@ -177,16 +194,23 @@
         <div class="modal__form_item">
           <span>Код подразделения</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="number" class="modal__form_input input" name="subdivision" autocomplete="off">
+            <input type="text" class="modal__form_input input" name="subdivision" autocomplete="off"
+              inputmode="numeric">
           </div>
         </div>
         <button class="button grid-column-2" type="submit">Создать договор</button>
       </form>
-      <form class="modal__form form-u-client _none">
+      <form class="modal__form form-u-client step-content _none">
         <div class="modal__form_item">
           <span>Номер договора</span>
           <div class="modal__form_wp-input wp-input">
             <input type="text" class="modal__form_input input" name="agrid" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Номер ячейки:</span>
+          <div class="modal__form_wp-input wp-input">
+            <div class="custom-input select-room-id"></div>
           </div>
         </div>
         <div class="modal__form_item">
@@ -204,15 +228,15 @@
         <div class="modal__form_item">
           <span>Стоимость аренды ячеек в договоре</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="number" class="modal__form_input input" name="price" autocomplete="off">
+            <input type="number" class="modal__form_input input hide-arrow" name="price" autocomplete="off"  inputmode="numeric">
           </div>
         </div>
         <div class="modal__form_item">
           <span>Способ аренды ячеек в договоре</span>
           <label class="wrapper-checkbox">
-            <input class="input-checkbox" type="radio" name="week_or_month" value="week" id="modal-create-agreement-radio-1"
-              checked>
-            <label class="label-checkbox" for="modal-create-agreement-radio-1">
+            <input class="input-checkbox" type="radio" name="week_or_month" value="week"
+              id="modal-create-agreement-radio-week_or_month-2" checked>
+            <label class="label-checkbox" for="modal-create-agreement-radio-week_or_month-2">
               <svg class="icon">
                 <use xlink:href="img/svg/sprite.svg#check-3"></use>
               </svg>
@@ -220,8 +244,9 @@
             <p>В неделю</p>
           </label>
           <label class="wrapper-checkbox">
-            <input class="input-checkbox" type="radio" name="week_or_month" value="month" id="modal-create-agreement-radio-2">
-            <label class="label-checkbox" for="modal-create-agreement-radio-2">
+            <input class="input-checkbox" type="radio" name="week_or_month" value="month"
+              id="modal-create-agreement-radio-week_or_month-3">
+            <label class="label-checkbox" for="modal-create-agreement-radio-week_or_month-3">
               <svg class="icon">
                 <use xlink:href="img/svg/sprite.svg#check-3"></use>
               </svg>
@@ -230,10 +255,18 @@
           </label>
         </div>
         <div class="modal__form_item">
+          <span>Стоимость дополнительного оборудования</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="number" class="modal__form_input input hide-arrow" name="equipment_price" autocomplete="off"
+              inputmode="numeric">
+          </div>
+        </div>
+        <div class="modal__form_item">
           <span>Метрика размера</span>
           <label class="wrapper-checkbox">
-            <input class="input-checkbox" type="radio" name="m2_or_m3" value="m2" id="modal-create-agreement-radio-3" checked>
-            <label class="label-checkbox" for="modal-create-agreement-radio-1">
+            <input class="input-checkbox" type="radio" name="m2_or_m3" value="m2"
+              id="modal-create-agreement-radio-m2_or_m3-2" checked>
+            <label class="label-checkbox" for="modal-create-agreement-radio-m2_or_m3-2">
               <svg class="icon">
                 <use xlink:href="img/svg/sprite.svg#check-3"></use>
               </svg>
@@ -241,20 +274,15 @@
             <p>Площадь (m2)</p>
           </label>
           <label class="wrapper-checkbox">
-            <input class="input-checkbox" type="radio" name="m2_or_m3" value="m3" id="modal-create-agreement-radio-4">
-            <label class="label-checkbox" for="modal-create-agreement-radio-4">
+            <input class="input-checkbox" type="radio" name="m2_or_m3" value="m3"
+              id="modal-create-agreement-radio-m2_or_m3-3">
+            <label class="label-checkbox" for="modal-create-agreement-radio-m2_or_m3-3">
               <svg class="icon">
                 <use xlink:href="img/svg/sprite.svg#check-3"></use>
               </svg>
             </label>
             <p>Объем (m3)</p>
           </label>
-        </div>
-        <div class="modal__form_item">
-          <span>Стоимость дополнительного оборудования</span>
-          <div class="modal__form_wp-input wp-input">
-            <input type="number" class="modal__form_input input" name="equipment_price" autocomplete="off">
-          </div>
         </div>
         <h4 class="title-form grid-column-2">Данные клиента</h4>
         <div class="modal__form_item">
@@ -266,7 +294,7 @@
         <div class="modal__form_item">
           <span>Инн</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="number" class="modal__form_input input" name="inn" autocomplete="off">
+            <input type="number" class="modal__form_input input hide-arrow" name="inn" autocomplete="off"  inputmode="numeric">
           </div>
         </div>
         <div class="modal__form_item">
@@ -278,7 +306,7 @@
         <div class="modal__form_item">
           <span>Кпп</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="number" class="modal__form_input input" name="kpp" autocomplete="off">
+            <input type="number" class="modal__form_input input hide-arrow" name="kpp" autocomplete="off"  inputmode="numeric">
           </div>
         </div>
         <div class="modal__form_item">
@@ -290,7 +318,7 @@
         <div class="modal__form_item">
           <span>Почта</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="email" class="modal__form_input input" name="email" autocomplete="off">
+            <input type="email" class="modal__form_input input" name="email" autocomplete="off"  inputmode="email">
           </div>
         </div>
         <h4 class="title-form grid-column-2">Финансовая информация</h4>
@@ -303,19 +331,19 @@
         <div class="modal__form_item">
           <span>Номер расчетного счета</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="number" class="modal__form_input input" name="rs" autocomplete="off">
+            <input type="number" class="modal__form_input input hide-arrow" name="rs" autocomplete="off"  inputmode="numeric">
           </div>
         </div>
         <div class="modal__form_item">
           <span>БИК</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="number" class="modal__form_input input" name="bik" autocomplete="off">
+            <input type="number" class="modal__form_input input hide-arrow" name="bik" autocomplete="off"  inputmode="numeric">
           </div>
         </div>
         <div class="modal__form_item">
           <span>Номер корреспондентского счета</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="number" class="modal__form_input input" name="ks" autocomplete="off">
+            <input type="number" class="modal__form_input input hide-arrow" name="ks" autocomplete="off"  inputmode="numeric">
           </div>
         </div>
         <button class="button grid-column-2" type="submit">Создать договор</button>

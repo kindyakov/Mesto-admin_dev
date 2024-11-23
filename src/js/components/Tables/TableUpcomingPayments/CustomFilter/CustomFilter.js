@@ -94,6 +94,7 @@ class CustomFilter {
       }
     )
 
+    this.toggleFilterClass(this.params.column.colDef.field, true)
     this.closeFilter(this.params.column.colDef.field)
 
     this.onChange(this.reqData)
@@ -134,6 +135,7 @@ class CustomFilter {
     this.params.column.colDef.clearCustomFilter?.()
 
     this.onClearFiltersCol(e)
+    this.toggleFilterClass()
 
     this.closeFilter(key)
     this.onChange(this.reqData)
@@ -159,6 +161,21 @@ class CustomFilter {
         input.disabled = true
       }
     })
+  }
+
+  toggleFilterClass() {
+    const keys = this.reqData.filters ? Object.keys(this.reqData.filters) : []
+    if (keys.length) {
+      keys.forEach(key => {
+        const headerCell = this.wpTable.querySelector(`.ag-header-cell[col-id="${key}"]`);
+        const floatingFilter = this.wpTable.querySelector(`.ag-header-cell.ag-floating-filter[aria-colindex="${headerCell.getAttribute('aria-colindex')}"]`)
+        const filterButton = floatingFilter?.querySelector('button');
+
+        if (floatingFilter) {
+          setTimeout(() => filterButton.classList.toggle('ag-filter-active', true));
+        }
+      })
+    }
   }
 
   closeFilter(columnField) {

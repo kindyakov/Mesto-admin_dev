@@ -181,7 +181,6 @@ class TableUpcomingPayments extends Table {
         const currentData = uniqBy(data.map(obj => obj[field]))
         let dataWithoutCurrentFilter = []
 
-
         if (this.queryParams.filters) {
           if (Object.keys(this.queryParams.filters).length == 1 && Object.keys(this.queryParams.filters)[0] == field) {
             dataWithoutCurrentFilter = fullCurrentData.filter(value => !currentData.includes(value))
@@ -200,10 +199,17 @@ class TableUpcomingPayments extends Table {
           }
         }
 
+        // Сортировка по возрастанию
+        if (field == 'price') {
+          currentData.sort((a, b) => a - b);
+          dataWithoutCurrentFilter.sort((a, b) => a - b);
+        }
+
         const params = { ...e, filterWrapper, currentData, data, fullCurrentData, dataWithoutCurrentFilter }
 
         this.customFilter.init(params)
         this.customFilter.gridApi = this.gridApi
+        this.customFilter.wpTable = this.wpTable
         this.customFilter.render(params)
         this.customFilter.onChange = (queryParams) => {
           // this.changeQueryParams(queryParams)

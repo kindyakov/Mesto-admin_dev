@@ -1,8 +1,9 @@
-import tippy from "tippy.js";
+import tippy from '../../configs/tippy.js'
 import { createElement } from "../../settings/createElement.js"
 import { searchModalHtml, itemHtml } from "./html.js"
 import { Loader } from "../../modules/myLoader.js";
 import { api } from "../../settings/api.js";
+import { itemEl } from "../Modals/utils/html.js";
 
 const defaultOptions = {
   allowHTML: true,
@@ -73,7 +74,9 @@ class SearchRoom {
   }
 
   handleClick() {
-    this.onSelect(this.selectedRoomIds)
+    if (this.selectedRoomIds.length) {
+      this.renderSelected(this.selectedRoomIds)
+    }
     this.clear()
   }
 
@@ -112,7 +115,36 @@ class SearchRoom {
     this.tippy.hide()
     this.contentSearch.innerHTML = ''
     this.inputSearch.value = ''
+  }
+
+  reset() {
+    this.tippy.reference.innerHTML = ''
     this.selectedRoomIds = []
+    this.tippy.enable()
+  }
+
+  renderSelected(ids) {
+    this.tippy.disable()
+    this.tippy.reference.innerHTML = ''
+
+    this.tippy.reference.append(
+      ...this.selectedRoomIds.map(id => itemEl(id,
+        curId => {
+          this.selectedRoomIds = this.selectedRoomIds.filter(_id => _id !== curId)
+
+          if (!this.selectedRoomIds.length) {
+            this.tippy.enable()
+            setTimeout(() => this.tippy.show())
+          }
+
+          this.onSelect(this.selectedRoomIds)
+        }
+      ))
+    )
+
+    this.tippy.reference.classList.remove('just-validate-error-field')
+
+    this.onSelect(this.selectedRoomIds)
   }
 
   render(room_ids) {

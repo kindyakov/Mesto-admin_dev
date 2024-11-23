@@ -130,6 +130,8 @@ export const getSalesConversionRates = getCreate('/_get_sales_conversion_rates_'
 
 export const postFuturePayments = postCreate('/_get_future_payments_')
 
+export const formNewAgreementByAdmin = postCreate('/_form_new_agreement_by_admin_')
+
 // ============================================================================>
 
 export const getClientTotal = getCreateTotal('/_get_client_total_')

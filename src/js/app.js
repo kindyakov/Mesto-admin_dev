@@ -40,7 +40,7 @@ async function appInit(user) {
       initializeModalTriggers(modalMap)
       Fancybox.bind("[data-fancybox]")
       document.querySelector('.header__user_info .name').textContent = user.manager.manager_fullname
-      
+
       new Accordion({ isAccordion: false })
       const warehouse = await warehousesSelect.render()
       nav.init({ warehouse, notify, user })

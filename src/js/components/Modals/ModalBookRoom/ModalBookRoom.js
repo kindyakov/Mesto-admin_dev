@@ -35,26 +35,11 @@ class ModalBookRoom extends BaseModal {
   events() {
     this.modalBody.addEventListener('click', this.handleClick.bind(this))
     this.form.addEventListener('submit', this.handleSubmit.bind(this))
-    this.searchRoom.onSelect = ids => {
-      if (ids.length) {
-        this.roomIds = ids
-        this.electRoomId.innerHTML = ''
-
-        ids.length && this.electRoomId.append(...ids.map(id => itemEl(id, curId => {
-          const index = this.roomIds.findIndex(_id => _id === curId)
-          this.roomIds.splice(index, 1)
-          if (!this.roomIds.length) {
-            this.searchRoom.tippy.show()
-          }
-        })))
-
-        this.electRoomId.classList.remove('just-validate-error-field')
-      }
-    }
+    this.searchRoom.onSelect = ids => this.roomIds = ids;
 
     this.popupSelectSend.onClick = typeSend => {
       this.sendData.send_what = typeSend
-      
+
     }
   }
 

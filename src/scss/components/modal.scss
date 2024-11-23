@@ -497,7 +497,11 @@
 
 		&_content {
 			width: 100%;
-			transition: opacity 0.3s ease;
+			transition:
+				opacity 0.3s ease,
+				height 0.3s ease-out;
+			overflow-y: hidden;
+			padding: 0 5px;
 		}
 	}
 
