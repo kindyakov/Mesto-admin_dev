@@ -10,14 +10,10 @@ export function validate(form, options = {}) {
     dateFormat: 'd.m.Y',
   })
 
-  const agrenddate = createCalendar(form.querySelector('input[name="agrenddate"]'), {
-    dateFormat: 'd.m.Y',
-  })
-
   const inputPhone = form.querySelector('input[name="username"]')
   Inputmask.default("+7 (999) 999-99-99").mask(inputPhone)
 
-  validator.calendars = [agrbegdate, agrenddate]
+  validator.calendars = [agrbegdate]
 
   const inputBik = form.querySelector('input[name="bik"]')
   const inputInn = form.querySelector('input[name="inn"]')
@@ -25,34 +21,17 @@ export function validate(form, options = {}) {
   const inputBank = form.querySelector('input[name="bank"]')
   const inputRs = form.querySelector('input[name="rs"]')
   const inputKs = form.querySelector('input[name="ks"]')
-
-  validator.addField(form.querySelector('input[name="agrid"]'), [
+  
+  validator.addField(form.querySelector('input[name="agrbegdate"]'), [
     {
       rule: 'required',
       errorMessage: 'Заполните поле',
     },
-    {
-      rule: 'number',
-    }
-  ]).addField(form.querySelector('input[name="price"]'), [
+  ]).addField(form.querySelector('input[name="num_monthes"]'), [
     {
       rule: 'required',
       errorMessage: 'Заполните поле',
     },
-    {
-      rule: 'number',
-    }
-  ]).addField(form.querySelector('input[name="agrbegdate"]'), [
-    {
-      rule: 'required',
-      errorMessage: 'Заполните поле',
-    },
-  ]).addField(form.querySelector('input[name="agrenddate"]'), [
-    {
-      rule: 'required',
-      errorMessage: 'Заполните поле',
-    },
-  ]).addField(form.querySelector('input[name="equipment_price"]'), [
     {
       rule: 'number',
     }

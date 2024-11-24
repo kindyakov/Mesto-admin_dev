@@ -27,15 +27,7 @@ export function validate(form, options = {}) {
       value: /^[А-ЯЁа-яё\s]+$/,
       errorMessage: 'Неверный формат',
     },
-  ]).addField(form.querySelector('input[name="agrid"]'), [
-    {
-      rule: 'required',
-      errorMessage: 'Заполните поле',
-    },
-    {
-      rule: 'number',
-    }
-  ]).addField(form.querySelector('input[name="price"]'), [
+  ]).addField(form.querySelector('input[name="num_monthes"]'), [
     {
       rule: 'required',
       errorMessage: 'Заполните поле',
@@ -48,15 +40,6 @@ export function validate(form, options = {}) {
       rule: 'required',
       errorMessage: 'Заполните поле',
     },
-  ]).addField(form.querySelector('input[name="agrenddate"]'), [
-    {
-      rule: 'required',
-      errorMessage: 'Заполните поле',
-    },
-  ]).addField(form.querySelector('input[name="equipment_price"]'), [
-    {
-      rule: 'number',
-    }
   ])
 
   return validator

@@ -118,6 +118,7 @@ class SearchRoom {
   }
 
   reset() {
+    this.tippy.reference.classList.remove('just-validate-error-field')
     this.tippy.reference.innerHTML = ''
     this.selectedRoomIds = []
     this.tippy.enable()
