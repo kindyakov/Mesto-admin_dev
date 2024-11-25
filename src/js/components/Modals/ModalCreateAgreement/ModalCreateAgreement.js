@@ -62,6 +62,11 @@ class ModalCreateAgreement extends BaseModal {
     this.childrenEl.forEach(el => el.classList.add('_none'));
 
     nextContent.classList.remove('_none')
+    nextContent.style.opacity = 0
+
+    setTimeout(() => {
+      nextContent.style.opacity = 1
+    }, 300)
 
     if (this.step) {
       this.buttonBack.classList.remove('_none')

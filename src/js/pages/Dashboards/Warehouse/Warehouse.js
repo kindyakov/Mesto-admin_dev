@@ -78,7 +78,14 @@ class Warehouse extends Dashboards {
     this.widgets.forEach(widget => {
       const { rented_cnt } = data
       const [rented, str] = widget.getAttribute('data-render-widget').split(',')
-      const [currentData = null] = rented_cnt.filter(obj => +obj.rented === +rented)
+      let [currentData = null] = rented_cnt.filter(obj => +obj.rented === +rented)
+      if (currentData && rented == 0) {
+        let [moreData = null] = rented_cnt.filter(obj => -2 == obj.rented)
+        currentData.area += moreData.area
+        currentData.cnt += moreData.cnt
+        currentData.rate += moreData.rate
+      }
+
       widget.innerText = currentData ? `${currentData.rate.toFixed(2)}% (${currentData.cnt.toFixed(0)}, ${+currentData.area.toFixed(1)} м²)` : '0% (0)'
     });
   }
@@ -89,7 +96,7 @@ class Warehouse extends Dashboards {
     if (target.checked) {
       data.end_area = 40
     }
-    
+
     this.changeQueryParams(data)
   }
 

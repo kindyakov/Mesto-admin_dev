@@ -6,12 +6,19 @@ export function validate(form, options = {}) {
   if (!form) return null
   const validator = createValidator(form, options)
 
+  const agrbegdate = createCalendar(form.querySelector('input[name="agrbegdate"]'), {
+    dateFormat: 'd.m.Y',
+    appendTo: form.querySelector('input[name="agrbegdate"]').parentElement
+  })
+
   const birthday = createCalendar(form.querySelector('input[name="birthday"]'), {
     dateFormat: 'd.m.Y',
+    appendTo: form.querySelector('input[name="birthday"]').parentElement
   })
 
   const issue_date = createCalendar(form.querySelector('input[name="issue_date"]'), {
     dateFormat: 'd.m.Y',
+    appendTo: form.querySelector('input[name="issue_date"]').parentElement
   })
 
   const inputPhone = form.querySelector('input[name="username"]')
@@ -24,7 +31,7 @@ export function validate(form, options = {}) {
   Inputmask.default("999999").mask(inputNo)
   Inputmask.default("999-999").mask(inputSubdivision)
 
-  validator.calendars = [birthday, issue_date]
+  validator.calendars = [agrbegdate, birthday, issue_date]
 
   validator.addField(form.querySelector('input[name="num_monthes"]'), [
     {
@@ -34,6 +41,11 @@ export function validate(form, options = {}) {
     {
       rule: 'number',
     }
+  ]).addField(form.querySelector('input[name="agrbegdate"]'), [
+    {
+      rule: 'required',
+      errorMessage: 'Заполните поле',
+    },
   ]).addField(form.querySelector('input[name="familyname"]'), [
     {
       rule: 'required',
@@ -141,6 +153,6 @@ export function validate(form, options = {}) {
       errorMessage: 'Неверный формат',
     }
   ])
-  
+
   return validator
 }

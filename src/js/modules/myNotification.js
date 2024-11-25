@@ -93,7 +93,7 @@ export class Notification {
     const [current] = this.notifications.filter(obj => obj.notification === notification)
     this.notifications = this.notifications.filter(obj => obj.notification !== notification)
 
-    current.notification
+    current?.notification
       .animate(animateHide, { duration: 300, easing: 'ease', fill: 'forwards' })
       .addEventListener('finish', () => {
         notification.remove()

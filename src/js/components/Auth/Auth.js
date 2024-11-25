@@ -4,7 +4,36 @@ import { api } from "../../settings/api.js"
 import { Loader } from "../../modules/myLoader.js"
 import { getCookie, deleteCookie } from "../../utils/getCookie.js"
 
+// Constants
+const AUTH_ENDPOINTS = {
+  LOGIN: '/_admin_login_'
+};
+
+const COOKIE_KEYS = {
+  TOKEN: 'token',
+  MANAGER: 'manager'
+};
+
+const ERROR_MESSAGES = {
+  AUTH_FAILED: 'Ошибка при авторизации',
+  TOKEN_EXPIRED: 'Сессия истекла, пожалуйста авторизуйтесь снова',
+  NETWORK_ERROR: 'Ошибка сети, проверьте подключение'
+};
+
+/**
+ * @typedef {Object} AuthOptions
+ * @property {string|null} redirect - URL для редиректа после успешной авторизации
+ * @property {Function} onAuth - Callback после успешной авторизации
+ * @property {Function} onInit - Callback после инициализации
+ */
+
+/**
+ * Класс управления аутентификацией
+ */
 class Auth {
+  /**
+   * @param {AuthOptions} options 
+   */
   constructor(options = {}) {
     let defaultOptions = {
       redirect: null,
@@ -123,6 +152,11 @@ class Auth {
     for (const key in modalMap) {
       modalMap[key]?.modal.close()
     }
+
+    this.notify.show({
+      msg: ERROR_MESSAGES.TOKEN_EXPIRED,
+      msg_type: 'warning'
+    });
   }
 
   allClose() {
@@ -132,34 +166,81 @@ class Auth {
     })
   }
 
+  /**
+   * Установка cookies с параметрами безопасности
+   * @private
+   */
+  #setCookies(token, manager, expiration) {
+    const secureCookieOptions = `max-age=${expiration}; path=/; secure; samesite=strict`;
+    document.cookie = `${COOKIE_KEYS.TOKEN}=Bearer ${token}; ${secureCookieOptions}`;
+    document.cookie = `${COOKIE_KEYS.MANAGER}=${JSON.stringify(manager)}; ${secureCookieOptions}`;
+  }
+
+  /**
+   * Обработка ошибок аутентификации
+   * @private
+   */
+  #handleAuthError(error) {
+    console.error(ERROR_MESSAGES.AUTH_FAILED, error);
+    this.notify.show({
+      msg: error.message || ERROR_MESSAGES.AUTH_FAILED,
+      msg_type: 'error'
+    });
+  }
+
+  /**
+   * Выполнение запроса аутентификации
+   * @private
+   */
+  async #performAuth(formData) {
+    try {
+      return await api.post(AUTH_ENDPOINTS.LOGIN, formData);
+    } catch (error) {
+      if (error.response?.status === 401) {
+        throw new Error(ERROR_MESSAGES.AUTH_FAILED);
+      }
+      throw new Error(ERROR_MESSAGES.NETWORK_ERROR);
+    }
+  }
+
+  /**
+   * Обработка ответа аутентификации
+   * @private
+   */
+  async #handleAuthResponse(response) {
+    if (response.status !== 200) return;
+
+    const { msg, msg_type, access_token, expiration_time, manager } = this.user = response.data;
+
+    this.notify.show(response.data);
+
+    if (msg_type === 'success') {
+      this.isAuth = true;
+      api.defaults.headers.Authorization = `Bearer ${access_token}`;
+
+      this.#setCookies(access_token, manager, expiration_time);
+      this.modal.close();
+      this.startExpirationTimer(new Date(this.currentDate.getTime() + expiration_time * 1000));
+      this.onAuth(response.data);
+
+      if (this.options.redirect) {
+        document.location.pathname = this.options.redirect;
+      }
+    }
+  }
+
+  /**
+   * Аутентификация пользователя
+   * @param {FormData} formData 
+   */
   async auth(formData) {
     try {
       this.loader.enable()
-      const response = await api.post('/_admin_login_', formData)
-
-      if (response.status !== 200) return
-
-      const { msg, msg_type, access_token, expiration_time, manager } = this.user = response.data
-
-      this.notify.show(response.data)
-
-      if (msg_type === 'success') {
-        this.isAuth = true
-        api.defaults.headers.Authorization = `Bearer ${access_token}`
-
-        document.cookie = `token=Bearer ${access_token}; max-age=${expiration_time}; path=/`;
-        document.cookie = `manager=${JSON.stringify(manager)}; max-age=${expiration_time}; path=/`
-
-        this.modal.close()
-        this.startExpirationTimer(new Date(this.currentDate.getTime() + expiration_time * 1000))
-        this.onAuth(response.data)
-
-        if (this.options.redirect) {
-          document.location.pathname = this.options.redirect
-        }
-      }
+      const response = await this.#performAuth(formData);
+      await this.#handleAuthResponse(response);
     } catch (error) {
-      console.error('Ошибка при авторизации', error.message)
+      this.#handleAuthError(error);
+      throw error
     } finally {
       this.loader.disable()
     }

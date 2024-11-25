@@ -41,11 +41,13 @@ export class FormUClient {
         formData.set('agrenddate', dateFormatter(formData.get('agrenddate'), 'yyyy-MM-dd'))
         formData.set('username', formData.get('username').replace(/[+() -]/g, ''))
         formData.set('room_ids', JSON.stringify(this.searchRoom.selectedRoomIds))
+        formData.set('user_type', 'u')
+        formData.set('old_or_new', 'new')
         formData.delete('flatpickr-month')
 
         const response = await formNewAgreementByAdmin(formData)
         if (response.status !== 200) return
-        window.app.notify(response.data)
+        window.app.notify.show(response.data)
       } catch (error) {
         throw error
       } finally {

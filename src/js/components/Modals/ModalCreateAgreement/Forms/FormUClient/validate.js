@@ -8,6 +8,7 @@ export function validate(form, options = {}) {
 
   const agrbegdate = createCalendar(form.querySelector('input[name="agrbegdate"]'), {
     dateFormat: 'd.m.Y',
+    appendTo: form.querySelector('input[name="agrbegdate"]').parentElement
   })
 
   const inputPhone = form.querySelector('input[name="username"]')
@@ -21,7 +22,7 @@ export function validate(form, options = {}) {
   const inputBank = form.querySelector('input[name="bank"]')
   const inputRs = form.querySelector('input[name="rs"]')
   const inputKs = form.querySelector('input[name="ks"]')
-  
+
   validator.addField(form.querySelector('input[name="agrbegdate"]'), [
     {
       rule: 'required',

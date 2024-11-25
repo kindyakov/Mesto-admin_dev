@@ -13,7 +13,7 @@ class WarehousesSelect {
     })
 
     this.mainLoader = mainLoader || document.querySelector('.body-loader')
-    this.warehouseStorage = JSON.parse(sessionStorage.getItem('warehouse'))
+    this.warehouseStorage = this.getStorageWarehouse()
 
     this.warehouses = []
   }
@@ -33,8 +33,7 @@ class WarehousesSelect {
   }
 
   getStorageWarehouse() {
-    this.warehouseStorage = JSON.parse(sessionStorage.getItem('warehouse'))
-    return this.warehouseStorage
+    return JSON.parse(sessionStorage.getItem('warehouse'))
   }
 
   setStorageWarehouse(warehouse) {

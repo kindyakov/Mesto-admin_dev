@@ -7,15 +7,15 @@ export function validate(form, options = {}) {
 
   const agrbegdate = createCalendar(form.querySelector('input[name="agrbegdate"]'), {
     dateFormat: 'd.m.Y',
-    // appendTo: form.querySelector('input[name="agrbegdate"]').parentElement
+    appendTo: form.querySelector('input[name="agrbegdate"]').parentElement
   })
 
-  const agrenddate = createCalendar(form.querySelector('input[name="agrenddate"]'), {
-    dateFormat: 'd.m.Y',
-    // appendTo: form.querySelector('input[name="agrenddate"]').parentElement
-  })
+  // const agrenddate = createCalendar(form.querySelector('input[name="agrenddate"]'), {
+  //   dateFormat: 'd.m.Y',
+  //   appendTo: form.querySelector('input[name="agrenddate"]').parentElement
+  // })
 
-  validator.calendars = [agrbegdate, agrenddate]
+  validator.calendars = [agrbegdate]
 
   validator.addField(form.querySelector('input[name="fullname"]'), [
     {

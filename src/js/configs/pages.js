@@ -1,10 +1,30 @@
-function actionDashboards({ tab, content, user }) {  
-  if (!user.manager.can_see_dasboards) {
-    console.log(tab?.closest('.sidebar__item')?.classList.add('_none'))
-    return false
+const PERMISSIONS = {
+  DASHBOARDS: 'can_see_dasboards',
+  USERS: 'can_see_users',
+  WORKTIME: 'can_see_users_worktime',
+  ROOM_PRICES: 'can_see_room_prices',
+  TIME_CONTROL: 'needs_time_control'
+};
+
+function checkAccess({ tab, content, user }, permission) {
+  if (!user?.manager) {
+    tab?.classList.add('_none');
+    return false;
   }
 
-  return true
+  if (permission && !user.manager[permission]) {
+    tab?.closest('.sidebar__item')?.classList.add('_none');
+    return false;
+  }
+
+  tab?.classList.remove('_none');
+  tab?.closest('.sidebar__item')?.classList.remove('_none');
+
+  return true;
+}
+
+function actionDashboards(params) {
+  return checkAccess(params, PERMISSIONS.DASHBOARDS);
 }
 
 export const pages = {
@@ -42,7 +62,10 @@ export const pages = {
       if (!user.manager.can_see_users) {
         tab?.classList.add('_none')
         return false
+      } else {
+        tab?.classList.remove('_none')
       }
+
       return true
     }
   },
@@ -54,10 +77,14 @@ export const pages = {
 
       if (user.manager.can_see_users_worktime) {
         table?.classList.remove('_none')
+      } else {
+        table?.classList.add('_none')
       }
 
       if (user.manager.needs_time_control) {
         list?.classList.remove('_none')
+      } else {
+        list?.classList.add('_none')
       }
 
       return true

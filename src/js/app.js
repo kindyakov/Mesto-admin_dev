@@ -42,9 +42,10 @@ async function appInit(user) {
       document.querySelector('.header__user_info .name').textContent = user.manager.manager_fullname
 
       new Accordion({ isAccordion: false })
-      const warehouse = await warehousesSelect.render()
-      nav.init({ warehouse, notify, user })
+      await warehousesSelect.render()
     }
+
+    nav.init({ warehouse: window.app.warehouse, notify, user })
 
     isFirstLoad = false
   } catch (error) {

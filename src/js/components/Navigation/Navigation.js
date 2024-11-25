@@ -15,6 +15,14 @@ class Navigation {
     this.md1200 = window.matchMedia(`(max-width: 1200px)`)
 
     this.defaultPage = Object.keys(pages).filter(key => key == 'rooms');
+
+    // Добавляем обработчики событий на ссылки навигации
+    this.navLinks.forEach(link => {
+      link.addEventListener('click', this.navigate.bind(this));
+    });
+
+    // Обработка событий изменения состояния истории
+    window.addEventListener('hashchange', this.handleHashChange.bind(this));
   }
 
   async init({ warehouse, notify, user }) {
@@ -29,14 +37,6 @@ class Navigation {
         user: this.user
       })
     })
-
-    // Добавляем обработчики событий на ссылки навигации
-    this.navLinks.forEach(link => {
-      link.addEventListener('click', this.navigate.bind(this));
-    });
-
-    // Обработка событий изменения состояния истории
-    window.addEventListener('hashchange', this.handleHashChange.bind(this));
 
     // Загружаем контент в зависимости от текущего URL при первой загрузке страницы
     const initialPath = window.location.hash.slice(1);
@@ -87,6 +87,31 @@ class Navigation {
     this.loadContent(path);
   }
 
+  /**
+   * Проверяет права доступа к странице
+   * @param {string} pageName - Имя страницы
+   * @returns {boolean} - Есть ли доступ к странице
+   */
+  checkPageAccess(pageName) {
+    const path = pages[pageName].path;
+    const tab = this.getTab(pageName);
+    const content = this.getContent(pageName);
+
+    const isAccess = pages[pageName].accessCheck({
+      tab,
+      content,
+      user: this.user,
+      page: this.modulesCache[pageName] || null
+    });
+
+    if (!isAccess) {
+      window.location.hash = this.defaultPage.at(0);
+      return false;
+    }
+
+    return true;
+  }
+
   loadContent(pageName) {
     if (!pages[pageName]) {
       console.error('Страница не найдена', pageName);
@@ -94,17 +119,9 @@ class Navigation {
     }
 
     const path = pages[pageName].path
-    const tab = this.getTab(pageName)
-    const content = this.getContent(pageName)
 
-    const isAccess = pages[pageName].accessCheck({
-      tab, content, user: this.user, page: this.modulesCache[pageName] || null
-    })
-
-    // Выполнится если нет прав доступа
-    if (!isAccess) {
-      window.location.hash = this.defaultPage.at(0);
-      return
+    if (!this.checkPageAccess(pageName)) {
+      return;
     }
 
     this.loader.enable();

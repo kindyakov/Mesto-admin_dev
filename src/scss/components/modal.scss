@@ -10,6 +10,7 @@
 	height: 100%;
 	transition: visibility 0.8s ease 0s;
 	visibility: hidden;
+
 	&::before {
 		content: '';
 		background-color: rgba(0, 0, 0, 0.7);
@@ -21,27 +22,34 @@
 		opacity: 0;
 		transition: opacity 0.8s ease 0s;
 	}
+
 	&._show {
 		visibility: visible;
 		overflow: auto;
+
 		&::before {
 			opacity: 1;
 		}
+
 		.modal_body {
 			transform: scale(1);
 		}
 	}
+
 	&._active {
 		overflow: auto;
 		visibility: visible;
+
 		&::before {
 			opacity: 1;
 		}
+
 		.modal__body {
 			transition: all 0.2s ease 0.2s;
 			transform: scale(1);
 		}
 	}
+
 	// .modal__content
 	&__content {
 		display: flex;
@@ -54,6 +62,7 @@
 		justify-content: center;
 		align-items: center;
 	}
+
 	// .modal__body
 	&__body {
 		transform: scale(0);
@@ -65,6 +74,7 @@
 		border-radius: 2px;
 		box-shadow: 0 8px 13px -3px rgba(0, 0, 0, 0.07);
 	}
+
 	// .modal__close
 	&__close {
 		width: 30px;
@@ -78,6 +88,7 @@
 		border-radius: 8px;
 		transition: 0.2s;
 		transform: translate(50%, -50%);
+
 		span {
 			display: block;
 			position: absolute;
@@ -86,10 +97,12 @@
 			background-color: rgb(85, 83, 83);
 			transition: 0.2s;
 			left: 50%;
+
 			&:first-child {
 				transform: translateX(-50%) rotate(45deg);
 				top: 12px;
 			}
+
 			&:last-child {
 				transform: translateX(-50%) rotate(-45deg);
 				top: 12px;
@@ -98,6 +111,7 @@
 
 		&:hover {
 			border: 2px solid red;
+
 			span {
 				background-color: red;
 			}
@@ -132,6 +146,7 @@
 			align-items: center;
 			justify-content: center;
 			padding: 10px;
+
 			.icon {
 				stroke: #000;
 				transform: rotate(180deg);
@@ -179,6 +194,7 @@
 			gap: 15px;
 			padding: 0 25px 25px 25px;
 			border-bottom: 1px solid #e2e8f0;
+
 			&:last-child {
 				border-bottom: none;
 			}
@@ -270,6 +286,7 @@
 				text-decoration: underline;
 				text-decoration-skip-ink: none;
 				color: #212b36;
+
 				&:hover {
 					text-decoration: none;
 				}
@@ -314,6 +331,7 @@
 			font-size: 18px;
 			padding: 10px;
 			background-color: rgb(240, 239, 239);
+
 			@media (max-width: $md4) {
 				font-size: 16px;
 			}
@@ -329,24 +347,26 @@
 			display: flex;
 			flex-direction: column;
 			gap: 5px;
-			> span {
+
+			>span {
 				font-weight: 500;
 				font-size: 14px;
 				color: #212b36;
 			}
 		}
 
-		&_wp-input {
-		}
+		&_wp-input {}
 
 		&_input {
 			height: 50px;
 			padding: 10px 20px;
 			color: #212b36;
+
 			@media (max-width: $md6) {
 				padding: 10px;
 			}
 		}
+
 		@media (max-width: $mdm1) {
 			grid-template-columns: 1fr;
 		}
@@ -364,6 +384,7 @@
 			flex: 1 1 66.66%;
 			padding: 15px 20px;
 		}
+
 		&-content,
 		&-photo {
 			border: 1.5px solid #e2e8f0;
@@ -380,24 +401,20 @@
 				flex-direction: column;
 				gap: 5px;
 
-				> span {
+				>span {
 					font-weight: 500;
 					font-size: 12px;
 					color: #4f5b67;
 				}
 			}
 
-			&_wp-input {
-			}
+			&_wp-input {}
 
-			&_input-passport {
-			}
+			&_input-passport {}
 
-			&_wp-status {
-			}
+			&_wp-status {}
 
-			&_status {
-			}
+			&_status {}
 		}
 
 		&-photo {
@@ -406,11 +423,13 @@
 			align-items: center;
 			justify-content: center;
 			padding: 15px;
+
 			img {
 				object-fit: contain;
 				max-width: 100%;
 				max-height: 100%;
 			}
+
 			@media (max-width: $mdm1) {
 				flex: 1 1 auto;
 				height: 160px;
@@ -507,7 +526,7 @@
 			transition:
 				opacity 0.3s ease,
 				height 0.3s ease-out;
-			overflow-y: hidden;
+			// overflow: hidden;
 			padding: 0 5px;
 		}
 	}
@@ -528,6 +547,7 @@
 			gap: 10px;
 			flex-wrap: wrap;
 			justify-content: center;
+
 			.button {
 				padding: 10px 15px;
 				font-size: 14px;
@@ -537,9 +557,11 @@
 
 	&__upload {
 		height: 400px;
+
 		@media (max-width: $md1) {
 			@include adaptiv-value('height', 400, 200, 1);
 		}
+
 		&_lable {
 			display: block;
 			width: 100%;
@@ -577,6 +599,7 @@
 				font-size: 15px;
 				line-height: 145%;
 				text-align: center;
+
 				span {
 					color: $blue;
 				}
@@ -597,6 +620,7 @@
 			}
 
 			&._is-load {
+
 				.block-icon,
 				.text {
 					display: none;
@@ -624,6 +648,7 @@
 			border-radius: 4px;
 			overflow-y: auto;
 			height: 280px;
+
 			&::-webkit-scrollbar {
 				width: 4px;
 				height: 4px;
@@ -694,6 +719,7 @@
 			border-top: none;
 			border-right: none;
 			border-radius: 0 0 0 4px;
+
 			.button-show-all {
 				font-weight: 500;
 				font-size: 13px;
@@ -702,6 +728,7 @@
 				text-decoration-skip-ink: none;
 				text-align: justify;
 				color: #64748b;
+
 				&:hover {
 					text-decoration: none;
 				}
@@ -709,10 +736,12 @@
 		}
 	}
 }
+
 //====================================================================================================
 
 .modal-auth {
 	transition: 0s;
+
 	&::before {
 		transition: 0s;
 		background-color: #1c2434;
@@ -724,12 +753,14 @@
 		max-width: 530px;
 		border-radius: 5px;
 		border: 1px solid #e2e8f0;
+
 		h2 {
 			font-weight: 700;
 			font-size: 33px;
 			line-height: 135%;
 			color: #212b36;
 		}
+
 		@media (max-width: $md4) {
 			padding: 25px 20px;
 		}
@@ -748,7 +779,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
-		> span {
+
+		>span {
 			font-weight: 500;
 			font-size: 16px;
 			color: #1c2434;
@@ -769,6 +801,7 @@
 		border-radius: 8px;
 	}
 }
+
 //====================================================================================================
 .tingle-modal {
 	background: rgba(0, 0, 0, 0.3);
@@ -780,11 +813,13 @@
 		.tingle-modal-box {
 			max-width: 450px;
 		}
+
 		.modal__title {
 			line-height: 125%;
 			text-align: center;
 			padding: 30px 20px;
 		}
+
 		.modal__footer {
 			padding: 20px;
 			justify-content: center;
@@ -806,7 +841,8 @@
 	.tingle-modal-box__content {
 		padding: 0;
 		position: relative;
-		> [data-tippy-root] {
+
+		>[data-tippy-root] {
 			inset: 0 0 0 0 !important;
 			width: 100%;
 			height: 100%;
@@ -815,10 +851,12 @@
 			align-items: center;
 			background-color: rgba(0, 0, 0, 0.25);
 			padding: 20px 30px;
+
 			.tippy-box {
 				width: 100%;
 			}
 		}
+
 		@media (max-width: 540px) {
 			overflow-y: visible;
 		}
@@ -846,9 +884,11 @@
 				&[data-value='0'] {
 					background-color: $red-light;
 					color: $red;
+
 					.icon-yes {
 						display: none;
 					}
+
 					.icon-no {
 						display: inline-flex;
 					}
@@ -857,14 +897,17 @@
 				&[data-value='1'] {
 					background-color: $green-light;
 					color: $green;
+
 					.icon-yes {
 						display: inline-flex;
 					}
+
 					.icon-no {
 						display: none;
 					}
 				}
 			}
+
 			.mySelect__option {
 				gap: 10px;
 			}
@@ -879,10 +922,11 @@
 				transform: rotate(180deg);
 			}
 
-			> span {
+			>span {
 				flex: 1 1 auto;
 			}
 		}
+
 		&__list {
 			// padding: 8px 10px;
 			box-shadow: 0 3px 6px rgba(128, 128, 128, 0.4);
@@ -895,6 +939,7 @@
 			display: flex;
 			align-items: center;
 			gap: 6px;
+
 			&:hover {
 				background-color: #f1f5f9;
 			}
@@ -926,6 +971,7 @@
 			left: auto;
 			right: 0;
 		}
+
 		&:has(.btn-edit-value) {
 			display: flex;
 
@@ -969,15 +1015,14 @@
 	}
 }
 
-.table-span-price {
-}
-.date {
-}
-.button-text {
-}
-.blue {
-}
-.icon {
-}
-.table-span-agrid {
-}
+.table-span-price {}
+
+.date {}
+
+.button-text {}
+
+.blue {}
+
+.icon {}
+
+.table-span-agrid {}
