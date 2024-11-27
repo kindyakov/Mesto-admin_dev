@@ -106,7 +106,7 @@
 		align-items: center;
 		gap: 4px;
 		height: 100%;
-		cursor: pointer;
+		// cursor: pointer;
 		// width: 100%;
 
 		.ag-icon {
@@ -321,15 +321,14 @@
 
 	&__top {
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: space-between;
 		padding: 15px 30px;
-		gap: 20px;
+		gap: 10px;
 		border: 1px solid #e1e8f0;
 		border-bottom: none;
 		@media (max-width: $md2) {
 			padding: 20px;
-			gap: 10px;
 		}
 		@media (max-width: $md5) {
 			flex-direction: column;
@@ -343,6 +342,7 @@
 		display: flex;
 		gap: 10px;
 		flex: 1 1 auto;
+		flex-wrap: wrap;
 		.wp-input {
 			.icon-search {
 				width: 15px;
@@ -350,7 +350,9 @@
 			}
 			&.wp-input-search {
 				max-width: 580px;
+				min-width: 250px;
 				width: 100%;
+				order: -1;
 			}
 		}
 		.input-table-search {
@@ -371,8 +373,14 @@
 		display: flex;
 		align-items: center;
 		gap: 10px;
-		@media (max-width: $md5) {
+		@media (max-width: $md3) {
 			width: 100%;
+			flex-wrap: wrap;
+		}
+		@media (max-width: $md4) {
+			button span {
+				display: none;
+			}
 		}
 	}
 
@@ -381,7 +389,7 @@
 			flex: 1 1 auto;
 			white-space: nowrap;
 			padding: 5px 10px;
-			justify-content: space-between;
+			// justify-content: space-between;
 		}
 	}
 	// &__button {	}

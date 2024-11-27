@@ -211,13 +211,15 @@ class CustomFilter {
     input.addEventListener('input', e => this.handleInputSearch(e, params))
   }
 
-  render(params) {
+  render(params, queryParams) {
     const { filterWrapper } = params
 
     this.wpButtons = this.wpButtons || createElement('div', {
       classes: ['wp-buttons'],
       attributes: [['style', `display:flex;gap:5px;justify-content:flex-end;`]]
     })
+
+    this.reqData = queryParams
 
     this.renderInputSearch(params)
     this.radioManager.render(params, this.reqData)

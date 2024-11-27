@@ -63,9 +63,16 @@ class Table {
           .map(col => ({ colId: col.colId, sort: col.sort, }));
         if (sortedColumn) {
           const { colId, sort } = sortedColumn
+          this.btnTableFilterReset?.classList.add('_is-filter')
           this.changeQueryParams({ sort_column: colId, sort_direction: sort });
+        } else {
+          this.formTableSearch?.reset()
+          this.queryParams = { show_cnt: this.gridOptions.paginationPageSize }
+          this.btnTableFilterReset?.classList.remove('_is-filter')
+          this.changeQueryParams({})
         }
       },
+      onFilterChanged: (params) => { }
     }
 
     this.selector = selector
@@ -107,6 +114,7 @@ class Table {
     this.formTableSearch = this.wpTable.querySelector('.form-table-search')
     this.inputTableSearch = this.wpTable.querySelector('.input-table-search')
     this.btnTableUploadExcel = this.wpTable.querySelector('.btn-table-upload-excel')
+    this.btnTableFilterReset = this.wpTable.querySelector('.btn-filter-reset')
 
     this.loader = new Loader(this.wpTable)
     this.selects = this.selects || new Select({ uniqueName: 'select-filter-table', parentEl: this.wpTable })
@@ -123,6 +131,10 @@ class Table {
   events() {
     if (this.btnTableUploadExcel) {
       this.btnTableUploadExcel.addEventListener('click', this.handleBtnUploadExcel.bind(this))
+    }
+
+    if (this.btnTableFilterReset) {
+      this.btnTableFilterReset.addEventListener('click', this.handleClickFilterReset.bind(this))
     }
 
     if (this.formTableSearch) {
@@ -181,6 +193,16 @@ class Table {
     this.selectedRows = this.gridApi.getSelectedRows()
     this.btnTableUploadExcel.setAttribute('data-count', this.selectedRows.length ? `(${this.selectedRows.length})` : '')
     this.handleRowSelected(currentData, this.selectedRows)
+  }
+
+  // Обработчик сброс фильтров таблицы
+  handleClickFilterReset() {
+    this.gridApi.setFilterModel(null)
+    this.gridApi.applyColumnState({
+      defaultState: { sort: null },
+    });
+    this.gridApi.onFilterChanged();
+    this.gridApi.onSortChanged();
   }
 
   // Обработчик клика по кнопке "Выгрузить в excel"

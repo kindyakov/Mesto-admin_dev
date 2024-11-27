@@ -26,13 +26,14 @@ export function createDaysLeftElement(params) {
     })
   }
 
-  if (params.value && params.value >= 0 && params.value <= 5) {
-    p.classList.add('_payments-soon')
-    tippy(p, {
-      trigger: 'mouseenter',
-      placement: 'bottom-end',
-      content: `<div class="tippy-contact"><p>Связались с клиентом?</p><button class="yes"><span>Да</span></button><button><span>Нет</span></button></div>`
-    })
-  }
+  // if (params.value && params.value >= 0 && params.value <= 5) {
+  // p.classList.add('_payments-soon')
+  //   tippy(p, {
+  //     trigger: 'mouseenter',
+  //     placement: 'bottom-end',
+  //     content: `<div class="tippy-contact"><p>Связались с клиентом?</p><button class="yes"><span>Да</span></button><button><span>Нет</span></button></div>`
+  //   })
+  // }
+
   return p
 }

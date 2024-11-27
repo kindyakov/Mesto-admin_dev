@@ -119,6 +119,7 @@ class TableRooms extends Table {
     const mergedOptions = Object.assign({}, defaultOptions, options);
     const mergedParams = Object.assign({}, defaultParams, params);
     super(selector, mergedOptions, mergedParams);
+    this.queryParams = { ...this.queryParams, warehouse_id: this.app.warehouse.warehouse_id }
   }
 
   onRendering({ rooms = [], cnt_pages = 0, page = 0, cnt_all = 0 }) {

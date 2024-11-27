@@ -60,10 +60,10 @@ export class CheckboxManager {
 
     return `
     <ul class="col-data-list">
-      ${html({ name, val: 'Выделить все', i: 0, isAll: true })}
+      ${html({ name, val: 'Выделить все', i: 0, isAll: true, isChecked: !dataWithoutCurrentFilter.length })}
       ${currentData.map((val, i) => html({ name, val, i: i + 1 })).join('')}
       ${dataWithoutCurrentFilter.length
-        ? dataWithoutCurrentFilter.map((val, i) => html({ name, val, i: i + 1, isChecked: false })).join('')
+      ? dataWithoutCurrentFilter.map((val, i) => html({ name, val, i: i + 1 + currentData.length, isChecked: false })).join('')
         : ''}
     </ul>`
   }

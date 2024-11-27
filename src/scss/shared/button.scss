@@ -134,6 +134,16 @@
 		}
 	}
 
+	&.btn-filter-reset {
+		&._is-filter {
+			background-color: #dcecfa;
+			border-color: #2196f3;
+			.icon {
+				fill: #2196f3;
+			}
+		}
+	}
+
 	@media (max-width: $md4) {
 		padding: 5px;
 	}

@@ -80,6 +80,11 @@ export class FormOldClient {
           return
         }
 
+        if (!this.userId) {
+          window.app.notify.show({ msg: 'Старый клиент не найден, попробуйте ещё раз !', msg_type: 'warning' })
+          return
+        }
+
         if (!isValid) return
         this.loader.enable()
 
@@ -87,6 +92,7 @@ export class FormOldClient {
 
         formData.set('agrbegdate', dateFormatter(formData.get('agrbegdate'), 'yyyy-MM-dd'))
         formData.set('agrenddate', dateFormatter(formData.get('agrenddate'), 'yyyy-MM-dd'))
+        formData.set('user_id', this.userId)
         formData.set('room_ids', JSON.stringify(this.searchRoom.selectedRoomIds))
         formData.set('old_or_new', 'old')
         formData.delete('flatpickr-month')
@@ -112,7 +118,7 @@ export class FormOldClient {
   addDisabled() {
     this.formElements.length && this.formElements.forEach(el => {
       if (el.name !== 'fullname') {
-        el.setAttribute('disabled', true)        
+        el.setAttribute('disabled', true)
       }
     })
     this.selectRoomId.setAttribute('disabled', true)
@@ -123,6 +129,7 @@ export class FormOldClient {
     this.validator.refresh()
     this.addDisabled()
     this.searchRoom.reset()
+    this.userId = null
   }
 
   async getFio(queryParams) {

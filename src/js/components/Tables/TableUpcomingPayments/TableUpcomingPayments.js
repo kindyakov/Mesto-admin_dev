@@ -177,8 +177,8 @@ class TableUpcomingPayments extends Table {
         const field = e.column.colDef.field
         const filterWrapper = e.eGui.querySelector('.ag-filter-body-wrapper')
         const data = e.api.getGridOption('rowData')
-        const fullCurrentData = uniqBy(this.data.map(obj => obj[field]))
-        const currentData = uniqBy(data.map(obj => obj[field]))
+        const fullCurrentData = uniqBy(this.data.map(obj => obj[field])).sort((a, b) => a - b); // Сортировка по возрастанию
+        const currentData = uniqBy(data.map(obj => obj[field])).sort((a, b) => a - b); // Сортировка по возрастанию
         let dataWithoutCurrentFilter = []
 
         if (this.queryParams.filters) {
@@ -196,13 +196,8 @@ class TableUpcomingPayments extends Table {
             })
               .map(obj => obj[field])
               .filter(value => !currentData.includes(value))
+              .sort((a, b) => a - b); // Сортировка по возрастанию
           }
-        }
-
-        // Сортировка по возрастанию
-        if (field == 'price') {
-          currentData.sort((a, b) => a - b);
-          dataWithoutCurrentFilter.sort((a, b) => a - b);
         }
 
         const params = { ...e, filterWrapper, currentData, data, fullCurrentData, dataWithoutCurrentFilter }
@@ -210,9 +205,11 @@ class TableUpcomingPayments extends Table {
         this.customFilter.init(params)
         this.customFilter.gridApi = this.gridApi
         this.customFilter.wpTable = this.wpTable
-        this.customFilter.render(params)
+        this.customFilter.render(params, this.queryParams)
         this.customFilter.onChange = (queryParams) => {
           // this.changeQueryParams(queryParams)
+          this.btnTableFilterReset?.classList.toggle('_is-filter', !(!queryParams.filters && !queryParams.sort_column))
+
           this.queryParams = queryParams
           this.tableRendering(queryParams)
         }
@@ -220,9 +217,6 @@ class TableUpcomingPayments extends Table {
           e.column.colDef.filterValues = merge(e.column.colDef.filterValues || {}, params)
         }
       }, // сработает при открытие окна с фильтром
-      onFilterChanged: (e) => {
-        console.log('Фильтр изменен');
-      },
       defaultColDef: {
         filter: "agTextColumnFilter",
         floatingFilter: true, // Добавляет панельку под заголовком
@@ -248,7 +242,11 @@ class TableUpcomingPayments extends Table {
     const func = (th, callback) => {
       const label = th.querySelector('.ag-header-cell-label')
 
-      if (label.querySelector('.text-info')) return
+      if (label?.querySelector('.text-info')) {
+        label.querySelector('.text-info').innerText = callback(data)
+        return
+      }
+
       const spanText = th.querySelector('.ag-header-cell-text')
       let hName = spanText.innerText
       spanText.remove()
@@ -275,7 +273,7 @@ class TableUpcomingPayments extends Table {
 
   }
 
-  changePagination({ page = 1, show_cnt = this.gridOptions.paginationPageSize, data = this.data }) {
+  changePagination({ page = 1, show_cnt = this.gridOptions.paginationPageSize, data = this.data, ...more }) {
     const cntAll = data.length
     const cntPages = Math.ceil(cntAll / show_cnt)
 
@@ -286,14 +284,14 @@ class TableUpcomingPayments extends Table {
 
     // this.pagination.setPage(page, cntPages, cntAll)
     this.gridApi.setGridOption('rowData', data)
+    this.renderTextHeader(this.calcSum(data))
   }
 
-  onRendering({ agreements = [], cnt_pages, page, cnt_all = 0, ...data }) {
+  onRendering({ agreements = [], cnt_pages, page, cnt_all = 0 }) {
     this.data = agreements
     this.cntAll = cnt_all
     this.customFilter.data = agreements
     this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length])
-    this.renderTextHeader(data)
     this.changePagination({ page })
   }
 
@@ -337,8 +335,20 @@ class TableUpcomingPayments extends Table {
     return result;
   }
 
+  calcSum(agreements) {
+    let data = {}
+
+    data.sum_amount = agreements.reduce((acc, obj) => acc + obj.price, 0);
+    data.cnt = agreements.length;
+    data.sum_area = agreements.reduce((acc, obj) => acc + obj.area, 0);
+    data.avg_price = Math.round(data.sum_amount / data.sum_area)
+    data.sum_deposit = agreements.reduce((acc, obj) => acc + obj.deposit, 0);
+
+    return data
+  }
+
   tableRendering(queryParams = {}) {
-    const data = this.filterAndSortData(this.data, queryParams)
+    let data = this.filterAndSortData(this.data, queryParams)
     // console.log({ params: queryParams, filteredData: data, fullData: this.data })
 
     this.changePagination({ ...queryParams, data })

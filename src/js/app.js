@@ -39,12 +39,12 @@ async function appInit(user) {
       burger({ selectorNav: '.sidebar' })
       initializeModalTriggers(modalMap)
       Fancybox.bind("[data-fancybox]")
-      document.querySelector('.header__user_info .name').textContent = user.manager.manager_fullname
 
       new Accordion({ isAccordion: false })
       await warehousesSelect.render()
     }
 
+    document.querySelector('.header__user_info .name').textContent = user.manager.manager_fullname
     nav.init({ warehouse: window.app.warehouse, notify, user })
 
     isFirstLoad = false

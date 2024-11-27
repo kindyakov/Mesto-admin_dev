@@ -80,12 +80,13 @@ class ModalAgreement extends BaseModal {
     })
   }
 
-  renderModal({ agreement, rooms, payments, returns }) {
+  renderModal({ agreement, rooms, payments, returns,  }) {
     this.renderElements = this.modalBody.querySelectorAll('[data-render]')
     this.attrsModal = this.modalBody.querySelectorAll('[data-modal]')
 
     this.attrsModal.length && this.attrsModal.forEach(el => {
       el.setAttribute('agr-id', agreement.agrid)
+      el.setAttribute('user-id', agreement.user_id)
     })
 
     this.validator = validate(this.form)

@@ -7,6 +7,10 @@ import SelectRooms from "../../../components/SelectRooms/SelectRooms.js";
 import { getRooms, getScheme, getDashboardWarehouse, getFinancePlan } from "../../../settings/request.js";
 import { Select } from "../../../modules/mySelect.js";
 
+function formatNumber(num) {
+  return Number.isInteger(num) ? num : Number(num).toFixed(1);
+}
+
 class Warehouse extends Dashboards {
   constructor({ loader }) {
     super({
@@ -86,7 +90,7 @@ class Warehouse extends Dashboards {
         currentData.rate += moreData.rate
       }
 
-      widget.innerText = currentData ? `${currentData.rate.toFixed(2)}% (${currentData.cnt.toFixed(0)}, ${+currentData.area.toFixed(1)} м²)` : '0% (0)'
+      widget.innerText = currentData ? `${formatNumber(currentData.rate)}% (${currentData.cnt.toFixed(0)}, ${formatNumber(currentData.area)} м²)` : '0% (0)'
     });
   }
 
