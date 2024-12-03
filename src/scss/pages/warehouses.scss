@@ -672,6 +672,7 @@
 		display: flex;
 		gap: 10px;
 		margin-top: auto;
+		flex-wrap: wrap;
 	}
 
 	&__button {
@@ -682,6 +683,23 @@
 		&.transparent {
 			padding: 10px;
 			background-color: #eff4fb;
+		}
+
+		&[data-modal='modal-confirm-lock-unlock'] {
+			&[data-blocked='0'] {
+				background-color: $red-light;
+				color: $red;
+				&::before {
+					content: 'Заблокировать';
+				}
+			}
+			&[data-blocked='1'] {
+				background: $green-light;
+				color: $green;
+				&::before {
+					content: 'Разблокировать';
+				}
+			}
 		}
 	}
 }

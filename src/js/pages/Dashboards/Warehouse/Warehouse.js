@@ -50,12 +50,6 @@ class Warehouse extends Dashboards {
   }
 
   events() {
-    this.wrapper.addEventListener('click', e => {
-      if (e.target.closest('.btn-filter-scheme:not(._active)')) {
-        this.handleClickFilterScheme(e)
-      }
-    })
-
     if (this.selectWarehouseFloors) {
       this.selectWarehouseFloors.onChange = (e, select, value) => {
         this.changeQueryParams({ floor: +value })
@@ -63,18 +57,6 @@ class Warehouse extends Dashboards {
     }
 
     this.filterRooms.onApply = filterParams => this.renderScheme(filterParams)
-  }
-
-  handleClickFilterScheme(e) {
-    const btn = e.target.closest('.btn-filter-scheme')
-    const btnActive = this.wrapper.querySelector('.btn-filter-scheme._active')
-    const rented = btn.getAttribute('data-rented')
-
-    btn.classList.add('_active')
-    btnActive?.classList.remove('_active')
-
-    this.currentRented = rented
-    this.warehouseScheme.filterCell(rented)
   }
 
   renderWidgets(data) {

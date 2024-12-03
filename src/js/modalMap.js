@@ -24,6 +24,7 @@ import modalCreateAgreement from "./components/Modals/ModalCreateAgreement/Modal
 import modalConfirmOpenRoom from "./components/Modals/Confirmation/ModalConfirmOpenRoom/ModalConfirmOpenRoom.js";
 import modalConfirmCancelGuestAccess from "./components/Modals/Confirmation/ModalConfirmCancelGuestAccess/ModalConfirmCancelGuestAccess.js";
 import modalConfirmationDepartureRoom from "./components/Modals/Confirmation/ModalConfirmationDepartureRoom/ModalConfirmationDepartureRoom.js";
+import modalConfirmLockUnlock from "./components/Modals/Confirmation/ModalConfirmLockUnlock/ModalConfirmLockUnlock.js";
 
 function getClassModal({ modal }) {
   return modal.opts.cssClass[0]
@@ -57,4 +58,5 @@ export const modalMap = {
   [getClassModal(modalConfirmOpenRoom)]: modalConfirmOpenRoom,
   [getClassModal(modalConfirmCancelGuestAccess)]: modalConfirmCancelGuestAccess,
   [getClassModal(modalConfirmationDepartureRoom)]: modalConfirmationDepartureRoom,
+  [getClassModal(modalConfirmLockUnlock)]: modalConfirmLockUnlock,
 }

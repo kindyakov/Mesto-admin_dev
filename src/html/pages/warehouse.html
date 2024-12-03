@@ -1,0 +1,63 @@
+<div class="main__content content-main" data-content="warehouse">
+  <div class="warehouse__select-rooms selects-rooms">
+
+  </div>
+
+  <div class="warehouse">
+    <div class="warehouse__header">
+      <div class="warehouse__types">
+        <button class="warehouse__type btn-filter-scheme" data-rented="0">
+          <span class="circle"></span>
+          <span class="name">Свободные</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.4">
+          <span class="circle"></span>
+          <span class="name">Неоплаченные</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.25">
+          <span class="circle"></span>
+          <span class="name">Гостевые</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.5">
+          <span class="circle"></span>
+          <span class="name">Забронированные</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="1">
+          <span class="circle"></span>
+          <span class="name">Занятые</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.75">
+          <span class="circle"></span>
+          <span class="name">Освобождающиеся</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.95">
+          <span class="circle"></span>
+          <span class="name">Дебиторы</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme _active" data-rented="-1">
+          <span class="name">Все</span>
+        </button>
+      </div>
+
+      <div class="warehouse__filters">
+        <select name="floors" class="init-custom-select _none" data-special-select="select-warehouse-floors"
+          data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
+          <option value="1">1 этаж</option>
+          <option value="2">2 этаж</option>
+        </select>
+        <button class="warehouse__button button-table btn-set-filters">
+          <span>Фильтры</span>
+          <svg class='icon icon-filter'>
+            <use xlink:href='img/svg/sprite.svg#filter'></use>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <button class="button transparent btn-hide-lock-room"
+      style="max-width: 300px;margin-left: auto;">Заблокированные</button>
+    <div class="warehouse__schemes" style="min-height: 370px;">
+      <div class="warehouse__wrap-scheme wrap-scheme _active" style="min-width: 1100px;">
+      </div>
+    </div>
+  </div>
+</div>

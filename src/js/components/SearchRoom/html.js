@@ -7,7 +7,7 @@ export function searchModalHtml() {
     <div>
       <span>Поиск:</span>
       <div class="wp-input" style="margin-top: 5px;">
-        <input type="text" name="search_str" autocomplete="off" class="input" placeholder="Введите номер ячейки">
+        <input type="number" name="search_str" autocomplete="off" class="input hide-arrow" placeholder="Введите номер ячейки">
       </div>
     </div>
 

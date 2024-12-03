@@ -11,6 +11,7 @@ import { createDaysLeftElement } from '../utils/createDaysLeftElement.js';
 
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
+import { sort } from '../../../utils/sort.js';
 
 import { downloadFuturePayments } from "../../../settings/request.js";
 import { createElement } from "../../../settings/createElement.js";
@@ -44,6 +45,10 @@ class TableUpcomingPayments extends Table {
           },
           filterRenderer: params => {
             const targetChild = params.filterWrapper.children[1]
+
+            if (params.column.colDef.dropdownTarget && !this.queryParams.real_payment) {
+              params.column.colDef.dropdownTarget.removeAttribute('style')
+            }
 
             if (params.filterWrapper.querySelector('.dropdown-target')) return
 
@@ -109,6 +114,7 @@ class TableUpcomingPayments extends Table {
             params.column.colDef.clearCustomFilter = () => {
               dropdownTarget.removeAttribute('style')
             }
+            params.column.colDef.dropdownTarget = dropdownTarget
           }
           // headerComponent: CustomHeaderComponent,
           // headerComponentParams: {
@@ -177,8 +183,8 @@ class TableUpcomingPayments extends Table {
         const field = e.column.colDef.field
         const filterWrapper = e.eGui.querySelector('.ag-filter-body-wrapper')
         const data = e.api.getGridOption('rowData')
-        const fullCurrentData = uniqBy(this.data.map(obj => obj[field])).sort((a, b) => a - b); // Сортировка по возрастанию
-        const currentData = uniqBy(data.map(obj => obj[field])).sort((a, b) => a - b); // Сортировка по возрастанию
+        const fullCurrentData = sort(uniqBy(this.data.map(obj => obj[field]))); // Сортировка по возрастанию
+        const currentData = sort(uniqBy(data.map(obj => obj[field]))); // Сортировка по возрастанию
         let dataWithoutCurrentFilter = []
 
         if (this.queryParams.filters) {
@@ -198,6 +204,10 @@ class TableUpcomingPayments extends Table {
               .filter(value => !currentData.includes(value))
               .sort((a, b) => a - b); // Сортировка по возрастанию
           }
+
+          if (dataWithoutCurrentFilter?.length) {
+            dataWithoutCurrentFilter = uniqBy(dataWithoutCurrentFilter)
+          }
         }
 
         const params = { ...e, filterWrapper, currentData, data, fullCurrentData, dataWithoutCurrentFilter }
@@ -206,13 +216,6 @@ class TableUpcomingPayments extends Table {
         this.customFilter.gridApi = this.gridApi
         this.customFilter.wpTable = this.wpTable
         this.customFilter.render(params, this.queryParams)
-        this.customFilter.onChange = (queryParams) => {
-          // this.changeQueryParams(queryParams)
-          this.btnTableFilterReset?.classList.toggle('_is-filter', !(!queryParams.filters && !queryParams.sort_column))
-
-          this.queryParams = queryParams
-          this.tableRendering(queryParams)
-        }
         this.customFilter.onChangeColumnParams = (params) => {
           e.column.colDef.filterValues = merge(e.column.colDef.filterValues || {}, params)
         }
@@ -234,6 +237,13 @@ class TableUpcomingPayments extends Table {
     super(selector, mergedOptions, mergedParams);
 
     this.customFilter = new CustomFilter()
+    this.customFilter.onChange = (queryParams) => {
+      // this.changeQueryParams(queryParams)
+      this.btnTableFilterReset?.classList.toggle('_is-filter', !(!queryParams.filters && !queryParams.sort_direction))
+
+      this.queryParams = queryParams
+      this.tableRendering(queryParams)
+    }
   }
 
   renderTextHeader(data) {
@@ -330,6 +340,7 @@ class TableUpcomingPayments extends Table {
         return 0; // Если sort_direction некорректен
       });
     }
+
     console.log(params)
 
     return result;

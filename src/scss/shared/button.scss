@@ -67,6 +67,17 @@
 		}
 	}
 
+	&.btn-hide-lock-room {
+		background-color: #fff;
+		&._active {
+			background-color: $red-light;
+			color: $red;
+			&:hover {
+				border-color: $red;
+			}
+		}
+	}
+
 	&[disabled] {
 		pointer-events: none;
 		opacity: 0.7;

@@ -4,13 +4,55 @@ class Scheme {
     this.wrapScheme = wrapper.querySelector('.wrap-scheme')
     this.schemes = wrapper.querySelectorAll('.scheme')
 
+    this.currentRented = -1
     this.numRooms = {}
+
+    this.buttonsFilterScheme = wrapper.querySelectorAll('.btn-filter-scheme')
+    this.btnHideLockRoom = wrapper.querySelector('.btn-hide-lock-room')
 
     this.init()
   }
 
   init() {
+    this.buttonsFilterScheme.length && this.buttonsFilterScheme.forEach(btn =>
+      btn.addEventListener('click', e => {
+        if (!btn.classList.contains('_active')) {
+          this.handleClickFilterScheme(btn)
+        }
+      })
+    )
+    this.btnHideLockRoom.addEventListener('click', (e) => this.handleClickBtnHideLockRoom(e))
+  }
 
+  handleClickFilterScheme(btn) {
+    const btnActive = this.wrapper.querySelector('.btn-filter-scheme._active')
+    const rented = btn.getAttribute('data-rented')
+
+    btn.classList.add('_active')
+    btnActive?.classList.remove('_active')
+
+    this.currentRented = rented
+    this.filterCell(rented)
+  }
+
+  handleClickBtnHideLockRoom(e) {
+    const btn = e.target
+    const isActive = btn.classList.contains('_active')
+    btn.classList.toggle('_active', !isActive)
+
+    if (isActive) {
+      this.filterCell(this.currentRented)
+    } else {
+      this.actionsCell(({ cell, cellId }) => {
+        const { rented, blocked } = this.numRooms[cellId]
+
+        if (rented !== 0.75 && rented !== 0.95 && rented !== 1) return
+
+        if (blocked == 0) {
+          cell.removeAttribute('data-rented')
+        }
+      })
+    }
   }
 
   changeActive(floor) {
@@ -24,19 +66,24 @@ class Scheme {
     })
   }
 
-  filterCell(rented) {
+  filterCell(_rented) {
     this.actionsCell(({ cell, cellId }) => {
-      const roomRented = this.numRooms[cellId]?.rented
+      const { rented = null, blocked = null } = this.numRooms[cellId]
 
-      if (roomRented === undefined) {
+      if (rented === undefined) {
         cell.removeAttribute('data-rented')
         return
       }
 
-      if (+rented === -1) {
-        cell.setAttribute('data-rented', roomRented)
-      } else if (+rented === +roomRented) {
-        cell.setAttribute('data-rented', roomRented)
+      if (this.btnHideLockRoom.classList.contains('_active') && blocked == 0) {
+        cell.removeAttribute('data-rented')
+        return
+      }
+
+      if (+_rented === -1) {
+        cell.setAttribute('data-rented', rented)
+      } else if (+_rented === +rented) {
+        cell.setAttribute('data-rented', rented)
       } else {
         cell.removeAttribute('data-rented')
       }

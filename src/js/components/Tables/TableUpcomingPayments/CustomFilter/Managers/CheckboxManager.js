@@ -45,7 +45,7 @@ export class CheckboxManager {
   htmlColList({ currentData, name, dataWithoutCurrentFilter }) {
     function html({ name, val, i, isAll = false, isChecked = true }) {
       return `
-      <li>
+      <li ${i == 0 ? 'style="position: sticky;top: 0;background: #F8F8F8;z-index: 1;"' : ''}>
         <label class="wrapper-checkbox" data-i="${i}">
           <input class="input-checkbox ${isAll ? 'all' : ''}" type="checkbox" name="${name}" value="${val == 'Выделить все' ? '' : val}" id="filter-checkbox-${name}-${i}" ${isChecked ? 'checked' : ''}>
           <label class="label-checkbox" for="filter-checkbox-${name}-${i}">
@@ -63,7 +63,7 @@ export class CheckboxManager {
       ${html({ name, val: 'Выделить все', i: 0, isAll: true, isChecked: !dataWithoutCurrentFilter.length })}
       ${currentData.map((val, i) => html({ name, val, i: i + 1 })).join('')}
       ${dataWithoutCurrentFilter.length
-      ? dataWithoutCurrentFilter.map((val, i) => html({ name, val, i: i + 1 + currentData.length, isChecked: false })).join('')
+        ? dataWithoutCurrentFilter.map((val, i) => html({ name, val, i: i + 1 + currentData.length, isChecked: false })).join('')
         : ''}
     </ul>`
   }

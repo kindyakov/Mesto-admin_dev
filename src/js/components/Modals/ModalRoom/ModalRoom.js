@@ -30,7 +30,12 @@ class ModalRoom extends BaseModal {
       }
     }
 
-    this.renderElements.length && this.renderElements.forEach(el => renderForm(el, room))
+    this.renderElements.length && this.renderElements.forEach(el => {
+      renderForm(el, room)
+      if (el.name == 'warehouse_name') {
+        el.value = `${room.warehouse_name} / ${room.floor}`
+      }
+    })
   }
 
   async onOpen(params = null) {

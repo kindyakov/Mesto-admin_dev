@@ -112,6 +112,10 @@ export const pages = {
     path: 'MestoBudget/MestoBudget.js',
     accessCheck: ({ tab, content, user }) => { return true }
   },
+  'warehouse': {
+    path: 'Warehouse/Warehouse.js',
+    accessCheck: ({ tab, content, user }) => { return true }
+  },
   'rooms': {
     path: 'Rooms/Rooms.js',
     accessCheck: ({ tab, content, user }) => { return true }

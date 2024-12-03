@@ -1,5 +1,6 @@
 import { formatPhoneNumber, formattingPrice } from "../../utils/formattingPrice.js";
 import { dateFormatter } from "../../settings/dateFormatter.js";
+import { dataStr } from "../../utils/dataStr.js"
 
 function typeRoom({ rented, rentenddate, next_payment_date }) {
   const text = {
@@ -14,8 +15,18 @@ function typeRoom({ rented, rentenddate, next_payment_date }) {
   return text[rented] ? text[rented] : ''
 }
 
-function dataStr(data) {
-  return JSON.stringify(data).replace(/\s+/g, '').replace(/"/g, '&quot;')
+// 0 Свободные
+// 0.4 Неоплаченные
+// 0.25 Гостевые
+// 0.5 Забронированные
+// 1 Занятые
+// 0.75 Освобождающиеся
+// 0.95 Дебиторы
+// -1 Все
+
+function buttonsBlockUnlock(data) {
+  let obj = { agrid: data.agrid, room_id: data.room_id, blocked: data.blocked ? 0 : 1 }
+  return `<button class="room__button button" data-modal="modal-confirm-lock-unlock" data-json="${dataStr(obj)}" data-blocked="${data.blocked}"></button>`
 }
 
 function buttonsRoom(data) {
@@ -28,8 +39,10 @@ function buttonsRoom(data) {
     0.75: `<button class="room__button button ${data.leave_approved ? '_confirmed' : ''}" data-modal="modal-confirmation-departure" room-id="${data.room_id}" agr-id="${data.agrid}">
             <span>Подтвердить выезд</span>
             <span>Выезд подтвержден</span>
-          </button>`,
-    1: ``,
+          </button>
+          ${buttonsBlockUnlock(data)}`,
+    0.95: buttonsBlockUnlock(data),
+    1: buttonsBlockUnlock(data),
   }
 
   return buttons[data.rented] ? buttons[data.rented] : ''
