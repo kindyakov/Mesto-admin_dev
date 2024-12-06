@@ -116,10 +116,16 @@ class Finance extends Dashboards {
     differenceFactPlan.style.left = `${findPercentageOfTotal(factV, sum) / 2}%`
     remainsDeposit.style.left = `${(findPercentageOfTotal(factV, sum))}%`
 
-    if (planV < factV) {
-      differenceFactPlan.classList.remove('text-error')
-      differenceFactPlan.classList.add('text-success')
+    differenceFactPlan.classList.remove('text-error')
+    differenceFactPlan.classList.remove('text-success')
+
+
+    if (dataDashboard.debitors <= 0) {
+      this.wrapper.querySelector('._circle.debitors').style.color = "#e03d3d"
+      differenceFactPlan.classList.add('text-error')
+    } else {
       this.wrapper.querySelector('._circle.debitors').style.color = "#0b704e"
+      differenceFactPlan.classList.add('text-success')
     }
   }
 
