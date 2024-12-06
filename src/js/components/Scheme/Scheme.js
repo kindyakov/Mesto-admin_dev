@@ -46,9 +46,9 @@ class Scheme {
       this.actionsCell(({ cell, cellId }) => {
         const { rented, blocked } = this.numRooms[cellId]
 
-        if (rented !== 0.75 && rented !== 0.95 && rented !== 1) return
+        if (rented !== 0.75 && rented !== 0.95 && rented !== 1 && rented !== 0) return
 
-        if (blocked == 0) {
+        if (!blocked) {
           cell.removeAttribute('data-rented')
         }
       })
@@ -75,7 +75,7 @@ class Scheme {
         return
       }
 
-      if (this.btnHideLockRoom.classList.contains('_active') && blocked == 0) {
+      if (this.btnHideLockRoom.classList.contains('_active') && !blocked) {
         cell.removeAttribute('data-rented')
         return
       }

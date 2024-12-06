@@ -86,7 +86,6 @@ class Warehouse extends Dashboards {
     this.changeQueryParams(data)
   }
 
-
   async getData(queryParams = {}) {
     const { warehouse_id = this.app.warehouse.warehouse_id, floor = 1 } = queryParams
     return Promise.all([
