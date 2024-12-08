@@ -11,12 +11,14 @@ import { createDaysLeftElement } from '../utils/createDaysLeftElement.js';
 
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { getFormattedDate } from "../../../utils/getFormattedDate.js";
+import { mergeQueryParams } from '../../../utils/buildQueryParams.js';
 import { sort } from '../../../utils/sort.js';
 
 import { downloadFuturePayments } from "../../../settings/request.js";
 import { createElement } from "../../../settings/createElement.js";
 
 import tippy from '../../../configs/tippy.js'
+
 
 class TableUpcomingPayments extends Table {
   constructor(selector, options, params) {
@@ -38,7 +40,7 @@ class TableUpcomingPayments extends Table {
             })
 
             if (!params.data.real_payment) {
-              span.classList.add(new Date(params.data.write_off_date) >= new Date() ? 'warning' : 'error')
+              span.classList.add(new Date(params.data.write_off_date) > new Date() ? 'warning' : 'error')
             }
 
             return cellRendererInput(params, { el: span })
@@ -46,7 +48,7 @@ class TableUpcomingPayments extends Table {
           filterRenderer: params => {
             const targetChild = params.filterWrapper.children[1]
 
-            if (params.column.colDef.dropdownTarget && !this.queryParams.real_payment) {
+            if (params.column.colDef.dropdownTarget && this.queryParams.real_payment == undefined) {
               params.column.colDef.dropdownTarget.removeAttribute('style')
             }
 
@@ -356,6 +358,20 @@ class TableUpcomingPayments extends Table {
     data.sum_deposit = agreements.reduce((acc, obj) => acc + obj.deposit, 0);
 
     return data
+  }
+
+  async updateDate(params) {
+    try {
+      this.loader.enable()
+      this.queryParams = mergeQueryParams(this.queryParams, params)
+      const data = await this.getData(this.queryParams)
+      if (!data) return
+      this.onRendering(data)
+    } catch (error) {
+      throw error
+    } finally {
+      this.loader.disable()
+    }
   }
 
   tableRendering(queryParams = {}) {

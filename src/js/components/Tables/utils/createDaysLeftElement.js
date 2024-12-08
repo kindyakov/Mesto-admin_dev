@@ -10,20 +10,20 @@ export function createDaysLeftElement(params) {
     <!-- <svg class='icon icon-calendar' style="${+params.value <= 0 ? 'fill: red;' : ''}">
       <use xlink:href='img/svg/sprite.svg#calendar'></use>
     </svg> -->
-    <span style="${+params.value < 0 ? 'color: red;' : ''}">${params.value ? `${params.value} ${declOfNum(Math.abs(params.value), ['День', 'Дня', 'Дней'])}` : '0 дней'}</span>`
+    <span style="${+params.value <= 0 ? 'color: red;' : ''}">${params.value ? `${params.value} ${declOfNum(Math.abs(params.value), ['День', 'Дня', 'Дней'])}` : '0 дней'}</span>`
   })
 
   // if (params.value && params.value >= 0) {
-    const date = new Date();
-    date.setDate(date.getDate() + params.value);
+  const date = new Date();
+  date.setDate(date.getDate() + params.value);
 
-    tippy(p, {
-      trigger: 'mouseenter',
-      placement: 'top',
-      arrow: true,
-      interactive: false,
-      content: `<span class="tippy-info-span tippy-info-rooms-id">${dateFormatter(date)}</span>`,
-    })
+  tippy(p, {
+    trigger: 'mouseenter',
+    placement: 'top',
+    arrow: true,
+    interactive: false,
+    content: `<span class="tippy-info-span tippy-info-rooms-id">${dateFormatter(date)}</span>`,
+  })
   // }
 
   // if (params.value && params.value >= 0 && params.value <= 5) {

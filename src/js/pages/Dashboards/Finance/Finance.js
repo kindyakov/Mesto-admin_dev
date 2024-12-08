@@ -81,8 +81,8 @@ class Finance extends Dashboards {
     const [table] = this.tables
     if (!params) return
     params = JSON.parse(params)
-    table.selects.setValue(params.real_payment)
-    table.changeQueryParams(params)
+    // table.selects.setValue(params.real_payment)
+    table.updateDate(params)
   }
 
   visualization({ dataDashboard, finance_planfact, dataEntities }) {

@@ -85,23 +85,26 @@ class ChartRevenue extends BaseChart {
 
     super(ctx, merge({}, defaultOptions, addOptions));
     this.ctx = ctx
+    this.dataPlan = {}
+    this.planMonthValue = this.wpChart.querySelector('.plan-month-value')
+
+    const btnSetPlan = this.wpChart.querySelector('.btn-set-plan')
+    btnSetPlan.addEventListener('click', () => this.handleClickBtnSetPlan())
   }
 
   calc(dataDashboard, finance_planfact) {
-    const planMonthValue = this.wpChart.querySelector('.plan-month-value')
     const deltaValue = this.wpChart.querySelector('.delta-value')
-    const btnSetPlan = this.wpChart.querySelector('.btn-set-plan')
 
     const [currentD] = finance_planfact.filter(obj => new Date(obj.data).toDateString() == new Date().toDateString())
-    const data = currentD ? currentD : finance_planfact.at(-1)
+    this.dataPlan = currentD ? currentD : finance_planfact.at(-1)
 
-    const fact = data.revenue_accumulated || 0
-    const plan = data.revenue_accumulated_planned || 0
+    const fact = this.dataPlan.revenue_accumulated || 0
+    const plan = this.dataPlan.revenue_accumulated_planned || 0
     const delta = fact - plan
 
     this.wpChart.querySelector('.fact-value').innerText = formattingPrice(fact)
     this.wpChart.querySelector('.plan-value').innerText = formattingPrice(plan)
-    planMonthValue.value = formattingPrice(finance_planfact.at(-1).revenue_accumulated_planned)
+    this.planMonthValue.value = formattingPrice(finance_planfact.at(-1).revenue_accumulated_planned)
     deltaValue.innerText = formattingPrice(delta)
 
     if (delta > 0) {
@@ -111,19 +114,19 @@ class ChartRevenue extends BaseChart {
     } else {
       deltaValue.classList.add('text-error')
     }
+  }
 
-    btnSetPlan.addEventListener('click', () => {
-      if (planMonthValue.value) {
-        planMonthValue.style.backgroundColor = ''
-        this.setFinancePlan({
-          revenue_planned: planMonthValue.value.replace(/\D/g, ''),
-          data: data.data,
-          month_or_day: 'month'
-        })
-      } else {
-        planMonthValue.style.backgroundColor = '#ffdbdb'
-      }
-    })
+  handleClickBtnSetPlan() {
+    if (this.planMonthValue.value) {
+      this.planMonthValue.style.backgroundColor = ''
+      this.setFinancePlan({
+        revenue_planned: this.planMonthValue.value.replace(/\D/g, ''),
+        data: this.dataPlan.data,
+        month_or_day: 'month'
+      })
+    } else {
+      this.planMonthValue.style.backgroundColor = '#ffdbdb'
+    }
   }
 
   onExternal(tooltipEl, chart, tooltip, dataI) {

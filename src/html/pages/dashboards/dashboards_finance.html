@@ -37,11 +37,11 @@
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
-      <div class="widgets__item_content" scroll-to='.dashboards__table;{"real_payment":-1}'>
+      <div class="widgets__item_content" scroll-to='.dashboards__table;{"show_what":"reestr"}'>
         <span class="value" data-render-widget="reestr_sum" price></span>
         <span class="name">Средств в реестре</span>
       </div>
-      <div class="widgets__item_content last" scroll-to='.dashboards__table;{"real_payment":0}'>
+      <div class="widgets__item_content last" scroll-to='.dashboards__table;{"show_what":"rest_in_reestr"}'>
         <span class="value" data-render-widget="rest_in_reestr" price></span>
         <span class="name">Осталось в реестре</span>
       </div>
@@ -50,12 +50,12 @@
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
-      <div class="widgets__item_content" scroll-to='.dashboards__table;{"real_payment":1}'>
+      <div class="widgets__item_content" scroll-to='.dashboards__table;{"show_what":"revenue"}'>
         <span class="value" data-render-widget="revenue" price></span>
         <span class="name">Выручка за выбранный<u class="hover-line" data-render-tippy="dates,end"
             price>период</u></span>
       </div>
-      <div class="widgets__item_content last" scroll-to='.dashboards__table'>
+      <div class="widgets__item_content last" scroll-to='.dashboards__table;{"show_what":"revenue_new"}'>
         <span class="value" data-render-widget="new_clients_revenue" price></span>
         <span class="name">Выручка от новых клиентов за выбранный <u class="hover-line"
             data-render-tippy="dates,end">период</u></span>
@@ -65,12 +65,12 @@
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
-      <div class="widgets__item_content" scroll-to='.dashboards__table'>
+      <div class="widgets__item_content" scroll-to='.dashboards__table;{"show_what":"revenue_new_rent"}'>
         <span class="value" data-render-widget="new_clients_revenue_rent" price></span>
         <span class="name">Сборы по аренде от новых клиентов за выбранный <u class="hover-line"
             data-render-tippy="dates,end" price>период</u></span>
       </div>
-      <div class="widgets__item_content last" scroll-to='.dashboards__table'>
+      <div class="widgets__item_content last" scroll-to='.dashboards__table;{"show_what":"revenue_new_deposit"}'>
         <span class="value" data-render-widget="new_clients_revenue_deposit" price></span>
         <span class="name">Сборы по депозитам от новых клиентов за выбранный <u class="hover-line"
             data-render-tippy="dates,end">период</u></span>
@@ -80,12 +80,12 @@
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
-      <div class="widgets__item_content" scroll-to='.dashboards__table'>
+      <div class="widgets__item_content" scroll-to='.dashboards__table;{"show_what":"revenue_rent"}'>
         <span class="value" data-render-widget="revenue_rent" price></span>
         <span class="name">Сборы по аренде за выбранный <u class="hover-line" data-render-tippy="dates,end"
             price>период</u></span>
       </div>
-      <div class="widgets__item_content last" scroll-to='.dashboards__table'>
+      <div class="widgets__item_content last" scroll-to='.dashboards__table;{"show_what":"revenue_deposit"}'>
         <span class="value" data-render-widget="revenue_deposit" price></span>
         <span class="name">Сборы по депозитам за выбранный <u class="hover-line" data-render-tippy="dates,end"
             price>период</u></span>
@@ -109,7 +109,7 @@
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
-      <div class="widgets__item_content" scroll-to='.dashboards__table'>
+      <div class="widgets__item_content" scroll-to='.dashboards__table;{"show_what":"deposits"}'>
         <span class="value" data-render-widget="revenue_deposit_today" price></span>
         <span class="name">Текущая сумма депозитов</span>
       </div>
@@ -131,7 +131,7 @@
     <h4 class="chart__title" style="flex: 1 1 100%;">Сборы по реестру за <span date-range></span></h4>
     <div class="chart__info">
       <p>
-        <i class="_circle fact"></i>
+        <i class="_circle fact" style="color: #0B704E;"></i>
         <span>Сборы по реестру</span>
       </p>
       <!-- <p>
@@ -139,7 +139,7 @@
         <span>План</span>
       </p> -->
       <p>
-        <i class="_circle plan" style="color: gray;"></i>
+        <i class="_circle plan" style="color: #EFBB34;"></i>
         <span>Осталось собрать</span>
       </p>
       <p>
@@ -228,7 +228,7 @@
           <div class="chart__info-calc">
             <p>
               <b>План на месяц:</b> <input type="text" name="revenue_planned" class="plan-month-value input-passport"
-                style="width: 110px;">
+                style="width: 110px;" autocomplete="off">
               <button class="button btn-set-plan">
                 <svg class="icon icon-edit edit" style="stroke: #fff;">
                   <use xlink:href="img/svg/sprite.svg#edit"></use>
