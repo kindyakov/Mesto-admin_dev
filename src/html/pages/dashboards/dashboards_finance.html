@@ -105,7 +105,7 @@
         <span class="name">Средняя ставка за все время</span>
       </div>
     </div>
-    <div class="widgets__item">
+    <div class="widgets__item col-2">
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
       </div>
@@ -113,19 +113,12 @@
         <span class="value" data-render-widget="revenue_deposit_today" price></span>
         <span class="name">Текущая сумма депозитов</span>
       </div>
+      <div class="widgets__item_content last" scroll-to='.dashboards__table;{"show_what":"total_reestr"}'>
+        <span class="value" data-render-widget="total_reestr" price></span>
+        <span class="name">Средств в реестре всего</span>
+      </div>
     </div>
   </div>
-
-  <!-- <div class="ranges">
-    <div class="ranges__item">
-      <span>Факт</span>
-      <div class="range range-fact" style="pointer-events: none;"></div>
-    </div>
-    <div class="ranges__item">
-      <span>План</span>
-      <div class="range range-plan"></div>
-    </div>
-  </div> -->
 
   <div class="visualization">
     <h4 class="chart__title" style="flex: 1 1 100%;">Сборы по реестру за <span date-range></span></h4>
@@ -144,7 +137,7 @@
       </p>
       <p>
         <i class="_circle debitors" style="color: #e03d3d;"></i>
-        <span>Дебиторы</span>
+        <span>Дебиторская задолженность</span>
       </p>
     </div>
     <div style="position: relative; width: 100%; height: 15px;">
@@ -163,64 +156,6 @@
   </div>
 
   <div class="charts">
-    <!-- <div class="chart" style="flex: 1 1 50%; width: 100%; min-height: 400px;">
-      <div class="chart__header" style="align-items: center; flex-wrap: wrap;">
-        <h4 class="chart__title" style="flex: 1 1 100%;">Сборы по реестру</h4>
-        <div class="chart__info-calc">
-          <p><b>Факт:</b> <span class="fact-value"></span></p>
-          <p><b>План:</b> <span class="plan-value"></span></p>
-          <p><b>Отклонение:</b> <span class="delta-value"></span></p>
-        </div>
-        <div style="display: flex; align-items: center; gap: 25px;">
-          <div class="chart__info">
-            <p>
-              <i class="_circle fact"></i>
-              <span>Факт</span>
-            </p>
-            <p>
-              <i class="_circle plan"></i>
-              <span style="color: #3d50e0;">План</span>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="chart__body">
-        <canvas id="chart-registration-fees" style="max-height: 260px;"></canvas>
-        <div id="tooltip-registration-fees" class="chart-tooltip"></div>
-      </div>
-    </div>
-    <div class="chart" style="flex: 1 1 50%; width: 100%; min-height: 400px;">
-      <div class="chart__header" style="align-items: center; flex-wrap: wrap;">
-        <h4 class="chart__title" style="flex: 1 1 100%;">Сборы по новым клиентам</h4>
-        <div class="chart__info-calc">
-          <p><b>Факт:</b> <span class="fact-value"></span></p>
-          <p><b>План:</b> <input type="text" class="plan-value input-passport" style="width: 110px;">
-            <button class="button btn-set-plan">
-              <svg class="icon icon-edit edit" style="stroke: #fff;">
-                <use xlink:href="img/svg/sprite.svg#edit"></use>
-              </svg>
-            </button>
-          </p>
-          <p><b>Отклонение:</b> <span class="delta-value"></span></p>
-        </div>
-        <div class="" style="display: flex; align-items: center; gap: 25px;">
-          <div class="chart__info">
-            <p>
-              <i class="_circle fact"></i>
-              <span>Факт</span>
-            </p>
-            <p>
-              <i class="_circle"></i>
-              <span style="color: #3d50e0;">План</span>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="chart__body">
-        <canvas id="chart-fees-new-customers" style="max-height: 260px;"></canvas>
-        <div id="tooltip-fees-new-customers" class="chart-tooltip"></div>
-      </div>
-    </div> -->
     <div class="chart" style="flex: 1 1 50%; width: 100%; min-height: 400px;">
       <div class="chart__header" style="align-items: center; flex-wrap: wrap;">
         <div style="flex: 1 1 100%; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
@@ -262,45 +197,6 @@
     </div>
   </div>
 
-  <!-- <div class="charts">
-    <div class="chart" style="flex: 1 1 auto; width: 100%; height: 380px;">
-      <div class="chart__header" style="align-items: center;">
-        <h4 class="chart__title">
-          Выручка за период: <span data-render-widget="revenue" price></span>
-          <div class="frame up" style="transform: translate(0, -10%);">
-            <span>0,23%</span>
-            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M3.49967 1.914L0.817673 4.596L0.110674 3.889L3.99967 3.67785e-06L7.88867 3.889L7.18167 4.596L4.49967 1.914L4.49967 8L3.49967 8L3.49967 1.914Z"
-                fill="white" />
-            </svg>
-          </div>
-        </h4>
-        <div class="" style="display: flex; align-items: center; gap: 25px;">
-          <div class="chart__info">
-            <p>
-              <img src="./img/icons/radio.png" alt="Иконка">
-              <span style="color: #3d50e0;">Факт</span>
-            </p>
-            <p>
-              <img src="./img/icons/radio-2.png" alt="Иконка">
-              <span>План</span>
-            </p>
-          </div>
-          <select name="sort" class="init-custom-select" data-special-select="select-chart-monthly-revenue">
-            <option value="planFact">План/Факт</option>
-            <option value="plan">План</option>
-            <option value="fact">Факт</option>
-          </select>
-        </div>
-      </div>
-      <div class="chart__body">
-        <canvas id="chart-monthly-revenue" style="max-height: 260px;"></canvas>
-        <div id="tooltip-monthly-revenue" class="chart-tooltip"></div>
-      </div>
-    </div>
-  </div> -->
-
   <div class="dashboards__table _my-accordion" data-accordion-open data-max-height="845">
     <button class="dashboards__table-toggle btn-toggle-table _my-accordion-control">
       <span>Платежи</span>
@@ -320,13 +216,19 @@
               </svg>
             </button>
           </div>
-          <select name="real_payment" class="init-custom-select" data-special-select="select-filter-table"
+          <select name="show_what" class="init-custom-select" data-special-select="select-filter-table"
             data-select-min-width="200"
             data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
-            <option value="-1">Все</option>
-            <option value="1">Платежи</option>
-            <option value="0">Плановые платежи</option>
-            <option value="2">Просроченные платежи</option>
+            <option value="reestr">Средств в реестре</option>
+            <option value="rest_in_reestr">Осталось в реестре</option>
+            <option value="revenue">Выручка</option>
+            <option value="revenue_new">Выручка от новых клиентов</option>
+            <option value="revenue_new_deposit">Сборы по депозитам от новых клиентов</option>
+            <option value="revenue_rent">Сборы по аренде</option>
+            <option value="revenue_new_rent">Сборы по аренде от новых клиентов</option>
+            <option value="revenue_deposit">Сборы по депозитам</option>
+            <option value="deposits">Текущая сумма депозитов</option>
+            <option value="total_reestr">Средств в реестре всего</option>
           </select>
         </form>
         <div class="table__buttuns">

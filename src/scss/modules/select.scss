@@ -84,6 +84,7 @@
 		opacity: 0;
 		overflow: hidden;
 		will-change: max-height;
+		box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.15);
 
 		&::-webkit-scrollbar {
 			width: 2px;
