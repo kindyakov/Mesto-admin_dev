@@ -1,0 +1,123 @@
+.main__content[data-content='dashboards/indexation'] {
+	.table-indexation {
+		.ag-cell:has(.button-table-row-edit) {
+			padding: 0;
+			* {
+				width: 100%;
+				height: 100%;
+			}
+			.button-table-row-edit {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background-color: #fff;
+				transition: 0.2s;
+				.icon {
+					width: 20px;
+					height: 20px;
+				}
+				&:hover {
+					background-color: $blue-light;
+				}
+				&._edit {
+					background-color: $blue;
+					.icon {
+						stroke: #fff;
+					}
+				}
+			}
+		}
+
+		.ag-cell:has(.row-buttons) {
+			padding: 5px;
+			* {
+				width: 100%;
+				height: 100%;
+			}
+			width: 100%;
+			button {
+				background-color: #fff;
+				padding: 0;
+				width: 100%;
+				flex: 1 1 auto;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 2px;
+
+				.icon {
+					width: 18px;
+					height: 18px;
+				}
+
+				.icon-save {
+					stroke: $blue;
+					fill: none;
+				}
+
+				.icon-send {
+					fill: $blue;
+				}
+
+				&:hover {
+					background-color: $blue-light;
+				}
+
+				&._active {
+					background-color: $blue;
+					.icon-save {
+						stroke: #fff;
+					}
+					.icon-send {
+						fill: #fff;
+					}
+				}
+			}
+		}
+
+		.ag-row {
+			&::before {
+				display: none;
+			}
+
+			&.bg-yellow {
+				background-color: $yellow-light;
+			}
+		}
+
+		.ag-cell {
+			border-right: 1px solid #efefef;
+			&:has(.wp-input) {
+				padding: 0;
+
+				.wp-input,
+				.cell-input {
+					width: 100%;
+					height: 100%;
+				}
+				.cell-input {
+					padding-left: 15px;
+					padding-right: 15px;
+					border: none;
+					background-color: #eff4fb;
+
+					&.not-edit {
+						background-color: transparent;
+					}
+
+					&._err {
+						background-color: $red-light;
+					}
+
+					@media (max-width: $md2) {
+						padding-left: 10px;
+						padding-right: 10px;
+					}
+				}
+			}
+			&:has(.button-table-row-edit) {
+				padding: 0;
+			}
+		}
+	}
+}

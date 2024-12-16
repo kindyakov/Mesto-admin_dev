@@ -1,0 +1,101 @@
+<div class="main__content content-main" data-content="dashboards/indexation">
+  <form class="main__filter form-filter-dashboards" style="justify-content: stretch;">
+    <label class="main__date-filter">
+      <svg class='icon icon-calendar'>
+        <use xlink:href='img/svg/sprite.svg#calendar'></use>
+      </svg>
+      <input type="text" class="input-date-filter" name="date" placeholder="Дата">
+    </label>
+    <div class="filter__block_content" style="max-width: 200px; position: relative;">
+      <span style="position: absolute; left: 0; bottom: 100%; font-size: 12px;">Площадь:</span>
+      <div class="filter__wp-input">
+        <span class="pref">от</span>
+        <input type="number" name="start_area" value="0" class="filter__input input-filter" inputmode="decimal"
+          autocomplete="off" step="0.1" min="0" max="1000" data-step="0.1" style="height: 40px; font-size: 14px;">
+      </div>
+      <div class="filter__wp-input">
+        <span class="pref">до</span>
+        <input type="number" name="end_area" value="1000" class="filter__input input-filter" inputmode="decimal"
+          autocomplete="off" step="0.1" min="0" max="1000" data-step="0.1" style="height: 40px; font-size: 14px;">
+      </div>
+    </div>
+    <div class="filter__block_content" style="position: relative; max-width: 200px;">
+      <label class="wrapper-checkbox">
+        <input type="checkbox" name="without-large-cells" class="input-checkbox" id="dashboards-indexation-checkbox-1">
+        <label class="label-checkbox" for="dashboards-indexation-checkbox-1">
+          <svg class='icon'>
+            <use xlink:href='img/svg/sprite.svg#check-3'></use>
+          </svg>
+        </label>
+        <p>Без больших ячеек</p>
+      </label>
+    </div>
+  </form>
+
+  <div class="widgets">
+    <div class="widgets__item col-2">
+      <div class="widgets__item_img">
+        <img src="img/icons/coins.png" alt="Иконка">
+      </div>
+      <div class="widgets__item_content">
+        <span class="value" data-render-widget="reestr" price></span>
+        <span class="name">Средств в реестре</span>
+      </div>
+      <div class="widgets__item_content last">
+        <span class="value" data-render-widget="" price></span>
+        <span class="name">Средств в реестре план</span>
+      </div>
+    </div>
+    <div class="widgets__item col-2">
+      <div class="widgets__item_img">
+        <img src="img/icons/coins.png" alt="Иконка">
+      </div>
+      <div class="widgets__item_content">
+        <span class="value" data-render-widget="avg_price_per_room" price></span>
+        <span class="name">Средняя ставка сейчас</span>
+      </div>
+      <div class="widgets__item_content last">
+        <span class="value" data-render-widget="calc-table" price></span>
+        <span class="name">Средняя ставка после индексации</span>
+      </div>
+    </div>
+    <div class="widgets__item col-2">
+      <div class="widgets__item_img">
+        <img src="img/icons/coins.png" alt="Иконка">
+      </div>
+      <div class="widgets__item_content">
+        <span class="value" data-render-widget="" price></span>
+        <span class="name">Итого сейчас</span>
+      </div>
+      <div class="widgets__item_content last">
+        <span class="value" data-render-widget="" price></span>
+        <span class="name">Итого план</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboards__table _my-accordion" data-accordion-open data-max-height="845">
+    <button class="dashboards__table-toggle btn-toggle-table _my-accordion-control">
+      <span>Индексация</span>
+      <svg class='icon icon-arrow-fill'>
+        <use xlink:href='img/svg/sprite.svg#arrow-fill'></use>
+      </svg>
+    </button>
+    <div class="table _my-accordion-content" style="height: 841px; max-height: none;">
+      <div class="table__top">
+        <form class="table__form form-table-search">
+          <div class="wp-input wp-input-search">
+            <input type="text" name="search_str" placeholder="Поиск" class="input input-table-search" autocomplete="off"
+              inputmode="search">
+            <button type="submit" class="button-icon-search">
+              <svg class='icon icon-search'>
+                <use xlink:href='./img/svg/sprite.svg#search'></use>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="table__content table-indexation ag-theme-quartz" style="height: 100%;"></div>
+    </div>
+  </div>
+</div>

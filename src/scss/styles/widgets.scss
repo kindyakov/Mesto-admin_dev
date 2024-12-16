@@ -21,6 +21,29 @@
 		align-items: center;
 		gap: 20px;
 
+		&.col-2 {
+			.widgets__item_content {
+				.value {
+					font-size: 18px;
+					@media (max-width: $md1) {
+						font-size: 14px;
+					}
+				}
+				.name {
+					font-size: 13px;
+				}
+
+				@media (max-width: $md4) {
+					.value {
+						font-size: 18px;
+					}
+					.name {
+						font-size: 13px;
+					}
+				}
+			}
+		}
+
 		@media (max-width: $md1) {
 			padding: 20px 15px;
 		}
@@ -30,6 +53,13 @@
 			grid-template-columns: auto 1fr;
 			gap: 10px;
 			padding: 10px 15px;
+			&.col-2 {
+				grid-column: span 1;
+				.widgets__item_content.last {
+					grid-column: span 2;
+					padding-left: 50px;
+				}
+			}
 		}
 
 		&_img {

@@ -20,7 +20,6 @@ window.app = {
 
 const mainLoader = document.querySelector('.body-loader');
 const notify = new Notification();
-
 const auth = new Auth({ modalMap, notify, mainLoader });
 const warehousesSelect = new WarehousesSelect({ mainLoader });
 const nav = new Navigation();
@@ -58,3 +57,8 @@ if (auth.isAuth) {
 }
 
 auth.onAuth = user => appInit(user);
+
+window.auth = auth;
+window.warehousesSelect = warehousesSelect;
+window.nav = nav;
+window.notify = notify;

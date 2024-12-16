@@ -48,13 +48,19 @@ class Navigation {
 		}
 	}
 
+	beforeSwitchTab() {
+		return true;
+	}
+
 	getTab(path) {
 		let [tab = null] = Array.from(this.navLinks).filter(link => link.dataset.path == path);
 		return tab;
 	}
 
 	getContent(path) {
-		let [content = null] = Array.from(this.contents).filter(content => content.dataset.content == path);
+		let [content = null] = Array.from(this.contents).filter(
+			content => content.dataset.content == path
+		);
 		return content;
 	}
 
@@ -75,7 +81,7 @@ class Navigation {
 	navigate(e) {
 		const path = e.target.closest('[data-path]').getAttribute('data-path');
 
-		if (path) {
+		if (path && this.beforeSwitchTab()) {
 			window.location.hash = path;
 		}
 
@@ -84,6 +90,7 @@ class Navigation {
 
 	handleHashChange() {
 		const path = window.location.hash.slice(1);
+
 		this.loadContent(path);
 	}
 
@@ -157,7 +164,8 @@ class Navigation {
 						loader: this.loader,
 						warehouse: this.warehouse,
 						notify: this.notify,
-						user: this.user
+						user: this.user,
+						navigation: this
 					});
 
 					this.modulesCache[pageName] = page; // Сохраняем модуль в кэш
