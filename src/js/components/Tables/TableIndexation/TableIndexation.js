@@ -316,7 +316,7 @@ class TableIndexation extends Table {
 	changeWidget(saveData = this.saveData) {
 		const sumNewPrice = saveData.reduce((acc, obj) => acc + obj.new_price, 0);
 		const sumArea = this.data.reduce((acc, obj) => acc + obj.area, 0);
-		const result = +(sumNewPrice / sumArea).toFixed(2);
+		const result = +(sumNewPrice / sumArea).toFixed(0);
 
 		this.widget.innerText = formattingPrice(result);
 	}
