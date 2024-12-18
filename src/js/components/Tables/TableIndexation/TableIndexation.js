@@ -70,7 +70,7 @@ class TableIndexation extends Table {
 					field: 'price',
 					minWidth: 80,
 					flex: 0.5,
-					valueFormatter: params => (params.value ? formattingPrice(params.value) : '')
+					valueFormatter: params => (params.value ? formattingPrice(params.value.toFixed(0)) : '')
 				},
 				{
 					headerName: 'Новая цена',
@@ -80,7 +80,7 @@ class TableIndexation extends Table {
 					cellRenderer: params => {
 						this.addHandleDbClickCell(params);
 						return cellRendererInput(params, {
-							funcFormate: formattingPrice,
+							funcFormate: value => formattingPrice(value.toFixed(0)),
 							inputmode: 'numeric'
 						});
 					}
@@ -114,14 +114,14 @@ class TableIndexation extends Table {
 					field: 'price_1m',
 					minWidth: 60,
 					flex: 0.6,
-					valueFormatter: params => (params.value ? formattingPrice(params.value) : '')
+					valueFormatter: params => (params.value ? formattingPrice(params.value.toFixed(0)) : '')
 				},
 				{
 					headerName: 'Новая средняя ставка',
 					field: 'new_price_1m',
 					minWidth: 60,
 					flex: 0.6,
-					valueFormatter: params => (params.value ? formattingPrice(params.value) : '')
+					valueFormatter: params => (params.value ? formattingPrice(params.value.toFixed(0)) : '')
 				},
 				{
 					headerName: '',
@@ -142,7 +142,7 @@ class TableIndexation extends Table {
 
 						const btnSend = createElement('button', {
 							classes: ['button-table', 'btn-send'],
-							content: `<svg class='icon icon-send'><use xlink:href='./img/svg/sprite.svg#send'></use></svg>`
+							content: `<svg xmlns='http://www.w3.org/2000/svg' viewBox="0 0 548.244 548.244" fill='none' class='icon icon-send'><path d="M392.19 156.054 211.268 281.667 22.032 218.58C8.823 214.168-.076 201.775 0 187.852c.077-13.923 9.078-26.24 22.338-30.498L506.15 1.549c11.5-3.697 24.123-.663 32.666 7.88 8.542 8.543 11.577 21.165 7.879 32.666L390.89 525.906c-4.258 13.26-16.575 22.261-30.498 22.338-13.923.076-26.316-8.823-30.728-22.032l-63.393-190.153z"></path></svg>`
 						});
 
 						wp.appendChild(btnSave);
@@ -213,6 +213,7 @@ class TableIndexation extends Table {
 		inputs.length &&
 			inputs.forEach(input => {
 				this.setReadonly(input, !isEditMode);
+				this.validateInput(input);
 				if (isEditMode) {
 					input.addEventListener('input', this.validateInputHandler);
 				} else {
@@ -252,16 +253,21 @@ class TableIndexation extends Table {
 
 		const rowNode = this.gridApi.getRowNode(params.node.id);
 
+		if (typeof rowNode.data.new_price === 'string') {
+			rowNode.data.new_price = Number(rowNode.data.new_price.replace(/\D/g, ''));
+		}
+
 		this.gridApi.refreshCells({
 			rowNodes: [rowNode],
 			force: true // опционально, заставит рендерить все ячейки, даже если данные не изменились
 		});
 
 		this.saveData.push(rowNode.data);
+		this.data = this.data.map(obj => (obj.room_id == rowNode.data.room_id ? rowNode.data : obj));
 
 		params.colDef.btnSend.classList.add('_active');
 
-		this.changeWidget(this.saveData);
+		this.changeWidget();
 	}
 
 	handleClickBtnSend(params, btn) {
@@ -279,9 +285,11 @@ class TableIndexation extends Table {
 			const row = params.eGridCell.closest('.ag-row');
 			const input = e.target.closest('input');
 			const btnEdit = row.querySelector('.button-table-row-edit');
+			const btnSave = row.querySelector('.btn-save');
 
 			if (input.classList.contains('not-edit')) {
 				btnEdit.classList.add('_edit');
+				btnSave?.classList.add('_active');
 				this.validateInput(input);
 				this.setReadonly(input);
 			}
@@ -313,12 +321,12 @@ class TableIndexation extends Table {
 		return !_input.classList.contains('_err');
 	}
 
-	changeWidget(saveData = this.saveData) {
-		const sumNewPrice = saveData.reduce((acc, obj) => acc + obj.new_price, 0);
-		const sumArea = this.data.reduce((acc, obj) => acc + obj.area, 0);
+	changeWidget(data = this.data) {
+		const sumNewPrice = data.reduce((acc, obj) => acc + obj.new_price, 0);
+		const sumArea = data.reduce((acc, obj) => acc + obj.area, 0);
 		const result = +(sumNewPrice / sumArea).toFixed(0);
 
-		this.widget.innerText = formattingPrice(result);
+		this.widget.innerHTML = formattingPrice(result);
 	}
 
 	onRendering({ indexations = [], cnt_pages, page, cnt_all = 0 }) {
@@ -326,7 +334,9 @@ class TableIndexation extends Table {
 		// this.cntAll = cnt_all;
 		this.saveData = [];
 		this.data = indexations;
+		this.changeWidget(indexations);
 		this.gridApi.setGridOption('rowData', indexations);
+
 		// this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, timepoints.length]);
 	}
 
