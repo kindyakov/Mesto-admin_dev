@@ -68,14 +68,7 @@ class Indexation extends Dashboards {
 	}
 
 	onRender(dataDashboard) {
-		console.log(dataDashboard);
 		this.renderWidgets(dataDashboard);
-		// if (this.tables.length && dataEntities) {
-		// 	this.actionsTables((table, i) => {
-		// 		table.data = dataEntities.agreements;
-		// 		table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities);
-		// 	});
-		// }
 	}
 }
 

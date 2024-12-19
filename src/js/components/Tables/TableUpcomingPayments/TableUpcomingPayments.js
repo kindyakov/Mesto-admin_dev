@@ -2,7 +2,7 @@ import uniqBy from 'lodash.uniqby';
 import merge from 'lodash.merge';
 
 import Table from '../Table.js';
-import CustomFilter from './CustomFilter/CustomFilter.js';
+import CustomFilter from '../utils/CustomFilter/CustomFilter.js';
 
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';

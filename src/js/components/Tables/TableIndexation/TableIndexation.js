@@ -1,4 +1,8 @@
+import uniqBy from 'lodash.uniqby';
+import merge from 'lodash.merge';
+
 import Table from '../Table.js';
+import CustomFilter from '../utils/CustomFilter/CustomFilter.js';
 import { api } from '../../../settings/api.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { createElement } from '../../../settings/createElement.js';
@@ -6,7 +10,9 @@ import { cellRendererInput } from '../utils/cellRenderer.js';
 import { inputValidator } from '../../../settings/validates.js';
 import { cellDatePicker } from '../TablesForecast/utils/cellDatePicker.js';
 import { dateFormatter } from '../../../settings/dateFormatter.js';
-import { outputInfo } from '../../../utils/outputinfo.js';
+// import { outputInfo } from '../../../utils/outputinfo.js';
+import { sort } from '../../../utils/sort.js';
+import { observeCell } from '../utils/observeCell.js';
 
 class TableIndexation extends Table {
 	constructor(selector, options, params) {
@@ -18,6 +24,9 @@ class TableIndexation extends Table {
 					width: 50,
 					resizable: false,
 					sortable: false,
+					floatingFilter: false,
+					closeOnApply: false,
+					filter: null,
 					cellRenderer: params => {
 						const row = params.eGridCell.closest('.ag-row');
 						const button = createElement('button', {
@@ -38,7 +47,7 @@ class TableIndexation extends Table {
 				{
 					headerName: 'Ячейка',
 					field: 'room_name',
-					minWidth: 70,
+					minWidth: 100,
 					flex: 0.4
 				},
 				{
@@ -50,14 +59,19 @@ class TableIndexation extends Table {
 				{
 					headerName: 'Договор',
 					field: 'agrid',
-					minWidth: 70,
+					minWidth: 100,
 					flex: 0.5
 				},
 				{
 					headerName: 'ФИО',
 					field: 'fullname',
-					minWidth: 200,
+					minWidth: 250,
 					flex: 1
+					// cellRenderer: params => {
+					// 	const wp = cellRendererInput(params, { iconId: 'profile' });
+					// 	observeCell(wp, params);
+					// 	return wp;
+					// }
 				},
 				{
 					headerName: 'Площадь',
@@ -68,14 +82,14 @@ class TableIndexation extends Table {
 				{
 					headerName: 'Цена',
 					field: 'price',
-					minWidth: 80,
+					minWidth: 100,
 					flex: 0.5,
 					valueFormatter: params => (params.value ? formattingPrice(params.value.toFixed(0)) : '')
 				},
 				{
 					headerName: 'Новая цена',
 					field: 'new_price',
-					minWidth: 60,
+					minWidth: 100,
 					flex: 0.6,
 					cellRenderer: params => {
 						this.addHandleDbClickCell(params);
@@ -88,7 +102,7 @@ class TableIndexation extends Table {
 				{
 					headerName: 'Дата новой цены',
 					field: 'index_date',
-					minWidth: 60,
+					minWidth: 100,
 					flex: 0.6,
 					cellRenderer: params => {
 						// Определяем формат даты на основе наличия дня
@@ -112,14 +126,14 @@ class TableIndexation extends Table {
 				{
 					headerName: 'Cредняя ставка',
 					field: 'price_1m',
-					minWidth: 60,
+					minWidth: 100,
 					flex: 0.6,
 					valueFormatter: params => (params.value ? formattingPrice(params.value.toFixed(0)) : '')
 				},
 				{
 					headerName: 'Новая средняя ставка',
 					field: 'new_price_1m',
-					minWidth: 60,
+					minWidth: 100,
 					flex: 0.6,
 					valueFormatter: params => (params.value ? formattingPrice(params.value.toFixed(0)) : '')
 				},
@@ -129,6 +143,9 @@ class TableIndexation extends Table {
 					width: 80,
 					resizable: false,
 					sortable: false,
+					floatingFilter: false,
+					closeOnApply: false,
+					filter: null,
 					cellRenderer: params => {
 						const wp = createElement('div', {
 							classes: ['row-buttons'],
@@ -161,7 +178,67 @@ class TableIndexation extends Table {
 				}
 			],
 			pagination: false,
-			rowHeight: 70
+			rowHeight: 70,
+			suppressColumnVirtualisation: true,
+			onFilterOpened: e => {
+				const field = e.column.colDef.field;
+				const filterWrapper = e.eGui.querySelector('.ag-filter-body-wrapper');
+				const data = e.api.getGridOption('rowData');
+				const fullCurrentData = sort(uniqBy(this.data.map(obj => obj[field]).filter(v => v))); // Сортировка по возрастанию
+				const currentData = sort(uniqBy(data.map(obj => obj[field] && obj[field]).filter(v => v))); // Сортировка по возрастанию
+				let dataWithoutCurrentFilter = [];
+
+				if (this.queryParams.filters) {
+					if (
+						Object.keys(this.queryParams.filters).length == 1 &&
+						Object.keys(this.queryParams.filters)[0] == field
+					) {
+						dataWithoutCurrentFilter = fullCurrentData.filter(
+							value => !currentData.includes(value)
+						);
+					} else if (Object.keys(this.queryParams.filters).length >= 2) {
+						dataWithoutCurrentFilter = this.filterAndSortData(this.data, {
+							...this.queryParams,
+							filters: Object.keys(this.queryParams.filters).reduce((filteredObj, key) => {
+								if (key !== field) {
+									filteredObj[key] = this.queryParams.filters[key];
+								}
+								return filteredObj;
+							}, {}) // Без учета текущего фильтра
+						})
+							.map(obj => obj[field])
+							.filter(value => !currentData.includes(value))
+							.sort((a, b) => a - b); // Сортировка по возрастанию
+					}
+
+					if (dataWithoutCurrentFilter?.length) {
+						dataWithoutCurrentFilter = uniqBy(dataWithoutCurrentFilter);
+					}
+				}
+
+				const params = {
+					...e,
+					filterWrapper,
+					currentData,
+					data,
+					fullCurrentData,
+					dataWithoutCurrentFilter
+				};
+
+				this.customFilter.init(params);
+				this.customFilter.gridApi = this.gridApi;
+				this.customFilter.wpTable = this.wpTable;
+				this.customFilter.render(params, this.queryParams);
+				this.customFilter.onChangeColumnParams = params => {
+					e.column.colDef.filterValues = merge(e.column.colDef.filterValues || {}, params);
+				};
+			}, // сработает при открытие окна с фильтром
+			defaultColDef: {
+				filter: 'agTextColumnFilter',
+				floatingFilter: true, // Добавляет панельку под заголовком
+				closeOnApply: true,
+				sortable: false
+			}
 		};
 
 		const defaultParams = {};
@@ -174,6 +251,20 @@ class TableIndexation extends Table {
 		this.widget = this.contentMain.querySelector('[data-render-widget="calc-table"]');
 		this.validateInputHandler = this.validateInput.bind(this);
 		this.saveData = [];
+		this.data = [];
+
+		this.customFilter = new CustomFilter();
+		this.customFilter.onChange = queryParams => {
+			// this.changeQueryParams(queryParams)
+			this.btnTableFilterReset?.classList.toggle(
+				'_is-filter',
+				!(!queryParams.filters && !queryParams.sort_direction)
+			);
+
+			this.queryParams = queryParams;
+
+			this.tableRendering(queryParams);
+		};
 
 		// this.gridOptions.navigation.beforeSwitchTab = () => {
 		// 	let isMove = true;
@@ -333,11 +424,54 @@ class TableIndexation extends Table {
 		// this.pagination.setPage(page, cnt_pages, cnt_all)
 		// this.cntAll = cnt_all;
 		this.saveData = [];
-		this.data = indexations;
+		if (!this.data.length) {
+			this.data = indexations;
+		}
 		this.changeWidget(indexations);
 		this.gridApi.setGridOption('rowData', indexations);
 
 		// this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, timepoints.length]);
+	}
+
+	filterAndSortData(data, params) {
+		const { filters = {}, sort_column, sort_direction } = params;
+
+		let result = data;
+
+		// Фильтрация по объекту filters
+		if (filters && Object.keys(filters).length > 0) {
+			result = result.filter(item => {
+				return Object.entries(filters).every(([key, values]) => {
+					if (Array.isArray(values) && values.length) {
+						return values.includes(String(item[key])); // Приводим к строке для совпадения
+					}
+					return true; // Пропускаем фильтр, если формат некорректный
+				});
+			});
+		}
+
+		// Сортировка
+		if (sort_column && sort_direction) {
+			result.sort((a, b) => {
+				const valA = a[sort_column];
+				const valB = b[sort_column];
+
+				if (sort_direction === 'asc') {
+					return valA > valB ? 1 : valA < valB ? -1 : 0;
+				} else if (sort_direction === 'desc') {
+					return valA < valB ? 1 : valA > valB ? -1 : 0;
+				}
+				return 0; // Если sort_direction некорректен
+			});
+		}
+
+		return result;
+	}
+
+	tableRendering(queryParams = {}) {
+		let data = this.filterAndSortData(this.data, queryParams);
+
+		this.onRendering({ ...queryParams, indexations: data });
 	}
 
 	async planIndexation(data) {
