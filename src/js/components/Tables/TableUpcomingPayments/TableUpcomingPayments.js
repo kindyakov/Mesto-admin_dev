@@ -344,7 +344,7 @@ class TableUpcomingPayments extends Table {
 		const obj = {
 			2: th => func(th, () => formattingPrice(data.sum_amount)),
 			3: th => func(th, () => data.cnt),
-			5: th => func(th, () => data.sum_area + ' м²'),
+			5: th => func(th, () => data.sum_area.toFixed(1) + ' м²'),
 			6: th => func(th, () => formattingPrice(data.avg_price)),
 			8: th => func(th, () => formattingPrice(data.sum_deposit))
 		};

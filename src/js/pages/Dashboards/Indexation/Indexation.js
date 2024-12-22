@@ -34,10 +34,6 @@ class Indexation extends Dashboards {
 		});
 	}
 
-	async getDashboardData(queryParams = {}) {
-		return getDashboardFinance({ ...this.queryParams, ...queryParams });
-	}
-
 	handleChangeInput({ target }) {
 		const [inputStartArea, inputEndArea] = Array.from(this.inputsFilter).map(input => {
 			if (['start_area', 'end_area'].includes(input.name)) {

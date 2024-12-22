@@ -5,6 +5,7 @@ import Table from '../Table.js';
 import CustomFilter from '../utils/CustomFilter/CustomFilter.js';
 import { api } from '../../../settings/api.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
+import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { createElement } from '../../../settings/createElement.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
 import { inputValidator } from '../../../settings/validates.js';
@@ -60,31 +61,52 @@ class TableIndexation extends Table {
 					headerName: 'Договор',
 					field: 'agrid',
 					minWidth: 100,
-					flex: 0.5
+					flex: 0.5,
+					cellRenderer: params => {
+						const span = createElement('span', {
+							classes: ['table-span-agrid'],
+							content: params.value ? addPrefixToNumbers(params.value) : 'нет'
+						});
+
+						return span;
+					}
 				},
 				{
 					headerName: 'ФИО',
 					field: 'fullname',
 					minWidth: 250,
-					flex: 1
-					// cellRenderer: params => {
-					// 	const wp = cellRendererInput(params, { iconId: 'profile' });
-					// 	observeCell(wp, params);
-					// 	return wp;
-					// }
+					flex: 1,
+					cellRenderer: params => {
+						const wp = createElement('div', {
+							content: `<svg class='icon icon-profile'><use xlink:href='img/svg/sprite.svg#profile'></use></svg><span>${params.value || ''}</span>`,
+							attributes: [['style', `display:flex;align-items:center;gap:5px;cur`]],
+							classes: ['hover-line']
+						});
+
+						observeCell(wp, params);
+						return wp;
+					}
 				},
 				{
 					headerName: 'Площадь',
 					field: 'area',
 					minWidth: 100,
-					flex: 0.6
+					flex: 0.6,
+					valueFormatter: params => `${params.value} м²`
 				},
 				{
 					headerName: 'Цена',
 					field: 'price',
 					minWidth: 100,
 					flex: 0.5,
-					valueFormatter: params => (params.value ? formattingPrice(params.value.toFixed(0)) : '')
+					cellRenderer: params => {
+						const span = createElement('span', {
+							classes: ['table-span-price'],
+							content: params.value ? formattingPrice(params.value.toFixed(0)) : 'нет'
+						});
+
+						return span;
+					}
 				},
 				{
 					headerName: 'Новая цена',
@@ -93,7 +115,12 @@ class TableIndexation extends Table {
 					flex: 0.6,
 					cellRenderer: params => {
 						this.addHandleDbClickCell(params);
+						const span = createElement('span', {
+							classes: ['table-span-price'],
+							content: params.value ? formattingPrice(params.value.toFixed(0)) : ''
+						});
 						return cellRendererInput(params, {
+							// el: span,
 							funcFormate: value => formattingPrice(value.toFixed(0)),
 							inputmode: 'numeric'
 						});
@@ -128,14 +155,26 @@ class TableIndexation extends Table {
 					field: 'price_1m',
 					minWidth: 100,
 					flex: 0.6,
-					valueFormatter: params => (params.value ? formattingPrice(params.value.toFixed(0)) : '')
+					cellRenderer: params => {
+						const span = createElement('span', {
+							classes: ['table-span-price'],
+							content: params.value ? formattingPrice(params.value.toFixed(0)) : ''
+						});
+						return span;
+					}
 				},
 				{
 					headerName: 'Новая средняя ставка',
 					field: 'new_price_1m',
 					minWidth: 100,
 					flex: 0.6,
-					valueFormatter: params => (params.value ? formattingPrice(params.value.toFixed(0)) : '')
+					cellRenderer: params => {
+						const span = createElement('span', {
+							classes: ['table-span-price'],
+							content: params.value ? formattingPrice(params.value.toFixed(0)) : ''
+						});
+						return span;
+					}
 				},
 				{
 					headerName: '',
@@ -248,7 +287,9 @@ class TableIndexation extends Table {
 		super(selector, mergedOptions, mergedParams);
 
 		this.contentMain = this.table.closest('.content-main');
-		this.widget = this.contentMain.querySelector('[data-render-widget="calc-table"]');
+
+		this.widgets = this.contentMain.querySelectorAll('[data-render-widget]');
+
 		this.validateInputHandler = this.validateInput.bind(this);
 		this.saveData = [];
 		this.data = [];
@@ -334,6 +375,7 @@ class TableIndexation extends Table {
 
 				if (!input.value) {
 					input.classList.add('_err');
+					this.setReadonly(input);
 					isValid = false;
 				} else {
 					input.classList.remove('_err');
@@ -347,6 +389,8 @@ class TableIndexation extends Table {
 		if (typeof rowNode.data.new_price === 'string') {
 			rowNode.data.new_price = Number(rowNode.data.new_price.replace(/\D/g, ''));
 		}
+
+		rowNode.setDataValue('new_price_1m', rowNode.data.new_price / rowNode.data.area);
 
 		this.gridApi.refreshCells({
 			rowNodes: [rowNode],
@@ -413,11 +457,39 @@ class TableIndexation extends Table {
 	}
 
 	changeWidget(data = this.data) {
-		const sumNewPrice = data.reduce((acc, obj) => acc + obj.new_price, 0);
-		const sumArea = data.reduce((acc, obj) => acc + obj.area, 0);
-		const result = +(sumNewPrice / sumArea).toFixed(0);
+		const v = {
+			'widget-0': data => {
+				return data.filter(obj => obj.rented == 1).reduce((acc, obj) => acc + obj.price, 0);
+			},
+			'widget-1': data => {
+				return data.filter(obj => obj.rented == 1).reduce((acc, obj) => acc + obj.new_price, 0);
+			},
+			'widget-2': data => {
+				const fData = data.filter(obj => obj.rented == 1);
+				const sumPrice = fData.reduce((acc, obj) => acc + obj.price, 0);
+				const sumArea = fData.reduce((acc, obj) => acc + obj.area, 0);
+				return sumPrice / sumArea;
+			},
+			'widget-3': data => {
+				const fData = data.filter(obj => obj.rented == 1);
+				const sumNewPrice = data.reduce((acc, obj) => acc + obj.new_price, 0);
+				const sumArea = data.reduce((acc, obj) => acc + obj.area, 0);
+				return sumNewPrice / sumArea;
+			},
+			'widget-4': data => {
+				return data.filter(obj => obj.rented !== -3).reduce((acc, obj) => acc + obj.price, 0);
+			},
+			'widget-5': data => {
+				return data.filter(obj => obj.rented !== -3).reduce((acc, obj) => acc + obj.new_price, 0);
+			}
+		};
 
-		this.widget.innerHTML = formattingPrice(result);
+		this.widgets.length &&
+			this.widgets.forEach(widget => {
+				const key = widget.getAttribute('data-render-widget');
+				const value = v[key]?.(data).toFixed(0) || 0;
+				widget.textContent = formattingPrice(value);
+			});
 	}
 
 	onRendering({ indexations = [], cnt_pages, page, cnt_all = 0 }) {
