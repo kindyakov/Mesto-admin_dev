@@ -4,7 +4,8 @@ import TableIndexation from '../../../components/Tables/TableIndexation/TableInd
 import TablePricesCells from '../../../components/Tables/TablePricesCells/TablePricesCells.js';
 
 async function getPricesCells() {
-	return localStorage.getItem('prices-cells') || [];
+	const pricesCells = localStorage.getItem('prices-cells');
+	return pricesCells ? JSON.parse(pricesCells) : [];
 }
 
 class Indexation extends Dashboards {
@@ -40,11 +41,14 @@ class Indexation extends Dashboards {
 	}
 
 	async getData(queryParams = {}) {
-		return getIndexations({
-			warehouse_id: window.app.warehouse.warehouse_id,
-			show_cnt: 30,
-			...queryParams
-		});
+		return Promise.all([
+			getIndexations({
+				warehouse_id: window.app.warehouse.warehouse_id,
+				show_cnt: 30,
+				...queryParams
+			}),
+			getPricesCells()
+		]);
 	}
 
 	handleChangeInput({ target }) {
@@ -77,7 +81,7 @@ class Indexation extends Dashboards {
 	}
 
 	onRender(dataDashboard) {
-		this.renderWidgets(dataDashboard);
+		// this.renderWidgets(dataDashboard);
 	}
 }
 

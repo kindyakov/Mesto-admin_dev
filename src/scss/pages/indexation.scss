@@ -115,6 +115,15 @@
 						padding-right: 10px;
 					}
 				}
+
+				.wp-input:has(.mySelect) {
+					display: flex;
+					align-items: center;
+					padding: 0 5px;
+					.mySelect {
+						width: 100%;
+					}
+				}
 			}
 			&:has(.button-table-row-edit) {
 				padding: 0;

@@ -3,6 +3,8 @@ import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { getFormattedDate } from '../../../utils/getFormattedDate.js';
 import { createElement } from '../../../settings/createElement.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
+import { api } from '../../../settings/api.js';
+import { cellRendererSelect } from '../utils/cellRenderer.js';
 
 class TablePricesCells extends Table {
 	constructor(selector, options, params) {
@@ -12,7 +14,35 @@ class TablePricesCells extends Table {
 					headerName: 'Тип размера',
 					field: 'size_type',
 					minWidth: 60,
-					flex: 0.5
+					flex: 0.5,
+					cellRenderer: params => {
+						let options = ['Площадь (м²)', 'Объем (м³)'];
+						const span = createElement('span', {
+							classes: ['table-span-w', 'gray'],
+							content: params.value
+						});
+
+						if (params.value) {
+							const index = options.indexOf(params.value);
+							if (index !== -1) {
+								const [item] = options.splice(index, 1);
+								options.unshift(item);
+							}
+						} else {
+							params.value = options[0];
+							params.setValue(params.value);
+						}
+
+						this.addHandleDbClickCell(params);
+						return cellRendererSelect(params, {
+							el: span,
+							options,
+							onSelect: value => {
+								params.data.size_type = value;
+								params.setValue(value);
+							}
+						});
+					}
 				},
 				{
 					headerName: 'Площадь/объем от',
@@ -103,6 +133,7 @@ class TablePricesCells extends Table {
 
 						button.addEventListener('click', () => {
 							api.applyTransaction({ remove: [data] });
+							this.btnApplyChanges?.removeAttribute('disabled');
 						});
 
 						return button;
@@ -135,29 +166,41 @@ class TablePricesCells extends Table {
 
 				this.btnApplyChanges &&
 					this.btnApplyChanges.addEventListener('click', () => this.handleClickBtnApplyChanges());
+
+				this.btnSendChangesServer &&
+					this.btnSendChangesServer.addEventListener('click', () =>
+						this.handleClickBtnSendChangesServer()
+					);
 			}
 		});
 	}
 
 	onRendering(data) {
-		console.log(data);
-		// this.gridApi.setGridOption('rowData', data);
+		this.gridApi.setGridOption('rowData', data);
 		// this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, timepoints.length]);
 	}
 
-	addHandleDbClickCell(params) {
-		params.eGridCell.addEventListener('dblclick', e => {
-			const row = params.eGridCell.closest('.ag-row');
-			const input = e.target.closest('input');
-			this.changeReadonly(input);
-			this.btnApplyChanges.removeAttribute('disabled');
+	addHandleDbClickCell({ eGridCell }) {
+		eGridCell.addEventListener('dblclick', e => {
+			const row = eGridCell.closest('.ag-row');
+			const wp = eGridCell.querySelector('.wp-input-cell');
+
+			if (wp.classList.contains('not-edit')) {
+				const input = wp.querySelector('input') || wp.querySelector('select');
+				// wp.classList.remove('not-edit');
+
+				this.changeReadonly(input);
+				this.btnApplyChanges?.removeAttribute('disabled');
+			} else {
+			}
 		});
 	}
 
 	afterAddRow({ data, element }) {
-		const inputs = element.querySelectorAll('input');
+		const inputs = element.querySelectorAll('select, input');
+
 		inputs.length && inputs.forEach(input => this.changeReadonly(input));
-		this.btnApplyChanges.removeAttribute('disabled');
+		this.btnApplyChanges?.removeAttribute('disabled');
 	}
 
 	handleClickBtnApplyChanges() {
@@ -169,7 +212,6 @@ class TablePricesCells extends Table {
 				const inputs = element.querySelectorAll('input');
 				inputs.length &&
 					inputs.forEach(input => {
-						this.validateInput(input);
 						if (!input.value) {
 							isErr = true;
 							input.classList.add('_err');
@@ -178,6 +220,36 @@ class TablePricesCells extends Table {
 			});
 
 		if (isErr) return;
+
+		let pricesCells = [];
+
+		rowsNode?.length &&
+			rowsNode.forEach(({ data, element }) => {
+				const inputs = element.querySelectorAll('input, select');
+				inputs.length && inputs.forEach(input => this.changeReadonly(input, true));
+				delete data.buttons;
+				pricesCells.push(data);
+			});
+
+		this.pricesCells = pricesCells;
+		localStorage.setItem('prices-cells', JSON.stringify(pricesCells));
+		this.btnApplyChanges?.setAttribute('disabled', '');
+		this.btnSendChangesServer?.removeAttribute('disabled');
+	}
+
+	handleClickBtnSendChangesServer() {}
+
+	async changePrices(data) {
+		try {
+			this.loader.enable();
+			const response = await api.post('/_change_prices_', { apply_to_agrs: 0, changes: data });
+			if (response.status !== 200) return;
+			this.app.notify.show(response.data);
+		} catch (error) {
+			throw error;
+		} finally {
+			this.loader.disable();
+		}
 	}
 }
 

@@ -220,12 +220,12 @@ class Table {
 		emptyRow = this.beforeAddRow(emptyRow);
 
 		// Добавление строки в таблицу
-		this.gridApi.applyTransaction({ add: [emptyRow], addIndex: 0 });
+		this.gridApi.applyTransaction({ add: [emptyRow] });
 
 		// Получение DOM-элемент строки
-		let [rowNode = null] = this.getAllRowsWithElements();
+		let rowsNode = this.getAllRowsWithElements();
 
-		setTimeout(() => this.afterAddRow(rowNode));
+		setTimeout(() => this.afterAddRow(rowsNode?.at(-1) || {}), 100);
 	}
 
 	getLocaleText(params) {
@@ -315,7 +315,7 @@ class Table {
 				clearTimeout(timer);
 				timer = setTimeout(() => {
 					this.updateCellValue(rowId, _input.name, _input.value);
-				}, 1000);
+				}, 500);
 			}
 		} else {
 			// _input.classList.add('_err');
@@ -333,16 +333,24 @@ class Table {
 	}
 
 	changeReadonly(input, isReadonly = false) {
-		this.validateInput(input);
+		const wpInput = input.closest('.wp-input');
 
 		if (isReadonly) {
-			input.setAttribute('readonly', 'true');
-			input.classList.add('not-edit');
-			input.removeEventListener('input', this.validateInputHandler);
+			if (input.localName == 'input') {
+				input.setAttribute('readonly', 'true');
+				input.classList.add('not-edit');
+				input.removeEventListener('input', this.validateInputHandler);
+			}
+
+			wpInput?.classList.add('not-edit');
 		} else {
-			input.removeAttribute('readonly');
-			input.classList.remove('not-edit');
-			input.addEventListener('input', this.validateInputHandler);
+			if (input.localName == 'input') {
+				this.validateInput(input);
+				input.removeAttribute('readonly');
+				input.classList.remove('not-edit');
+				input.addEventListener('input', this.validateInputHandler);
+			}
+			wpInput?.classList.remove('not-edit');
 		}
 	}
 
