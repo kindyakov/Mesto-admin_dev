@@ -344,13 +344,7 @@ class TableIndexation extends Table {
 
 		inputs.length &&
 			inputs.forEach(input => {
-				this.setReadonly(input, !isEditMode);
-				this.validateInput(input);
-				if (isEditMode) {
-					input.addEventListener('input', this.validateInputHandler);
-				} else {
-					input.removeEventListener('input', this.validateInputHandler);
-				}
+				this.changeReadonly(input, !isEditMode);
 			});
 
 		btnSave.classList.toggle('_active', isEditMode);
@@ -375,7 +369,7 @@ class TableIndexation extends Table {
 
 				if (!input.value) {
 					input.classList.add('_err');
-					this.setReadonly(input);
+					this.changeReadonly(input);
 					isValid = false;
 				} else {
 					input.classList.remove('_err');
@@ -426,34 +420,9 @@ class TableIndexation extends Table {
 				btnEdit.classList.add('_edit');
 				btnSave?.classList.add('_active');
 				this.validateInput(input);
-				this.setReadonly(input);
+				this.changeReadonly(input);
 			}
 		});
-	}
-
-	setReadonly(input, isReadonly = false) {
-		if (isReadonly) {
-			input.setAttribute('readonly', 'true');
-			input.classList.add('not-edit');
-		} else {
-			input.removeAttribute('readonly');
-			input.classList.remove('not-edit');
-		}
-	}
-
-	validateInput(e) {
-		const input = e.target || e;
-		const inputMode = input.getAttribute('inputmode');
-		const validator = inputValidator[inputMode];
-		const _input = validator ? validator(input) : input;
-
-		if (_input.value) {
-			_input.classList.remove('_err');
-		} else {
-			// _input.classList.add('_err');
-		}
-
-		return !_input.classList.contains('_err');
 	}
 
 	changeWidget(data = this.data) {
@@ -472,8 +441,8 @@ class TableIndexation extends Table {
 			},
 			'widget-3': data => {
 				const fData = data.filter(obj => obj.rented == 1);
-				const sumNewPrice = data.reduce((acc, obj) => acc + obj.new_price, 0);
-				const sumArea = data.reduce((acc, obj) => acc + obj.area, 0);
+				const sumNewPrice = fData.reduce((acc, obj) => acc + obj.new_price, 0);
+				const sumArea = fData.reduce((acc, obj) => acc + obj.area, 0);
 				return sumNewPrice / sumArea;
 			},
 			'widget-4': data => {

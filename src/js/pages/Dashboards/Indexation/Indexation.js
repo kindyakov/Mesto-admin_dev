@@ -1,6 +1,11 @@
 import Dashboards from '../Dashboards.js';
 import { getDashboardFinance, getIndexations } from '../../../settings/request.js';
 import TableIndexation from '../../../components/Tables/TableIndexation/TableIndexation.js';
+import TablePricesCells from '../../../components/Tables/TablePricesCells/TablePricesCells.js';
+
+async function getPricesCells() {
+	return localStorage.getItem('prices-cells') || [];
+}
 
 class Indexation extends Dashboards {
 	constructor({ loader, navigation }) {
@@ -15,6 +20,14 @@ class Indexation extends Dashboards {
 					},
 					params: {
 						getData: getIndexations
+					},
+					navigation
+				},
+				{
+					tableSelector: '.table-prices-cells',
+					TableComponent: TablePricesCells,
+					params: {
+						getData: getPricesCells
 					},
 					navigation
 				}

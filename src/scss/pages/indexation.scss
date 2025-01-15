@@ -1,5 +1,6 @@
 .main__content[data-content='dashboards/indexation'] {
-	.table-indexation {
+	.table-indexation,
+	.table-prices-cells {
 		.ag-cell:has(.button-table-row-edit) {
 			padding: 0;
 			* {

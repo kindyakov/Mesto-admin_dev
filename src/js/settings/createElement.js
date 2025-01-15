@@ -1,20 +1,24 @@
 export const createElement = (tag, { classes = [], attributes = [], content = '' } = {}) => {
-  const el = document.createElement(tag);
+	const el = document.createElement(tag);
 
-  // Добавляем классы
-  el.classList.add(...classes);
+	// Добавляем классы
+	el.classList.add(...classes);
 
-  // Добавляем атрибуты
-  attributes.forEach(([key, value]) => {
-    el.setAttribute(key, value);
-  });
+	// Добавляем атрибуты
+	attributes.forEach(([key, value]) => {
+		el.setAttribute(key, value);
+	});
 
-  // Добавляем содержимое, которое может быть строкой или элементом
-  if (typeof content === 'string') {
-    el.innerHTML = content;
-  } else if (content instanceof HTMLElement) {
-    el.appendChild(content);
-  }
+	// Добавляем содержимое, которое может быть строкой или элементом
+	if (typeof content === 'string') {
+		el.innerHTML = content;
+	} else if (content instanceof HTMLElement) {
+		el.appendChild(content);
+	} else if (content?.length) {
+		content.forEach(_el => {
+			el.appendChild(_el);
+		});
+	}
 
-  return el;
+	return el;
 };

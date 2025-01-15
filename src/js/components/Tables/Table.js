@@ -8,6 +8,7 @@ import { Select } from '../../modules/mySelect.js';
 import { createCalendar } from '../../settings/createCalendar.js';
 import { mergeQueryParams } from '../../utils/buildQueryParams.js';
 import { dateFormatter } from '../../settings/dateFormatter.js';
+import { inputValidator } from '../../settings/validates.js';
 
 class Table {
 	constructor(selector, options, params) {
@@ -85,6 +86,7 @@ class Table {
 
 		this.grid = createGrid(this.gridOptions.wrapper.querySelector(selector), this.gridOptions);
 		this.table = this.gridOptions.wrapper.querySelector(selector);
+		this.wpTable = this.table.closest('.table');
 		this.app = window.app;
 
 		this.onRowSelected = this.onRowSelected.bind(this);
@@ -92,6 +94,8 @@ class Table {
 		this.selectedRows = [];
 		this.queryParams = { show_cnt: this.gridOptions.paginationPageSize };
 		this.onReadyFunctions = [];
+
+		this.validateInputHandler = this.validateInput.bind(this);
 	}
 
 	onInit() {
@@ -121,7 +125,8 @@ class Table {
 		this.btnTableFilterReset = this.wpTable.querySelector('.btn-filter-reset');
 
 		this.loader = new Loader(this.wpTable);
-		this.selects = this.selects || new Select({ uniqueName: 'select-filter-table', parentEl: this.wpTable });
+		this.selects =
+			this.selects || new Select({ uniqueName: 'select-filter-table', parentEl: this.wpTable });
 		this.calendar = createCalendar(this.wpTable.querySelector('.input-date-filter'), {
 			mode: 'range',
 			dateFormat: 'd. M, Y'
@@ -181,6 +186,46 @@ class Table {
 			};
 			this.pagination.onPageChange = page => this.changeQueryParams({ page });
 		}
+
+		if (this.wpTable) {
+			this.wpTable.addEventListener('click', e => this.handlesClickWpTable(e));
+		}
+	}
+
+	handlesClickWpTable(e) {
+		if (e.target.closest('.btn-add-stroke')) {
+			this.addRowTable(e);
+		}
+	}
+
+	beforeAddRow(emptyRow) {
+		return emptyRow;
+	}
+
+	afterAddRow(emptyRow) {}
+	// Добавляет новую строку в таблицу
+	addRowTable(e) {
+		const columnDefs = this.gridOptions.columnDefs;
+		let emptyRow = {};
+
+		// Формируем объект строки с пустыми значениями на основе columnDefs
+		columnDefs?.length &&
+			columnDefs.forEach(colDef => {
+				if (colDef.field) {
+					// Проверяем, есть ли ключ field
+					emptyRow[colDef.field] = ''; // Устанавливаем пустое значение
+				}
+			});
+
+		emptyRow = this.beforeAddRow(emptyRow);
+
+		// Добавление строки в таблицу
+		this.gridApi.applyTransaction({ add: [emptyRow], addIndex: 0 });
+
+		// Получение DOM-элемент строки
+		let [rowNode = null] = this.getAllRowsWithElements();
+
+		setTimeout(() => this.afterAddRow(rowNode));
 	}
 
 	getLocaleText(params) {
@@ -196,7 +241,10 @@ class Table {
 	// Срабатывает при change у checkbox
 	onRowSelected(currentData) {
 		this.selectedRows = this.gridApi.getSelectedRows();
-		this.btnTableUploadExcel.setAttribute('data-count', this.selectedRows.length ? `(${this.selectedRows.length})` : '');
+		this.btnTableUploadExcel.setAttribute(
+			'data-count',
+			this.selectedRows.length ? `(${this.selectedRows.length})` : ''
+		);
 		this.handleRowSelected(currentData, this.selectedRows);
 	}
 
@@ -253,6 +301,51 @@ class Table {
 		btn.classList.remove('_edit');
 	}
 
+	validateInput(e) {
+		const input = e?.target || e;
+		const inputMode = input.getAttribute('inputmode');
+		const validator = inputValidator[inputMode];
+		const _input = validator ? validator(input) : input;
+
+		if (_input.value) {
+			_input.classList.remove('_err');
+			const rowId = _input.closest('[row-id]')?.getAttribute('row-id') || null;
+			if (rowId !== null) {
+				let timer = null;
+				clearTimeout(timer);
+				timer = setTimeout(() => {
+					this.updateCellValue(rowId, _input.name, _input.value);
+				}, 1000);
+			}
+		} else {
+			// _input.classList.add('_err');
+		}
+
+		return !_input.classList.contains('_err');
+	}
+
+	updateCellValue(rowId, field, newValue) {
+		const rowNode = this.gridApi.getRowNode(rowId);
+		if (rowNode) {
+			rowNode.setDataValue(field, newValue);
+			// rowNode.setData({ ...rowNode.data, [field]: newValue });
+		}
+	}
+
+	changeReadonly(input, isReadonly = false) {
+		this.validateInput(input);
+
+		if (isReadonly) {
+			input.setAttribute('readonly', 'true');
+			input.classList.add('not-edit');
+			input.removeEventListener('input', this.validateInputHandler);
+		} else {
+			input.removeAttribute('readonly');
+			input.classList.remove('not-edit');
+			input.addEventListener('input', this.validateInputHandler);
+		}
+	}
+
 	changeQueryParams(params) {
 		this.queryParams = mergeQueryParams(this.queryParams, params);
 		this.tableRendering(this.queryParams);
@@ -276,7 +369,7 @@ class Table {
 
 		for (let i = 0; i < rowCount; i++) {
 			let rowNode = this.gridApi.getDisplayedRowAtIndex(i);
-			let rowElement = this.wpTable.querySelector(`.ag - row[row - id="${rowNode.id}"]`);
+			let rowElement = this.wpTable.querySelector(`.ag-row[row-id="${rowNode.id}"]`);
 
 			rowsWithElements.push({
 				data: rowNode.data,
