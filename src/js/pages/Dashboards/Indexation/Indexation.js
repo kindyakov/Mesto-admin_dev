@@ -41,41 +41,47 @@ class Indexation extends Dashboards {
 
 		const [tableIndexation, tablePricesCells] = this.tables;
 
-		tablePricesCells.onApplyChange = data => {
-			let resultData = null;
+		this.tableIndexation = tableIndexation;
+		this.tablePricesCells = tablePricesCells;
 
-			data?.length &&
-				data.forEach(({ size_start, size_end, size_type, price_1m, price_6m, price_11m }) => {
-					resultData = tableIndexation.data.map(obj => {
-						if (+obj[size_type] >= +size_start && +obj[size_type] < +size_end) {
-							const rentPrice = obj => {
-								let price = price_1m;
+		this.tablePricesCells.onApplyChange = data => this.onApplyChange(data);
+	}
 
-								if (obj.rent_period) {
-									if (6 <= obj.rent_period && obj.rent_period < 11) {
-										price = price_6m;
-									} else if (obj.rent_period >= 11) {
-										price = price_11m;
-									}
+	onApplyChange(data) {
+		let resultData = null;
+
+		data?.length &&
+			data.forEach(({ size_start, size_end, size_type, price_1m, price_6m, price_11m }) => {
+				resultData = this.tableIndexation.data.map(obj => {
+					if (+obj[size_type] >= +size_start && +obj[size_type] < +size_end) {
+						const rentPrice = obj => {
+							let price = price_1m;
+
+							if (obj.rent_period) {
+								if (6 <= obj.rent_period && obj.rent_period < 11) {
+									price = price_6m;
+								} else if (obj.rent_period >= 11) {
+									price = price_11m;
 								}
-
-								return price;
-							};
-							if (tablePricesCells.checkbox.checked && obj.rent_period) {
-								obj.new_price = rentPrice(obj) * +obj[size_type];
-							} else if (!tablePricesCells.checkbox.checked && !obj.rent_period) {
-								obj.new_price = rentPrice();
 							}
-						}
-						return obj;
-					});
-				});
 
-			if (resultData) {
-				tableIndexation.data = resultData;
-				tableIndexation.tableRendering();
-			}
-		};
+							return price;
+						};
+						if (this.tablePricesCells.checkbox.checked && obj.rent_period) {
+							obj.new_price = rentPrice(obj) * +obj[size_type];
+						} else if (!this.tablePricesCells.checkbox.checked && !obj.rent_period) {
+							obj.new_price = rentPrice();
+						}
+					}
+					return obj;
+				});
+			});
+
+		if (resultData) {
+			this.tableIndexation.data = resultData;
+			this.tableIndexation.tableRendering();
+			this.app.notify.show({ msg: 'Изменения внесены', msg_type: 'info' });
+		}
 	}
 
 	async getData(queryParams = {}) {
