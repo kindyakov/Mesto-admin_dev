@@ -74,6 +74,26 @@
     </div>
   </div>
 
+  <div style="display: flex;align-items: center;gap: 20px;">
+    <label class="wrapper-checkbox">
+      <input type="checkbox" name="apply_to_agrs" class="input-checkbox input-checkbox-indexation"
+        id="dashboards-indexation-checkbox-2">
+      <label class="label-checkbox" for="dashboards-indexation-checkbox-2">
+        <svg class="icon">
+          <use xlink:href="img/svg/sprite.svg#check-3"></use>
+        </svg>
+      </label>
+      <p>Индексировать текущие договоры</p>
+    </label>
+    <label class="main__date-filter wp-label-input-date-indexation _hidden">
+      <svg class="icon icon-calendar">
+        <use xlink:href="img/svg/sprite.svg#calendar"></use>
+      </svg>
+      <input type="text" class="flatpickr-input input-date-indexation" name="apply_date" placeholder="Дата индексации"
+        readonly="readonly">
+    </label>
+  </div>
+
   <div class="table" style="height: 500px; max-height: none;">
     <div class="table__top">
       <div class="table__buttuns" style="margin-left: auto;">

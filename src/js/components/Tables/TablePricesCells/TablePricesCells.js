@@ -1,10 +1,14 @@
 import Table from '../Table.js';
+
+import { cellRendererInput } from '../utils/cellRenderer.js';
+import { cellRendererSelect } from '../utils/cellRenderer.js';
+
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { getFormattedDate } from '../../../utils/getFormattedDate.js';
-import { createElement } from '../../../settings/createElement.js';
-import { cellRendererInput } from '../utils/cellRenderer.js';
+
 import { api } from '../../../settings/api.js';
-import { cellRendererSelect } from '../utils/cellRenderer.js';
+import { createElement } from '../../../settings/createElement.js';
+import { createCalendar } from '../../../settings/createCalendar.js';
 
 class TablePricesCells extends Table {
 	constructor(selector, options, params) {
@@ -16,10 +20,13 @@ class TablePricesCells extends Table {
 					minWidth: 60,
 					flex: 0.5,
 					cellRenderer: params => {
-						let options = ['Площадь (м²)', 'Объем (м³)'];
+						let options = [
+							['area', 'Площадь (м²)'],
+							['volume', 'Объем (м³)']
+						];
 						const span = createElement('span', {
 							classes: ['table-span-w', 'gray'],
-							content: params.value
+							content: params.value ? (params.value == 'area' ? 'Площадь (м²)' : 'Объем (м³)') : ''
 						});
 
 						if (params.value) {
@@ -29,7 +36,7 @@ class TablePricesCells extends Table {
 								options.unshift(item);
 							}
 						} else {
-							params.value = options[0];
+							params.value = options[0][0];
 							params.setValue(params.value);
 						}
 
@@ -173,7 +180,28 @@ class TablePricesCells extends Table {
 					);
 			}
 		});
+
+		this.checkbox = this.gridOptions.wrapper.querySelector('.input-checkbox-indexation');
+		this.wpLabelInputDateIndexation = this.gridOptions.wrapper.querySelector(
+			'.wp-label-input-date-indexation'
+		);
+
+		this.apply_date = '';
+
+		this.checkbox &&
+			this.checkbox.addEventListener('change', e => {
+				this.wpLabelInputDateIndexation.classList.toggle('_hidden', !e.target.checked);
+			});
+
+		this.calendarIndexation = createCalendar(`.input-date-indexation`, {
+			dateFormat: 'd. M, Y',
+			onChange: ([date], dateStr, instance) => {
+				this.apply_date = date;
+			}
+		});
 	}
+
+	onApplyChange(data) {}
 
 	onRendering(data) {
 		this.gridApi.setGridOption('rowData', data);
@@ -201,6 +229,7 @@ class TablePricesCells extends Table {
 
 		inputs.length && inputs.forEach(input => this.changeReadonly(input));
 		this.btnApplyChanges?.removeAttribute('disabled');
+		this.btnSendChangesServer?.setAttribute('disabled', '');
 	}
 
 	handleClickBtnApplyChanges() {
@@ -215,6 +244,7 @@ class TablePricesCells extends Table {
 						if (!input.value) {
 							isErr = true;
 							input.classList.add('_err');
+							this.changeReadonly(input);
 						}
 					});
 			});
@@ -228,27 +258,45 @@ class TablePricesCells extends Table {
 				const inputs = element.querySelectorAll('input, select');
 				inputs.length && inputs.forEach(input => this.changeReadonly(input, true));
 				delete data.buttons;
+				for (const key in data) {
+					data[key] = !isNaN(+data[key]) ? +data[key] : data[key];
+				}
 				pricesCells.push(data);
 			});
 
-		this.pricesCells = pricesCells;
 		localStorage.setItem('prices-cells', JSON.stringify(pricesCells));
 		this.btnApplyChanges?.setAttribute('disabled', '');
 		this.btnSendChangesServer?.removeAttribute('disabled');
+		this.onApplyChange(pricesCells);
 	}
 
-	handleClickBtnSendChangesServer() {}
+	handleClickBtnSendChangesServer() {
+		const rowsNode = this.getAllRows();
+		this.changePrices(
+			rowsNode.map(obj => {
+				for (const key in obj) {
+					obj[key] = !isNaN(+obj[key]) ? +obj[key] : obj[key];
+				}
+				return obj;
+			})
+		);
+	}
 
 	async changePrices(data) {
 		try {
 			this.loader.enable();
-			const response = await api.post('/_change_prices_', { apply_to_agrs: 0, changes: data });
+			const response = await api.post('/_change_prices_', {
+				apply_to_agrs: this.checkbox.checked ? 1 : 0,
+				apply_date: getFormattedDate(this.apply_date, 'YYYY-MM-DD'),
+				changes: data
+			});
 			if (response.status !== 200) return;
 			this.app.notify.show(response.data);
 		} catch (error) {
 			throw error;
 		} finally {
 			this.loader.disable();
+			this.btnSendChangesServer?.setAttribute('disabled', '');
 		}
 	}
 }

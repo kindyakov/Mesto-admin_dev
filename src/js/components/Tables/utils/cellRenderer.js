@@ -60,7 +60,9 @@ export function cellRendererSelect(params, opts = {}) {
 	const { funcFormate, el, options, onSelect } = Object.assign({}, defaultOptionsSelect, opts);
 
 	function renderOptions(options) {
-		return options.map(value => `<option value="${value}">${funcFormate(value)}</option>`).join('');
+		return options
+			.map(([value, text]) => `<option value="${value}">${funcFormate(text)}</option>`)
+			.join('');
 	}
 
 	const select = createElement('select', {

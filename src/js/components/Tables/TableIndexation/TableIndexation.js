@@ -509,7 +509,7 @@ class TableIndexation extends Table {
 		return result;
 	}
 
-	tableRendering(queryParams = {}) {
+	tableRendering(queryParams = this.queryParams) {
 		let data = this.filterAndSortData(this.data, queryParams);
 
 		this.onRendering({ ...queryParams, indexations: data });

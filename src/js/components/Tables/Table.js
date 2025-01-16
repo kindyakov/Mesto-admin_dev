@@ -314,6 +314,8 @@ class Table {
 				let timer = null;
 				clearTimeout(timer);
 				timer = setTimeout(() => {
+					console.log(_input.value);
+
 					this.updateCellValue(rowId, _input.name, _input.value);
 				}, 500);
 			}

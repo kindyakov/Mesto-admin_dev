@@ -38,6 +38,40 @@ class Indexation extends Dashboards {
 
 		const inputCheckbox = this.wrapper.querySelector('[name="without-large-cells"]');
 		inputCheckbox && inputCheckbox.addEventListener('change', this.handleChangeInput.bind(this));
+
+		const [tableIndexation, tablePricesCells] = this.tables;
+
+		tablePricesCells.onApplyChange = data => {
+			let resultData = null;
+
+			data?.length &&
+				data.forEach(({ size_start, size_end, size_type, price_1m, price_6m, price_11m }) => {
+					resultData = tableIndexation.data.map(obj => {
+						if (size_start <= obj[size_type] <= size_end) {
+							const rentPrice = () => {
+								let price = 0;
+
+								if (obj.rent_period < 6) {
+									price = price_1m;
+								} else if (6 <= obj.rent_period < 11) {
+									price = price_6m;
+								} else if (obj.rent_period > 11) {
+									price = price_11m;
+								}
+								return price;
+							};
+
+							obj.new_price = obj.rent_period * rentPrice();
+						}
+						return obj;
+					});
+				});
+
+			if (resultData) {
+				tableIndexation.data = resultData;
+				tableIndexation.tableRendering();
+			}
+		};
 	}
 
 	async getData(queryParams = {}) {
