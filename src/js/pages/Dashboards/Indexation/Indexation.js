@@ -47,21 +47,25 @@ class Indexation extends Dashboards {
 			data?.length &&
 				data.forEach(({ size_start, size_end, size_type, price_1m, price_6m, price_11m }) => {
 					resultData = tableIndexation.data.map(obj => {
-						if (size_start <= obj[size_type] <= size_end) {
+						if (+obj[size_type] >= +size_start && +obj[size_type] < +size_end) {
 							const rentPrice = () => {
-								let price = 0;
+								let price = price_1m;
 
-								if (obj.rent_period < 6) {
-									price = price_1m;
-								} else if (6 <= obj.rent_period < 11) {
-									price = price_6m;
-								} else if (obj.rent_period > 11) {
-									price = price_11m;
+								if (obj.rent_period) {
+									if (6 <= obj.rent_period < 11) {
+										price = price_6m;
+									} else if (obj.rent_period >= 11) {
+										price = price_11m;
+									}
 								}
+
 								return price;
 							};
-
-							obj.new_price = obj.rent_period * rentPrice();
+							if (tablePricesCells.checkbox.checked && obj.rent_period) {
+								obj.new_price = obj.rent_period || 1 * rentPrice();
+							} else if (!tablePricesCells.checkbox.checked && !obj.rent_period) {
+								obj.new_price = rentPrice();
+							}
 						}
 						return obj;
 					});

@@ -110,7 +110,7 @@ class TablePricesCells extends Table {
 					}
 				},
 				{
-					headerName: 'Цена 12 месяц',
+					headerName: 'Цена 11 месяц',
 					field: 'price_11m',
 					minWidth: 50,
 					flex: 0.5,

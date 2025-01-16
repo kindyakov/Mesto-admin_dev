@@ -314,10 +314,9 @@ class Table {
 				let timer = null;
 				clearTimeout(timer);
 				timer = setTimeout(() => {
-					console.log(_input.value);
-
 					this.updateCellValue(rowId, _input.name, _input.value);
-				}, 500);
+					this.changeReadonly(_input, true);
+				}, 1500);
 			}
 		} else {
 			// _input.classList.add('_err');
@@ -329,7 +328,9 @@ class Table {
 	updateCellValue(rowId, field, newValue) {
 		const rowNode = this.gridApi.getRowNode(rowId);
 		if (rowNode) {
-			rowNode.setDataValue(field, newValue);
+			const currentValue = rowNode.data[field];
+			const updatedValue = typeof currentValue === 'number' ? Number(newValue) : String(newValue);
+			const result = rowNode.setDataValue(field, updatedValue);
 			// rowNode.setData({ ...rowNode.data, [field]: newValue });
 		}
 	}
