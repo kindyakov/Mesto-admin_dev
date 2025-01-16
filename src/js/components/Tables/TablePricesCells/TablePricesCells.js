@@ -190,6 +190,7 @@ class TablePricesCells extends Table {
 
 		this.checkbox &&
 			this.checkbox.addEventListener('change', e => {
+				this.btnApplyChanges?.removeAttribute('disabled');
 				this.wpLabelInputDateIndexation.classList.toggle('_hidden', !e.target.checked);
 			});
 
@@ -272,24 +273,37 @@ class TablePricesCells extends Table {
 
 	handleClickBtnSendChangesServer() {
 		const rowsNode = this.getAllRows();
-		this.changePrices(
-			rowsNode.map(obj => {
+		const data = {
+			apply_to_agrs: this.checkbox.checked ? 1 : 0,
+			apply_date: getFormattedDate(this.apply_date, 'YYYY-MM-DD'),
+			changes: rowsNode.map(obj => {
 				for (const key in obj) {
 					obj[key] = !isNaN(+obj[key]) ? +obj[key] : obj[key];
 				}
 				return obj;
 			})
-		);
+		};
+
+		if (data.apply_to_agrs && !this.apply_date && this.calendarIndexation.input) {
+			if (this.calendarIndexation.input.classList.contains('_error')) return;
+			this.calendarIndexation.input.classList.add('_error');
+
+			this.calendarIndexation.input.scrollIntoView({ block: 'center', behavior: 'smooth' });
+			this.calendarIndexation.input.style = `outline: 1px solid red;box-shadow: 0 0 6px 1px #d99e9e;`;
+			setTimeout(() => {
+				this.calendarIndexation.input.classList.remove('_error');
+				this.calendarIndexation.input.removeAttribute('style');
+			}, 1500);
+			return;
+		}
+
+		this.changePrices(data);
 	}
 
 	async changePrices(data) {
 		try {
 			this.loader.enable();
-			const response = await api.post('/_change_prices_', {
-				apply_to_agrs: this.checkbox.checked ? 1 : 0,
-				apply_date: getFormattedDate(this.apply_date, 'YYYY-MM-DD'),
-				changes: data
-			});
+			const response = await api.post('/_change_prices_', data);
 			if (response.status !== 200) return;
 			this.app.notify.show(response.data);
 		} catch (error) {
