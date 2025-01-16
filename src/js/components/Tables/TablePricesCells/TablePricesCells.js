@@ -200,12 +200,87 @@ class TablePricesCells extends Table {
 				this.apply_date = date;
 			}
 		});
+
+		this.defaultData = [
+			{
+				size_type: 'volume',
+				size_start: 1,
+				size_end: 1,
+				price_1m: 2500,
+				price_6m: 2500,
+				price_11m: 2500
+			},
+			{
+				size_type: 'volume',
+				size_start: 1.5,
+				size_end: 1.5,
+				price_1m: 2500,
+				price_6m: 2500,
+				price_11m: 2500
+			},
+			{
+				size_type: 'area',
+				size_start: 1,
+				size_end: 3.9,
+				price_1m: 3000,
+				price_6m: 2800,
+				price_11m: 2600
+			},
+			{
+				size_type: 'area',
+				size_start: 4,
+				size_end: 5.9,
+				price_1m: 2900,
+				price_6m: 2700,
+				price_11m: 2500
+			},
+			{
+				size_type: 'area',
+				size_start: 6,
+				size_end: 7.9,
+				price_1m: 2800,
+				price_6m: 2600,
+				price_11m: 2400
+			},
+			{
+				size_type: 'area',
+				size_start: 8,
+				size_end: 9.9,
+				price_1m: 2700,
+				price_6m: 2500,
+				price_11m: 2300
+			},
+			{
+				size_type: 'area',
+				size_start: 10,
+				size_end: 14.4,
+				price_1m: 2600,
+				price_6m: 2400,
+				price_11m: 2300
+			},
+			{
+				size_type: 'area',
+				size_start: 15,
+				size_end: 19.9,
+				price_1m: 2500,
+				price_6m: 2300,
+				price_11m: 2100
+			},
+			{
+				size_type: 'area',
+				size_start: 20,
+				size_end: 1000,
+				price_1m: 2400,
+				price_6m: 2200,
+				price_11m: 2000
+			}
+		];
 	}
 
 	onApplyChange(data) {}
 
-	onRendering(data) {
-		this.gridApi.setGridOption('rowData', data);
+	onRendering(data = this.defaultData) {
+		this.gridApi.setGridOption('rowData', data.length ? data : this.defaultData);
 		// this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, timepoints.length]);
 	}
 
