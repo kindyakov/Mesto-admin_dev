@@ -127,6 +127,8 @@ export const getSaleChannelsLeads = getCreate('/_get_sale_channels_leads_');
 export const getSalesConversionRates = getCreate('/_get_sales_conversion_rates_');
 
 export const getIndexations = getCreate('/_get_indexations_');
+
+export const getChangePrices = getCreate('/_get_change_prices_');
 // ============================================================================>
 
 export const postFuturePayments = postCreate('/_get_future_payments_');

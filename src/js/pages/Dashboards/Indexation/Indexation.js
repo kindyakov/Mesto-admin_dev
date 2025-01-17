@@ -1,12 +1,7 @@
 import Dashboards from '../Dashboards.js';
-import { getDashboardFinance, getIndexations } from '../../../settings/request.js';
+import { getDashboardFinance, getIndexations, getChangePrices } from '../../../settings/request.js';
 import TableIndexation from '../../../components/Tables/TableIndexation/TableIndexation.js';
 import TablePricesCells from '../../../components/Tables/TablePricesCells/TablePricesCells.js';
-
-async function getPricesCells() {
-	const pricesCells = localStorage.getItem('prices-cells');
-	return pricesCells ? JSON.parse(pricesCells) : [];
-}
 
 class Indexation extends Dashboards {
 	constructor({ loader, navigation }) {
@@ -28,7 +23,7 @@ class Indexation extends Dashboards {
 					tableSelector: '.table-prices-cells',
 					TableComponent: TablePricesCells,
 					params: {
-						getData: getPricesCells
+						getData: getChangePrices
 					},
 					navigation
 				}
@@ -57,7 +52,7 @@ class Indexation extends Dashboards {
 						const rentPrice = obj => {
 							let price = price_1m;
 
-							if (obj.rent_period) {
+							if (obj?.rent_period) {
 								if (6 <= obj.rent_period && obj.rent_period < 11) {
 									price = price_6m;
 								} else if (obj.rent_period >= 11) {
@@ -91,7 +86,7 @@ class Indexation extends Dashboards {
 				show_cnt: 30,
 				...queryParams
 			}),
-			getPricesCells()
+			getChangePrices()
 		]);
 	}
 
