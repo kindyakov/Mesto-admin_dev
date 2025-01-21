@@ -8,7 +8,7 @@ import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { createElement } from '../../../settings/createElement.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
-import { inputValidator } from '../../../settings/validates.js';
+// import { inputValidator } from '../../../settings/validates.js';
 import { cellDatePicker } from '../TablesForecast/utils/cellDatePicker.js';
 import { dateFormatter } from '../../../settings/dateFormatter.js';
 // import { outputInfo } from '../../../utils/outputinfo.js';

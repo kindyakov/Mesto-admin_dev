@@ -151,7 +151,7 @@ class TablePricesCells extends Table {
 			suppressColumnVirtualisation: true
 		};
 
-		const defaultParams = {};
+		const defaultParams = { timerReadonly: true };
 
 		const mergedOptions = Object.assign({}, defaultOptions, options);
 		const mergedParams = Object.assign({}, defaultParams, params);

@@ -15,6 +15,7 @@ class Table {
 		let defaultParams = {
 			isPagination: true,
 			paginationCountBtn: 5,
+			timerReadonly: false, // Включает обновлении ячейки после опр. времени
 			getData: async () => {},
 			onSubmitSearch: () => {},
 			onValidateSearch: () => {},
@@ -310,13 +311,13 @@ class Table {
 		if (_input.value) {
 			_input.classList.remove('_err');
 			const rowId = _input.closest('[row-id]')?.getAttribute('row-id') || null;
-			if (rowId !== null) {
+			if (rowId !== null && this.params.timerReadonly) {
 				let timer = null;
 				clearTimeout(timer);
 				timer = setTimeout(() => {
 					this.updateCellValue(rowId, _input.name, _input.value);
 					this.changeReadonly(_input, true);
-				}, 1500);
+				}, 3000);
 			}
 		} else {
 			// _input.classList.add('_err');
