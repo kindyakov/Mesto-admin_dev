@@ -62,12 +62,16 @@ class Indexation extends Dashboards {
 
 							return price;
 						};
-						if (this.tablePricesCells.checkbox.checked && obj.rent_period) {
+
+						if (!this.tablePricesCells.checkbox.checked && !obj.rent_period) {
+							obj.new_price = price_1m * +obj[size_type];
+						} else if (this.tablePricesCells.checkbox.checked && obj.rent_period) {
 							obj.new_price = rentPrice(obj) * +obj[size_type];
-						} else if (!this.tablePricesCells.checkbox.checked && !obj.rent_period) {
-							obj.new_price = rentPrice();
 						}
+
+						obj.new_price_1m = obj.new_price / +obj.area;
 					}
+
 					return obj;
 				});
 			});
