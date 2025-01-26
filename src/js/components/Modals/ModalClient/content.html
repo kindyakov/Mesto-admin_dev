@@ -26,7 +26,7 @@
           </svg>
         </button>
       </div>
-      <form class="modal__form form-client-data">
+      <form class="modal__form form-client-data" data-validator="client">
         <div class="modal__form_item">
           <span>ФИО</span>
           <div class="modal__form_wp-input wp-input">
@@ -70,7 +70,7 @@
       </div>
       <div class="modal__passport">
         <div class="modal__passport-content">
-          <form class="modal__passport-form">
+          <form class="modal__passport-form form-passport-data">
             <div class="modal__passport-form_item">
               <span>Номер:</span>
               <div class="modal__passport-form_wp-input wp-input">
@@ -124,6 +124,13 @@
                   data-render="subdivision" inputmode="numeric" readonly="true">
               </div>
             </div>
+            <div class="modal__passport-form_item col-2">
+              <span>Адрес регистрации:</span>
+              <div class="modal__passport-form_wp-input wp-input">
+                <input type="text" name="address" class="modal__passport-form_input-passport input-passport"
+                  data-render="address" inputmode="numeric" readonly="true">
+              </div>
+            </div>
           </form>
         </div>
         <div class="modal__passport-photo">
@@ -135,8 +142,18 @@
     <div class="modal__block_item block-item-user-u _none">
       <div class="modal__block_top">
         <h4 class="modal__sub-title">Реквизиты</h4>
+        <button class="button-text btn-edit-data">
+          <span class="span-edit">Редактировать</span>
+          <span class="span-save">Сохранить</span>
+          <svg class='icon icon-edit'>
+            <use xlink:href='img/svg/sprite.svg#edit'></use>
+          </svg>
+          <svg class='icon icon-save'>
+            <use xlink:href='img/svg/sprite.svg#save'></use>
+          </svg>
+        </button>
       </div>
-      <form class="modal__form">
+      <form class="modal__form form-requisites-data" data-validator="requisites">
         <div class="modal__passport-form_item">
           <span>Юридическое наименование</span>
           <div class="modal__passport-form_wp-input wp-input">

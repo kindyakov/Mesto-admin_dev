@@ -10,6 +10,8 @@ class ModalConfirmCancelPayment extends BaseConfirmationModal {
 	}
 
 	onClick(isConfirm) {
+		console.log(isConfirm, this.room);
+
 		if (isConfirm && this.room) {
 			this.cancelPayment({
 				room_id: this.room.room_id,
@@ -21,6 +23,8 @@ class ModalConfirmCancelPayment extends BaseConfirmationModal {
 
 	onOpen(params) {
 		const data = this.extractData(params);
+		console.log(data);
+
 		if (data) {
 			this.room = data;
 		}

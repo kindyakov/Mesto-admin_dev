@@ -156,6 +156,20 @@
 	font-weight: 500;
 	font-size: 14px;
 	color: #212b36;
+
+	&.edit {
+		background-color: #eff4fb;
+		&:focus {
+			outline: 1px solid $blue;
+		}
+	}
+
+	&.just-validate-error-field {
+		outline: 1px solid $red;
+		&:focus {
+			outline: 1px solid $red;
+		}
+	}
 }
 
 .wp-status {

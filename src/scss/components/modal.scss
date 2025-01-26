@@ -348,14 +348,21 @@
 			flex-direction: column;
 			gap: 5px;
 
-			>span {
+			&.col-2 {
+				@media (min-width: 696px) {
+					grid-column: span 2;
+				}
+			}
+
+			> span {
 				font-weight: 500;
 				font-size: 14px;
 				color: #212b36;
 			}
 		}
 
-		&_wp-input {}
+		&_wp-input {
+		}
 
 		&_input {
 			height: 50px;
@@ -401,20 +408,30 @@
 				flex-direction: column;
 				gap: 5px;
 
-				>span {
+				&.col-2 {
+					@media (min-width: 420px) {
+						grid-column: span 2;
+					}
+				}
+
+				> span {
 					font-weight: 500;
 					font-size: 12px;
 					color: #4f5b67;
 				}
 			}
 
-			&_wp-input {}
+			&_wp-input {
+			}
 
-			&_input-passport {}
+			&_input-passport {
+			}
 
-			&_wp-status {}
+			&_wp-status {
+			}
 
-			&_status {}
+			&_status {
+			}
 		}
 
 		&-photo {
@@ -620,7 +637,6 @@
 			}
 
 			&._is-load {
-
 				.block-icon,
 				.text {
 					display: none;
@@ -780,7 +796,7 @@
 		flex-direction: column;
 		gap: 10px;
 
-		>span {
+		> span {
 			font-weight: 500;
 			font-size: 16px;
 			color: #1c2434;
@@ -842,7 +858,7 @@
 		padding: 0;
 		position: relative;
 
-		>[data-tippy-root] {
+		> [data-tippy-root] {
 			inset: 0 0 0 0 !important;
 			width: 100%;
 			height: 100%;
@@ -922,7 +938,7 @@
 				transform: rotate(180deg);
 			}
 
-			>span {
+			> span {
 				flex: 1 1 auto;
 			}
 		}
@@ -1015,14 +1031,20 @@
 	}
 }
 
-.table-span-price {}
+.table-span-price {
+}
 
-.date {}
+.date {
+}
 
-.button-text {}
+.button-text {
+}
 
-.blue {}
+.blue {
+}
 
-.icon {}
+.icon {
+}
 
-.table-span-agrid {}
+.table-span-agrid {
+}

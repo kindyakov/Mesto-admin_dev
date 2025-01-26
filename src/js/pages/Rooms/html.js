@@ -34,7 +34,7 @@ function buttonsRoom(data) {
 		0: `<button class="room__button button" data-json="${dataStr(data)}" data-modal="modal-add-client"><span>Оформить клиенту</span></button>`,
 		0.25: `<button class="room__button button" data-json="${dataStr(data)}" data-modal="modal-confirm-cancel-guest-access"><span>Отменить доступ</span></button>`,
 		0.45: ``,
-		0.4: `<button class="room__button button" data-modal="modal-confirm-cancel-payment"><span>Отменить оплату</span></button>`,
+		0.4: `<button class="room__button button" data-modal="modal-confirm-cancel-payment" data-json="${dataStr(data)}"><span>Отменить оплату</span></button>`,
 		0.5: `<button class="room__button button" data-modal="modal-passport" user-id="${data.user_id}"><span>Подтвердить клиента</span></button>`,
 		0.75: `<button class="room__button button ${data.leave_approved ? '_confirmed' : ''}" data-modal="modal-confirmation-departure" room-id="${data.room_id}" agr-id="${data.agrid}">
             <span>Подтвердить выезд</span>
