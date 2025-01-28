@@ -356,7 +356,8 @@ class TablePricesCells extends Table {
 					obj[key] = !isNaN(+obj[key]) ? +obj[key] : obj[key];
 				}
 				return obj;
-			})
+			}),
+			warehouse_id: this.app.warehouse.warehouse_id
 		};
 
 		if (data.apply_to_agrs && !this.apply_date && this.calendarIndexation.input) {

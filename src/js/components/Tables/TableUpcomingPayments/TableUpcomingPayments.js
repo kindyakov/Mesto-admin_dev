@@ -451,7 +451,7 @@ class TableUpcomingPayments extends Table {
 	async download(data, isAll) {
 		try {
 			this.loader.enable();
-			let reqData = {};
+			let reqData = { warehouse_id: this.app.warehouse.warehouse_id };
 
 			if (isAll) {
 				reqData.all_payments = 1;

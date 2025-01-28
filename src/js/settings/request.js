@@ -11,6 +11,10 @@ function getCreate(rout) {
 			if (response.status !== 200) return null;
 			return response.data;
 		} catch (error) {
+			window.app.notify.show({
+				msg: `Что-то пошло не так!<br>Ошибка: ${error.message}`,
+				msg_type: 'error'
+			});
 			console.error(error);
 			throw error;
 		}
@@ -24,6 +28,10 @@ function getCreateTotal(rout) {
 			if (response.status !== 200) return null;
 			return response.data;
 		} catch (error) {
+			window.app.notify.show({
+				msg: `Что-то пошло не так!<br>Ошибка: ${error.message}`,
+				msg_type: 'error'
+			});
 			console.error(error);
 			throw error;
 		}
@@ -37,6 +45,10 @@ function postCreate(rout) {
 			if (response.status !== 200) return null;
 			return response.data;
 		} catch (error) {
+			window.app.notify.show({
+				msg: `Что-то пошло не так!<br>Ошибка: ${error.message}`,
+				msg_type: 'error'
+			});
 			console.error(error);
 			throw error;
 		}
@@ -67,6 +79,10 @@ function downloadCreate(rout, opts = {}) {
 				return true;
 			}
 		} catch (error) {
+			window.app.notify.show({
+				msg: `Что-то пошло не так!<br>Ошибка: ${error.message}`,
+				msg_type: 'error'
+			});
 			console.error(error);
 			throw error;
 		}

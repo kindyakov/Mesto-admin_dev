@@ -50,7 +50,7 @@ export class Notification {
         </div>`;
 		} else {
 			notification.className = `notify ${msg_type} absolute`;
-			notification.textContent = msg;
+			notification.innerHTML = msg;
 		}
 
 		this.container.insertAdjacentElement('afterbegin', notification);

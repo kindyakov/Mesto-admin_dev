@@ -1,5 +1,5 @@
 import Dashboards from '../Dashboards.js';
-import { getDashboardFinance, getIndexations, getChangePrices } from '../../../settings/request.js';
+import { getIndexations, getChangePrices } from '../../../settings/request.js';
 import TableIndexation from '../../../components/Tables/TableIndexation/TableIndexation.js';
 import TablePricesCells from '../../../components/Tables/TablePricesCells/TablePricesCells.js';
 
@@ -23,7 +23,8 @@ class Indexation extends Dashboards {
 					tableSelector: '.table-prices-cells',
 					TableComponent: TablePricesCells,
 					params: {
-						getData: getChangePrices
+						getData: params =>
+							getChangePrices({ warehouse_id: this.app.warehouse.warehouse_id, ...params })
 					},
 					navigation
 				}
@@ -90,7 +91,7 @@ class Indexation extends Dashboards {
 				show_cnt: 30,
 				...queryParams
 			}),
-			getChangePrices()
+			getChangePrices({ warehouse_id: this.app.warehouse.warehouse_id })
 		]);
 	}
 

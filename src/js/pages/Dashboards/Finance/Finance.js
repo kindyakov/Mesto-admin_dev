@@ -1,7 +1,11 @@
 import Dashboards from '../Dashboards.js';
 import TableUpcomingPayments from '../../../components/Tables/TableUpcomingPayments/TableUpcomingPayments.js';
 import ChartRevenue from '../../../components/Charts/ChartRevenue/ChartRevenue.js';
-import { getDashboardFinance, getFinancePlan, postFuturePayments } from '../../../settings/request.js';
+import {
+	getDashboardFinance,
+	getFinancePlan,
+	postFuturePayments
+} from '../../../settings/request.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 
 class Finance extends Dashboards {
@@ -38,7 +42,14 @@ class Finance extends Dashboards {
 	}
 
 	async getDashboardData(queryParams = {}) {
-		return Promise.all([getDashboardFinance({ ...this.queryParams, ...queryParams }), getFinancePlan(queryParams)]);
+		return Promise.all([
+			getDashboardFinance({
+				warehouse_id: this.app.warehouse.warehouse_id,
+				...this.queryParams,
+				...queryParams
+			}),
+			getFinancePlan({ warehouse_id: this.app.warehouse.warehouse_id, ...queryParams })
+		]);
 	}
 
 	handleChangeInput({ target }) {
@@ -85,7 +96,9 @@ class Finance extends Dashboards {
 		const differenceFactPlan = this.wrapper.querySelector('.difference-fact-plan');
 		const needsCollectedMont = this.wrapper.querySelector('.needs-collected-mont');
 
-		const [currentD] = finance_planfact.filter(obj => new Date(obj.data).toDateString() == new Date().toDateString());
+		const [currentD] = finance_planfact.filter(
+			obj => new Date(obj.data).toDateString() == new Date().toDateString()
+		);
 		const data = currentD ? currentD : finance_planfact.at(-1);
 
 		const factV = data.revenue_reestr_accumulated || 0;
