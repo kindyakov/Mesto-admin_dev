@@ -36,8 +36,8 @@ export const pages = {
 	},
 	'dashboards/finance': {
 		path: 'Dashboards/Finance/Finance.js',
-		accessCheck: ({ tab, content, user }) => {
-			return actionDashboards({ tab, content, user });
+		accessCheck: ({ tab, content, user, ...params }) => {
+			return actionDashboards({ tab, content, user, ...params });
 		}
 	},
 	'dashboards/marketing': {
@@ -49,7 +49,14 @@ export const pages = {
 	'dashboards/warehouse': {
 		path: 'Dashboards/Warehouse/Warehouse.js',
 		accessCheck: ({ tab, content, user }) => {
-			return actionDashboards({ tab, content, user });
+			let access = actionDashboards({ tab, content, user });
+
+			if (!window.app.warehouse.warehouse_id) {
+				tab?.classList.add('_none');
+				access = false;
+			}
+
+			return access;
 		}
 	},
 	'dashboards/transactions': {
@@ -67,13 +74,27 @@ export const pages = {
 	'dashboards/indexation': {
 		path: 'Dashboards/Indexation/Indexation.js',
 		accessCheck: ({ tab, content, user }) => {
-			return actionDashboards({ tab, content, user });
+			let access = actionDashboards({ tab, content, user });
+
+			if (!window.app.warehouse.warehouse_id) {
+				tab?.classList.add('_none');
+				access = false;
+			}
+
+			return access;
 		}
 	},
 	'charging-locks': {
 		path: 'ChargingLocks/ChargingLocks.js',
 		accessCheck: ({ tab, content, user }) => {
-			return true;
+			let access = true;
+
+			if (!window.app.warehouse.warehouse_id) {
+				tab?.classList.add('_none');
+				access = false;
+			}
+
+			return access;
 		}
 	},
 	users: {
@@ -123,7 +144,14 @@ export const pages = {
 	forecast: {
 		path: 'Forecast/Forecast.js',
 		accessCheck: ({ tab, content, user }) => {
-			return true;
+			let access = true;
+
+			if (!window.app.warehouse.warehouse_id) {
+				tab?.classList.add('_none');
+				access = false;
+			}
+
+			return access;
 		}
 	},
 	'mesto-plan': {
@@ -141,13 +169,27 @@ export const pages = {
 	warehouse: {
 		path: 'Warehouse/Warehouse.js',
 		accessCheck: ({ tab, content, user }) => {
-			return true;
+			let access = true;
+
+			if (!window.app.warehouse.warehouse_id) {
+				tab?.classList.add('_none');
+				access = false;
+			}
+
+			return access;
 		}
 	},
 	rooms: {
 		path: 'Rooms/Rooms.js',
 		accessCheck: ({ tab, content, user }) => {
-			return true;
+			let access = true;
+
+			if (!window.app.warehouse.warehouse_id) {
+				tab?.classList.add('_none');
+				access = false;
+			}
+
+			return access;
 		}
 	},
 	payments: {

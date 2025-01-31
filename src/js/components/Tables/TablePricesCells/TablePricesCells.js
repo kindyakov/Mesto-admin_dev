@@ -151,7 +151,7 @@ class TablePricesCells extends Table {
 			suppressColumnVirtualisation: true
 		};
 
-		const defaultParams = { timerReadonly: true };
+		const defaultParams = { timerReadonly: false };
 
 		const mergedOptions = Object.assign({}, defaultOptions, options);
 		const mergedParams = Object.assign({}, defaultParams, params);
@@ -309,6 +309,11 @@ class TablePricesCells extends Table {
 	}
 
 	handleClickBtnApplyChanges() {
+		this.changedCells.length &&
+			this.changedCells.forEach(({ rowId, fields }) => {
+				this.updateCellValue(rowId, fields);
+			});
+
 		const rowsNode = this.getAllRowsWithElements();
 		let isErr = false;
 
@@ -340,7 +345,6 @@ class TablePricesCells extends Table {
 				pricesCells.push(data);
 			});
 
-		localStorage.setItem('prices-cells', JSON.stringify(pricesCells));
 		this.btnApplyChanges?.setAttribute('disabled', '');
 		this.btnSendChangesServer?.removeAttribute('disabled');
 		this.onApplyChange(pricesCells);

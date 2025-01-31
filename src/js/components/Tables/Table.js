@@ -95,6 +95,7 @@ class Table {
 		this.selectedRows = [];
 		this.queryParams = { show_cnt: this.gridOptions.paginationPageSize };
 		this.onReadyFunctions = [];
+		this.changedCells = [];
 
 		this.validateInputHandler = this.validateInput.bind(this);
 	}
@@ -311,11 +312,13 @@ class Table {
 		if (_input.value) {
 			_input.classList.remove('_err');
 			const rowId = _input.closest('[row-id]')?.getAttribute('row-id') || null;
+			this.trackCellChange(rowId, _input.name, _input.value);
+
 			if (rowId !== null && this.params.timerReadonly) {
 				let timer = null;
 				clearTimeout(timer);
 				timer = setTimeout(() => {
-					this.updateCellValue(rowId, _input.name, _input.value);
+					this.updateCellValue(rowId, [{ field: _input.name, value: _input.value }]);
 					this.changeReadonly(_input, true);
 				}, 3000);
 			}
@@ -326,12 +329,34 @@ class Table {
 		return !_input.classList.contains('_err');
 	}
 
-	updateCellValue(rowId, field, newValue) {
+	trackCellChange(rowId, fieldName, fieldValue) {
+		if (!rowId) return;
+
+		let rowData = this.changedCells.find(item => item.rowId === rowId);
+
+		if (rowData) {
+			let field = rowData.fields.find(f => f.field === fieldName);
+			if (field) {
+				field.value = fieldValue; // Обновляем значение
+			} else {
+				rowData.fields.push({ field: fieldName, value: fieldValue }); // Добавляем новое поле
+			}
+		} else {
+			this.changedCells.push({
+				rowId,
+				fields: [{ field: fieldName, value: fieldValue }]
+			});
+		}
+	}
+
+	updateCellValue(rowId, fields = []) {
 		const rowNode = this.gridApi.getRowNode(rowId);
-		if (rowNode) {
-			const currentValue = rowNode.data[field];
-			const updatedValue = typeof currentValue === 'number' ? Number(newValue) : String(newValue);
-			const result = rowNode.setDataValue(field, updatedValue);
+		if (rowNode && fields.length) {
+			fields.forEach(({ field, value }) => {
+				const currentValue = rowNode.data[field];
+				const updatedValue = typeof currentValue === 'number' ? Number(value) : String(value);
+				const result = rowNode.setDataValue(field, updatedValue);
+			});
 			// rowNode.setData({ ...rowNode.data, [field]: newValue });
 		}
 	}
