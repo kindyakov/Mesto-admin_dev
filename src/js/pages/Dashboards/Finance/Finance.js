@@ -38,7 +38,11 @@ class Finance extends Dashboards {
 	}
 
 	async getData(queryParams = {}) {
-		return postFuturePayments({ show_cnt: 1000, ...queryParams });
+		return postFuturePayments({
+			warehouse_id: this.app.warehouse.warehouse_id,
+			show_cnt: 1000,
+			...queryParams
+		});
 	}
 
 	async getDashboardData(queryParams = {}) {

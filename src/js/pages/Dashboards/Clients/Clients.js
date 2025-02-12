@@ -12,7 +12,10 @@ class Clients extends Dashboards {
 				{
 					tableSelector: '.table-clients',
 					TableComponent: TableClients,
-					params: { getData: getClients },
+					params: {
+						getData: queryParams =>
+							getClients({ warehouse_id: this.app.warehouse.warehouse_id, ...queryParams })
+					},
 					options: {
 						paginationPageSize: 15
 					}
@@ -27,7 +30,11 @@ class Clients extends Dashboards {
 	}
 
 	async getData(queryParams = {}) {
-		return getClients({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams });
+		return getClients({
+			warehouse_id: this.app.warehouse.warehouse_id,
+			show_cnt: this.tables[0].gridOptions.paginationPageSize,
+			...queryParams
+		});
 	}
 
 	async getDashboardData(queryParams = {}) {
