@@ -69,9 +69,14 @@ class Scheme {
 
 	filterCell(_rented) {
 		this.actionsCell(({ cell, cellId }) => {
-			const { rented = null, blocked = null } = this.numRooms[cellId];
+			const room = this.numRooms[+cellId];
+			if (!room) {
+				return
+			}
 
-			if (rented === undefined) {
+			const { rented = null, blocked = null } = room
+
+			if (rented === undefined || rented === null) {
 				cell.removeAttribute('data-rented');
 				return;
 			}
@@ -91,7 +96,7 @@ class Scheme {
 		});
 	}
 
-	actionsCell(callback = () => {}) {
+	actionsCell(callback = () => { }) {
 		this.cells.forEach(cell => {
 			const cellId = cell.getAttribute('data-cell-num');
 			callback({ cell, cellId });
