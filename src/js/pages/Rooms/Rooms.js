@@ -161,7 +161,13 @@ class Rooms extends Page {
   async renderConfirmation() {
     try {
       this.loader.enable()
-      const [{ users: usersM = [] }, { users: usersN = [] }] = await Promise.all([getMovingOutClients(), getNonApprovedClients()])
+
+      const [{ users: usersM = [] }, { users: usersN = [] }] = await Promise.all(
+        [
+          getMovingOutClients({ warehouse_id: window.app.warehouse.warehouse_id }),
+          getNonApprovedClients()
+        ]
+      )
 
       const contentConfirmDeparture = this.wrapper.querySelector('.content-confirmation-departure')
       const contentConfirmClient = this.wrapper.querySelector('.content-confirmation-client')
