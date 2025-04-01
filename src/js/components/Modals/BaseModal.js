@@ -35,7 +35,7 @@ class BaseModal {
 		this.setContent(content);
 	}
 
-	onOpen() {}
+	onOpen() { }
 
 	onClose() {
 		this.disableEditInput(this.form, [
@@ -43,15 +43,15 @@ class BaseModal {
 		]);
 	}
 
-	onSave() {}
+	onSave() { }
 
 	onEdit() {
 		return {};
 	}
 
-	onHandleClick(e) {}
+	onHandleClick(e) { }
 
-	onSaveValue() {}
+	onSaveValue() { }
 
 	checkValue() {
 		const inputs = this.form.querySelectorAll('input');
@@ -325,7 +325,7 @@ class BaseModal {
 		return {};
 	}
 
-	async editForm() {}
+	async editForm() { }
 }
 
 export default BaseModal;

@@ -40,6 +40,7 @@ class ModalPassport extends BaseModal {
     if (!this.modalBody) return
     this.form = this.modalBody.querySelector('.form-passport-data')
     this.validator = validatePassport(this.form)
+    this.form.validator = this.validator
   }
 
   onEdit() {
