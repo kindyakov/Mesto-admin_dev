@@ -16,10 +16,10 @@ class Table {
 			isPagination: true,
 			paginationCountBtn: 5,
 			timerReadonly: false, // Включает обновлении ячейки после опр. времени
-			getData: async () => {},
-			onSubmitSearch: () => {},
-			onValidateSearch: () => {},
-			onValueInputSearch: () => {}
+			getData: async () => { },
+			onSubmitSearch: () => { },
+			onValidateSearch: () => { },
+			onValueInputSearch: () => { }
 		};
 
 		let defaultoptions = {
@@ -74,7 +74,7 @@ class Table {
 					this.changeQueryParams({});
 				}
 			},
-			onFilterChanged: params => {}
+			onFilterChanged: params => { }
 		};
 
 		this.selector = selector;
@@ -183,10 +183,12 @@ class Table {
 
 		if (this.params.isPagination && this.pagination) {
 			this.pagination.onChangeShowCount = count => {
-				this.changeQueryParams({ show_cnt: count, page: null });
+				this.changeQueryParams({ show_cnt: count, page: null, warehouse_id: this.app.warehouse.warehouse_id });
 				this.gridApi.setGridOption('paginationPageSize', count);
 			};
-			this.pagination.onPageChange = page => this.changeQueryParams({ page });
+			this.pagination.onPageChange = page => {
+				this.changeQueryParams({ page, warehouse_id: this.app.warehouse.warehouse_id })
+			};
 		}
 
 		if (this.wpTable) {
@@ -204,7 +206,7 @@ class Table {
 		return emptyRow;
 	}
 
-	afterAddRow(emptyRow) {}
+	afterAddRow(emptyRow) { }
 	// Добавляет новую строку в таблицу
 	addRowTable(e) {
 		const columnDefs = this.gridOptions.columnDefs;
@@ -270,7 +272,7 @@ class Table {
 		}
 	}
 
-	handleRowSelected(currentData) {}
+	handleRowSelected(currentData) { }
 
 	enableEditing(row) {
 		if (!row) return [];
