@@ -199,6 +199,7 @@ class Auth {
       if (error.response?.status === 401) {
         throw new Error(ERROR_MESSAGES.AUTH_FAILED);
       }
+
       throw new Error(ERROR_MESSAGES.NETWORK_ERROR);
     }
   }

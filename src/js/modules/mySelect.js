@@ -32,10 +32,10 @@ export class Select {
 			selectMaxWidth: null,
 			maxHeightList: null,
 			parentEl: null,
-			onInit: () => {},
-			onChange: () => {},
-			onOpen: () => {},
-			onClose: () => {},
+			onInit: () => { },
+			onChange: () => { },
+			onOpen: () => { },
+			onClose: () => { },
 			callbackInput: value => {
 				return `<span>${value}</span><svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>`;
 			},
@@ -258,11 +258,11 @@ export class Select {
 			mySelect.innerHTML = `<div class="mySelect__input" data-value="${placeholder.length ? '' : options[activeIndex].value}">${placeholder.length ? `<span class="placeholder">${placeholder}</span>` : `<span>${prefix ? `<span class="prefix">${prefix}</span>` : ''}${options[activeIndex].innerHTML}</span>`} ${inputHtml.length ? inputHtml : ''}</div>
     <ul class="mySelect__list">
     ${Array.from(options)
-			.map(
-				option =>
-					`<li class="mySelect__option ${options[activeIndex].value === option.value && !placeholder ? '_none' : ''}" data-value="${option.value}">${this.callbackOption(option.textContent, option.value)}</li>`
-			)
-			.join('')}
+					.map(
+						option =>
+							`<li class="mySelect__option ${options[activeIndex].value === option.value && !placeholder ? '_none' : ''}" data-value="${option.value}">${this.callbackOption(option.textContent, option.value)}</li>`
+					)
+					.join('')}
     </ul>`;
 		}
 

@@ -43,6 +43,9 @@ class ModalAddRefund extends BaseModal {
 
       formData.set('payment_date', dateFormatter(formData.get('payment_date'), 'yyyy-MM-dd'))
       formData.set('amount', formData.get('amount').replace(/[^0-9]/g, ''))
+      if (this.selects.selectValue) {
+        formData.set('payment_type', this.selects.selectValue)
+      }
       formData.delete('flatpickr-month')
 
       Array.from(formData).forEach(arr => data[arr[0]] = arr[1])
