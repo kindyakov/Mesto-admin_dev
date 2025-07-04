@@ -429,6 +429,7 @@ class Table {
 			const data = await this.getData(queryParams);
 
 			this.onRendering(data);
+			this.onRowSelected()
 		} catch (error) {
 			console.error(error);
 		} finally {

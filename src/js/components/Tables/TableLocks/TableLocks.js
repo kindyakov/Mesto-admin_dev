@@ -29,7 +29,7 @@ class TableLocks extends Table {
           }
         },
         {
-          headerName: 'Дата обновление', field: 'update_date', minWidth: 150, flex: 1, resizable: false,
+          headerName: 'Дата обновления', field: 'update_date', minWidth: 150, flex: 1, resizable: false,
           cellRenderer: params => {
             if (!params.value) return ''
             const [date, time] = params.value.split(' ')

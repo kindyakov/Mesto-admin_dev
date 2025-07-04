@@ -105,7 +105,7 @@ class TablePayments extends Table {
 
 		const defaultParams = {
 			selectTypeUser: true,
-			onChangeTypeUser: () => {}
+			onChangeTypeUser: () => { }
 		};
 
 		const mergedOptions = Object.assign({}, defaultOptions, options);
@@ -137,10 +137,12 @@ class TablePayments extends Table {
 				if (isValid) {
 					const formData = new FormData(form);
 					let data = { payment_id };
+
 					formData.set(
 						'payment_date',
 						getFormattedDate(formData.get('payment_date'), 'YYYY-MM-DD')
 					);
+
 					Array.from(formData).forEach(obj => (data[obj[0]] = obj[1]));
 
 					this.editPayment(data).finally(() => {
@@ -188,6 +190,7 @@ class TablePayments extends Table {
 	onRendering({ payments = [], cnt_pages, page, cnt_all }) {
 		this.cntAll = cnt_all;
 		this.pagination.setPage(page, cnt_pages, cnt_all);
+		console.log(payments)
 		this.gridApi.setGridOption('rowData', payments);
 		// this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, payments.length])
 	}

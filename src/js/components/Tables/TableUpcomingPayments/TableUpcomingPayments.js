@@ -361,8 +361,6 @@ class TableUpcomingPayments extends Table {
 		this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length]);
 		this.gridApi.setGridOption('rowData', agreements);
 		this.renderTextHeader(this.calcSum(agreements));
-
-		console.log(this.queryParams);
 	}
 
 	filterAndSortData(data, params) {

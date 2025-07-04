@@ -12,10 +12,10 @@ import { burger, fixedSideBar } from './utils/header.js';
 import { modalMap } from './modalMap.js';
 
 window.app = {
+	logsModal: [],
 	warehouses: [],
-	warehouse: null,
 	modalMap,
-	logsModal: []
+	warehouse: null,
 };
 
 const mainLoader = document.querySelector('.body-loader');

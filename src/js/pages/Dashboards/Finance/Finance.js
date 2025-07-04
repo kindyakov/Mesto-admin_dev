@@ -89,7 +89,7 @@ class Finance extends Dashboards {
 		const [table] = this.tables;
 		if (!params) return;
 		params = JSON.parse(params);
-		/* table.selects.setValue(params.real_payment) */
+		table.selects.setValue(params.show_what)
 		table.updateQueryParams(params);
 	}
 

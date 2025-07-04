@@ -46,6 +46,11 @@ class ChargingLocks extends Page {
 
 		this.customSelect.onChange = (e, select, value) => {
 			this.wrapper.querySelectorAll('.locks-content')?.forEach(el => el.classList.add('_none'));
+			if (value === 'tile') {
+				this.btnSort.classList.remove('_none')
+			} else {
+				this.btnSort.classList.add('_none')
+			}
 			this.wrapper.querySelector(`[data-locks-content="${value}"]`)?.classList.remove('_none');
 		};
 
@@ -113,10 +118,9 @@ class ChargingLocks extends Page {
 						room => room.room_name == cell.getAttribute('data-cell-num')
 					);
 					if (!room) return;
-
-					if (50 <= room.electric_quantity <= 100) {
+					if (50 <= room.electric_quantity && room.electric_quantity <= 100) {
 						cell.dataset.rented = 0;
-					} else if (20 <= room.electric_quantity <= 49) {
+					} else if (20 <= room.electric_quantity && room.electric_quantity <= 49) {
 						cell.dataset.rented = 0.75;
 					} else {
 						cell.dataset.rented = 1;
@@ -130,7 +134,7 @@ class ChargingLocks extends Page {
 		input.value = extractNumbers(input.value);
 		clearTimeout(this.timerInput);
 		this.timerInput = setTimeout(() => {
-			this.changeQueryParams({ search_str: input.value });
+			this.changeQueryParams({ search_str: input.value, show_cnt: 1000 });
 		}, 600);
 	}
 
