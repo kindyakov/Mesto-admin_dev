@@ -29,6 +29,11 @@ class TablePayments extends Table {
 					field: 'agrid',
 					minWidth: 90,
 					flex: 0.3,
+					comparator: (a, b) => {
+						const numA = parseInt(a, 10)
+						const numB = parseInt(b, 10)
+						return numA - numB
+					},
 					cellRenderer: params => {
 						const span = document.createElement('span');
 						span.classList.add('table-span-agrid');
@@ -190,7 +195,7 @@ class TablePayments extends Table {
 	onRendering({ payments = [], cnt_pages, page, cnt_all }) {
 		this.cntAll = cnt_all;
 		this.pagination.setPage(page, cnt_pages, cnt_all);
-		console.log(payments)
+		// payments = payments.map(p => ({ ...p, agrid: +p.agrid }))
 		this.gridApi.setGridOption('rowData', payments);
 		// this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, payments.length])
 	}

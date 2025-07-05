@@ -179,6 +179,12 @@ export const pages = {
 			return access;
 		}
 	},
+	locks: {
+		path: 'Locks/Locks.js',
+		accessCheck: ({ tab, content, user }) => {
+			return true;
+		}
+	},
 	rooms: {
 		path: 'Rooms/Rooms.js',
 		accessCheck: ({ tab, content, user }) => {

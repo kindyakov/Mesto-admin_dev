@@ -42,6 +42,11 @@ class Navigation {
 		const initialPath = window.location.hash.slice(1);
 
 		if (initialPath) {
+			if (initialPath === 'open' && !warehouse.warehouse_id) {
+				window.location.hash = 'payments';
+				return
+			}
+
 			this.loadContent(initialPath);
 		} else {
 			window.location.hash = this.defaultPage.at(0);

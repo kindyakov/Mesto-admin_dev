@@ -7,6 +7,7 @@ import {
 	postFuturePayments
 } from '../../../settings/request.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
+import { mergeQueryParams } from '../../../utils/buildQueryParams.js';
 
 class Finance extends Dashboards {
 	constructor({ loader }) {
@@ -38,6 +39,7 @@ class Finance extends Dashboards {
 	}
 
 	async getData(queryParams = {}) {
+		this.table.queryParams = mergeQueryParams(this.table.queryParams, queryParams)
 		return postFuturePayments({
 			warehouse_id: this.app.warehouse.warehouse_id,
 			show_cnt: 1000,

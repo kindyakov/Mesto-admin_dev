@@ -46,6 +46,9 @@ async function appInit(user) {
 		document.querySelector('.header__user_info .name').textContent = user.manager.manager_fullname;
 		nav.init({ warehouse: window.app.warehouse, notify, user });
 
+		const sidebarItemOpen = document.querySelector('.sidebar__item[data-path="open"]')
+		sidebarItemOpen.classList.toggle('_none', !window.app.warehouse.warehouse_id)
+
 		isFirstLoad = false;
 	} catch (error) {
 		console.log(error);
