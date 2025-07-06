@@ -25,10 +25,12 @@
 			.widgets__item_content {
 				.value {
 					font-size: 18px;
+
 					@media (max-width: $md1) {
 						font-size: 14px;
 					}
 				}
+
 				.name {
 					font-size: 13px;
 				}
@@ -37,6 +39,7 @@
 					.value {
 						font-size: 18px;
 					}
+
 					.name {
 						font-size: 13px;
 					}
@@ -53,8 +56,10 @@
 			grid-template-columns: auto 1fr;
 			gap: 10px;
 			padding: 10px 15px;
+
 			&.col-2 {
 				grid-column: span 1;
+
 				.widgets__item_content.last {
 					grid-column: span 2;
 					padding-left: 50px;
@@ -71,11 +76,13 @@
 			align-items: center;
 			justify-content: center;
 			flex-shrink: 0;
+
 			img {
 				max-width: 100%;
 				max-height: 100%;
 				object-fit: cover;
 			}
+
 			@media (max-width: $md4) {
 				width: 40px;
 				height: 40px;
@@ -87,6 +94,7 @@
 			@include adaptiv-value('height', 60, 40, 1);
 			border-radius: 50%;
 			position: relative;
+			flex-shrink: 0;
 
 			&::after {
 				content: '';
@@ -140,6 +148,7 @@
 					background-color: $blue-light;
 					animation-delay: 0.4s;
 				}
+
 				&::before {
 					background-color: $blue;
 				}
@@ -150,6 +159,7 @@
 					background-color: rgba(245, 115, 39, 0.2);
 					animation-delay: 0.6s;
 				}
+
 				&::before {
 					background-color: #f57227;
 				}
@@ -160,6 +170,7 @@
 					background-color: $red-light;
 					animation-delay: 0.8s;
 				}
+
 				&::before {
 					background-color: $red;
 				}
@@ -170,6 +181,7 @@
 					background-color: $yellow-light;
 					animation-delay: 1s;
 				}
+
 				&::before {
 					background-color: $yellow;
 				}
@@ -180,6 +192,7 @@
 					background-color: rgba(160, 82, 45, 0.3);
 					animation-delay: 1.2s;
 				}
+
 				&::before {
 					background-color: rgb(160, 82, 45);
 				}
@@ -189,12 +202,14 @@
 		&_content {
 			display: flex;
 			flex-direction: column;
-			flex: 1 1 auto;
+			flex: 1 1 50%;
+
 			.value {
 				font-weight: 700;
 				@include adaptiv-font(24, 20, 1);
 				color: #1c2434;
 				font-family: $second-family;
+
 				sup {
 					font-size: 50%;
 				}
@@ -236,11 +251,12 @@
 				height: 1px;
 			}
 
-			> p {
+			>p {
 				font-weight: 500;
 				font-size: 12px;
 				color: #64748b;
 			}
+
 			.percent {
 				font-weight: 400;
 				font-size: 12px;
@@ -252,10 +268,12 @@
 				&.success {
 					background: #10b981;
 				}
+
 				&.danger {
 					background: #dc3545;
 				}
 			}
+
 			@media (min-width: $md5) {
 				display: none;
 			}
@@ -268,10 +286,12 @@
 		transform: scale(1);
 		opacity: 1;
 	}
+
 	50% {
 		transform: scale(1.15);
 		opacity: 0.7;
 	}
+
 	100% {
 		transform: scale(1);
 		opacity: 1;

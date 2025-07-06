@@ -123,7 +123,7 @@ class Finance extends Dashboards {
 		}
 
 		fact.style.width = `${findPercentageOfTotal(factV, sum)}%`;
-		remainsDeposit.style.width = `calc(${findPercentageOfTotal(remainsDepositV, sum)}% + 30px)`;
+		remainsDeposit.style.width = `calc(${findPercentageOfTotal(remainsDepositV, sum)}% + 15px)`;
 
 		differenceFactPlan.style.left = `${findPercentageOfTotal(factV, sum) / 2}%`;
 		remainsDeposit.style.left = `${findPercentageOfTotal(factV, sum)}%`;

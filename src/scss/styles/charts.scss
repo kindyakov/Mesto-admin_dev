@@ -39,10 +39,12 @@
 		justify-content: space-between;
 		align-items: flex-start;
 		gap: 15px;
+
 		&.flex-col {
 			flex-direction: column;
 			align-items: flex-start;
 		}
+
 		@media (max-width: $md4) {
 			flex-direction: column;
 			align-items: flex-start !important;
@@ -59,8 +61,10 @@
 	&__info {
 		display: flex;
 		align-items: center;
+		flex-wrap: wrap;
 		gap: 25px;
-		> p {
+
+		>p {
 			display: flex;
 			align-items: center;
 			gap: 5px;
@@ -72,6 +76,7 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
+
 				&::before {
 					content: '';
 					width: 8px;
@@ -81,13 +86,14 @@
 				}
 			}
 
-			> span {
+			>span {
 				font-weight: 500;
 				font-size: 15px;
 				line-height: 100%;
 				color: #78849a;
 			}
 		}
+
 		@media (max-width: $md4) {
 			gap: 10px;
 		}
@@ -98,11 +104,13 @@
 		flex-wrap: wrap;
 		gap: 10px;
 		font-size: 14px;
-		> p {
+
+		>p {
 			display: flex;
 			align-items: center;
 			gap: 4px;
 		}
+
 		.button {
 			padding: 4px;
 		}
@@ -111,6 +119,7 @@
 	&__header-flex {
 		display: flex;
 		gap: 25px;
+
 		@media (max-width: $md4) {
 			flex-direction: column;
 		}
@@ -120,20 +129,23 @@
 		display: flex;
 		align-items: flex-start;
 		gap: 10px;
-		> p {
+
+		>p {
 			display: flex;
 			flex-direction: column;
 			gap: 5px;
-			> span {
+
+			>span {
 				font-weight: 500;
 				font-size: 14px;
 				color: #637380;
 			}
+
 			.blue {
 				color: $blue;
 			}
-			.gray {
-			}
+
+			.gray {}
 		}
 	}
 
@@ -142,6 +154,7 @@
 		align-items: flex-end;
 		height: 100%;
 		gap: 15px;
+
 		&.start {
 			align-items: flex-start;
 		}
@@ -155,15 +168,18 @@
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
+
 		li {
 			display: flex;
 			align-items: center;
 			gap: 8px;
+
 			span {
 				color: #fff;
 				border-radius: 22px;
 				padding: 4px 7px;
 			}
+
 			p {
 				font-weight: 500;
 				font-size: 15px;
@@ -178,6 +194,7 @@
 		flex: 1 1 auto;
 		display: flex;
 		align-items: flex-end;
+
 		canvas {
 			flex: 1 1 auto;
 			height: 100%;
@@ -191,6 +208,7 @@
 			width: 240px;
 			height: 240px;
 			position: relative;
+
 			.count-cells {
 				position: absolute;
 				left: 50%;
@@ -200,11 +218,13 @@
 				align-items: center;
 				justify-content: center;
 				flex-direction: column;
+
 				b {
 					font-weight: 700;
 					font-size: 28px;
 					color: #212b36;
 				}
+
 				span {
 					font-weight: 500;
 					font-size: 14px;
@@ -223,6 +243,7 @@
 		align-items: flex-end;
 		padding: 30px 10px;
 		justify-content: center;
+
 		span {
 			writing-mode: vertical-rl;
 			font-weight: 500;
@@ -254,7 +275,7 @@
 	flex-direction: column;
 	row-gap: 5px;
 
-	> div {
+	>div {
 		display: flex;
 		align-items: center;
 	}
@@ -276,6 +297,7 @@
 	align-items: center;
 	gap: 2px;
 	margin-left: 15px;
+
 	span {
 		font-weight: 500;
 		font-size: 12px;
