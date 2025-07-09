@@ -24,7 +24,7 @@ class ChartAreaRentedCells extends BaseChart {
           pointRadius: 2,
           fill: true,
           tension: 0.6
-        }, {
+        }/*, {
           label: 'План',
           data: [],
           borderColor: '#6f7d90',
@@ -36,7 +36,7 @@ class ChartAreaRentedCells extends BaseChart {
           borderDash: [5, 5], // Пунктирная линия
           fill: false,
           tension: 0.6
-        }]
+        }*/]
       },
       options: {
         scales: {
@@ -114,7 +114,7 @@ class ChartAreaRentedCells extends BaseChart {
   render({ finance_planfact = [] }) {
     this.chart.data.labels = finance_planfact.length ? finance_planfact.map(obj => obj.data) : []
     this.chart.data.datasets[0].data = finance_planfact.length ? finance_planfact.map(obj => obj.rented_area) : []
-    this.chart.data.datasets[1].data = finance_planfact.length ? finance_planfact.map(obj => obj.rented_area_planned) : []
+    //this.chart.data.datasets[1].data = finance_planfact.length ? finance_planfact.map(obj => obj.rented_area_planned) : []
     this.chart.update()
   }
 }
