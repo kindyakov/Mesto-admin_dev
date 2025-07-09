@@ -157,13 +157,19 @@
               </svg>
             </div> -->
           </h4>
-          <select name="sort" class="init-custom-select" data-special-select="select-chart-area-rented-cells">
+          <label class="main__date-filter">
+            <svg class='icon icon-calendar'>
+              <use xlink:href='img/svg/sprite.svg#calendar'></use>
+            </svg>
+            <input type="text" class="input-date-filter-chart-area-rented-cells" name="start_date,end_date" placeholder="Дата">
+          </label>
+          <!-- <select name="sort" class="init-custom-select" data-special-select="select-chart-area-rented-cells">
             <option value="planFact">План/Факт</option>
             <option value="plan">План</option>
             <option value="fact">Факт</option>
-          </select>
+          </select> -->
         </div>
-        <div class="chart__info" style="margin-top: 15px;">
+        <!-- <div class="chart__info" style="margin-top: 15px;">
           <p>
             <img src="./img/icons/radio.png" alt="Иконка">
             <span style="color: #3d50e0;">Факт</span>
@@ -171,8 +177,8 @@
           <p>
             <img src="./img/icons/radio-2.png" alt="Иконка">
             <span>План</span>
-          </p>
-        </div>
+          </p> 
+        </div> -->
       </div>
       <div class="chart__body">
         <canvas id="chart-area-rented-cells" style="max-height: 220px;"></canvas>

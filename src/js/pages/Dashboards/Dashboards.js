@@ -27,11 +27,6 @@ class Dashboards extends Page {
 		this.widgets = this.wrapper.querySelectorAll('[data-render-widget]');
 
 		if (this.formFilter) {
-			const now = new Date();
-			this.app.defaultDate = this.app.defaultDate || [
-				new Date(now.getFullYear(), now.getMonth(), 1),
-				new Date(now.getFullYear(), now.getMonth() + 1, 0)
-			];
 
 			this.selectFilter = new Select({
 				uniqueName: 'select-filter-main',

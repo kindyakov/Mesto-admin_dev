@@ -2,9 +2,12 @@ import BaseChart from "../BaseChart.js";
 import merge from 'lodash.merge'
 import { Select } from '../../../modules/mySelect.js';
 import { dateFormatter } from '../../../settings/dateFormatter.js';
+import { createCalendar } from "../../../settings/createCalendar.js";
+import {getFinancePlan} from '../../../settings/request.js';
+
 
 class ChartAreaRentedCells extends BaseChart {
-  constructor(ctx, addOptions) {
+  constructor(ctx, addOptions, app) {
 
     const gradient = ctx.getContext("2d").createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, 'rgba(60, 80, 224, 0.1)');
@@ -71,7 +74,25 @@ class ChartAreaRentedCells extends BaseChart {
     }
 
     super(ctx, merge({}, defaultOptions, addOptions));
-
+    console.log(this.defaultDate)
+    this.calendars = createCalendar(`.input-date-filter-chart-area-rented-cells`, {
+      mode: 'range',
+      dateFormat: 'd. M, Y',
+      //defaultDate: app.defaultDate,
+      onChange: async (selectedDates, dateStr, instance) => {
+      if (selectedDates.length === 2) {
+        const data = await getFinancePlan({warehouse_id: window.app.warehouse.warehouse_id,
+        //  this.app.defaultDate = selectedDates;
+        //  this.changeQueryParams({
+        start_date: dateFormatter(selectedDates[0], 'yyyy-MM-dd'),
+        end_date: dateFormatter(selectedDates[1], 'yyyy-MM-dd')
+        });
+        this.render(data)
+      }
+      }
+    });
+    console.log(this.calendars)
+    /*
     this.datasets = {
       plan: () => {
         this.chart.data.datasets[0].hidden = true;
@@ -89,17 +110,18 @@ class ChartAreaRentedCells extends BaseChart {
         this.chart.update();
       },
     };
-
+    
     this.selects = new Select({ uniqueName: 'select-chart-area-rented-cells', selectMinWidth: 125 });
     this.selects.onChange = this.handleSelectChange.bind(this);
+    */
   }
-
+  /*
   handleSelectChange(e, select, value) {
     if (this.datasets[value]) {
       this.datasets[value]();
     }
   }
-
+  */
   onExternal(tooltipEl, chart, tooltip) {
     const dataI = tooltip.dataPoints[0].dataIndex
     const date = chart.data.labels[dataI]
@@ -116,6 +138,12 @@ class ChartAreaRentedCells extends BaseChart {
     this.chart.data.datasets[0].data = finance_planfact.length ? finance_planfact.map(obj => obj.rented_area) : []
     //this.chart.data.datasets[1].data = finance_planfact.length ? finance_planfact.map(obj => obj.rented_area_planned) : []
     this.chart.update()
+
+    const [startDate, endDate] = [
+      finance_planfact[0].data,
+      finance_planfact.at(-1).data
+    ]
+    this.calendars.element.value = `${dateFormatter(startDate, 'dd. LLLL, yyyy')} - ${dateFormatter(endDate, 'dd. LLLL, yyyy')}`
   }
 }
 
