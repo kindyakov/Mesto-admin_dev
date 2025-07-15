@@ -89,10 +89,19 @@ class Auth {
 
   checkAuth() {
     const token = getCookie('token')
-    const manager = getCookie('manager') ? JSON.parse(getCookie('manager')) : {}
+    let manager = {}
+
+    try {
+      //manager = getCookie('manager') ? JSON.parse(getCookie('manager')) : {}
+      manager = localStorage.getItem('manager') ? JSON.parse(localStorage.getItem('manager')) : {}
+    }
+    catch (error) {
+      console.log(error)
+      manager = {}
+    }
 
     let isAuth = Boolean(token && token.startsWith('Bearer'))
-
+    
     if (isAuth) {
       const tokenData = JSON.parse(atob(token.split('.')[1]))
       const tokenExpiration = new Date(tokenData.exp * 1000)
@@ -143,6 +152,7 @@ class Auth {
 
   logout() {
     deleteCookie('token');
+    deleteCookie('manager');
     this.allClose()
     this.modal.open()
     this.isAuth = false
@@ -173,7 +183,8 @@ class Auth {
   #setCookies(token, manager, expiration) {
     const secureCookieOptions = `max-age=${expiration}; path=/; secure; samesite=strict`;
     document.cookie = `${COOKIE_KEYS.TOKEN}=Bearer ${token}; ${secureCookieOptions}`;
-    document.cookie = `${COOKIE_KEYS.MANAGER}=${JSON.stringify(manager)}; ${secureCookieOptions}`;
+    //document.cookie = `${COOKIE_KEYS.MANAGER}=${JSON.stringify(manager)}; ${secureCookieOptions}`;
+    localStorage.setItem(COOKIE_KEYS.MANAGER,JSON.stringify(manager))
   }
 
   /**
