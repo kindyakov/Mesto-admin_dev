@@ -22,6 +22,7 @@ export const path = {
   },
   src: {
     html: `${srcFolder}/*.html`,
+    css: `${srcFolder}/css/tailwind.css`,
     scss: `${srcFolder}/scss/style.scss`,
     scssCritical: `${srcFolder}/scss/critical/*.scss`,
     js: `${srcFolder}/js/app.js`,

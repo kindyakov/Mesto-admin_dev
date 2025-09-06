@@ -1,5 +1,133 @@
 <div class="main__content content-main" data-content="dashboards/warehouse">
-  <div class="widgets">
+  <div class="rounded-md border border-solid border-[#D1E4F9] p-4 grid grid-cols-4 gap-4">
+    <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
+      <span class="text-sm text-[#64748b]">Все ячейки</span>
+      <div class="flex gap-4 mt-1">
+        <div class="widgets__item_circle gray"></div>
+        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+          <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
+            <b class="text-xl" room-rented="-1" room-key="cnt"></b> <b class="text-sm">шт.</b>
+          </p>
+          <p class="text-[#1c2434]">
+            <b class="text-xl" room-rented="-1" room-key="area"></b> <b class="text-sm">м²</b>
+          </p>
+          <p class="text-[#787b80]">
+            <b class="text-xl" room-rented="-1" room-key="rate"></b><b class="text-sm">%</b>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
+      <span class="text-sm text-[#64748b]">Свободные ячейки</span>
+      <div class="flex gap-4 mt-1">
+        <div class="widgets__item_circle green"></div>
+        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+          <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
+            <b class="text-xl" room-rented="0" room-key="cnt"></b> <b class="text-sm">шт.</b>
+          </p>
+          <p class="text-[#1c2434]">
+            <b class="text-xl" room-rented="0" room-key="area"></b> <b class="text-sm">м²</b>
+          </p>
+          <p class="text-[#787b80]">
+            <b class="text-xl" room-rented="0" room-key="rate"></b><b class="text-sm">%</b>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
+      <span class="text-sm text-[#64748b]">Занятые ячейки</span>
+      <div class="flex gap-4 mt-1">
+        <div class="widgets__item_circle red"></div>
+        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+          <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
+            <b class="text-xl" room-rented="1" room-key="cnt"></b> <b class="text-sm">шт.</b>
+          </p>
+          <p class="text-[#1c2434]">
+            <b class="text-xl" room-rented="1" room-key="area"></b> <b class="text-sm">м²</b>
+          </p>
+          <p class="text-[#787b80]">
+            <b class="text-xl" room-rented="1" room-key="rate"></b><b class="text-sm">%</b>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
+      <span class="text-sm text-[#64748b]">Освобождающиеся ячейки</span>
+      <div class="flex gap-4 mt-1">
+        <div class="widgets__item_circle yellow"></div>
+        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+          <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
+            <b class="text-xl" room-rented="0.75" room-key="cnt"></b> <b class="text-sm">шт.</b>
+          </p>
+          <p class="text-[#1c2434]">
+            <b class="text-xl" room-rented="0.75" room-key="area"></b> <b class="text-sm">м²</b>
+          </p>
+          <p class="text-[#787b80]">
+            <b class="text-xl" room-rented="0.75" room-key="rate"></b><b class="text-sm">%</b>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
+      <span class="text-sm text-[#64748b]">Оформлен гостевой визит</span>
+      <div class="flex gap-4 mt-1">
+        <div class="widgets__item_circle blue"></div>
+        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+          <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
+            <b class="text-xl" room-rented="0.25" room-key="cnt"></b> <b class="text-sm">шт.</b>
+          </p>
+          <p class="text-[#1c2434]">
+            <b class="text-xl" room-rented="0.25" room-key="area"></b> <b class="text-sm">м²</b>
+          </p>
+          <p class="text-[#787b80]">
+            <b class="text-xl" room-rented="0.25" room-key="rate"></b><b class="text-sm">%</b>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
+      <span class="text-sm text-[#64748b]">Ожидают подтверждения</span>
+      <div class="flex gap-4 mt-1">
+        <div class="widgets__item_circle orange"></div>
+        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+          <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
+            <b class="text-xl" room-rented="0.5" room-key="cnt"></b> <b class="text-sm">шт.</b>
+          </p>
+          <p class="text-[#1c2434]">
+            <b class="text-xl" room-rented="0.5" room-key="area"></b> <b class="text-sm">м²</b>
+          </p>
+          <p class="text-[#787b80]">
+            <b class="text-xl" room-rented="0.5" room-key="rate"></b><b class="text-sm">%</b>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
+      <span class="text-sm text-[#64748b]">В режиме оформления</span>
+      <div class="flex gap-4 mt-1">
+        <div class="widgets__item_circle purple"></div>
+        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+          <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
+            <b class="text-xl" room-rented="0.45" room-key="cnt"></b> <b class="text-sm">шт.</b>
+          </p>
+          <p class="text-[#1c2434]">
+            <b class="text-xl" room-rented="0.45" room-key="area"></b> <b class="text-sm">м²</b>
+          </p>
+          <p class="text-[#787b80]">
+            <b class="text-xl" room-rented="0.45" room-key="rate"></b><b class="text-sm">%</b>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="widgets">
     <div class="widgets__item">
       <div class="widgets__item_circle green" style="flex-shrink: 0;">
       </div>
@@ -57,14 +185,12 @@
       </div>
     </div>
     <div class="widgets__item">
-      <!-- <div class="widgets__item_circle yellow" style="flex-shrink: 0;">
-      </div> -->
       <span class="name">Все</span>
       <div class="widgets__item_content">
         <span class="value" data-render-widget="-1"></span>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- <form class="main__filter" style="justify-content: stretch;">
     <div class="filter__block_content" style="position: relative; max-width: 200px;">
@@ -84,24 +210,15 @@
 
   </div>
 
-  <div class="warehouse">
+  <div class="warehouse" style="gap: 0;">
     <div class="warehouse__header">
       <div class="warehouse__types">
+        <button class="warehouse__type btn-filter-scheme _active" data-rented="-1">
+          <span class="name">Все</span>
+        </button>
         <button class="warehouse__type btn-filter-scheme" data-rented="0">
           <span class="circle"></span>
           <span class="name">Свободные</span>
-        </button>
-        <button class="warehouse__type btn-filter-scheme" data-rented="0.4">
-          <span class="circle"></span>
-          <span class="name">Неоплаченные</span>
-        </button>
-        <button class="warehouse__type btn-filter-scheme" data-rented="0.25">
-          <span class="circle"></span>
-          <span class="name">Гостевые</span>
-        </button>
-        <button class="warehouse__type btn-filter-scheme" data-rented="0.5">
-          <span class="circle"></span>
-          <span class="name">Забронированные</span>
         </button>
         <button class="warehouse__type btn-filter-scheme" data-rented="1">
           <span class="circle"></span>
@@ -111,33 +228,66 @@
           <span class="circle"></span>
           <span class="name">Освобождающиеся</span>
         </button>
-        <button class="warehouse__type btn-filter-scheme" data-rented="0.95">
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.25">
+          <span class="circle"></span>
+          <span class="name">Гостевой визит</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.5">
+          <span class="circle"></span>
+          <span class="name">Ожидают подтверждения</span>
+        </button>
+        <button class="warehouse__type btn-filter-scheme" data-rented="0.4">
+          <span class="circle"></span>
+          <span class="name">В режиме оформления</span>
+        </button>
+        <!-- <button class="warehouse__type btn-filter-scheme" data-rented="0.95">
           <span class="circle"></span>
           <span class="name">Дебиторы</span>
-        </button>
-        <button class="warehouse__type btn-filter-scheme _active" data-rented="-1">
-          <span class="name">Все</span>
-        </button>
+        </button> -->
       </div>
 
-      <div class="warehouse__filters">
-        <select name="floors" class="init-custom-select _none" data-special-select="select-warehouse-floors"
-          data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
-          <option value="1">1 этаж</option>
-          <option value="2">2 этаж</option>
-        </select>
-        <!-- <button class="warehouse__button button-table btn-set-filters">
+      <!-- <div class="warehouse__filters">
+        <button class="warehouse__button button-table btn-set-filters">
           <span>Фильтры</span>
           <svg class='icon icon-filter'>
             <use xlink:href='img/svg/sprite.svg#filter'></use>
           </svg>
-        </button> -->
-      </div>
+        </button> 
+      </div> -->
     </div>
-    <button class="button transparent btn-hide-lock-room"
-      style="max-width: 300px;margin-left: auto;">Заблокированные</button>
-    <div class="warehouse__schemes" style="min-height: 370px;">
-      <div class="warehouse__wrap-scheme wrap-scheme _active" style="min-width: 1100px;">
+    <div class="flex justify-between gap-4 mt-3">
+      <div class="flex gap-1">
+        <button class="button transparent btn-hide-lock-room">
+          <span class="mr-3">❗</span>
+          <p>Заблокированные</p>
+        </button>
+        <div
+          class="border border-solid border-[#e1e8f0] py-1 px-3 rounded-sm bg-white flex flex-col items-center justify-center gap-1">
+          <span class="text-sm text-[#64748b]">Ячейки с дебиторской задолженностью</span>
+          <div class="grid grid-cols-3 gap-1 w-full justify-items-center text-center">
+            <b class="text-[#1c2434] border-r border-solid border-[#ecedef] w-full">
+              <span class="text-xl"></span>
+              <span class="text-sm"> шт.</span>
+            </b>
+            <b class="text-[#1c2434] border-r border-solid border-[#ecedef] w-full">
+              <span class="text-xl"></span>
+              <span class="text-sm"> м²</span>
+            </b>
+            <b class="text-[#787b80]">
+              <span class="text-xl"></span>
+              <span class="text-sm">%</span>
+            </b>
+          </div>
+        </div>
+      </div>
+      <select name="floors" class="init-custom-select _none" data-special-select="select-warehouse-floors"
+        data-input-html="<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>">
+        <option value="1">1 этаж</option>
+        <option value="2">2 этаж</option>
+      </select>
+    </div>
+    <div class="warehouse__schemes mt-3" style="min-height: 370px;">
+      <div class="warehouse__wrap-scheme wrap-scheme _active" style="min-width: 1px;">
       </div>
     </div>
   </div>
@@ -161,7 +311,8 @@
             <svg class='icon icon-calendar'>
               <use xlink:href='img/svg/sprite.svg#calendar'></use>
             </svg>
-            <input type="text" class="input-date-filter-chart-area-rented-cells" name="start_date,end_date" placeholder="Дата">
+            <input type="text" class="input-date-filter-chart-area-rented-cells" name="start_date,end_date"
+              placeholder="Дата">
           </label>
           <!-- <select name="sort" class="init-custom-select" data-special-select="select-chart-area-rented-cells">
             <option value="planFact">План/Факт</option>
@@ -197,16 +348,20 @@
       <div class="chart__content start between">
         <ul class="chart__list">
           <li>
-            <span class="percent" style="background: #3b50e1;" data-chart-widget="0">20%</span>
+            <span class="rate" style="background: #3b50e1;" data-chart-widget="0">20%</span>
             <p>Свободные</p>
           </li>
           <li>
-            <span class="percent" style="background: #6577f3;" data-chart-widget="0.5">30%</span>
+            <span class="rate" style="background: #6577f3;" data-chart-widget="0.5">30%</span>
             <p>Забронированные</p>
           </li>
           <li>
-            <span class="percent" style="background: #8fd0ef;" data-chart-widget="1">50%</span>
+            <span class="rate" style="background: #8fd0ef;" data-chart-widget="1">50%</span>
             <p>Занятые</p>
+          </li>
+          <li>
+            <span class="rate" style="background: #ABCCCF;" data-chart-widget="other">50%</span>
+            <p>Прочее</p>
           </li>
         </ul>
         <div class="chart__body chart-cell-occupancy">

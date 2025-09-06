@@ -1,5 +1,4 @@
-.tippy {
-}
+.tippy {}
 
 .tippy-box {
 	.modal__body {
@@ -7,8 +6,7 @@
 	}
 }
 
-.tippy-button {
-}
+.tippy-button {}
 
 .tippy-content {
 	background-color: #fff;
@@ -23,10 +21,12 @@
 	border: 1px solid currentColor;
 	transition: 0.1s;
 	opacity: 0.6;
+
 	&:hover {
 		opacity: 1;
 		transform: scale(0.95);
 	}
+
 	&._active {
 		opacity: 1;
 		transform: scale(1.05);
@@ -82,6 +82,7 @@
 	position: relative;
 	display: block;
 	line-height: normal;
+
 	&::before {
 		content: '';
 		position: absolute;
@@ -89,7 +90,8 @@
 		left: 10%;
 		border-width: 6px;
 		border-style: solid;
-		border-color: #e2e8f0 transparent transparent transparent; /* Цвет стрелки */
+		border-color: #e2e8f0 transparent transparent transparent;
+		/* Цвет стрелки */
 	}
 }
 
@@ -108,6 +110,7 @@
 		font-weight: 400;
 		line-height: 125%;
 	}
+
 	button {
 		font-weight: 500;
 		background-color: #eff4fb;
@@ -145,6 +148,7 @@
 		gap: 10px;
 		text-align: center;
 		padding: 20px 50px;
+
 		@media (max-width: $md5) {
 			padding: 20px 20px;
 		}
@@ -163,7 +167,8 @@
 		font-size: 16px;
 		line-height: 155%;
 		color: #64748b;
-		> span {
+
+		>span {
 			color: #212b36;
 		}
 	}
@@ -218,15 +223,14 @@
 		flex-direction: column;
 		gap: 15px;
 
-		> span {
+		>span {
 			font-weight: 500;
 			font-size: 13px;
 			line-height: 155%;
 			color: #212b36;
 		}
 
-		.wp-input {
-		}
+		.wp-input {}
 
 		.input {
 			height: 40px;
@@ -277,7 +281,7 @@
 		gap: 10px;
 		user-select: none;
 
-		> span {
+		>span {
 			font-weight: 500;
 			font-size: 14px;
 			line-height: 150%;
@@ -287,6 +291,7 @@
 
 	&__footer {
 		padding: 10px 20px;
+
 		.button {
 			width: 100%;
 		}

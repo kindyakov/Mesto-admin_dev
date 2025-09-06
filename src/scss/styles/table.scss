@@ -1,5 +1,4 @@
-.wrapper-table {
-}
+.wrapper-table {}
 
 .table {
 	display: flex;
@@ -11,23 +10,28 @@
 		.ag-root-wrapper {
 			border: none;
 		}
+
 		.ag-header {
 			border-bottom: 0;
+
 			[aria-colindex='3'],
 			[aria-colindex='4'] {
 				padding: 0 !important;
 				border: 1px solid #efefef;
 				cursor: pointer;
+
 				.ag-header-cell-comp-wrapper {
 					display: flex;
 					align-items: center;
 					justify-content: center;
+
 					.btn-custom-th {
 						width: 100%;
 						height: 100%;
 					}
 				}
 			}
+
 			[aria-colindex='3'] {
 				border-right: none;
 			}
@@ -60,17 +64,21 @@
 		height: 60px;
 		gap: 10px;
 		padding: 10px 20px;
-		& > * {
+
+		&>* {
 			margin: 0;
 		}
+
 		.wrap-buttons {
 			display: flex;
 			gap: 10px;
 			margin-left: auto;
+
 			.button {
 				height: 40px;
 			}
 		}
+
 		@media (max-width: $md4) {
 			align-items: flex-start;
 			flex-direction: column;
@@ -82,9 +90,11 @@
 	.ag-header-group-cell {
 		padding-left: 15px;
 		padding-right: 15px;
+
 		@media (max-width: $md2) {
 			padding-left: 10px;
 			padding-right: 10px;
+
 			&:first-child {
 				padding-left: 20px;
 			}
@@ -98,8 +108,7 @@
 		color: #4f5b67;
 	}
 
-	.ag-header-cell {
-	}
+	.ag-header-cell {}
 
 	.custom-header {
 		display: flex;
@@ -148,13 +157,15 @@
 			height: 100%;
 			display: flex;
 			gap: 10px;
-			> div {
+
+			>div {
 				flex: 0 1 50%;
 				display: flex;
 				align-items: center;
 				justify-content: center;
 				border-radius: 2px;
 				overflow: hidden;
+
 				img {
 					max-width: 100%;
 					max-height: 100%;
@@ -173,6 +184,7 @@
 
 		.wp-input.not-edit.cursor-pointer {
 			cursor: pointer;
+
 			.input-cell {
 				cursor: pointer;
 			}
@@ -182,6 +194,7 @@
 			width: 100%;
 			border-bottom: 1px solid $blue;
 			transition: 0.2s;
+
 			&:hover {
 				border-color: transparent;
 			}
@@ -190,6 +203,7 @@
 		@media (max-width: $md2) {
 			padding-left: 10px;
 			padding-right: 10px;
+
 			&:first-child {
 				padding-left: 20px;
 			}
@@ -258,10 +272,12 @@
 		border-radius: 22px;
 		padding: 6px 10px;
 		line-height: 100%;
+
 		&.warning {
 			color: $yellow;
 			background-color: $yellow-light;
 		}
+
 		&.error {
 			color: $red;
 			background-color: $red-light;
@@ -289,11 +305,13 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
+
 		.icon {
 			width: 15px;
 			height: 15px;
 			fill: #212b36;
 			flex-shrink: 0;
+
 			&.icon-profile {
 				fill: #a8b0b9;
 			}
@@ -302,6 +320,7 @@
 
 	.days-left-p {
 		position: relative;
+
 		&._payments-soon {
 			&::before {
 				content: '';
@@ -316,8 +335,7 @@
 		}
 	}
 
-	&.table-clients {
-	}
+	&.table-clients {}
 
 	&__top {
 		display: flex;
@@ -327,12 +345,15 @@
 		gap: 10px;
 		border: 1px solid #e1e8f0;
 		border-bottom: none;
+
 		@media (max-width: $md2) {
 			padding: 20px;
 		}
+
 		@media (max-width: $md5) {
 			flex-direction: column;
 		}
+
 		@media (max-width: $md6) {
 			padding: 10px;
 		}
@@ -343,11 +364,13 @@
 		gap: 10px;
 		flex: 1 1 auto;
 		flex-wrap: wrap;
+
 		.wp-input {
 			.icon-search {
 				width: 15px;
 				height: 15px;
 			}
+
 			&.wp-input-search {
 				max-width: 580px;
 				min-width: 250px;
@@ -355,6 +378,7 @@
 				order: -1;
 			}
 		}
+
 		.input-table-search {
 			padding: 5px 15px;
 			height: 40px;
@@ -373,10 +397,12 @@
 		display: flex;
 		align-items: center;
 		gap: 10px;
+
 		@media (max-width: $md3) {
 			width: 100%;
 			flex-wrap: wrap;
 		}
+
 		@media (max-width: $md4) {
 			button span {
 				display: none;
@@ -392,6 +418,7 @@
 			// justify-content: space-between;
 		}
 	}
+
 	// &__button {	}
 
 	// &__content {}
@@ -404,6 +431,7 @@
 
 	.btn-custom-th {
 		transition: background-color 0.2s;
+
 		&:hover {
 			background-color: #e1edfd;
 		}
@@ -430,6 +458,7 @@
 		&::before {
 			transform: translate(-50%, -50%) rotate(45deg);
 		}
+
 		&::after {
 			transform: translate(-50%, -50%) rotate(-45deg);
 		}
@@ -437,7 +466,9 @@
 		&._show {
 			opacity: 1;
 			visibility: visible;
+
 			&:hover {
+
 				&::before,
 				&::after {
 					background-color: $red;
@@ -454,8 +485,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		.icon-edit {
-		}
+
+		.icon-edit {}
 
 		.icon-check {
 			display: none;
@@ -466,16 +497,19 @@
 			.icon-edit {
 				display: none;
 			}
+
 			.icon-check {
 				display: inline-block;
 			}
 		}
 	}
+
 	.ag-paging-panel {
 		.paging-show-count {
 			display: flex;
 			align-items: center;
 			gap: 10px;
+
 			.mySelect {
 				&__input {
 					padding: 10px;
@@ -501,7 +535,8 @@
 
 			[type='radio'] {
 				display: none;
-				&:checked + .label-radio {
+
+				&:checked+.label-radio {
 					background-color: $blue-light;
 					color: $blue;
 				}
@@ -513,6 +548,7 @@
 			cursor: pointer;
 			padding: 5px;
 			transition: 0.2s;
+
 			&:hover {
 				color: $blue;
 			}
@@ -546,6 +582,7 @@
 			padding: 6px 8px;
 			font-size: 14px;
 			border-color: #dddcdc;
+
 			&:focus {
 				border-color: $blue;
 			}
@@ -567,8 +604,10 @@
 		min-height: 100px;
 		height: 100%;
 		padding-left: 10px;
+
 		li {
 			position: relative;
+
 			&::before,
 			&::after {
 				content: '';
@@ -576,6 +615,7 @@
 				position: absolute;
 				top: 50%;
 			}
+
 			&::before {
 				right: 100%;
 				width: 10px;
@@ -604,6 +644,7 @@
 			.wrapper-checkbox {
 				font-weight: 400;
 				white-space: nowrap;
+
 				p {
 					max-width: 200px;
 					overflow: hidden;
@@ -627,6 +668,7 @@
 	gap: 2px;
 	width: 100%;
 	height: 100%;
+
 	span {
 		width: 4px;
 		height: 4px;
@@ -658,6 +700,7 @@
 		span {
 			display: none;
 		}
+
 		.icon {
 			display: block;
 		}
@@ -675,6 +718,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+
 		.icon {
 			stroke: #6c7288;
 			fill: none;
@@ -694,6 +738,7 @@
 	&__pages {
 		display: flex;
 		align-items: center;
+
 		li {
 			width: 30px;
 			height: 30px;

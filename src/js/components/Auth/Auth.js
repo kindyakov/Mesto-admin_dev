@@ -182,7 +182,6 @@ class Auth {
   #setCookies(token, manager, expiration) {
     const secureCookieOptions = `max-age=${expiration}; path=/; secure; samesite=strict`;
     document.cookie = `${COOKIE_KEYS.TOKEN}=Bearer ${token}; ${secureCookieOptions}`;
-    //document.cookie = `${COOKIE_KEYS.MANAGER}=${JSON.stringify(manager)}; ${secureCookieOptions}`;
     localStorage.setItem(COOKIE_KEYS.MANAGER, JSON.stringify(manager))
   }
 

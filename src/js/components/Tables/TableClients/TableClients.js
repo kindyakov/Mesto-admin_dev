@@ -107,7 +107,7 @@ class TableClients extends Table {
 
 		const defaultParams = {
 			selectTypeUser: false,
-			onChangeTypeUser: () => {}
+			onChangeTypeUser: () => { }
 		};
 
 		const mergedOptions = Object.assign({}, defaultOptions, options);
@@ -129,7 +129,7 @@ class TableClients extends Table {
 		let form;
 
 		const tippyInstance = actions(button, {
-			onOpen: () => {},
+			onOpen: () => { },
 			attrModal: 'modal-client',
 			attributes: [['user-id', params.data.user_id]],
 			data: params.data

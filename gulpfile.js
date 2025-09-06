@@ -76,10 +76,11 @@ import ftp from './gulp/tasks/ftp.js'
 import php from './gulp/tasks/php.js'
 import { video } from "./gulp/tasks/video.js";
 import { createRepo } from './gulp/tasks/git.js';
+import { css } from './gulp/tasks/css.js';
 
 function watcher() {
   gulp.watch(path.watch.assets, copy)
-  gulp.watch(path.watch.html, html)
+  gulp.watch(path.watch.html, gulp.parallel(html, css))
   gulp.watch(path.watch.scssCritical, insertCriticalCss)
   gulp.watch(path.watch.scss, scss)
   gulp.watch(path.watch.js, js)
@@ -90,8 +91,8 @@ function watcher() {
 // Последовательная обработка шрифтов 
 const fonts = gulp.series(otfToTtf, ttfToWoff, fontsStyle, iconsfonts)
 // Основные задачи
-const mainTasks = gulp.series(video, gulp.parallel(copy, gulp.series(insertCriticalCss, html, htmlReplaceExtensionImg, js), scss, images, php))
-const devTasks = gulp.series(video, gulp.parallel(copy, gulp.series(generateHtmlData, insertCriticalCss, html), scss, js, images, php))
+const mainTasks = gulp.series(video, gulp.parallel(copy, gulp.series(insertCriticalCss, html, htmlReplaceExtensionImg, js), scss, css, images, php))
+const devTasks = gulp.series(video, gulp.parallel(copy, gulp.series(generateHtmlData, insertCriticalCss, html), scss, css, js, images, php))
 // Сценарий выполнения задач 
 const dev = gulp.series(reset, devTasks, gulp.parallel(watcher, server))
 const build = gulp.series(reset, mainTasks)

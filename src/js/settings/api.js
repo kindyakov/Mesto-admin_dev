@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'https://store-demo-test.ru'; // https://store-mesto.ru
-
+const baseURL = 'https://store-mesto-api.ru';
 axios.defaults.timeout = 60000;
 
 export const api = axios.create({ baseURL });

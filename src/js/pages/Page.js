@@ -6,10 +6,12 @@ class Page {
 		this.wrapper = document.querySelector(`[data-content="${page}"]`);
 		//this.app = window.app;
 		const now = new Date();
-		this.app = {...window.app, defaultDate: [
-			new Date(now.getFullYear(), now.getMonth(), 1),
-			new Date(now.getFullYear(), now.getMonth() + 1, 0)
-		]};
+		this.app = {
+			...window.app, defaultDate: [
+				new Date(now.getFullYear(), now.getMonth(), 1),
+				new Date(now.getFullYear(), now.getMonth() + 1, 0)
+			]
+		};
 
 		this.tables = [];
 		this.charts = [];
@@ -30,7 +32,7 @@ class Page {
 			charts.forEach(_chart => {
 				const { id, ChartComponent, options = {} } = _chart;
 				const ctx = this.wrapper.querySelector(`#${id}`);
-				const chart = new ChartComponent(ctx, options, this.app );
+				const chart = new ChartComponent(ctx, options, this.app);
 				chart.wrapper = this.wrapper;
 				this.charts.push(chart);
 			});
@@ -39,13 +41,13 @@ class Page {
 		this.init(page);
 	}
 
-	onRender() {}
+	onRender() { }
 
 	init(page) {
 		this.events();
 	}
 
-	events() {}
+	events() { }
 
 	changeQueryParams(params, table = null) {
 		this.queryParams = mergeQueryParams(this.queryParams, params);
@@ -56,14 +58,14 @@ class Page {
 		}
 	}
 
-	actionsTables(callback = () => {}) {
+	actionsTables(callback = () => { }) {
 		if (!this.tables.length) return console.error('Нет таблиц');
 		this.tables.forEach((table, i) => {
 			callback(table, i);
 		});
 	}
 
-	actionsCharts(callback = () => {}) {
+	actionsCharts(callback = () => { }) {
 		if (!this.charts.length) return;
 		this.charts.forEach((chart, i) => {
 			callback(chart, i);

@@ -11,13 +11,14 @@ class ChartCellOccupancy extends BaseChart {
     const defaultOptions = {
       type: 'doughnut',
       data: {
-        labels: ['Свободные', 'Забронированные', 'Занятые'],
+        labels: ['Свободные', 'Забронированные', 'Занятые', 'Прочее'],
         datasets: [{
-          data: [20, 60, 20], // Проценты или значения
+          data: [20, 40, 20, 20], // Проценты или значения
           backgroundColor: [
             '#3b50e1',
             '#ACB3E4',
-            '#8fd0ef'
+            '#8fd0ef',
+            "#ABCCCF"
           ],
           hoverOffset: 4
         }]
@@ -122,18 +123,35 @@ class ChartCellOccupancy extends BaseChart {
     const [free = null] = rented_cnt.filter(obj => +obj.rented === 0)
     const [booked = null] = rented_cnt.filter(obj => +obj.rented === 0.5)
     const [busy = null] = rented_cnt.filter(obj => +obj.rented === 1)
+    const other = rented_cnt.filter(obj => +obj.rented !== 1 && +obj.rented !== 0.5 && +obj.rented !== 1 && +obj.rented !== -1)
+
+    const result = other.reduce((acc, obj) => {
+      for (let key in obj) {
+        if (key !== 'rented') {
+          acc[key] = (acc[key] || 0) + obj[key];
+        }
+      }
+      return acc;
+    }, {});
+
+    console.log(result);
 
     this.chart.data.datasets[0].data = [
       free ? free.cnt : 0,
       booked ? booked.cnt : 0,
-      busy ? busy.cnt : 0
+      busy ? busy.cnt : 0,
+      other ? result.cnt : 0
     ]
 
     this.countCellsEl.textContent = plan_rooms.length
     this.widgets.length && this.widgets.forEach(widget => {
-      const rented = +widget.getAttribute('data-chart-widget')
-      const [currentData = null] = rented_cnt.filter(obj => +obj.rented === rented)
-      widget.innerText = currentData ? `${currentData.rate.toFixed(2)}%` : '0%'
+      const rented = widget.getAttribute('data-chart-widget')
+      if (rented === 'other') {
+        widget.innerText = result.rate.toFixed(1) + "%"
+      } else {
+        const [currentData = null] = rented_cnt.filter(obj => +obj.rented === +rented)
+        widget.innerText = currentData ? `${currentData.rate.toFixed(2)}%` : '0%'
+      }
     })
 
     this.chart.update()

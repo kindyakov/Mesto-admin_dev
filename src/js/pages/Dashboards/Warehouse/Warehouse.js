@@ -68,23 +68,34 @@ class Warehouse extends Dashboards {
 		this.filterRooms.onApply = filterParams => this.renderScheme(filterParams);
 	}
 
-	renderWidgets(data) {
-		if (!this.widgets.length) return;
-		this.widgets.forEach(widget => {
-			const { rented_cnt } = data;
-			const [rented, str] = widget.getAttribute('data-render-widget').split(',');
-			let [currentData = null] = rented_cnt.filter(obj => +obj.rented === +rented);
-			if (currentData && rented == 0) {
-				let [moreData = null] = rented_cnt.filter(obj => -2 == obj.rented);
-				currentData.area += moreData.area;
-				currentData.cnt += moreData.cnt;
-				currentData.rate += moreData.rate;
-			}
+	renderWidgets({ rented_cnt }) {
+		// if (!this.widgets.length) return;
+		// this.widgets.forEach(widget => {
+		// 	const [rented, str] = widget.getAttribute('data-render-widget').split(',');
+		// 	let [currentData = null] = rented_cnt.filter(obj => +obj.rented === +rented);
+		// 	if (currentData && rented == 0) {
+		// 		let [moreData = null] = rented_cnt.filter(obj => -2 == obj.rented);
+		// 		currentData.area += moreData.area;
+		// 		currentData.cnt += moreData.cnt;
+		// 		currentData.rate += moreData.rate;
+		// 	}
 
-			widget.innerText = currentData
-				? `${formatNumber(currentData.rate)}% (${currentData.cnt.toFixed(0)}, ${formatNumber(currentData.area)} м²)`
-				: '0% (0)';
-		});
+		// 	widget.innerText = currentData
+		// 		? `${formatNumber(currentData.rate)}% (${currentData.cnt.toFixed(0)}, ${formatNumber(currentData.area)} м²)`
+		// 		: '0% (0)';
+		// });
+
+		const items = this.wrapper.querySelectorAll('[room-rented][room-key]')
+		items.length && items.forEach(item => {
+			const rented = item.getAttribute('room-rented')
+			const key = item.getAttribute('room-key')
+			const data = rented_cnt.find(obj => obj.rented === parseFloat(rented))
+			if (data && data[key]) {
+				item.textContent = key === 'cnt' ? data[key].toFixed(0) : formatNumber(data[key])
+			} else {
+				item.textContent = '0'
+			}
+		})
 	}
 
 	handleChangeInput({ target }) {

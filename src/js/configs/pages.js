@@ -84,6 +84,12 @@ export const pages = {
 			return access;
 		}
 	},
+	'dashboards/plan': {
+		path: 'Dashboards/Plan/Plan.js',
+		accessCheck: ({ tab, content, user }) => {
+			return actionDashboards({ tab, content, user });
+		}
+	},
 	'charging-locks': {
 		path: 'ChargingLocks/ChargingLocks.js',
 		accessCheck: ({ tab, content, user }) => {

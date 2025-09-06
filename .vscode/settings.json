@@ -1,3 +1,10 @@
 {
-	"CodeGPT.apiKey": "CodeGPT Plus Beta"
+	"CodeGPT.apiKey": "CodeGPT Plus Beta",
+	"python-envs.pythonProjects": [
+		{
+			"path": "gulp/tasks",
+			"envManager": "ms-python.python:venv",
+			"packageManager": "ms-python.python:pip"
+		}
+	]
 }

@@ -1,0 +1,245 @@
+<div class="main__content content-main" data-content="dashboards/plan" style="gap: 0;">
+  <form class="main__filter form-filter-dashboards">
+    <label class="main__date-filter">
+      <svg class='icon icon-calendar'>
+        <use xlink:href='img/svg/sprite.svg#calendar'></use>
+      </svg>
+      <input type="text" class="input-date-filter" name="start_date,end_date" placeholder="Дата">
+    </label>
+  </form>
+
+  <div class="flex gap-[6px] max-[679px]:flex-col mt-11">
+    <div class="flex flex-col gap-[6px] border border-solid border-[#ecedef] py-4 px-3 bg-white flex-1">
+      <div class="flex items-center gap-[6px]">
+        <img src="./img/svg/material-symbols_receipt-long-rounded.svg" class="w-5 h-5">
+        <span class="text-lg font-semibold text-[#1c1d1f]">ВЫРУЧКА в руб.</span>
+      </div>
+      <div class="flex w-full gap-[10px]">
+        <div class="flex flex-col gap-1 flex-auto border-r border-solid border-[#ecedef]">
+          <span class="text-xs text-[#787b80]">План</span>
+          <span class="text-sm text-[#1c1d1f]">300</span>
+        </div>
+        <div class="flex flex-col gap-1 flex-auto border-r border-solid border-[#ecedef]">
+          <span class="text-xs text-[#787b80]">Факт</span>
+          <span class="text-sm text-[#1c1d1f]">240</span>
+        </div>
+        <div class="flex flex-col gap-1 flex-auto justify-between">
+          <div class="w-full h-[6px] bg-[#5fc057] rounded-[10px] mt-1"></div>
+          <div class="flex items-center gap-1">
+            <img src="./img/svg/ion_checkmark-done-circle.svg">
+            <span class="text-sm text-[#1c1d1f]">130%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-[6px] border border-solid border-[#ecedef] py-4 px-3 bg-white flex-1">
+      <div class="flex items-center gap-[6px]">
+        <img src="./img/svg/game-icons_buy-card.svg" class="w-5 h-5">
+        <span class="text-lg font-semibold text-[#1c1d1f]">ПРОДАЖИ КВ.М.</span>
+      </div>
+      <div class="flex w-full gap-[10px]">
+        <div class="flex flex-col gap-1 flex-auto border-r border-solid border-[#ecedef]">
+          <span class="text-xs text-[#787b80]">План</span>
+          <span class="text-sm text-[#1c1d1f]">300</span>
+        </div>
+        <div class="flex flex-col gap-1 flex-auto border-r border-solid border-[#ecedef]">
+          <span class="text-xs text-[#787b80]">Факт</span>
+          <span class="text-sm text-[#1c1d1f]">240</span>
+        </div>
+        <div class="flex flex-col gap-1 flex-auto justify-between">
+          <div class="w-full h-[6px] bg-[#c05757] rounded-[10px] mt-1"></div>
+          <div class="flex items-center gap-1">
+            <img src="./img/svg/carbon_close-filled.svg">
+            <span class="text-sm text-[#1c1d1f]">36%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-[6px] border border-solid border-[#ecedef] py-4 px-3 bg-white flex-1">
+      <div class="flex items-center gap-[6px]">
+        <img src="./img/svg/carbon_calls-incoming.svg" class="w-5 h-5">
+        <span class="text-lg font-semibold text-[#1c1d1f]">ЛИДЫ</span>
+      </div>
+      <div class="flex w-full gap-[10px]">
+        <div class="flex flex-col gap-1 flex-auto border-r border-solid border-[#ecedef]">
+          <span class="text-xs text-[#787b80]">План</span>
+          <span class="text-sm text-[#1c1d1f]">300</span>
+        </div>
+        <div class="flex flex-col gap-1 flex-auto border-r border-solid border-[#ecedef]">
+          <span class="text-xs text-[#787b80]">Факт</span>
+          <span class="text-sm text-[#1c1d1f]">240</span>
+        </div>
+        <div class="flex flex-col gap-1 flex-auto justify-between">
+          <div class="w-full h-[6px] bg-[#5fc057] rounded-[10px] mt-1"></div>
+          <div class="flex items-center gap-1">
+            <img src="./img/svg/ion_checkmark-done-circle.svg">
+            <span class="text-sm text-[#1c1d1f]">130%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-4 mt-11">
+    <div class="flex flex-col gap-[6px] border border-solid border-[#ecedef] py-4 px-3 bg-white flex-auto">
+      <div class="flex items-center justify-between gap-[6px]">
+        <div class="flex items-center gap-[6px]">
+          <img src="./img/svg/material-symbols_receipt-long-rounded.svg" class="w-5 h-5">
+          <span class="text-lg font-semibold text-[#1c1d1f] max-[479px]:text-xs">ВЫРУЧКА, руб. План/Факт</span>
+        </div>
+        <div class="flex justify-center gap-[6px]">
+          <div class="w-4 h-4 rounded-sm shrink-0 bg-[#166eaf]"></div>
+          <span class="text-xs text-[#1c1d1f]">Факт</span>
+          <div class="w-4 h-4 rounded-sm shrink-0 bg-[#51b5f6]"></div>
+          <span class="text-xs text-[#1c1d1f]">План</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <div class="w-full flex h-4">
+          <div class="w-2/3 rounded-s-[10px] bg-[#166eaf] h-full flex items-center justify-center ">
+            <span class="text-center text-white text-xs">250 000</span>
+          </div>
+          <div class="w-1/3 rounded-e-[10px] bg-[#51b5f6] h-full flex items-center justify-center">
+            <span class="text-center text-white text-xs">325 000</span>
+          </div>
+        </div>
+        <div class="flex items-center w-full justify-between gap-1 text-[10px] text-[#787b80]">
+          <span>0</span>
+          <span>50 000</span>
+          <span>100 000</span>
+          <span>150 000</span>
+          <span>200 000</span>
+          <span>250 000</span>
+          <span>300 000</span>
+          <span>350 000</span>
+          <span>400 000</span>
+          <span>450 000</span>
+          <span>500 000</span>
+          <span>550 000</span>
+          <span>600 000</span>
+          <span>650 000</span>
+          <span>700 000</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-[6px] border border-solid border-[#ecedef] py-4 px-3 bg-white flex-auto">
+      <div class="flex items-center justify-between gap-[6px]">
+        <div class="flex items-center gap-[6px]">
+          <img src="./img/svg/game-icons_buy-card.svg" class="w-5 h-5">
+          <span class="text-lg font-semibold text-[#1c1d1f] max-[479px]:text-xs">ПРОДАЖА кв.м. План/Факт</span>
+        </div>
+        <div class="flex justify-center gap-[6px]">
+          <div class="w-4 h-4 rounded-sm shrink-0 bg-[#166eaf]"></div>
+          <span class="text-xs text-[#1c1d1f]">Факт</span>
+          <div class="w-4 h-4 rounded-sm shrink-0 bg-[#51b5f6]"></div>
+          <span class="text-xs text-[#1c1d1f]">План</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <div class="w-full flex h-4">
+          <div class="w-2/3 rounded-s-[10px] bg-[#166eaf] h-full flex items-center justify-center ">
+            <span class="text-center text-white text-xs">250 000</span>
+          </div>
+          <div class="w-1/3 rounded-e-[10px] bg-[#51b5f6] h-full flex items-center justify-center">
+            <span class="text-center text-white text-xs">325 000</span>
+          </div>
+        </div>
+        <div class="flex items-center w-full justify-between gap-1 text-[10px] text-[#787b80]">
+          <span>0</span>
+          <span>50 000</span>
+          <span>100 000</span>
+          <span>150 000</span>
+          <span>200 000</span>
+          <span>250 000</span>
+          <span>300 000</span>
+          <span>350 000</span>
+          <span>400 000</span>
+          <span>450 000</span>
+          <span>500 000</span>
+          <span>550 000</span>
+          <span>600 000</span>
+          <span>650 000</span>
+          <span>700 000</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-[6px] border border-solid border-[#ecedef] py-4 px-3 bg-white flex-auto">
+      <div class="flex items-center justify-between gap-[6px]">
+        <div class="flex items-center gap-[6px]">
+          <img src="./img/svg/carbon_calls-incoming.svg" class="w-5 h-5">
+          <span class="text-lg font-semibold text-[#1c1d1f] max-[479px]:text-xs">ЛИДЫ План/Факт</span>
+        </div>
+        <div class="flex justify-center gap-[6px]">
+          <div class="w-4 h-4 rounded-sm shrink-0 bg-[#166eaf]"></div>
+          <span class="text-xs text-[#1c1d1f]">Факт</span>
+          <div class="w-4 h-4 rounded-sm shrink-0 bg-[#51b5f6]"></div>
+          <span class="text-xs text-[#1c1d1f]">План</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <div class="w-full flex h-4">
+          <div class="w-2/3 rounded-s-[10px] bg-[#166eaf] h-full flex items-center justify-center ">
+            <span class="text-center text-white text-xs">250 000</span>
+          </div>
+          <div class="w-1/3 rounded-e-[10px] bg-[#51b5f6] h-full flex items-center justify-center">
+            <span class="text-center text-white text-xs">325 000</span>
+          </div>
+        </div>
+        <div class="flex items-center w-full justify-between gap-1 text-[10px] text-[#787b80]">
+          <span>0</span>
+          <span>50 000</span>
+          <span>100 000</span>
+          <span>150 000</span>
+          <span>200 000</span>
+          <span>250 000</span>
+          <span>300 000</span>
+          <span>350 000</span>
+          <span>400 000</span>
+          <span>450 000</span>
+          <span>500 000</span>
+          <span>550 000</span>
+          <span>600 000</span>
+          <span>650 000</span>
+          <span>700 000</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table mt-11">
+    <div class="flex w-full border border-b-0 border-solid border-[#ecedef]">
+      <div class="w-1/3 text-center flex justify-center items-center px-2 py-3 border-r border-solid border-[#ecedef]">
+        <b class="flex-auto">ВЫРУЧКА</b>
+        <button class="w-7 h-7 border border-[#ECEDEF] shrink-0 flex justify-center items-center">
+          <svg class='icon icon-no-show w-4 h-4'>
+            <use xlink:href='img/svg/sprite.svg#no-show'></use>
+          </svg>
+        </button>
+      </div>
+      <div class="w-1/3 text-center flex justify-center items-center px-2 py-3 border-r border-solid border-[#ecedef]">
+        <b style="flex: 1 1 auto;">ПРОДАЖА</b>
+        <button class="w-7 h-7 border border-solid border-[#ECEDEF] shrink-0 flex justify-center items-center">
+          <svg class='icon icon-no-show w-4 h-4'>
+            <use xlink:href='img/svg/sprite.svg#no-show'></use>
+          </svg>
+        </button>
+      </div>
+      <div class="w-1/3 text-center flex justify-center items-center px-2 py-3">
+        <b style="flex: 1 1 auto;">МАРКЕТИНГ</b>
+        <button class="w-7 h-7 border border-solid border-[#ECEDEF] shrink-0 flex justify-center items-center">
+          <svg class='icon icon-no-show w-4 h-4'>
+            <use xlink:href='img/svg/sprite.svg#no-show'></use>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="table__content table-plan ag-theme-quartz text-xs" style="height: 770px;">
+    </div>
+  </div>
+</div>
