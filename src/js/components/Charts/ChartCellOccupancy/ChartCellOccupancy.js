@@ -2,10 +2,6 @@ import BaseChart from "../BaseChart.js"
 import merge from 'lodash.merge'
 import { Select } from '../../../modules/mySelect.js';
 
-function generateRandomData(length, min, max) {
-  return Array.from({ length }, () => Math.floor(Math.random() * (max - min + 1)) + min);
-}
-
 class ChartCellOccupancy extends BaseChart {
   constructor(ctx, addOptions = {}) {
     const defaultOptions = {
@@ -13,7 +9,7 @@ class ChartCellOccupancy extends BaseChart {
       data: {
         labels: ['Свободные', 'Забронированные', 'Занятые', 'Прочее'],
         datasets: [{
-          data: [20, 40, 20, 20], // Проценты или значения
+          data: [20, 40, 20, 20],
           backgroundColor: [
             '#3b50e1',
             '#ACB3E4',
@@ -67,6 +63,7 @@ class ChartCellOccupancy extends BaseChart {
         this.dataFilter(this.rooms, 0, floor),
         this.dataFilter(this.rooms, 0.5, floor),
         this.dataFilter(this.rooms, 1, floor),
+        this.dataFilter(this.rooms, 'other', floor)
       ]
 
       this.chart.update();
@@ -79,6 +76,7 @@ class ChartCellOccupancy extends BaseChart {
           this.dataFilter(this.rooms, 0),
           this.dataFilter(this.rooms, 0.5),
           this.dataFilter(this.rooms, 1),
+          this.dataFilter(this.rooms, 'other'),
         ]
         this.chart.update();
       },
@@ -105,13 +103,30 @@ class ChartCellOccupancy extends BaseChart {
   }
 
   dataFilter(rooms, rented, floor = false) {
-    let data = []
+    let filteredRooms = [];
+
     if (floor) {
-      data = rooms.filter(room => room.rented == rented && room.floor == floor)
+      filteredRooms = rooms.filter(room => room.floor == floor);
     } else {
-      data = rooms.filter(room => room.rented == rented)
+      filteredRooms = rooms;
     }
-    return data.length
+
+    // Если rented - это массив (для "other")
+    if (Array.isArray(rented)) {
+      return filteredRooms.filter(room => rented.includes(room.rented)).length;
+    }
+
+    // Если rented === 'other', фильтруем все кроме 0, 0.5, 1
+    if (rented === 'other') {
+      return filteredRooms.filter(room =>
+        room.rented !== 0 &&
+        room.rented !== 0.5 &&
+        room.rented !== 1
+      ).length;
+    }
+
+    // Обычная фильтрация по конкретному значению rented
+    return filteredRooms.filter(room => room.rented == rented).length;
   }
 
   render(data) {
@@ -123,7 +138,7 @@ class ChartCellOccupancy extends BaseChart {
     const [free = null] = rented_cnt.filter(obj => +obj.rented === 0)
     const [booked = null] = rented_cnt.filter(obj => +obj.rented === 0.5)
     const [busy = null] = rented_cnt.filter(obj => +obj.rented === 1)
-    const other = rented_cnt.filter(obj => +obj.rented !== 1 && +obj.rented !== 0.5 && +obj.rented !== 1 && +obj.rented !== -1)
+    const other = rented_cnt.filter(obj => +obj.rented !== 1 && +obj.rented !== 0.5 && +obj.rented !== -1)
 
     const result = other.reduce((acc, obj) => {
       for (let key in obj) {

@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.table-plan .input-cell {
+  border: none;
+  padding: 5px;
+}
+
+.table-plan .input-cell:not(.not-edit) {
+  background-color: #eff4fb;
+}

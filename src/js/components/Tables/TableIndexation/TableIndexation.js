@@ -132,7 +132,6 @@ class TableIndexation extends Table {
 					minWidth: 100,
 					flex: 0.6,
 					cellRenderer: params => {
-						// Определяем формат даты на основе наличия дня
 						const el = cellRendererInput(params, {
 							funcFormate: value => {
 								dateFormatter(value);
