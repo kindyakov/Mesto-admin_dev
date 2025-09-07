@@ -21,7 +21,7 @@ export function chatHtml(data) {
           <div class="chat__messages_header-chat">
             <button class="button-back btn-open-chats">
               <svg class="icon icon-arrow">
-                <use xlink:href="img/svg/sprite.svg#arrow"></use>
+                <use xlink:href="#arrow"></use>
               </svg>
             </button>
             <div class="img">
@@ -94,7 +94,7 @@ export function name(data) {
               <div class="preview">${data.previ}</div>
               <button class="btn-del">
                 <svg class='icon icon-close'>
-                  <use xlink:href='img/svg/sprite.svg#close'></use>
+                  <use xlink:href='#close'></use>
                 </svg>
               </button>
             </li>`

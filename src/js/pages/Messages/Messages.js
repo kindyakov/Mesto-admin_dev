@@ -165,8 +165,8 @@ class Messages extends Page {
   loadPreviewFile(e, input) {
     const fileListEl = input.closest('.chat-messages-bottom').querySelector('.file-list')
     const typeFile = e.target.result.split(';')[0].split(':')[1].split('/')[0]
-    const item = createElement('li', { classes: ['chat__messages_file'], content: `<div class="preview">${typeFile === 'image' ? `<img src="${e.target.result}">` : `<svg class='icon icon-file'><use xlink:href='img/svg/sprite.svg#file'></use></svg>`}</div>` })
-    const btnDel = createElement('button', { classes: ['btn-del'], content: `<svg class='icon icon-close'><use xlink:href='img/svg/sprite.svg#close'></use></svg>` })
+    const item = createElement('li', { classes: ['chat__messages_file'], content: `<div class="preview">${typeFile === 'image' ? `<img src="${e.target.result}">` : `<svg class='icon icon-file'><use xlink:href='#file'></use></svg>`}</div>` })
+    const btnDel = createElement('button', { classes: ['btn-del'], content: `<svg class='icon icon-close'><use xlink:href='#close'></use></svg>` })
 
 
     btnDel.addEventListener('click', () => {

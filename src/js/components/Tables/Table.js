@@ -356,7 +356,7 @@ class Table {
 		if (rowNode && fields.length) {
 			fields.forEach(({ field, value }) => {
 				const currentValue = rowNode.data[field];
-				const updatedValue = typeof currentValue === 'number' ? Number(value) : String(value);
+				const updatedValue = typeof currentValue === 'number' ? parseFloat(value) : String(value);
 				const result = rowNode.setDataValue(field, updatedValue);
 			});
 			// rowNode.setData({ ...rowNode.data, [field]: newValue });

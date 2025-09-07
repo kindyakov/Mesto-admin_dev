@@ -27,7 +27,7 @@ export function itemHtml(room_id, isChecked = false, type = 'checkbox') {
               <input type="${type}" class="input-checkbox" name="room_id" id="input-checkbox-${room_id}" value="${room_id}" ${isChecked ? 'checked' : ''}>
               <label for="input-checkbox-${room_id}" class="label-checkbox">
                 <svg class='icon icon-check-3'>
-                  <use xlink:href='img/svg/sprite.svg#check-3'></use>
+                  <use xlink:href='#check-3'></use>
                 </svg>
               </label>
               <span>${room_id}</span>

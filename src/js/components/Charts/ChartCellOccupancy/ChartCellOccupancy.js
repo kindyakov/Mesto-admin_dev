@@ -60,10 +60,10 @@ class ChartCellOccupancy extends BaseChart {
       this.countCellsEl.textContent = filterRooms.length
 
       this.chart.data.datasets[0].data = [
-        this.dataFilter(this.rooms, 0, floor),
+        this.dataFilter(this.rooms, [0, -2], floor),
         this.dataFilter(this.rooms, 0.5, floor),
-        this.dataFilter(this.rooms, 1, floor),
-        this.dataFilter(this.rooms, 'other', floor)
+        this.dataFilter(this.rooms, [1, 0.95], floor),
+        this.dataFilter(this.rooms, 0.75, floor)
       ]
 
       this.chart.update();
@@ -116,13 +116,9 @@ class ChartCellOccupancy extends BaseChart {
       return filteredRooms.filter(room => rented.includes(room.rented)).length;
     }
 
-    // Если rented === 'other', фильтруем все кроме 0, 0.5, 1
+    // Если rented === 'other'
     if (rented === 'other') {
-      return filteredRooms.filter(room =>
-        room.rented !== 0 &&
-        room.rented !== 0.5 &&
-        room.rented !== 1
-      ).length;
+      return filteredRooms.filter(room => room.rented == 0.75).length;
     }
 
     // Обычная фильтрация по конкретному значению rented
@@ -135,10 +131,28 @@ class ChartCellOccupancy extends BaseChart {
     this.rooms = plan_rooms
 
     if (!rented_cnt.length) return
-    const [free = null] = rented_cnt.filter(obj => +obj.rented === 0)
+    const free = rented_cnt
+      .filter(obj => +obj.rented === 0 || +obj.rented === -2)
+      .reduce((acc, obj) => {
+        Object.keys(obj).forEach(key => {
+          if (key !== 'rented') {
+            acc[key] = (acc[key] || 0) + (+obj[key] || 0);
+          }
+        });
+        return acc;
+      }, {});
     const [booked = null] = rented_cnt.filter(obj => +obj.rented === 0.5)
-    const [busy = null] = rented_cnt.filter(obj => +obj.rented === 1)
-    const other = rented_cnt.filter(obj => +obj.rented !== 1 && +obj.rented !== 0.5 && +obj.rented !== -1)
+    const busy = rented_cnt
+      .filter(obj => +obj.rented === 1 || +obj.rented === 0.95)
+      .reduce((acc, obj) => {
+        Object.keys(obj).forEach(key => {
+          if (key !== 'rented') {
+            acc[key] = (acc[key] || 0) + (+obj[key] || 0);
+          }
+        });
+        return acc;
+      }, {});
+    const other = rented_cnt.filter(obj => +obj.rented == 0.75)
 
     const result = other.reduce((acc, obj) => {
       for (let key in obj) {
@@ -148,8 +162,6 @@ class ChartCellOccupancy extends BaseChart {
       }
       return acc;
     }, {});
-
-    console.log(result);
 
     this.chart.data.datasets[0].data = [
       free ? free.cnt : 0,

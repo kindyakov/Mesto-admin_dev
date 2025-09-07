@@ -22,7 +22,7 @@ export class Pagination {
       return `<div class="pagging ${this.options.classPagging} _none">
 	<button class="pagging__arrow left _disabled">
 		<svg class="icon">
-			<use xlink:href="img/svg/sprite.svg#arrow"></use>
+			<use xlink:href="#arrow"></use>
 		</svg>
 	</button>
 	<ul class="pagging__list">
@@ -30,7 +30,7 @@ export class Pagination {
 	</ul>
 	<button class="pagging__arrow right">
 		<svg class="icon">
-			<use xlink:href="img/svg/sprite.svg#arrow"></use>
+			<use xlink:href="#arrow"></use>
 		</svg>
 	</button>
 </div>`

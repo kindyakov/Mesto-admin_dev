@@ -101,11 +101,11 @@ class ChartMonthlyRevenue extends BaseChart {
   onExternal(tooltipEl, chart, tooltip) {
     const dataI = tooltip.dataPoints[0].dataIndex
     const date = chart.data.labels[dataI]
-    tooltipEl.insertAdjacentHTML('afterbegin', `<div><svg class="icon icon-calendar" style="width: 12px; height: 12px; fill: gray; margin-right: 2px;"><use xlink:href="img/svg/sprite.svg#calendar"></use></svg><span style="font-size: 12px; text-align: center;">${dateFormatter(date)}</span></div>`)
+    tooltipEl.insertAdjacentHTML('afterbegin', `<div><svg class="icon icon-calendar" style="width: 12px; height: 12px; fill: gray; margin-right: 2px;"><use xlink:href="#calendar"></use></svg><span style="font-size: 12px; text-align: center;">${dateFormatter(date)}</span></div>`)
   }
 
   render([dataDashboard, { finance_planfact = [] }]) {
-    this.chart.data.labels = finance_planfact.length ? finance_planfact.map(obj => obj.data) : [] 
+    this.chart.data.labels = finance_planfact.length ? finance_planfact.map(obj => obj.data) : []
     this.chart.data.datasets[0].data = finance_planfact.length ? finance_planfact.map(obj => obj.revenue) : []
     this.chart.data.datasets[1].data = finance_planfact.length ? finance_planfact.map(obj => obj.revenue_planned) : []
     this.chart.update()

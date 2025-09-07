@@ -26,7 +26,7 @@ export function cellRendererInput(params, options = {}) {
 	}
 
 	if (iconId) {
-		const icon = `<svg class='icon icon-${iconId}'><use xlink:href='img/svg/sprite.svg#${iconId}'></use></svg>`;
+		const icon = `<svg class='icon icon-${iconId}'><use xlink:href='#${iconId}'></use></svg>`;
 		wpInput.insertAdjacentHTML('afterbegin', icon);
 		wpInput.classList.add('is-icon');
 	}
@@ -54,7 +54,7 @@ export function cellRendererInput(params, options = {}) {
 	return wpInput;
 }
 
-const defaultOptionsSelect = { funcFormate: val => val, el: null, options: [], onSelect: () => {} };
+const defaultOptionsSelect = { funcFormate: val => val, el: null, options: [], onSelect: () => { } };
 
 export function cellRendererSelect(params, opts = {}) {
 	const { funcFormate, el, options, onSelect } = Object.assign({}, defaultOptionsSelect, opts);

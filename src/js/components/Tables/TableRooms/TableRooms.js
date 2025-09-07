@@ -64,7 +64,7 @@ class TableRooms extends Table {
 							classes: ['table-p'],
 							content: `
               <svg class='icon icon-profile'>
-                <use xlink:href='img/svg/sprite.svg#profile'></use>
+                <use xlink:href='#profile'></use>
               </svg>
               <span>${params.value ? params.value : '___'}</span>`
 						});
@@ -134,13 +134,12 @@ class TableRooms extends Table {
 						const div = createElement('div', {
 							classes: ['table-buttons'],
 							content: `${buttonsRoom(params.data)}
-            ${
-							+params.data.rented === 0.75
-								? `<button class="table-button button transparent" data-modal="modal-complete-rent" agr-id="${params.data.agrid || ''}" room-id="${params.data.room_id || ''}">
+            ${+params.data.rented === 0.75
+									? `<button class="table-button button transparent" data-modal="modal-complete-rent" agr-id="${params.data.agrid || ''}" room-id="${params.data.room_id || ''}">
                       <span>Ускорить</span>
                     </button>`
-								: `<button class="table-button button transparent" data-modal="modal-confirm-open-room" data-json="${dataStr(params.data)}"><span>Открыть</span></button>`
-						}`
+									: `<button class="table-button button transparent" data-modal="modal-confirm-open-room" data-json="${dataStr(params.data)}"><span>Открыть</span></button>`
+								}`
 						});
 						return div;
 					}

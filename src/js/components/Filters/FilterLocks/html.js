@@ -24,7 +24,7 @@ export function filterHtml(data) {
           <input name="" type="checkbox" value="0" class="filter__input input-checkbox" id="filter-input--0">
           <label for="filter-input--0" class="label-checkbox">
             <svg class='icon icon-check-3'>
-              <use xlink:href='img/svg/sprite.svg#check-3'></use>
+              <use xlink:href='#check-3'></use>
             </svg>
           </label>
           <span>Разряжен</span>
@@ -33,7 +33,7 @@ export function filterHtml(data) {
           <input name="" type="checkbox" value="0" class="filter__input input-checkbox" id="filter-input--1">
           <label for="filter-input--1" class="label-checkbox">
             <svg class='icon icon-check-3'>
-              <use xlink:href='img/svg/sprite.svg#check-3'></use>
+              <use xlink:href='#check-3'></use>
             </svg>
           </label>
           <span>Сломан</span>
@@ -42,7 +42,7 @@ export function filterHtml(data) {
           <input name="" type="checkbox" value="0" class="filter__input input-checkbox" id="filter-input--2">
           <label for="filter-input--2" class="label-checkbox">
             <svg class='icon icon-check-3'>
-              <use xlink:href='img/svg/sprite.svg#check-3'></use>
+              <use xlink:href='#check-3'></use>
             </svg>
           </label>
           <span>Норм</span>
@@ -51,7 +51,7 @@ export function filterHtml(data) {
           <input name="" type="checkbox" value="0" class="filter__input input-checkbox" id="filter-input--3">
           <label for="filter-input--3" class="label-checkbox">
             <svg class='icon icon-check-3'>
-              <use xlink:href='img/svg/sprite.svg#check-3'></use>
+              <use xlink:href='#check-3'></use>
             </svg>
           </label>
           <span>И т.д</span>

@@ -57,7 +57,7 @@ export class CheckboxManager {
           <input class="input-checkbox ${isAll ? 'all' : ''}" type="checkbox" name="${name}" value="${val == 'Выделить все' ? '' : val}" id="filter-checkbox-${name}-${i}" ${isChecked ? 'checked' : ''}>
           <label class="label-checkbox" for="filter-checkbox-${name}-${i}">
             <svg class="icon">
-              <use xlink:href="img/svg/sprite.svg#check-3"></use>
+              <use xlink:href="#check-3"></use>
             </svg>
           </label>
           <p>${text}</p>

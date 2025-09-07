@@ -3,7 +3,7 @@ import merge from 'lodash.merge'
 import { Select } from '../../../modules/mySelect.js';
 import { dateFormatter } from '../../../settings/dateFormatter.js';
 import { createCalendar } from "../../../settings/createCalendar.js";
-import {getFinancePlan} from '../../../settings/request.js';
+import { getFinancePlan } from '../../../settings/request.js';
 
 
 class ChartAreaRentedCells extends BaseChart {
@@ -80,15 +80,16 @@ class ChartAreaRentedCells extends BaseChart {
       dateFormat: 'd. M, Y',
       //defaultDate: app.defaultDate,
       onChange: async (selectedDates, dateStr, instance) => {
-      if (selectedDates.length === 2) {
-        const data = await getFinancePlan({warehouse_id: window.app.warehouse.warehouse_id,
-        //  this.app.defaultDate = selectedDates;
-        //  this.changeQueryParams({
-        start_date: dateFormatter(selectedDates[0], 'yyyy-MM-dd'),
-        end_date: dateFormatter(selectedDates[1], 'yyyy-MM-dd')
-        });
-        this.render(data)
-      }
+        if (selectedDates.length === 2) {
+          const data = await getFinancePlan({
+            warehouse_id: window.app.warehouse.warehouse_id,
+            //  this.app.defaultDate = selectedDates;
+            //  this.changeQueryParams({
+            start_date: dateFormatter(selectedDates[0], 'yyyy-MM-dd'),
+            end_date: dateFormatter(selectedDates[1], 'yyyy-MM-dd')
+          });
+          this.render(data)
+        }
       }
     });
     console.log(this.calendars)
@@ -130,7 +131,7 @@ class ChartAreaRentedCells extends BaseChart {
       val.innerText = parseFloat(val.innerText).toFixed(1) + ' м²'
     })
 
-    tooltipEl.insertAdjacentHTML('afterbegin', `<div><svg class="icon icon-calendar" style="width: 12px; height: 12px; fill: gray; margin-right: 2px;"><use xlink:href="img/svg/sprite.svg#calendar"></use></svg><span style="font-size: 12px; text-align: center;">${dateFormatter(date)}</span></div>`)
+    tooltipEl.insertAdjacentHTML('afterbegin', `<div><svg class="icon icon-calendar" style="width: 12px; height: 12px; fill: gray; margin-right: 2px;"><use xlink:href="#calendar"></use></svg><span style="font-size: 12px; text-align: center;">${dateFormatter(date)}</span></div>`)
   }
 
   render({ finance_planfact = [] }) {

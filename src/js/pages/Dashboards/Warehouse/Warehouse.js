@@ -69,29 +69,24 @@ class Warehouse extends Dashboards {
 	}
 
 	renderWidgets({ rented_cnt }) {
-		// if (!this.widgets.length) return;
-		// this.widgets.forEach(widget => {
-		// 	const [rented, str] = widget.getAttribute('data-render-widget').split(',');
-		// 	let [currentData = null] = rented_cnt.filter(obj => +obj.rented === +rented);
-		// 	if (currentData && rented == 0) {
-		// 		let [moreData = null] = rented_cnt.filter(obj => -2 == obj.rented);
-		// 		currentData.area += moreData.area;
-		// 		currentData.cnt += moreData.cnt;
-		// 		currentData.rate += moreData.rate;
-		// 	}
-
-		// 	widget.innerText = currentData
-		// 		? `${formatNumber(currentData.rate)}% (${currentData.cnt.toFixed(0)}, ${formatNumber(currentData.area)} м²)`
-		// 		: '0% (0)';
-		// });
-
 		const items = this.wrapper.querySelectorAll('[room-rented][room-key]')
+
 		items.length && items.forEach(item => {
 			const rented = item.getAttribute('room-rented')
 			const key = item.getAttribute('room-key')
 			const data = rented_cnt.find(obj => obj.rented === parseFloat(rented))
 			if (data && data[key]) {
-				item.textContent = key === 'cnt' ? data[key].toFixed(0) : formatNumber(data[key])
+				let value = data[key];
+
+				if (+rented === 0) {
+					const moreData = rented_cnt.find(obj => obj.rented === -2)
+					value += moreData ? moreData[key] : 0
+				} else if (+rented === 1) {
+					const moreData = rented_cnt.find(obj => obj.rented === 0.95)
+					value += moreData ? moreData[key] : 0
+				}
+
+				item.textContent = key === 'cnt' ? value.toFixed(0) : formatNumber(value)
 			} else {
 				item.textContent = '0'
 			}

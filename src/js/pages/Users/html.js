@@ -16,7 +16,7 @@ export function employeeHtml(data) {
       </div>
       <button class="button-open-subordinates">
         <svg class='icon icon-plus'>
-          <use xlink:href='img/svg/sprite.svg#plus'></use>
+          <use xlink:href='#plus'></use>
         </svg>
         <svg viewBox="0 0 8 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-arrow">
           <path

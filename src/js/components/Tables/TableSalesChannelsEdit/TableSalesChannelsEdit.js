@@ -21,9 +21,9 @@ class TableSalesChannelsEdit extends Table {
           headerName: '', field: '', minWidth: 40, width: 40, resizable: false, sortable: false,
           headerComponentParams: {
             template: `<svg class='icon icon-edit' style="flex-shrink: 0; stroke: #000; width: 15px; height: 15px;">
-                        <use xlink:href='img/svg/sprite.svg#edit'></use>
+                        <use xlink:href='#edit'></use>
                       </svg>
-                      <svg class="icon icon-check"><use xlink:href="img/svg/sprite.svg#check"></use></svg>`
+                      <svg class="icon icon-check"><use xlink:href="#check"></use></svg>`
           },
           headerComponent: CustomHeaderComponentEdit
         },
@@ -31,7 +31,7 @@ class TableSalesChannelsEdit extends Table {
           headerName: '', field: 'channel_id', minWidth: 40, width: 40, resizable: false, sortable: false,
           headerComponentParams: {
             template: `<svg class='icon icon-plus' style="flex-shrink: 0; width: 10px; height: 10px;">
-                        <use xlink:href='img/svg/sprite.svg#plus'></use>
+                        <use xlink:href='#plus'></use>
                       </svg>`,
           },
           headerComponent: CustomHeaderComponentAddSales,

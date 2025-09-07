@@ -8,7 +8,7 @@ export function createDaysLeftElement(params) {
     classes: ['table-p', 'days-left-p'],
     content: `
     <!-- <svg class='icon icon-calendar' style="${+params.value <= 0 ? 'fill: red;' : ''}">
-      <use xlink:href='img/svg/sprite.svg#calendar'></use>
+      <use xlink:href='#calendar'></use>
     </svg> -->
     <span style="${+params.value <= 0 ? 'color: red;' : ''}">${params.value ? `${params.value} ${declOfNum(Math.abs(params.value), ['День', 'Дня', 'Дней'])}` : '0 дней'}</span>`
   })

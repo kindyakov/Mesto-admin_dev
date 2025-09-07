@@ -125,7 +125,7 @@ class TableClients extends Table {
 		const row = params.eGridCell.closest('.ag-row');
 		const button = document.createElement('button');
 		button.classList.add('button-table-actions');
-		button.innerHTML = `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`;
+		button.innerHTML = `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='#check'></use></svg>`;
 		let form;
 
 		const tippyInstance = actions(button, {

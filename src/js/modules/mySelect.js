@@ -27,7 +27,7 @@ export class Select {
 			placeholder: '',
 			isDev: false,
 			isDisabled: false,
-			inputHtml: `<svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>`,
+			inputHtml: `<svg class='icon icon-arrow'><use xlink:href='#arrow'></use></svg>`,
 			selectMinWidth: null,
 			selectMaxWidth: null,
 			maxHeightList: null,
@@ -37,7 +37,7 @@ export class Select {
 			onOpen: () => { },
 			onClose: () => { },
 			callbackInput: value => {
-				return `<span>${value}</span><svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>`;
+				return `<span>${value}</span><svg class='icon icon-arrow'><use xlink:href='#arrow'></use></svg>`;
 			},
 			callbackOption: value => {
 				return `<span>${value}</span>`;

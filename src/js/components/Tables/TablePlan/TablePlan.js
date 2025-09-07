@@ -103,12 +103,8 @@ class TablePlan extends Table {
           flex: 0.1,
           cellRenderer: params => {
             this.addHandleDbClickCell(params);
-            const span = createElement('span', {
-              classes: ['table-span-price'],
-              content: params.value
-            });
             return cellRendererInput(params, {
-              inputmode: 'numeric'
+              inputmode: 'decimal'
             });
           }
         },
@@ -277,7 +273,9 @@ class TablePlan extends Table {
         this.changeReadonly(input, true);
         // Обновляем значение в input
         if (originalData && originalData[fieldName] !== undefined) {
-          input.value = originalData[fieldName];
+          input.value = typeof originalData[fieldName] === 'number'
+            ? originalData[fieldName].toString()
+            : originalData[fieldName];
         }
       }
     });
@@ -297,8 +295,8 @@ class TablePlan extends Table {
     this.editableFields.forEach(fieldName => {
       const input = row.querySelector(`input[name="${fieldName}"]`);
       if (input) {
-        const newValue = input.value.replace(/\s/g, ''); // Убираем пробелы
-        const numericValue = newValue ? parseInt(newValue, 10) : 0;
+        const newValue = input.value.replace(/\s/g, '');
+        const numericValue = newValue ? parseFloat(newValue) : 0;
 
         if (numericValue !== rowNode.data[fieldName]) {
           updatedData[fieldName] = numericValue;

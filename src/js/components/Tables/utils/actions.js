@@ -11,7 +11,7 @@ let defaultOptions = {
       button.classList.add('tippy-button', 'table-tippy-client__button', 'btn-edit-row-table')
       button.innerHTML = `
       <svg class='icon icon-edit'>
-        <use xlink:href='img/svg/sprite.svg#edit'></use>
+        <use xlink:href='#edit'></use>
       </svg>
       <span>Редактировать</span>`
 
@@ -22,7 +22,7 @@ let defaultOptions = {
       button.classList.add('tippy-button', 'table-tippy-client__button', 'btn-open')
       button.innerHTML = `
       <svg class='icon icon-arrow-right-circle' styles="fill: none;">
-        <use xlink:href='img/svg/sprite.svg#arrow-right-circle'></use>
+        <use xlink:href='#arrow-right-circle'></use>
       </svg>
       <span>Открыть</span>`
 

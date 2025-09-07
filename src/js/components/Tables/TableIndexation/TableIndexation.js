@@ -32,7 +32,7 @@ class TableIndexation extends Table {
 						const row = params.eGridCell.closest('.ag-row');
 						const button = createElement('button', {
 							classes: ['button-table-row-edit'],
-							content: `<svg class='icon icon-edit edit'><use xlink:href='img/svg/sprite.svg#edit'></use></svg>`
+							content: `<svg class='icon icon-edit edit'><use xlink:href='#edit'></use></svg>`
 						});
 
 						params.colDef.btnEdit = button;
@@ -78,7 +78,7 @@ class TableIndexation extends Table {
 					flex: 1,
 					cellRenderer: params => {
 						const wp = createElement('div', {
-							content: `<svg class='icon icon-profile'><use xlink:href='img/svg/sprite.svg#profile'></use></svg><span>${params.value || ''}</span>`,
+							content: `<svg class='icon icon-profile'><use xlink:href='#profile'></use></svg><span>${params.value || ''}</span>`,
 							attributes: [['style', `display:flex;align-items:center;gap:5px;cur`]],
 							classes: ['hover-line']
 						});

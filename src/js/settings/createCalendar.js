@@ -45,7 +45,7 @@ export const createCalendar = (input, options = {}) => {
       selectM.classList.add('init-custom-select');
       selectM.setAttribute('name', 'flatpickr-month');
       selectM.setAttribute('data-special-select', `${uniqueId}-select-flatpickr`);
-      selectM.setAttribute('data-input-html', '<svg class="icon icon-arrow"><use xlink:href="./img/svg/sprite.svg#arrow"></use></svg>');
+      selectM.setAttribute('data-input-html', '<svg class="icon icon-arrow"><use xlink:href="./#arrow"></use></svg>');
       selectM.innerHTML = '';
 
       months.forEach((month, i) => {

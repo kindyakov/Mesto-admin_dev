@@ -7,10 +7,10 @@ import { inputValidator } from '../../../settings/validates.js';
 
 function btnEditContent() {
 	return `<svg class='icon icon-edit edit'>
-            <use xlink:href='img/svg/sprite.svg#edit'></use>
+            <use xlink:href='#edit'></use>
           </svg>
           <svg class='icon icon-save save'>
-            <use xlink:href='img/svg/sprite.svg#save'></use>
+            <use xlink:href='#save'></use>
           </svg>`;
 }
 

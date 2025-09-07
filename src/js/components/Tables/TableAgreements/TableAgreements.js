@@ -133,7 +133,7 @@ class TableAgreements extends Table {
 
 		const defaultParams = {
 			selectTypeUser: true,
-			onChangeTypeUser: () => {}
+			onChangeTypeUser: () => { }
 		};
 
 		const mergedOptions = Object.assign({}, defaultOptions, options);
@@ -151,7 +151,7 @@ class TableAgreements extends Table {
 		const row = params.eGridCell.closest('.ag-row');
 		const button = createElement('button', {
 			classes: ['button-table-actions'],
-			content: `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`
+			content: `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='#check'></use></svg>`
 		});
 		let form;
 
@@ -161,7 +161,7 @@ class TableAgreements extends Table {
 			attributes: [['agr-id', params.data.agrid]],
 			placement: 'bottom-right',
 			data: params.data,
-			onOpen: () => {}
+			onOpen: () => { }
 		});
 
 		return button;

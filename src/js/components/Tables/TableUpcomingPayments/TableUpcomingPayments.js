@@ -92,7 +92,7 @@ class TableUpcomingPayments extends Table {
 
 						const dropdownTarget = createElement('div', {
 							classes: ['dropdown-target'],
-							content: `<p>Фильтр по цвету</p><svg class="icon icon-arrow"><use xlink:href="img/svg/sprite.svg#arrow"></use></svg>`
+							content: `<p>Фильтр по цвету</p><svg class="icon icon-arrow"><use xlink:href="#arrow"></use></svg>`
 						});
 
 						const instanceTippy = tippy(dropdownTarget, {

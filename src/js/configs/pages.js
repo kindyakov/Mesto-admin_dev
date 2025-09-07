@@ -87,7 +87,7 @@ export const pages = {
 	'dashboards/plan': {
 		path: 'Dashboards/Plan/Plan.js',
 		accessCheck: ({ tab, content, user }) => {
-			return actionDashboards({ tab, content, user });
+			return true
 		}
 	},
 	'charging-locks': {
@@ -195,7 +195,6 @@ export const pages = {
 		path: 'Rooms/Rooms.js',
 		accessCheck: ({ tab, content, user }) => {
 			let access = true;
-
 			if (!window.app.warehouse.warehouse_id) {
 				tab?.classList.add('_none');
 				access = false;

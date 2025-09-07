@@ -21,7 +21,7 @@ class ModalPassport extends BaseModal {
     this.selectApproved = new Select({
       uniqueName: 'select-passport',
       callbackInput: (optionContent, optionValue, select) => {
-        return `<svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-yes"><path d="M1 6L5.66667 10.5L15 1.5" stroke="#0B704E" stroke-width="2"/></svg><svg width="16" height="13" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-no"><path d="M1 9L9 1M9 9L1 1" stroke="#D42424" stroke-width="1.5" /></svg><span>${optionContent}</span><svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>`
+        return `<svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-yes"><path d="M1 6L5.66667 10.5L15 1.5" stroke="#0B704E" stroke-width="2"/></svg><svg width="16" height="13" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-no"><path d="M1 9L9 1M9 9L1 1" stroke="#D42424" stroke-width="1.5" /></svg><span>${optionContent}</span><svg class='icon icon-arrow'><use xlink:href='#arrow'></use></svg>`
       },
       callbackOption: (optionContent, optionValue) => {
         return `${optionValue === '0'

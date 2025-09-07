@@ -28,7 +28,7 @@ class Plan extends Dashboards {
   }
 
   async getData(queryParams = {}) {
-    return getFinancePlan({ warehouse_id: this.app.warehouse.warehouse_id, ...queryParams });
+    return getFinancePlan({ warehouse_id: this.app.warehouse.warehouse_id, ...this.queryParams });
   }
 
   onRender(_, { finance_planfact }) {
@@ -57,16 +57,23 @@ class Plan extends Dashboards {
         return acc;
       }, {});
 
-    result['revenue_percent'] = result.revenue ? result.revenue_accumulated / result.revenue_planned : 0;
-    result['inflow_area_percent'] = result.inflow_area ? result.inflow_area_planned / result.inflow_area_accumulated_planned : 0;
-    result['leads_percent'] = result.leads_fact ? result.leads_planned / result.leads_accumulated_planned : 0;
+    result['revenue_percent'] = result.revenue && result.revenue_planned ? result.revenue / result.revenue_planned : 0;
+    result['inflow_area_percent'] = result.inflow_area && result.inflow_area_planned ? result.inflow_area / result.inflow_area_planned : 0;
+    result['leads_percent'] = result.leads_fact && result.leads_planned ? result.leads_fact / result.leads_planned : 0;
 
     const winds = this.wrapper.querySelectorAll('[data-finance]')
     winds.length && winds.forEach(item => {
       const key = item.dataset.finance
 
       if (key) {
-        item.textContent = result[key] ? formattingPrice(result[key]) : 0
+        let text = 0
+        if (key === 'revenue_planned' || key === 'revenue') {
+          text = formattingPrice(result[key])
+        } else if (result[key]) [
+          text = result[key].toFixed(0)
+        ]
+
+        item.textContent = text
       }
     })
 
@@ -74,15 +81,15 @@ class Plan extends Dashboards {
     rates.length && rates.forEach(item => {
       const key = item.dataset.financeRate
       if (key) {
-        item.textContent = result[key] ? (result[key] * 100).toFixed(0) + '%' : '0%'
+        item.textContent = result[key] && result[key] !== Infinity ? (result[key] * 100).toFixed(0) + '%' : '0%'
       }
     })
 
     const ratesInfo = this.wrapper.querySelectorAll('[data-finance-rate-width]')
     ratesInfo.length && ratesInfo.forEach(item => {
-      const key = item.dataset.financeRateInfo
+      const key = item.dataset.financeRateWidth
       if (key) {
-        item.style.cssText = `background: ${result[key] >= 1 ? '#5fc057' : '#c05757'};
+        item.style.cssText = `background: ${result[key] >= 1 && result[key] !== Infinity ? '#5fc057' : '#c05757'};
         width: ${result[key] >= 1 ? '100%' : (result[key] * 100).toFixed(0) + '%'}`
       }
     })

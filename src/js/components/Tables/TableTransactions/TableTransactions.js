@@ -185,12 +185,12 @@ class TableTransactions extends Table {
 		const row = params.eGridCell.closest('.ag-row');
 		const button = createElement('button', {
 			classes: ['button-table-actions'],
-			content: `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='img/svg/sprite.svg#check'></use></svg>`
+			content: `<span></span><span></span><span></span><svg class='icon icon-check'><use xlink:href='#check'></use></svg>`
 		});
 
 		const tippyInstance = actions(button, {
 			buttonsIs: [true, false],
-			onOpen: () => {}
+			onOpen: () => { }
 		});
 
 		tippyInstance.options.onEdit = async instance => {

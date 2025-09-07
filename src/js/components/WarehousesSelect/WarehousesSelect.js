@@ -8,7 +8,7 @@ class WarehousesSelect {
 			uniqueName: 'warehouse-select',
 			onChange: this.onChange.bind(this),
 			callbackInput: value => {
-				return `<img src="./img/svg/warehouse.svg" alt="Склад" width="20" height="20"><span style="flex: 1 1 auto">${value}</span><svg class='icon icon-arrow'><use xlink:href='img/svg/sprite.svg#arrow'></use></svg>`;
+				return `<img src="./img/svg/warehouse.svg" alt="Склад" width="20" height="20"><span style="flex: 1 1 auto">${value}</span><svg class='icon icon-arrow'><use xlink:href='#arrow'></use></svg>`;
 			}
 		});
 
