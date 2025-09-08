@@ -5,11 +5,92 @@ import { getFormattedDate } from '../../../utils/getFormattedDate.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
 import { api } from '../../../settings/api.js';
+import { HeaderSync } from './HeaderSync.js';
+
 
 class TablePlan extends Table {
   constructor(selector, options, params) {
+    const accordionColumn = window.app?.warehouse?.warehouse_id === 0 ? [{
+      headerName: '',
+      width: 30,
+      resizable: false,
+      sortable: false,
+      pinned: 'left',
+      cellRenderer: ({ data, rowIndex, node, eGridCell }) => {
+        const buttonExpand = createElement('button', {
+          content: `<svg width="15" height="15" viewBox="0 0 4 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M3.75 2.74951H2.25V4.24951H1.75V2.74951H0.25V2.24951H1.75V0.749512H2.25V2.24951H3.75V2.74951Z" fill="#787B80" />
+</svg>`
+        });
+        buttonExpand.className = 'btn-accordion w-5 h-5 border border-solid border-[#ecedef] hover:bg-[#f5f6f7] shrink-0 flex items-center justify-center';
+
+        eGridCell.style.padding = '3px';
+        eGridCell.style.textAlign = 'center';
+
+        buttonExpand.addEventListener('click', () => this.toggleAccordion(node.id, buttonExpand));
+
+        return buttonExpand;
+      }
+    }] : [];
+
     const defaultOptions = {
+      headerHeight: 90,
+      // masterDetail: true,
+      // detailRowHeight: 190, // подогнать под содержимое
+      // detailCellRenderer: (params) => {
+      //   // params.data — исходная строка (master row)
+      //   const detailRows = this.getDetailDataForRow(params.data) || [];
+
+      //   // Если нет данных — вернуть простое сообщение
+      //   if (!detailRows.length) {
+      //     return createElement('div', {
+      //       classes: ['detail-empty'],
+      //       content: 'Деталей нет'
+      //     });
+      //   }
+
+      //   // Собираем DOM — для каждой записи строим небольшую таблицу
+      //   const content = detailRows.map(dr => {
+      //     const rowsHtml = Object.keys(dr).map(key => {
+      //       let value = dr[key];
+
+      //       // Форматирование: даты и чисел
+      //       if (key.toLowerCase().includes('date') || key === 'data') {
+      //         value = getFormattedDate(value);
+      //       } else if (typeof value === 'number' && (key.toLowerCase().includes('revenue') || key.toLowerCase().includes('price') || key.toLowerCase().includes('amount') || key.toLowerCase().includes('accumulated') || key.toLowerCase().includes('area') || key.toLowerCase().includes('leads'))) {
+      //         // для чисел используем форматирование цен/чисел
+      //         try {
+      //           value = formattingPrice(value);
+      //         } catch (e) {
+      //           value = String(value);
+      //         }
+      //       } else {
+      //         value = value === null || value === undefined ? '' : String(value);
+      //       }
+
+      //       // безопасный HTML — ключ и значение как текст
+      //       return `<tr><td class="detail-key">${key}</td><td class="detail-val">${value}</td></tr>`;
+      //     }).join('');
+
+      //     return `<div class="detail-block"><table class="detail-table"><tbody>${rowsHtml}</tbody></table></div>`;
+      //   }).join('');
+
+      //   const wrapper = createElement('div', {
+      //     classes: ['detail-container'],
+      //     content: content
+      //   });
+
+      //   // немного стилей через JS — можно вынести в CSS-файл
+      //   wrapper.style.padding = '8px 12px';
+      //   wrapper.querySelectorAll && wrapper.querySelectorAll('.detail-table').forEach(tbl => {
+      //     tbl.style.borderCollapse = 'collapse';
+      //     tbl.style.width = '100%';
+      //   });
+
+      //   return wrapper;
+      // },
       columnDefs: [
+        ...accordionColumn,
         {
           headerName: '',
           width: 40,
@@ -55,6 +136,7 @@ class TablePlan extends Table {
         },
         {
           headerName: 'Выручка план нарастающим итогом',
+          headerClass: 'header-wrap',
           field: 'revenue_accumulated_planned',
           minWidth: 120,
           flex: 0.1,
@@ -70,6 +152,7 @@ class TablePlan extends Table {
         {
           headerName: 'Выручка факт нарастающим итогом',
           field: 'revenue_accumulated',
+          headerClass: 'header-wrap',
           minWidth: 120,
           flex: 0.1,
           valueFormatter: params => formattingPrice(params.value)
@@ -99,6 +182,7 @@ class TablePlan extends Table {
         {
           headerName: 'Заполнение план нарастающим итогом',
           field: 'inflow_area_accumulated_planned',
+          headerClass: 'header-wrap',
           minWidth: 120,
           flex: 0.1,
           cellRenderer: params => {
@@ -111,12 +195,14 @@ class TablePlan extends Table {
         {
           headerName: 'Заполнение факт общий нарастающим',
           field: 'inflow_area_accumulated',
+          headerClass: 'header-wrap',
           minWidth: 120,
           flex: 0.1,
         },
         {
           headerName: 'Заполнение в день, м2',
           field: 'inflow_area',
+          headerClass: 'header-wrap',
           minWidth: 120,
           flex: 0.1,
         },
@@ -140,6 +226,7 @@ class TablePlan extends Table {
         {
           headerName: 'Лиды план нарастающим итогом',
           field: 'leads_accumulated_planned',
+          headerClass: 'header-wrap',
           minWidth: 120,
           flex: 0.1,
           cellRenderer: params => {
@@ -152,6 +239,7 @@ class TablePlan extends Table {
         {
           headerName: 'Лидов факт общий нарастающим',
           field: 'leads_accumulated_fact',
+          headerClass: 'header-wrap',
           minWidth: 120,
           flex: 0.1,
         },
@@ -169,6 +257,7 @@ class TablePlan extends Table {
         },
         {
           headerName: '% выполнения ОБЩИЙ',
+          headerClass: 'header-wrap',
           minWidth: 120,
           flex: 0.1,
           cellRenderer: ({ data }) => {
@@ -185,7 +274,10 @@ class TablePlan extends Table {
           }
         },
       ],
-      pagination: false
+      pagination: false,
+      onColumnResized: params => {
+        this.headerSync?.syncWidths(params.api);
+      },
     };
 
     const defaultParams = {
@@ -205,6 +297,77 @@ class TablePlan extends Table {
 
     // Для хранения оригинальных значений при редактировании
     this.originalRowData = new Map();
+    this.headerSync = null;
+
+    this.onReadyFunctions.push(() => {
+      this.headerSync = new HeaderSync(this.wpTable, this.gridApi);
+      setTimeout(() => this.headerSync.init(), 100);
+    })
+  }
+
+  toggleAccordion(rowId, button) {
+    const rowNode = this.gridApi.getRowNode(rowId);
+    const isExpanded = rowNode.expanded;
+
+    if (isExpanded) {
+      rowNode.setExpanded(false);
+      button.classList.remove('expanded');
+      button.querySelector('svg').style.transform = '';
+    } else {
+      // Закрываем все остальные
+      this.gridApi.forEachNode(node => {
+        if (node.expanded && node.id !== rowId) {
+          node.setExpanded(false);
+          const otherButton = this.wpTable.querySelector(`[row-id="${node.id}"] .btn-accordion`);
+          if (otherButton) {
+            otherButton.classList.remove('expanded');
+            otherButton.querySelector('svg').style.transform = '';
+          }
+        }
+      });
+
+      // Открываем текущий
+      rowNode.setExpanded(true);
+      button.classList.add('expanded');
+      button.querySelector('svg').style.transform = 'rotate(180deg)';
+    }
+  }
+
+  // Метод для получения детальных данных:
+  getDetailDataForRow(rowData) {
+    // Здесь должна быть логика получения детальных данных
+    // В зависимости от вашей структуры данных
+    return [
+      {
+        "data": "Борисовские пруды",
+        "inflow_area": 15,
+        "inflow_area_accumulated": 15,
+        "inflow_area_accumulated_planned": 10.3,
+        "inflow_area_planned": 10.3,
+        "leads_accumulated_fact": 13,
+        "leads_accumulated_planned": 14,
+        "leads_fact": 13,
+        "leads_planned": 14,
+        "outflow_area": 0,
+        "outflow_area_accumulated": 0,
+        "outflow_area_accumulated_planned": 0,
+        "outflow_area_planned": 0,
+        "reest_plan_accumulated": 18500,
+        "reestr_plan": 18500,
+        "rented_area": 4239,
+        "rented_area_accumulated": 4239,
+        "rented_area_accumulated_planned": 0,
+        "rented_area_planned": 0,
+        "revenue": 153632,
+        "revenue_accumulated": 153632,
+        "revenue_accumulated_planned": 103347,
+        "revenue_new": 22634,
+        "revenue_new_accumulated": 22634,
+        "revenue_planned": 103347,
+        "revenue_reestr": 118070,
+        "revenue_reestr_accumulated": 118070
+      }
+    ];
   }
 
   enableRowEdit(rowId) {
@@ -371,6 +534,8 @@ class TablePlan extends Table {
 
   onRendering({ finance_planfact }) {
     this.gridApi.setGridOption('rowData', finance_planfact);
+
+    setTimeout(() => this.headerSync?.syncWidths(this.gridApi), 50);
   }
 }
 

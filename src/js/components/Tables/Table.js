@@ -1,5 +1,6 @@
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
+import 'ag-grid-enterprise';
 import { createGrid } from 'ag-grid-community';
 import { translations } from './translations.js';
 import Pagination from '../../components/Pagination/Pagination.js';

@@ -129,6 +129,7 @@ class ChartCellOccupancy extends BaseChart {
     const { rented_cnt = [], plan_rooms = [] } = data
 
     this.rooms = plan_rooms
+    console.log(rented_cnt)
 
     if (!rented_cnt.length) return
     const free = rented_cnt
@@ -152,7 +153,7 @@ class ChartCellOccupancy extends BaseChart {
         });
         return acc;
       }, {});
-    const other = rented_cnt.filter(obj => +obj.rented == 0.75)
+    const other = rented_cnt.filter(obj => +obj.rented === 0.25 || +obj.rented === 0.45 || +obj.rented === 0.75)
 
     const result = other.reduce((acc, obj) => {
       for (let key in obj) {
@@ -170,15 +171,17 @@ class ChartCellOccupancy extends BaseChart {
       other ? result.cnt : 0
     ]
 
+    const widgetData = {
+      0: free.rate || 0,
+      0.5: booked ? booked.rate : 0,
+      1: busy.rate || 0,
+      'other': result.rate || 0
+    }
+
     this.countCellsEl.textContent = plan_rooms.length
     this.widgets.length && this.widgets.forEach(widget => {
       const rented = widget.getAttribute('data-chart-widget')
-      if (rented === 'other') {
-        widget.innerText = result.rate.toFixed(1) + "%"
-      } else {
-        const [currentData = null] = rented_cnt.filter(obj => +obj.rented === +rented)
-        widget.innerText = currentData ? `${currentData.rate.toFixed(2)}%` : '0%'
-      }
+      widget.innerText = widgetData[rented] ? `${widgetData[rented].toFixed(1)}%` : '0%'
     })
 
     this.chart.update()

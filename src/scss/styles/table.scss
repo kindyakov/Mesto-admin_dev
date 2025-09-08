@@ -771,3 +771,47 @@
 		}
 	}
 }
+
+.table-plan {
+	.header-wrap {
+		.ag-header-cell-text {
+			white-space: normal !important;
+			word-wrap: break-word !important;
+			line-height: 1.2 !important;
+			overflow: visible !important;
+			text-align: left !important;
+		}
+
+		.ag-header-cell {
+			overflow: visible !important;
+		}
+	}
+}
+
+.detail-container {
+	background: #fff;
+}
+
+.detail-block {
+	margin-bottom: 8px;
+}
+
+.detail-table {
+	border-collapse: collapse;
+	width: 100%;
+	font-size: 13px;
+}
+
+.detail-table .detail-key {
+	padding: 6px 8px;
+	width: 35%;
+	background: #fafafa;
+	border: 1px solid #eee;
+	font-weight: 600;
+	text-transform: none;
+}
+
+.detail-table .detail-val {
+	padding: 6px 8px;
+	border: 1px solid #eee;
+}

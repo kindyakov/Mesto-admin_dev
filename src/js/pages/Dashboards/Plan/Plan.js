@@ -166,11 +166,11 @@ class Plan extends Dashboards {
         const plannedText = plannedBar.querySelector('span');
 
         if (factText) {
-          factText.textContent = formattingPrice(factValue);
+          factText.textContent = barType === 'revenue' ? formattingPrice(factValue) : factValue;
         }
 
         if (plannedText) {
-          plannedText.textContent = formattingPrice(plannedValue);
+          plannedText.textContent = barType === 'revenue' ? formattingPrice(plannedValue) : plannedValue.toFixed(0);
         }
       }
     });

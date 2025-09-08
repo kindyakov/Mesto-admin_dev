@@ -204,6 +204,11 @@ body {
 	}
 }
 
+.scroll-height-0::-webkit-scrollbar {
+	width: 6px;
+	height: 0;
+}
+
 // shared
 @import 'shared/input';
 @import 'shared/button';

@@ -75,6 +75,7 @@
   "dependencies": {
     "@ag-grid-community/locale": "^32.0.0",
     "ag-grid-community": "^32.0.0",
+    "ag-grid-enterprise": "^34.1.2",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "chartjs-plugin-annotation": "^3.0.1",
