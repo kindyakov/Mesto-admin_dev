@@ -1,15 +1,16 @@
 import Table from '../Table.js';
+import { HeaderSync } from './HeaderSync.js';
+import { RowDetailRenderer } from './RowDetailRenderer.js';
 import { addPrefixToNumbers } from '../utils/addPrefixToNumbers.js';
 import { createElement } from '../../../settings/createElement.js';
 import { getFormattedDate } from '../../../utils/getFormattedDate.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
 import { api } from '../../../settings/api.js';
-import { HeaderSync } from './HeaderSync.js';
-
 
 class TablePlan extends Table {
   constructor(selector, options, params) {
+    // Колонка с кнопкой аккордеона (только для warehouse_id === 0)
     const accordionColumn = window.app?.warehouse?.warehouse_id === 0 ? [{
       headerName: '',
       width: 30,
@@ -17,12 +18,18 @@ class TablePlan extends Table {
       sortable: false,
       pinned: 'left',
       cellRenderer: ({ data, rowIndex, node, eGridCell }) => {
+        // Не показываем кнопку для детальных строк
+        if (data._isDetail) {
+          return '';
+        }
+
         const buttonExpand = createElement('button', {
           content: `<svg width="15" height="15" viewBox="0 0 4 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M3.75 2.74951H2.25V4.24951H1.75V2.74951H0.25V2.24951H1.75V0.749512H2.25V2.24951H3.75V2.74951Z" fill="#787B80" />
-</svg>`
+                      <path d="M3.75 2.74951H2.25V4.24951H1.75V2.74951H0.25V2.24951H1.75V0.749512H2.25V2.24951H3.75V2.74951Z" fill="#787B80" />
+                    </svg>`,
+          attributes: [['data-row-id', node.id]]
         });
-        buttonExpand.className = 'btn-accordion w-5 h-5 border border-solid border-[#ecedef] hover:bg-[#f5f6f7] shrink-0 flex items-center justify-center';
+        buttonExpand.className = 'btn-accordion w-5 h-5 border border-solid border-[#ecedef] hover:bg-[#f5f6f7] shrink-0 flex items-center justify-center m-auto';
 
         eGridCell.style.padding = '3px';
         eGridCell.style.textAlign = 'center';
@@ -35,60 +42,6 @@ class TablePlan extends Table {
 
     const defaultOptions = {
       headerHeight: 90,
-      // masterDetail: true,
-      // detailRowHeight: 190, // подогнать под содержимое
-      // detailCellRenderer: (params) => {
-      //   // params.data — исходная строка (master row)
-      //   const detailRows = this.getDetailDataForRow(params.data) || [];
-
-      //   // Если нет данных — вернуть простое сообщение
-      //   if (!detailRows.length) {
-      //     return createElement('div', {
-      //       classes: ['detail-empty'],
-      //       content: 'Деталей нет'
-      //     });
-      //   }
-
-      //   // Собираем DOM — для каждой записи строим небольшую таблицу
-      //   const content = detailRows.map(dr => {
-      //     const rowsHtml = Object.keys(dr).map(key => {
-      //       let value = dr[key];
-
-      //       // Форматирование: даты и чисел
-      //       if (key.toLowerCase().includes('date') || key === 'data') {
-      //         value = getFormattedDate(value);
-      //       } else if (typeof value === 'number' && (key.toLowerCase().includes('revenue') || key.toLowerCase().includes('price') || key.toLowerCase().includes('amount') || key.toLowerCase().includes('accumulated') || key.toLowerCase().includes('area') || key.toLowerCase().includes('leads'))) {
-      //         // для чисел используем форматирование цен/чисел
-      //         try {
-      //           value = formattingPrice(value);
-      //         } catch (e) {
-      //           value = String(value);
-      //         }
-      //       } else {
-      //         value = value === null || value === undefined ? '' : String(value);
-      //       }
-
-      //       // безопасный HTML — ключ и значение как текст
-      //       return `<tr><td class="detail-key">${key}</td><td class="detail-val">${value}</td></tr>`;
-      //     }).join('');
-
-      //     return `<div class="detail-block"><table class="detail-table"><tbody>${rowsHtml}</tbody></table></div>`;
-      //   }).join('');
-
-      //   const wrapper = createElement('div', {
-      //     classes: ['detail-container'],
-      //     content: content
-      //   });
-
-      //   // немного стилей через JS — можно вынести в CSS-файл
-      //   wrapper.style.padding = '8px 12px';
-      //   wrapper.querySelectorAll && wrapper.querySelectorAll('.detail-table').forEach(tbl => {
-      //     tbl.style.borderCollapse = 'collapse';
-      //     tbl.style.width = '100%';
-      //   });
-
-      //   return wrapper;
-      // },
       columnDefs: [
         ...accordionColumn,
         {
@@ -96,7 +49,13 @@ class TablePlan extends Table {
           width: 40,
           resizable: false,
           sortable: false,
+          pinned: 'left',
           cellRenderer: ({ data, rowIndex, node, eGridCell }) => {
+            // Скрываем кнопки редактирования для детальных строк
+            if (data._isDetail) {
+              return '';
+            }
+
             const buttonEdit = createElement('button', {
               content: `<img src="./img/svg/tabler_edit.svg">`
             })
@@ -104,7 +63,6 @@ class TablePlan extends Table {
 
             const buttonCancel = createElement('button', {
               content: `<img src="./img/svg/material-symbols_close.svg">`
-
             })
             buttonCancel.className = 'btn-cancel w-6 h-6 flex items-center justify-center bg-[#ecedef] hover:bg-[#d3d5d6] border border-solid border-[#ecedef] hidden'
 
@@ -116,7 +74,7 @@ class TablePlan extends Table {
             const wp = createElement('div', {
               content: [buttonEdit, buttonSave, buttonCancel]
             })
-            wp.className = 'flex flex-col gap-1 items-center justify-center'
+            wp.className = 'w-full flex flex-col gap-1 items-center justify-center'
 
             eGridCell.style.padding = '5px'
 
@@ -130,9 +88,24 @@ class TablePlan extends Table {
         {
           headerName: 'Дата',
           field: 'data',
-          minWidth: 120,
-          flex: 0.1,
-          valueFormatter: params => getFormattedDate(params.value)
+          minWidth: 85,
+          flex: 0.01,
+          cellRenderer: ({ value, data, eGridCell }) => {
+            const span = createElement('span', {
+              content: value || ''
+            });
+
+            if (data._isDetail) {
+              span.style.color = '#6b7280';
+              eGridCell.style.left = '0'
+            } else {
+              span.textContent = value ? getFormattedDate(value) : '';
+            }
+
+            span.style.paddingLeft = '5px';
+
+            return span;
+          }
         },
         {
           headerName: 'Выручка план нарастающим итогом',
@@ -141,9 +114,12 @@ class TablePlan extends Table {
           minWidth: 120,
           flex: 0.1,
           cellRenderer: params => {
+            if (params.data._isDetail) {
+              // Для детальных строк просто показываем отформатированное значение
+              return params.value ? formattingPrice(params.value) : '—';
+            }
             this.addHandleDbClickCell(params);
             return cellRendererInput(params, {
-              // el: span,
               funcFormate: value => formattingPrice(value.toFixed(0)),
               inputmode: 'numeric'
             });
@@ -155,27 +131,39 @@ class TablePlan extends Table {
           headerClass: 'header-wrap',
           minWidth: 120,
           flex: 0.1,
-          valueFormatter: params => formattingPrice(params.value)
+          valueFormatter: params => {
+            return params.value ? formattingPrice(params.value) : '—';
+          }
         },
         {
           headerName: 'Выручка в день',
           field: 'revenue',
-          minWidth: 120,
+          minWidth: 100,
           flex: 0.1,
-          valueFormatter: params => formattingPrice(params.value)
+          valueFormatter: params => {
+            return params.value ? formattingPrice(params.value) : '—';
+          }
         },
         {
           headerName: '% выполнения',
-          minWidth: 120,
+          minWidth: 100,
           flex: 0.1,
           cellRenderer: ({ data }) => {
-            const rate = (data.revenue_accumulated / data.revenue_accumulated_planned * 100).toFixed(0)
+            if (!data.revenue_accumulated_planned || data.revenue_accumulated_planned === 0) {
+              return '—';
+            }
+            const rate = (data.revenue_accumulated / data.revenue_accumulated_planned * 100).toFixed(0);
+            const isGood = rate >= 100;
+
             const p = createElement('p', {
               classes: ['flex', 'gap-1', 'items-center'],
-              content: `<img src="./img/svg/${rate >= 100 ? 'ion_checkmark-done-circle.svg' : 'carbon_close-filled.svg'}" class="shrink-0">
+              content: `<img src="./img/svg/${isGood ? 'ion_checkmark-done-circle.svg' : 'carbon_close-filled.svg'}" class="shrink-0">
               <span>${rate}%</span>`
             });
 
+            if (data._isDetail) {
+              p.style.opacity = '0.8'; // Немного приглушаем для детальных строк
+            }
             return p;
           }
         },
@@ -186,6 +174,10 @@ class TablePlan extends Table {
           minWidth: 120,
           flex: 0.1,
           cellRenderer: params => {
+            if (params.data._isDetail) {
+              // Для детальных строк просто показываем значение
+              return params.value ? params.value.toFixed(1) : '—';
+            }
             this.addHandleDbClickCell(params);
             return cellRendererInput(params, {
               inputmode: 'decimal'
@@ -198,28 +190,41 @@ class TablePlan extends Table {
           headerClass: 'header-wrap',
           minWidth: 120,
           flex: 0.1,
+          valueFormatter: params => {
+            return params.value !== null && params.value !== undefined ? params.value : '—';
+          }
         },
         {
           headerName: 'Заполнение в день, м2',
           field: 'inflow_area',
           headerClass: 'header-wrap',
-          minWidth: 120,
+          minWidth: 100,
           flex: 0.1,
+          valueFormatter: params => {
+            return params.value !== null && params.value !== undefined ? params.value : '—';
+          }
         },
         {
           headerName: '% выполнения',
-          minWidth: 120,
+          minWidth: 100,
           flex: 0.1,
           cellRenderer: ({ data }) => {
-            const rate = (data.inflow_area_accumulated / data.inflow_area_accumulated_planned * 100).toFixed(0)
+            if (!data.inflow_area_accumulated_planned || data.inflow_area_accumulated_planned === 0) {
+              return '—';
+            }
+            const rate = (data.inflow_area_accumulated / data.inflow_area_accumulated_planned * 100).toFixed(0);
+            const isValid = !isNaN(rate) && isFinite(rate);
+            const isGood = isValid && parseInt(rate) >= 100;
+
             const p = createElement('p', {
               classes: ['flex', 'gap-1', 'items-center'],
-              content: `<img src="./img/svg/${rate < 100 || rate === 'Infinity' || rate === "NaN"
-                ? 'carbon_close-filled.svg'
-                : 'ion_checkmark-done-circle.svg'}" class="shrink-0">
-              <span>${rate === 'NaN' || rate === 'Infinity' ? "0" : rate}%</span>`
+              content: `<img src="./img/svg/${isGood ? 'ion_checkmark-done-circle.svg' : 'carbon_close-filled.svg'}" class="shrink-0">
+              <span>${!isValid ? "0" : rate}%</span>`
             });
 
+            if (data._isDetail) {
+              p.style.opacity = '0.8';
+            }
             return p;
           }
         },
@@ -227,9 +232,12 @@ class TablePlan extends Table {
           headerName: 'Лиды план нарастающим итогом',
           field: 'leads_accumulated_planned',
           headerClass: 'header-wrap',
-          minWidth: 120,
+          minWidth: 100,
           flex: 0.1,
           cellRenderer: params => {
+            if (params.data._isDetail) {
+              return params.value !== null && params.value !== undefined ? params.value : '—';
+            }
             this.addHandleDbClickCell(params);
             return cellRendererInput(params, {
               inputmode: 'numeric'
@@ -240,15 +248,21 @@ class TablePlan extends Table {
           headerName: 'Лидов факт общий нарастающим',
           field: 'leads_accumulated_fact',
           headerClass: 'header-wrap',
-          minWidth: 120,
+          minWidth: 100,
           flex: 0.1,
+          valueFormatter: params => {
+            return params.value !== null && params.value !== undefined ? params.value : '—';
+          }
         },
         {
           headerName: 'Лиды в день',
           field: 'leads_fact',
-          minWidth: 120,
+          minWidth: 100,
           flex: 0.1,
           cellRenderer: params => {
+            if (params.data._isDetail) {
+              return params.value !== null && params.value !== undefined ? params.value : '—';
+            }
             this.addHandleDbClickCell(params);
             return cellRendererInput(params, {
               inputmode: 'numeric'
@@ -258,26 +272,50 @@ class TablePlan extends Table {
         {
           headerName: '% выполнения ОБЩИЙ',
           headerClass: 'header-wrap',
-          minWidth: 120,
+          minWidth: 100,
           flex: 0.1,
+          resizable: false,
           cellRenderer: ({ data }) => {
-            const rate = (data.leads_accumulated_fact / data.leads_accumulated_planned * 100).toFixed(0)
+            if (!data.leads_accumulated_planned || data.leads_accumulated_planned === 0) {
+              return '—';
+            }
+            const rate = (data.leads_accumulated_fact / data.leads_accumulated_planned * 100).toFixed(0);
+            const isValid = !isNaN(rate) && isFinite(rate);
+            const isGood = isValid && parseInt(rate) >= 100;
+
             const p = createElement('p', {
               classes: ['flex', 'gap-1', 'items-center'],
-              content: `<img src="./img/svg/${rate < 100 || rate === "NaN" || rate === 'Infinity'
-                ? 'carbon_close-filled.svg'
-                : 'ion_checkmark-done-circle.svg'}" class="shrink-0">
-              <span>${rate === 'NaN' || rate === 'Infinity' ? 0 : rate}%</span>`
+              content: `<img src="./img/svg/${isGood ? 'ion_checkmark-done-circle.svg' : 'carbon_close-filled.svg'}" class="shrink-0">
+              <span>${!isValid ? "0" : rate}%</span>`
             });
 
+            if (data._isDetail) {
+              p.style.opacity = '0.8';
+            }
             return p;
           }
         },
       ],
+      // Функция для определения высоты строки
+      getRowHeight: params => {
+        // Используем одинаковую высоту для всех строк
+        return 60;
+      },
+      // Отключаем возможность выбора детальных строк
+      isRowSelectable: params => {
+        return !params.data._isDetail;
+      },
       pagination: false,
       onColumnResized: params => {
         this.headerSync?.syncWidths(params.api);
       },
+      // Добавляем CSS класс для детальных строк
+      getRowClass: params => {
+        if (params.data._isDetail) {
+          return 'detail-row';
+        }
+        return '';
+      }
     };
 
     const defaultParams = {
@@ -299,90 +337,111 @@ class TablePlan extends Table {
     this.originalRowData = new Map();
     this.headerSync = null;
 
+    // Инициализируем RowDetailRenderer
+    this.detailRenderer = null;
+
     this.onReadyFunctions.push(() => {
       this.headerSync = new HeaderSync(this.wpTable, this.gridApi);
       setTimeout(() => this.headerSync.init(), 100);
-    })
+
+      // Создаем detailRenderer после инициализации gridApi
+      this.detailRenderer = new RowDetailRenderer(this.gridApi, this.getDetailDataForRow.bind(this));
+    });
   }
 
-  toggleAccordion(rowId, button) {
+  /**
+   * Переключает аккордеон (раскрытие/сворачивание строки)
+   */
+  toggleAccordion(rowId, btn) {
     const rowNode = this.gridApi.getRowNode(rowId);
-    const isExpanded = rowNode.expanded;
+    if (!rowNode || !this.detailRenderer) return;
 
-    if (isExpanded) {
-      rowNode.setExpanded(false);
-      button.classList.remove('expanded');
-      button.querySelector('svg').style.transform = '';
-    } else {
-      // Закрываем все остальные
-      this.gridApi.forEachNode(node => {
-        if (node.expanded && node.id !== rowId) {
-          node.setExpanded(false);
-          const otherButton = this.wpTable.querySelector(`[row-id="${node.id}"] .btn-accordion`);
-          if (otherButton) {
-            otherButton.classList.remove('expanded');
-            otherButton.querySelector('svg').style.transform = '';
-          }
-        }
+    // Если идет редактирование - сначала отменяем его
+    if (this.originalRowData.size > 0) {
+      this.originalRowData.forEach((data, id) => {
+        this.cancelRowEdit(id);
       });
+    }
 
-      // Открываем текущий
-      rowNode.setExpanded(true);
-      button.classList.add('expanded');
-      button.querySelector('svg').style.transform = 'rotate(180deg)';
+    this.detailRenderer.toggle(rowNode, btn);
+  }
+
+  /**
+   * Метод для получения детальных данных
+   * В реальном приложении здесь должен быть API запрос
+   */
+  async getDetailDataForRow(rowData) {
+    try {
+      this.loader.enable();
+      let data = []
+
+      for (const { warehouse_id, warehouse_short_name } of this.app.warehouses) {
+        if (warehouse_id === 0) continue
+
+        const { finance_planfact = [] } = await this.getData({
+          start_date: rowData.data,
+          end_date: rowData.data,
+          warehouse_id
+        })
+
+        if (finance_planfact.length) {
+          data.push({ ...finance_planfact[0], data: warehouse_short_name })
+        }
+      }
+
+      return data
+    } catch (error) {
+      console.log(error)
+    } finally {
+      this.loader.disable();
     }
   }
 
-  // Метод для получения детальных данных:
-  getDetailDataForRow(rowData) {
-    // Здесь должна быть логика получения детальных данных
-    // В зависимости от вашей структуры данных
-    return [
-      {
-        "data": "Борисовские пруды",
-        "inflow_area": 15,
-        "inflow_area_accumulated": 15,
-        "inflow_area_accumulated_planned": 10.3,
-        "inflow_area_planned": 10.3,
-        "leads_accumulated_fact": 13,
-        "leads_accumulated_planned": 14,
-        "leads_fact": 13,
-        "leads_planned": 14,
-        "outflow_area": 0,
-        "outflow_area_accumulated": 0,
-        "outflow_area_accumulated_planned": 0,
-        "outflow_area_planned": 0,
-        "reest_plan_accumulated": 18500,
-        "reestr_plan": 18500,
-        "rented_area": 4239,
-        "rented_area_accumulated": 4239,
-        "rented_area_accumulated_planned": 0,
-        "rented_area_planned": 0,
-        "revenue": 153632,
-        "revenue_accumulated": 153632,
-        "revenue_accumulated_planned": 103347,
-        "revenue_new": 22634,
-        "revenue_new_accumulated": 22634,
-        "revenue_planned": 103347,
-        "revenue_reestr": 118070,
-        "revenue_reestr_accumulated": 118070
-      }
-    ];
-  }
+  async enableRowEdit(rowId) {
+    // Сначала сворачиваем все аккордеоны
+    if (this.detailRenderer && this.detailRenderer.expandedRowId) {
+      this.detailRenderer.collapseAll();
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
 
-  enableRowEdit(rowId) {
-    const row = this.wpTable.querySelector(`[row-id="${rowId}"]`);
-    if (!row) return;
+    const centerColsViewport = this.wpTable.querySelector('.ag-center-cols-viewport')
+    const pinnedLeftColsContainer = this.wpTable.querySelector('.ag-pinned-left-cols-container')
+
+    if (!centerColsViewport || !pinnedLeftColsContainer) {
+      console.warn('Не удалось найти обертку строк или обертку пинов')
+      return
+    }
+
+    const row = centerColsViewport.querySelector(`[row-id="${rowId}"]`);
+    if (!row) {
+      console.warn('Не удалось найти строку')
+      return
+    };
+
+    const pinnedRow = pinnedLeftColsContainer.querySelector(`.ag-row[row-id="${rowId}"]`)
+
+    if (!pinnedRow) {
+      console.warn('Не удалось найти пин строку')
+      return
+    }
 
     const rowNode = this.gridApi.getRowNode(rowId);
+
+    // Не разрешаем редактирование детальных строк
+    if (rowNode.data._isDetail) return;
 
     // Сохраняем оригинальные данные
     this.originalRowData.set(rowId, { ...rowNode.data });
 
     // Переключаем кнопки
-    const btnEdit = row.querySelector('.btn-edit');
-    const btnSave = row.querySelector('.btn-save');
-    const btnCancel = row.querySelector('.btn-cancel');
+    const btnEdit = pinnedRow.querySelector('.btn-edit');
+    const btnSave = pinnedRow.querySelector('.btn-save');
+    const btnCancel = pinnedRow.querySelector('.btn-cancel');
+
+    if (!btnEdit || !btnSave || !btnCancel) {
+      console.warn('Не удалось найти кнопки')
+      return
+    };
 
     btnEdit.classList.add('hidden');
     btnSave.classList.remove('hidden');
@@ -391,6 +450,7 @@ class TablePlan extends Table {
     // Включаем редактирование для нужных полей
     this.editableFields.forEach(fieldName => {
       const input = row.querySelector(`input[name="${fieldName}"]`);
+
       if (input) {
         this.changeReadonly(input, false);
       }
@@ -398,10 +458,12 @@ class TablePlan extends Table {
   }
 
   addHandleDbClickCell(params) {
+    // Не добавляем обработчик для детальных строк
+    if (params.data._isDetail) return;
+
     params.eGridCell.addEventListener('dblclick', e => {
-      // const row = params.eGridCell.closest('.ag-row');
       const input = e.target.closest('input');
-      if (input.classList.contains('not-edit')) {
+      if (input && input.classList.contains('not-edit')) {
         this.enableRowEdit(params.node.id)
       }
     });
@@ -425,9 +487,11 @@ class TablePlan extends Table {
     const btnSave = row.querySelector('.btn-save');
     const btnCancel = row.querySelector('.btn-cancel');
 
-    btnEdit.classList.remove('hidden');
-    btnSave.classList.add('hidden');
-    btnCancel.classList.add('hidden');
+    if (btnEdit && btnSave && btnCancel) {
+      btnEdit.classList.remove('hidden');
+      btnSave.classList.add('hidden');
+      btnCancel.classList.add('hidden');
+    }
 
     // Отключаем редактирование
     this.editableFields.forEach(fieldName => {
@@ -446,10 +510,12 @@ class TablePlan extends Table {
 
   async saveRowData(rowId) {
     const row = this.wpTable.querySelector(`[row-id="${rowId}"]`);
-
     if (!row) return;
 
     const rowNode = this.gridApi.getRowNode(rowId);
+
+    // Не сохраняем детальные строки
+    if (rowNode.data._isDetail) return;
 
     // Собираем измененные данные
     const updatedData = {};
@@ -472,6 +538,7 @@ class TablePlan extends Table {
       this.cancelRowEdit(rowId);
       return;
     }
+
     try {
       // Вызываем метод сохранения данных
       await this.setFinancePlan({
@@ -516,7 +583,7 @@ class TablePlan extends Table {
   async setFinancePlan(data) {
     try {
       this.loader.enable();
-      console.log(data)
+      console.log('Saving finance plan:', data);
 
       const response = await api.post('/_set_finance_plan_', data);
       if (response.status !== 200) {
@@ -533,9 +600,40 @@ class TablePlan extends Table {
   }
 
   onRendering({ finance_planfact }) {
-    this.gridApi.setGridOption('rowData', finance_planfact);
+    // Сохраняем состояние раскрытых строк перед обновлением
+    const expandedRowId = this.detailRenderer?.expandedRowId;
+
+    // Фильтруем детальные строки из новых данных
+    const filteredData = finance_planfact.filter(row => !row._isDetail);
+
+    this.gridApi.setGridOption('rowData', filteredData);
+
+    // Восстанавливаем раскрытые строки после обновления
+    if (expandedRowId && this.detailRenderer) {
+      setTimeout(() => {
+        const rowNode = this.gridApi.getRowNode(expandedRowId);
+        const button = document.querySelector(`[row-id="${expandedRowId}"] .btn-accordion`);
+        if (rowNode && button) {
+          this.detailRenderer.expand(rowNode, button);
+        }
+      }, 100);
+    }
 
     setTimeout(() => this.headerSync?.syncWidths(this.gridApi), 50);
+  }
+
+  /**
+   * Метод для программного раскрытия строки
+   */
+  expandRow(rowId) {
+    if (!this.detailRenderer) return;
+
+    const rowNode = this.gridApi.getRowNode(rowId);
+    const button = document.querySelector(`[row-id="${rowId}"] .btn-accordion`);
+
+    if (rowNode && button && !this.detailRenderer.isExpanded(rowId)) {
+      this.detailRenderer.expand(rowNode, button);
+    }
   }
 }
 

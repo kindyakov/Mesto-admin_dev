@@ -1,18 +1,19 @@
 <div class="main__content content-main" data-content="dashboards/warehouse">
-  <div class="rounded-md border border-solid border-[#D1E4F9] p-4 grid grid-cols-4 gap-4">
+  <div
+    class="rounded-md border border-solid border-[#D1E4F9] p-4 grid grid-cols-4 gap-4 max-[920px]:gap-2 max-[1600px]:grid-cols-3 max-[840px]:grid-cols-2 max-sm:grid-cols-1 max-sm:p-2">
     <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
-      <span class="text-sm text-[#64748b]">Все ячейки</span>
-      <div class="flex gap-4 mt-1">
+      <span class="text-sm text-[rgb(100,116,139)]">Все ячейки</span>
+      <div class="flex gap-4 max-[920px]:gap-2 mt-1">
         <div class="widgets__item_circle gray"></div>
-        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+        <div class="grid grid-cols-2 gap-x-3 max-[920px]:gap-x-1 gap-y-1">
           <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
-            <b class="text-xl" room-rented="-1" room-key="cnt"></b> <b class="text-sm">шт.</b>
+            <b class="text-xl max-[920px]:text-lg" room-rented="-1" room-key="cnt"></b> <b class="text-sm">шт.</b>
           </p>
           <p class="text-[#1c2434]">
-            <b class="text-xl" room-rented="-1" room-key="area"></b> <b class="text-sm">м²</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="-1" room-key="area"></b> <b class="text-sm">м²</b>
           </p>
           <p class="text-[#787b80]">
-            <b class="text-xl" room-rented="-1" room-key="rate"></b><b class="text-sm">%</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="-1" room-key="rate"></b><b class="text-sm">%</b>
           </p>
         </div>
       </div>
@@ -20,17 +21,17 @@
 
     <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
       <span class="text-sm text-[#64748b]">Свободные ячейки</span>
-      <div class="flex gap-4 mt-1">
+      <div class="flex gap-4  max-[920px]:gap-2 mt-1">
         <div class="widgets__item_circle green"></div>
-        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+        <div class="grid grid-cols-2 gap-x-3 max-[920px]:gap-x-1 gap-y-1">
           <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
-            <b class="text-xl" room-rented="0" room-key="cnt"></b> <b class="text-sm">шт.</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0" room-key="cnt"></b> <b class="text-sm">шт.</b>
           </p>
           <p class="text-[#1c2434]">
-            <b class="text-xl" room-rented="0" room-key="area"></b> <b class="text-sm">м²</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0" room-key="area"></b> <b class="text-sm">м²</b>
           </p>
           <p class="text-[#787b80]">
-            <b class="text-xl" room-rented="0" room-key="rate"></b><b class="text-sm">%</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0" room-key="rate"></b><b class="text-sm">%</b>
           </p>
         </div>
       </div>
@@ -38,17 +39,17 @@
 
     <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
       <span class="text-sm text-[#64748b]">Занятые ячейки</span>
-      <div class="flex gap-4 mt-1">
+      <div class="flex gap-4  max-[920px]:gap-2 mt-1">
         <div class="widgets__item_circle red"></div>
-        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+        <div class="grid grid-cols-2 gap-x-3 max-[920px]:gap-x-1 gap-y-1">
           <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
-            <b class="text-xl" room-rented="1" room-key="cnt"></b> <b class="text-sm">шт.</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="1" room-key="cnt"></b> <b class="text-sm">шт.</b>
           </p>
           <p class="text-[#1c2434]">
-            <b class="text-xl" room-rented="1" room-key="area"></b> <b class="text-sm">м²</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="1" room-key="area"></b> <b class="text-sm">м²</b>
           </p>
           <p class="text-[#787b80]">
-            <b class="text-xl" room-rented="1" room-key="rate"></b><b class="text-sm">%</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="1" room-key="rate"></b><b class="text-sm">%</b>
           </p>
         </div>
       </div>
@@ -56,17 +57,17 @@
 
     <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
       <span class="text-sm text-[#64748b]">Освобождающиеся ячейки</span>
-      <div class="flex gap-4 mt-1">
+      <div class="flex gap-4  max-[920px]:gap-2 mt-1">
         <div class="widgets__item_circle yellow"></div>
-        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+        <div class="grid grid-cols-2 gap-x-3 max-[920px]:gap-x-1 gap-y-1">
           <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
-            <b class="text-xl" room-rented="0.75" room-key="cnt"></b> <b class="text-sm">шт.</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0.75" room-key="cnt"></b> <b class="text-sm">шт.</b>
           </p>
           <p class="text-[#1c2434]">
-            <b class="text-xl" room-rented="0.75" room-key="area"></b> <b class="text-sm">м²</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0.75" room-key="area"></b> <b class="text-sm">м²</b>
           </p>
           <p class="text-[#787b80]">
-            <b class="text-xl" room-rented="0.75" room-key="rate"></b><b class="text-sm">%</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0.75" room-key="rate"></b><b class="text-sm">%</b>
           </p>
         </div>
       </div>
@@ -74,17 +75,17 @@
 
     <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
       <span class="text-sm text-[#64748b]">Оформлен гостевой визит</span>
-      <div class="flex gap-4 mt-1">
+      <div class="flex gap-4  max-[920px]:gap-2 mt-1">
         <div class="widgets__item_circle blue"></div>
-        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+        <div class="grid grid-cols-2 gap-x-3 max-[920px]:gap-x-1 gap-y-1">
           <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
-            <b class="text-xl" room-rented="0.25" room-key="cnt"></b> <b class="text-sm">шт.</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0.25" room-key="cnt"></b> <b class="text-sm">шт.</b>
           </p>
           <p class="text-[#1c2434]">
-            <b class="text-xl" room-rented="0.25" room-key="area"></b> <b class="text-sm">м²</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0.25" room-key="area"></b> <b class="text-sm">м²</b>
           </p>
           <p class="text-[#787b80]">
-            <b class="text-xl" room-rented="0.25" room-key="rate"></b><b class="text-sm">%</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0.25" room-key="rate"></b><b class="text-sm">%</b>
           </p>
         </div>
       </div>
@@ -92,17 +93,17 @@
 
     <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
       <span class="text-sm text-[#64748b]">Ожидают подтверждения</span>
-      <div class="flex gap-4 mt-1">
+      <div class="flex gap-4  max-[920px]:gap-2 mt-1">
         <div class="widgets__item_circle orange"></div>
-        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+        <div class="grid grid-cols-2 gap-x-3 max-[920px]:gap-x-1 gap-y-1">
           <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
-            <b class="text-xl" room-rented="0.5" room-key="cnt"></b> <b class="text-sm">шт.</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0.5" room-key="cnt"></b> <b class="text-sm">шт.</b>
           </p>
           <p class="text-[#1c2434]">
-            <b class="text-xl" room-rented="0.5" room-key="area"></b> <b class="text-sm">м²</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0.5" room-key="area"></b> <b class="text-sm">м²</b>
           </p>
           <p class="text-[#787b80]">
-            <b class="text-xl" room-rented="0.5" room-key="rate"></b><b class="text-sm">%</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0.5" room-key="rate"></b><b class="text-sm">%</b>
           </p>
         </div>
       </div>
@@ -110,17 +111,17 @@
 
     <div class="bg-white p-[10px] pt-1 rounded-md border border-solid border-[#e1e8f0]">
       <span class="text-sm text-[#64748b]">В режиме оформления</span>
-      <div class="flex gap-4 mt-1">
+      <div class="flex gap-4  max-[920px]:gap-2 mt-1">
         <div class="widgets__item_circle purple"></div>
-        <div class="grid grid-cols-2 gap-x-3 gap-y-1">
+        <div class="grid grid-cols-2 gap-x-3 max-[920px]:gap-x-1 gap-y-1">
           <p class="text-[#1c2434] border-r pr-1 border-solid border-[#ecedef]">
-            <b class="text-xl" room-rented="0.45" room-key="cnt"></b> <b class="text-sm">шт.</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0.45" room-key="cnt"></b> <b class="text-sm">шт.</b>
           </p>
           <p class="text-[#1c2434]">
-            <b class="text-xl" room-rented="0.45" room-key="area"></b> <b class="text-sm">м²</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0.45" room-key="area"></b> <b class="text-sm">м²</b>
           </p>
           <p class="text-[#787b80]">
-            <b class="text-xl" room-rented="0.45" room-key="rate"></b><b class="text-sm">%</b>
+            <b class="text-xl  max-[920px]:text-lg" room-rented="0.45" room-key="rate"></b><b class="text-sm">%</b>
           </p>
         </div>
       </div>
@@ -176,8 +177,9 @@
         </button> 
       </div> -->
     </div>
-    <div class="flex justify-between gap-4 mt-3 items-end">
-      <div class="flex gap-1">
+    <div
+      class="flex justify-between gap-4 max-[920px]:gap-2 mt-3 items-end max-[460px]:flex-col  max-[460px]:items-start">
+      <div class="flex gap-1 max-md:flex-col">
         <button class="button transparent btn-hide-lock-room">
           <span class="mr-3">❗</span>
           <p>Заблокированные</p>
@@ -187,15 +189,15 @@
           <span class="text-sm text-[#64748b]">Ячейки с дебиторской задолженностью</span>
           <div class="grid grid-cols-3 gap-1 w-full justify-items-center text-center">
             <b class="text-[#1c2434] border-r border-solid border-[#ecedef] w-full">
-              <span class="text-xl" room-rented="0.95" room-key="cnt"></span>
+              <span class="text-xl  max-[920px]:text-lg" room-rented="0.95" room-key="cnt"></span>
               <span class="text-sm"> шт.</span>
             </b>
             <b class="text-[#1c2434] border-r border-solid border-[#ecedef] w-full">
-              <span class="text-xl" room-rented="0.95" room-key="area"></span>
+              <span class="text-xl  max-[920px]:text-lg" room-rented="0.95" room-key="area"></span>
               <span class="text-sm"> м²</span>
             </b>
             <b class="text-[#787b80]">
-              <span class="text-xl" room-rented="0.95" room-key="rate"></span>
+              <span class="text-xl  max-[920px]:text-lg" room-rented="0.95" room-key="rate"></span>
               <span class="text-sm">%</span>
             </b>
           </div>

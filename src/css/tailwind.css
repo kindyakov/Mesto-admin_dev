@@ -10,3 +10,12 @@
 .table-plan .input-cell:not(.not-edit) {
   background-color: #eff4fb;
 }
+
+.table-plan .ag-cell {
+  padding: 0 !important;
+}
+
+.table-plan .ag-header-cell {
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+}

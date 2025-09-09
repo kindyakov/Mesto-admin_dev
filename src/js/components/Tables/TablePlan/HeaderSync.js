@@ -14,6 +14,7 @@ export class HeaderSync {
   }
 
   init() {
+    this.titlesContainerHide = this.wpTable.querySelector('.table-titles-container-hide')
     this.headerTitles = this.wpTable.querySelectorAll('.table-title');
     this.headerContainer = this.headerTitles[0]?.parentElement;
     this.agHeader = this.wpTable.querySelector('.ag-header-row');
@@ -61,6 +62,7 @@ export class HeaderSync {
   hideSection(sectionIndex, gridApi = this.gridApi) {
     const columnGroups = this.getColumnGroups(gridApi);
     const columnsToHide = columnGroups[sectionIndex] || [];
+    console.log(columnGroups);
 
     columnsToHide.forEach(col => {
       gridApi?.setColumnVisible(col.colId, false);
@@ -86,13 +88,15 @@ export class HeaderSync {
 
   moveHeaderToTop(sectionIndex) {
     const header = this.headerTitles[sectionIndex];
+
     if (!header || this.movedHeaders.has(sectionIndex)) return;
 
-    // Перемещаем в начало wpTable
-    this.wpTable.insertBefore(header, this.wpTable.firstChild);
-    this.movedHeaders.set(sectionIndex, true);
+    header.style.padding = '5px'
+    header.style.background = 'rgba(81, 181, 246, 0.2)'
 
-    console.log(`Заголовок секции ${sectionIndex} перемещен в начало`);
+    // Перемещаем в начало titlesContainerHide
+    this.titlesContainerHide.insertBefore(header, this.titlesContainerHide.lastChild);
+    this.movedHeaders.set(sectionIndex, true);
   }
 
   moveHeaderBack(sectionIndex) {
@@ -108,8 +112,11 @@ export class HeaderSync {
       originalPosition.parent.appendChild(header);
     }
 
+    header.style.padding = ''
+    header.style.background = ''
+
     this.movedHeaders.delete(sectionIndex);
-    console.log(`Заголовок секции ${sectionIndex} возвращен на место`);
+    // this.syncWidths();
   }
 
   updateToggleButton(sectionIndex, isHidden) {
@@ -130,7 +137,8 @@ export class HeaderSync {
     const offset = hasAccordion ? 1 : 0; // Сдвигаем индексы если есть аккордион
 
     return [
-      columnState.slice(0, 6 + offset),   // ВЫРУЧКА 
+      columnState.slice(0, 2 + offset),
+      columnState.slice(2 + offset, 6),   // ВЫРУЧКА 
       columnState.slice(6 + offset, 10 + offset),  // ПРОДАЖА
       columnState.slice(10 + offset)      // МАРКЕТИНГ
     ];
@@ -154,12 +162,15 @@ export class HeaderSync {
 
     // Получаем ВСЕ колонки (включая скрытые)
     const columnState = gridApi.getColumnState();
+    const hasAccordion = window.app?.warehouse?.warehouse_id === 0;
+    const offset = hasAccordion ? 1 : 0; // Сдвигаем индексы если есть аккордион
 
     // Определяем группы колонок по индексам (не зависит от видимости)
     const sectionRanges = [
-      { start: 0, end: 6 },   // ВЫРУЧКА (0-5 колонки)
-      { start: 6, end: 10 },  // ПРОДАЖА (6-9 колонки)  
-      { start: 10, end: columnState.length } // МАРКЕТИНГ (10+ колонки)
+      { start: 0, end: 2 + offset },
+      { start: 2 + offset, end: 6 + offset },   // ВЫРУЧКА (0-5 колонки)
+      { start: 6 + offset, end: 10 + offset },  // ПРОДАЖА (6-9 колонки)  
+      { start: 10 + offset, end: columnState.length } // МАРКЕТИНГ (10+ колонки)
     ];
 
     this.headerTitles.forEach((header, sectionIndex) => {
