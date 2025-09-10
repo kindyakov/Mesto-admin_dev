@@ -43,6 +43,7 @@ class Finance extends Dashboards {
 		return postFuturePayments({
 			warehouse_id: this.app.warehouse.warehouse_id,
 			show_cnt: 1000,
+			show_what: this.table?.queryParams?.show_what || 'reestr',
 			...queryParams
 		});
 	}
@@ -90,7 +91,7 @@ class Finance extends Dashboards {
 	onHandleScrollTo({ params }) {
 		const [table] = this.tables;
 		if (!params) return;
-		params = JSON.parse({...params, warehouse_id: window.app.warehouse.warehouse_id});
+		params = JSON.parse({ ...params, warehouse_id: window.app.warehouse.warehouse_id });
 		table.selects.setValue(params.show_what)
 		table.updateQueryParams(params);
 	}

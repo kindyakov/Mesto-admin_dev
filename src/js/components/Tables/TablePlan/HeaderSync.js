@@ -138,7 +138,7 @@ export class HeaderSync {
 
     return [
       columnState.slice(0, 2 + offset),
-      columnState.slice(2 + offset, 6),   // ВЫРУЧКА 
+      columnState.slice(2 + offset, 6 + offset),   // ВЫРУЧКА 
       columnState.slice(6 + offset, 10 + offset),  // ПРОДАЖА
       columnState.slice(10 + offset)      // МАРКЕТИНГ
     ];
