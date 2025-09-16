@@ -509,7 +509,8 @@ class TablePlan extends Table {
   }
 
   async saveRowData(rowId) {
-    const row = this.wpTable.querySelector(`[row-id="${rowId}"]`);
+    const centerColsViewport = this.wpTable.querySelector('.ag-center-cols-viewport')
+    const row = centerColsViewport.querySelector(`[row-id="${rowId}"]`);
     if (!row) return;
 
     const rowNode = this.gridApi.getRowNode(rowId);
@@ -523,6 +524,7 @@ class TablePlan extends Table {
 
     this.editableFields.forEach(fieldName => {
       const input = row.querySelector(`input[name="${fieldName}"]`);
+
       if (input) {
         const newValue = input.value.replace(/\s/g, '');
         const numericValue = newValue ? parseFloat(newValue) : 0;
@@ -553,14 +555,16 @@ class TablePlan extends Table {
         rowNode.setDataValue(field, updatedData[field]);
       });
 
-      // Переключаем кнопки и отключаем редактирование
-      const btnEdit = row.querySelector('.btn-edit');
-      const btnSave = row.querySelector('.btn-save');
-      const btnCancel = row.querySelector('.btn-cancel');
+      const pinnedLeftColsContainer = this.wpTable.querySelector('.ag-pinned-left-cols-container')
 
-      btnEdit.classList.remove('hidden');
-      btnSave.classList.add('hidden');
-      btnCancel.classList.add('hidden');
+      // Переключаем кнопки и отключаем редактирование
+      const btnEdit = pinnedLeftColsContainer.querySelector('.btn-edit');
+      const btnSave = pinnedLeftColsContainer.querySelector('.btn-save');
+      const btnCancel = pinnedLeftColsContainer.querySelector('.btn-cancel');
+
+      btnEdit?.classList.remove('hidden');
+      btnSave?.classList.add('hidden');
+      btnCancel?.classList.add('hidden');
 
       this.editableFields.forEach(fieldName => {
         const input = row.querySelector(`input[name="${fieldName}"]`);
@@ -575,7 +579,7 @@ class TablePlan extends Table {
       console.error('Ошибка при сохранении:', error);
 
       if (window.app?.notify?.show) {
-        window.app.notify.show({ message: 'Ошибка при сохранении данных', type: 'error' });
+        window.app.notify.show({ msg: 'Ошибка при сохранении данных', type: 'error' });
       }
     }
   }
