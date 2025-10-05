@@ -105,11 +105,10 @@ class Dashboards extends Page {
 				const { start_date, end_date } = this.queryParams;
 
 				const newContent = `<span class="tippy-info-span tippy-info-date">
-        ${
-					type == 'start'
+        ${type == 'start'
 						? `${dateFormatter(new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-1`))} - ${dateFormatter(end_date)}`
 						: `${dateFormatter(start_date)} - ${dateFormatter(end_date)}`
-				}
+					}
         </span>`;
 
 				if (el._tippy) {
@@ -135,30 +134,39 @@ class Dashboards extends Page {
 		if (!this.widgets.length) return;
 		this.widgets.forEach(widget => {
 			const params = widget.getAttribute('data-render-widget');
-			const isPrice = widget.getAttribute('price') == '';
-			const isPrice2 = widget.getAttribute('price2') == '';
+			if (!params) return;
 
-			const [name, str] = params.split(',');
-			const value = data[name] ? data[name] + `${str ? str : ''}` : ''; // В процессе доработки
-			if (!data[name]) {
-				// widget.style.fontSize = '16px'
+			const hasPrice = widget.hasAttribute('price');
+			const hasPrice2 = widget.hasAttribute('price2');
+
+			// Вычитание двух значений: "value1-value2"
+			if (params.includes('-')) {
+				const [key1, key2] = params.split('-');
+				const result = (data[key1] || 0) - (data[key2] || 0);
+				widget.innerText = formattingPrice(result);
+				return;
 			}
+
+			// Обычное значение с опциональным суффиксом: "key" или "key,suffix"
+			const [key, suffix = ''] = params.split(',');
+			const value = data[key];
 
 			if (!value) return;
 
-			if (isPrice) {
-				widget.innerText = Number.isInteger(+value) ? formattingPrice(+value) : '';
-			} else if (isPrice2) {
-				widget.innerText = value ? formattingPrice(parseFloat(value)) + str : '';
+			if (hasPrice) {
+				const num = parseFloat(value);
+				widget.innerText = Number.isInteger(num) ? formattingPrice(num) : '';
+			} else if (hasPrice2) {
+				widget.innerText = formattingPrice(parseFloat(value)) + suffix;
 			} else {
-				widget.innerHTML = value;
+				widget.innerHTML = value + suffix;
 			}
 		});
 	}
 
-	onHandleScrollTo() {}
+	onHandleScrollTo() { }
 
-	onRender() {}
+	onRender() { }
 
 	getDashboardData() {
 		return [];

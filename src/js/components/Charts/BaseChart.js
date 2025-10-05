@@ -61,8 +61,10 @@ class BaseChart {
               const dataI = tooltip.dataPoints[0].dataIndex
 
               chart.data.datasets.length && chart.data.datasets.forEach(obj => {
+                const color = Array.isArray(obj.color) ? obj.color[dataI] : obj.color
+
                 const el = createElement('div', {
-                  content: `<b style="background: ${obj.color};"></b><span class="value">${obj.data[dataI]}</span>`
+                  content: `${color ? `<b style="background: ${color};"></b>` : ''}<span class="value">${obj.data[dataI]}</span>`
                 })
 
                 tooltipEl.appendChild(el)
@@ -70,10 +72,8 @@ class BaseChart {
 
               tooltipEl.style.opacity = 1;
 
+              this.onPosExternal(tooltipEl, chart, tooltip, dataI)
               this.onExternal(tooltipEl, chart, tooltip, dataI)
-
-              tooltipEl.style.left = (chart.canvas.offsetLeft + tooltip.caretX) - tooltipEl.clientWidth - 6 + 'px';
-              tooltipEl.style.top = (chart.canvas.offsetTop + tooltip.caretY) - tooltipEl.clientHeight - 6 + 'px';
             }
           }
         },
@@ -120,6 +120,22 @@ class BaseChart {
     if (this.chart) {
       this.chart.update('resize')
     }
+  }
+
+  onPosExternal(tooltipEl, chart, tooltip, dataI) {
+    // Вычисляем позицию слева
+    const leftPosition = (chart.canvas.offsetLeft + tooltip.caretX) - tooltipEl.clientWidth - 6;
+
+    // Проверяем, выходит ли tooltip за левую границу
+    if (leftPosition < 0) {
+      // Показываем справа
+      tooltipEl.style.left = (chart.canvas.offsetLeft + tooltip.caretX) + 6 + 'px';
+    } else {
+      // Показываем слева
+      tooltipEl.style.left = leftPosition + 'px';
+    }
+
+    tooltipEl.style.top = (chart.canvas.offsetTop + tooltip.caretY) - tooltipEl.clientHeight - 6 + 'px';
   }
 
   onExternal(tooltipEl, chart, tooltip, dataI) {

@@ -1,5 +1,8 @@
 import Dashboards from '../Dashboards.js';
 import TableUpcomingPayments from '../../../components/Tables/TableUpcomingPayments/TableUpcomingPayments.js';
+import RentDynamics from '../../../components/Charts/RentDynamics.js';
+import PaymentStructure from '../../../components/Charts/PaymentStructure.js';
+import DynamicsAvgRate from '../../../components/Charts/DynamicsAvgRate.js';
 import ChartRevenue from '../../../components/Charts/ChartRevenue/ChartRevenue.js';
 import {
 	getDashboardFinance,
@@ -25,13 +28,19 @@ class Finance extends Dashboards {
 					}
 				}
 			],
-			charts: [{ id: 'chart-revenue', ChartComponent: ChartRevenue }],
+			charts: [
+				{ id: 'chart-rent-dynamics', ChartComponent: RentDynamics },
+				{ id: 'chart-payment-structure', ChartComponent: PaymentStructure },
+				{ id: 'chart-dynamics-avg-rate', ChartComponent: DynamicsAvgRate },
+				{ id: 'chart-revenue', ChartComponent: ChartRevenue }
+			],
 			page: 'dashboards/finance'
 		});
 
 		this.actionsCharts(chart => {
 			chart.loader = this.loader;
 			chart.app = this.app;
+			chart.queryParams = this.queryParams;
 		});
 
 		const inputCheckbox = this.wrapper.querySelector('[name="without-large-cells"]');

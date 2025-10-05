@@ -6,33 +6,9 @@
       </svg>
       <input type="text" class="input-date-filter" name="date" placeholder="Дата">
     </label>
-    <div class="filter__block_content" style="max-width: 200px; position: relative;">
-      <span style="position: absolute; left: 0; bottom: 100%; font-size: 12px;">Площадь:</span>
-      <div class="filter__wp-input">
-        <span class="pref">от</span>
-        <input type="number" name="start_area" value="0" class="filter__input input-filter" inputmode="decimal"
-          autocomplete="off" step="0.1" min="0" max="1000" data-step="0.1" style="height: 40px; font-size: 14px;">
-      </div>
-      <div class="filter__wp-input">
-        <span class="pref">до</span>
-        <input type="number" name="end_area" value="1000" class="filter__input input-filter" inputmode="decimal"
-          autocomplete="off" step="0.1" min="0" max="1000" data-step="0.1" style="height: 40px; font-size: 14px;">
-      </div>
-    </div>
-    <div class="filter__block_content" style="position: relative; max-width: 200px;">
-      <label class="wrapper-checkbox">
-        <input type="checkbox" name="without-large-cells" class="input-checkbox" id="dashboards-finance-checkbox-1">
-        <label class="label-checkbox" for="dashboards-finance-checkbox-1">
-          <svg class='icon'>
-            <use xlink:href='#check-3'></use>
-          </svg>
-        </label>
-        <p>Без больших ячеек</p>
-      </label>
-    </div>
   </form>
 
-  <div class="widgets">
+  <!-- <div class="widgets">
     <div class="widgets__item col-2">
       <div class="widgets__item_img">
         <img src="img/icons/coins.png" alt="Иконка">
@@ -117,6 +93,120 @@
       <div class="widgets__item_content last" scroll-to='.dashboards__table;{"show_what":"total_reestr"}'>
         <span class="value" data-render-widget="total_reestr" price></span>
         <span class="name">Средств в реестре всего</span>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="grid grid-cols-3 gap-4 max-[1530px]:grid-cols-2 max-[800px]:grid-cols-1">
+    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4"
+      style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
+      <div class="flex justify-between gap-3 items-start w-full">
+        <div class="text-[#64748b] text-sm font-medium leading-[100%]">
+          Сумма арендной платы <br> с действующих клиентов (всего)
+        </div>
+        <div class="text-sm text-[#5fc057] font-bold flex items-center gap-1">
+          <svg width="7" height="7" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+            <path d="M5.83586 1.98802L0.823461 7L0 6.17661L5.0124 1.16463H0.59401V0H7V6.40546H5.83527L5.83586 1.98802Z"
+              fill="#5FC057" />
+          </svg>
+          <span>23%</span>
+        </div>
+      </div>
+      <div class="text-[32px] font-bold text-[#1c2434] mt-1" data-render-widget="total_reestr" price></div>
+      <p class="font-medium text-xs text-[#64748b] mt-1">Количество активных договоров: <b>183</b></p>
+      <div class="flex justify-between gap-3 mt-2">
+        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1">
+          <p class="text-xs font-medium text-[#64748b]">
+            Сумма арендной платы за выбранный
+            <span class="underline underline-offset-4 cursor-pointer hover:no-underline" data-render-tippy="dates,end"
+              price>период</span>
+          </p>
+          <b class="text-lg text-[#1c2434] mt-auto max-[1800px]:text-sm" data-render-widget="reestr_sum" price></b>
+        </div>
+        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col">
+          <p class="text-xs font-medium text-[#64748b]">
+            Сумма арендной платы в других периодах
+          </p>
+          <b class="text-lg text-[#1c2434] mt-auto max-[1800px]:text-sm" data-render-widget="total_reestr-reestr_sum"
+            price></b>
+        </div>
+      </div>
+      <div class="w-full h-[100px] mt-6">
+        <canvas id="chart-rent-dynamics" style="max-height: 90px;"></canvas>
+        <div id="tooltip-rent-dynamics" class="chart-tooltip"></div>
+      </div>
+    </div>
+    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4"
+      style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
+      <div class="text-[#64748b] text-sm font-medium leading-[100%]">
+        Сумма арендной платы <br> с действующих клиентов (за выбранный <span>период</span>)
+      </div>
+      <div class="text-[32px] font-bold text-[#1c2434] mt-1">2 000 000 ₽</div>
+      <div class="flex justify-between gap-3 mt-7 max-[800px]:mt-2 max-[420px]:gap-1 max-[380px]:flex-col">
+        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1">
+          <p class="text-xs font-medium text-[#64748b] max-[420px]:text-[10px] max-[420px]:leading-[100%]">
+            Арендная плата за <span class="underline underline-offset-4 cursor-pointer hover:no-underline"
+              data-render-tippy="dates,end" price>период</span>
+          </p>
+          <b class="mt-auto text-lg text-[#1c2434] max-[1800px]:text-sm" data-render-widget="revenue_rent" price></b>
+        </div>
+        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1">
+          <p class="text-xs font-medium text-[#64748b] max-[420px]:text-[10px] max-[420px]:leading-[100%]">
+            Продажи за <span class="underline underline-offset-4 cursor-pointer hover:no-underline"
+              data-render-tippy="dates,end" price>период</span>
+          </p>
+          <b class="mt-auto text-lg text-[#1c2434] max-[1800px]:text-sm" data-render-widget="new_clients_revenue_rent"
+            price></b>
+        </div>
+        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1">
+          <p class="text-xs font-medium text-[#64748b] max-[420px]:text-[10px] max-[420px]:leading-[100%]">
+            Депозит за <span class="underline underline-offset-4 cursor-pointer hover:no-underline"
+              data-render-tippy="dates,end">период</span>
+          </p>
+          <b class="mt-auto text-lg text-[#1c2434] max-[1800px]:text-sm"
+            data-render-widget="new_clients_revenue_deposit" price></b>
+        </div>
+      </div>
+      <div class="flex items-center mt-5 gap-4">
+        <ul class="flex flex-col gap-1 text-xs w-2/4">
+          <li class="flex gap-1 items-center">
+            <div class="w-[15px] h-[10px] flex-shrink-0 bg-[#00455f]"></div>
+            <p class="text-[#00455f]">Аренда</p>
+          </li>
+          <li class="flex gap-1 items-center">
+            <div class="w-[15px] h-[10px] flex-shrink-0 bg-[#5F9DB0]"></div>
+            <p class="text-[#69adc2]">Продажи: арендная плата</p>
+          </li>
+          <li class="flex gap-1 items-center">
+            <div class="w-[15px] h-[10px] flex-shrink-0 bg-[#A5CBD5]"></div>
+            <p class="text-[#92c7d6]">Продажи: депозит</p>
+          </li>
+        </ul>
+        <div class="h-[120px] w-2/4 flex items-center justify-center">
+          <canvas id="chart-payment-structure" style="max-height: 100px;"></canvas>
+          <div id="tooltip-payment-structure" class="chart-tooltip"></div>
+        </div>
+      </div>
+    </div>
+    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col wp-chart"
+      style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
+      <div class="flex items-center justify-between gap-2">
+        <p class="text-[#64748b] text-sm font-medium leading-[100%]">
+          Средняя ставка за всё время
+        </p>
+        <b class="text-[32px] font-bold text-[#1c2434] flex-shrink-0" data-render-widget="avg_price_per_room,/м²"
+          price2>₽/м</b>
+      </div>
+      <div class="flex items-center justify-between gap-2 mt-3 mb-2">
+        <p class="text-[#64748b] text-sm font-medium leading-[100%]">
+          Средняя ставка за выбранный <span data-render-tippy="dates,end"
+            class="underline underline-offset-4 cursor-pointer hover:no-underline">период</span>
+        </p>
+        <b class="text-[32px] font-bold text-[#1c2434] flex-shrink-0"
+          data-render-widget="current_avg_price_per_room,/м²" price2>2 000 000 ₽</b>
+      </div>
+      <div class="mt-auto w-full h-[100px] flex items-end">
+        <canvas id="chart-dynamics-avg-rate" style="max-height: 100px;"></canvas>
       </div>
     </div>
   </div>
@@ -205,6 +295,32 @@
         <use xlink:href='#arrow-fill'></use>
       </svg>
     </button>
+    <div class="flex items-center flex-wrap gap-6">
+      <div class="filter__block_content" style="max-width: 200px; position: relative;">
+        <span style="position: absolute; left: 0; bottom: 100%; font-size: 12px;">Площадь:</span>
+        <div class="filter__wp-input">
+          <span class="pref">от</span>
+          <input type="number" name="start_area" value="0" class="filter__input input-filter" inputmode="decimal"
+            autocomplete="off" step="0.1" min="0" max="1000" data-step="0.1" style="height: 40px; font-size: 14px;">
+        </div>
+        <div class="filter__wp-input">
+          <span class="pref">до</span>
+          <input type="number" name="end_area" value="1000" class="filter__input input-filter" inputmode="decimal"
+            autocomplete="off" step="0.1" min="0" max="1000" data-step="0.1" style="height: 40px; font-size: 14px;">
+        </div>
+      </div>
+      <div class="filter__block_content" style="position: relative; max-width: 200px;">
+        <label class="wrapper-checkbox">
+          <input type="checkbox" name="without-large-cells" class="input-checkbox" id="dashboards-finance-checkbox-1">
+          <label class="label-checkbox" for="dashboards-finance-checkbox-1">
+            <svg class='icon'>
+              <use xlink:href='#check-3'></use>
+            </svg>
+          </label>
+          <p>Без больших ячеек</p>
+        </label>
+      </div>
+    </div>
     <div class="table _my-accordion-content" style="height: 841px; max-height: none;">
       <div class="table__top">
         <form class="table__form form-table-search">
