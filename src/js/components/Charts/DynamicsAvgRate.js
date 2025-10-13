@@ -1,6 +1,7 @@
 import BaseChart from "./BaseChart.js";
 import merge from 'lodash.merge';
 // import { formattingPrice } from '../../utils/formattingPrice.js';
+import { getPreviousMonthsRanges } from '../../utils/getPreviousMonthsRanges.js';
 import { getDashboardFinance } from '../../settings/request.js';
 import { dateFormatter } from "../../settings/dateFormatter.js";
 import { Loader } from "../../modules/myLoader.js";
@@ -41,7 +42,7 @@ class DynamicsAvgRate extends BaseChart {
             },
             ticks: {
               font: {
-                size: 12
+                size: 10
               }
             }
           }
@@ -75,72 +76,18 @@ class DynamicsAvgRate extends BaseChart {
     });
   }
 
-  async render() {
-    try {
-      this._loader.enable()
+  render() {
+    if (!this.previousMonthsData) return
+    const data = this.previousMonthsData.data.slice(-9)
+    const rangeDates = this.previousMonthsData.previousRanges.slice(-9)
 
-      const currentStartDate = this.queryParams.start_date;
-      const currentEndDate = this.queryParams.end_date;
+    this.chart.data.labels = rangeDates.map(range => {
+      const date = new Date(range.start_date);
+      return dateFormatter(date, 'LLLL');
+    });
+    this.chart.data.datasets[0].data = data.map(obj => obj.current_avg_price_per_room || 0)
 
-      // Функция для получения диапазона предыдущих месяцев
-      const getPreviousMonthsRanges = (startDate, endDate, monthsCount = 3) => {
-        const ranges = [];
-        const start = new Date(startDate);
-
-        for (let i = 1; i <= monthsCount; i++) {
-          // Вычисляем дату для предыдущего месяца
-          const prevMonthEnd = new Date(start);
-          prevMonthEnd.setMonth(start.getMonth() - i);
-          prevMonthEnd.setDate(1); // Устанавливаем первый день месяца
-
-          // Последний день предыдущего месяца
-          const lastDay = new Date(prevMonthEnd.getFullYear(), prevMonthEnd.getMonth() + 1, 0);
-
-          ranges.push({
-            start_date: prevMonthEnd.toISOString().split('T')[0],
-            end_date: lastDay.toISOString().split('T')[0]
-          });
-        }
-
-        return ranges;
-      };
-
-      // Получаем диапазоны для предыдущих 3 месяцев
-      const previousRanges = getPreviousMonthsRanges(currentStartDate, currentEndDate, 3).reverse();
-
-      // Формируем массив всех запросов
-      const requests = [
-        // Основной запрос
-        getDashboardFinance({
-          warehouse_id: this.app.warehouse.warehouse_id,
-          end_date: currentEndDate || "",
-          start_date: currentStartDate || ""
-        }),
-        // Запросы за предыдущие месяцы
-        ...previousRanges.map(range =>
-          getDashboardFinance({
-            warehouse_id: this.app.warehouse.warehouse_id,
-            start_date: range.start_date,
-            end_date: range.end_date
-          })
-        )
-      ];
-
-      // Выполняем все запросы параллельно
-      const [currentData, ...previousMonthsData] = await Promise.all(requests);
-
-      this.chart.data.labels = previousRanges.map(range => {
-        const date = new Date(range.start_date);
-        return dateFormatter(date, 'LLLL');
-      });
-      this.chart.data.datasets[0].data = previousMonthsData.map(obj => obj.current_avg_price_per_room || 0)
-
-      this.chart.update();
-    } catch (error) {
-      throw error;
-    } finally {
-      this._loader.disable()
-    }
+    this.chart.update();
   }
 }
 

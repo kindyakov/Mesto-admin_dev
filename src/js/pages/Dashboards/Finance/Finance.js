@@ -11,6 +11,7 @@ import {
 } from '../../../settings/request.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { mergeQueryParams } from '../../../utils/buildQueryParams.js';
+import { getPreviousMonthsRanges } from '../../../utils/getPreviousMonthsRanges.js';
 
 class Finance extends Dashboards {
 	constructor({ loader }) {
@@ -47,6 +48,41 @@ class Finance extends Dashboards {
 		inputCheckbox && inputCheckbox.addEventListener('change', this.handleChangeInput.bind(this));
 	}
 
+	async getPreviousMonthsData(monthsCount) {
+		const currentStartDate = this.queryParams.start_date;
+		const currentEndDate = this.queryParams.end_date;
+
+		// Получаем диапазоны для предыдущих месяцев
+		const previousRanges = getPreviousMonthsRanges(currentStartDate, currentEndDate, monthsCount).reverse();
+
+		// Формируем массив всех запросов
+		const requests = [
+			// Основной запрос (текущий период)
+			getDashboardFinance({
+				warehouse_id: this.app.warehouse.warehouse_id,
+				end_date: currentEndDate || "",
+				start_date: currentStartDate || ""
+			}),
+			// Запросы за предыдущие месяцы
+			...previousRanges.map(range =>
+				getDashboardFinance({
+					warehouse_id: this.app.warehouse.warehouse_id,
+					start_date: range.start_date,
+					end_date: range.end_date
+				})
+			)
+		];
+
+		// Выполняем все запросы параллельно
+		const data = await Promise.all(requests);
+
+		return {
+			previousRanges,
+			data,
+			currentRange: { start_date: currentStartDate, end_date: currentEndDate }
+		};
+	}
+
 	async getData(queryParams = {}) {
 		this.table.queryParams = mergeQueryParams(this.table.queryParams, queryParams)
 		return postFuturePayments({
@@ -64,7 +100,8 @@ class Finance extends Dashboards {
 				...this.queryParams,
 				...queryParams
 			}),
-			getFinancePlan({ warehouse_id: this.app.warehouse.warehouse_id, ...queryParams })
+			getFinancePlan({ warehouse_id: this.app.warehouse.warehouse_id, ...queryParams }),
+			this.getPreviousMonthsData(9)
 		]);
 	}
 
@@ -150,7 +187,7 @@ class Finance extends Dashboards {
 		}
 	}
 
-	onRender([dataDashboard, { finance_planfact = [] }], dataEntities) {
+	onRender([dataDashboard, { finance_planfact = [] }, previousMonthsData], dataEntities) {
 		this.renderWidgets(dataDashboard);
 
 		if (this.tables.length && dataEntities) {
@@ -160,7 +197,32 @@ class Finance extends Dashboards {
 			});
 		}
 
+		// Передаем данные в диаграммы
+		if (this.charts.length) {
+			this.actionsCharts((chart) => {
+				// Передаем полные данные, каждая диаграмма сама возьмет нужное количество
+				chart.previousMonthsData = previousMonthsData;
+				chart.render([dataDashboard, { finance_planfact }]);
+			});
+		}
+
 		this.visualization({ dataDashboard, finance_planfact, dataEntities });
+
+		const total_reestr_percent = this.wrapper.querySelector('.total-reestr-percent')
+
+		if (total_reestr_percent) {
+			const total_reestr_percent_value = ((dataDashboard.total_reestr || 1) / (previousMonthsData.data.at(-1).total_reestr || 1) * 100).toFixed(0)
+
+			total_reestr_percent.textContent = total_reestr_percent_value + '%'
+
+			if (total_reestr_percent_value > 0) {
+				total_reestr_percent.style.color = '#5fc057'
+			} else if (total_reestr_percent_value === 0) {
+				total_reestr_percent.style.color = '#EFBB34'
+			} else {
+				total_reestr_percent.style.color = '#E03D3D'
+			}
+		}
 	}
 }
 

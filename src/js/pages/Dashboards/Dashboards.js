@@ -1,3 +1,4 @@
+import { Parser } from 'expr-eval';
 import Page from '../Page.js';
 import { Select } from '../../modules/mySelect.js';
 import { createCalendar } from '../../settings/createCalendar.js';
@@ -17,6 +18,35 @@ function formatePrice(value) {
 	}
 
 	return value.toFixed(0) + ' ' + units[unitIndex];
+}
+
+const parser = new Parser();
+
+// Функция для вычисления математических выражений
+function calculateExpression(expression, data) {
+	if (expression.includes(',')) {
+		return null;
+	}
+	// Проверяем, есть ли математические операторы
+	if (!/[\+\-\*\/\(\)]/.test(expression)) {
+		return null; // Это не выражение, а обычный ключ
+	}
+
+	try {
+		// Извлекаем все переменные из выражения
+		const variables = expression.match(/[a-zA-Z_][a-zA-Z0-9_]*/g) || [];
+
+		const safeData = {};
+		variables.forEach(variable => {
+			safeData[variable] = data[variable] ?? 0;
+		});
+
+		const expr = parser.parse(expression);
+		return expr.evaluate(safeData);
+	} catch (e) {
+		console.error('Ошибка вычисления выражения:', expression, e);
+		return 0;
+	}
 }
 
 class Dashboards extends Page {
@@ -139,11 +169,10 @@ class Dashboards extends Page {
 			const hasPrice = widget.hasAttribute('price');
 			const hasPrice2 = widget.hasAttribute('price2');
 
-			// Вычитание двух значений: "value1-value2"
-			if (params.includes('-')) {
-				const [key1, key2] = params.split('-');
-				const result = (data[key1] || 0) - (data[key2] || 0);
-				widget.innerText = formattingPrice(result);
+			const calculatedValue = calculateExpression(params, data);
+
+			if (calculatedValue !== null) {
+				widget.innerText = formattingPrice(calculatedValue);
 				return;
 			}
 
@@ -151,7 +180,7 @@ class Dashboards extends Page {
 			const [key, suffix = ''] = params.split(',');
 			const value = data[key];
 
-			if (!value) return;
+			if (value === null || value === undefined) return;
 
 			if (hasPrice) {
 				const num = parseFloat(value);

@@ -1,6 +1,10 @@
 export function formattingPrice(price) {
-	if (!price || price == 'null') return 0 + ' ₽';
-	return Number(price).toLocaleString('en-US') + ' ₽';
+	if (!price || price === 'null') return '0 ₽';
+
+	const num = Number(price);
+	if (isNaN(num)) return '0 ₽'; // защита от некорректных значений
+
+	return num.toLocaleString('ru-RU') + ' ₽';
 }
 
 export function formatPhoneNumber(phoneNumber) {

@@ -98,18 +98,18 @@
   </div> -->
 
   <div class="grid grid-cols-3 gap-4 max-[1530px]:grid-cols-2 max-[800px]:grid-cols-1">
-    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4"
+    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 wp-chart"
       style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
       <div class="flex justify-between gap-3 items-start w-full">
         <div class="text-[#64748b] text-sm font-medium leading-[100%]">
           Сумма арендной платы <br> с действующих клиентов (всего)
         </div>
-        <div class="text-sm text-[#5fc057] font-bold flex items-center gap-1">
+        <div class="text-sm font-bold flex items-center gap-1">
           <svg width="7" height="7" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
             <path d="M5.83586 1.98802L0.823461 7L0 6.17661L5.0124 1.16463H0.59401V0H7V6.40546H5.83527L5.83586 1.98802Z"
               fill="#5FC057" />
           </svg>
-          <span>23%</span>
+          <span class="total-reestr-percent">23%</span>
         </div>
       </div>
       <div class="text-[32px] font-bold text-[#1c2434] mt-1" data-render-widget="total_reestr" price></div>
@@ -125,10 +125,16 @@
         </div>
         <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col">
           <p class="text-xs font-medium text-[#64748b]">
-            Сумма арендной платы в других периодах
+            Сумма в будущих периодах
           </p>
-          <b class="text-lg text-[#1c2434] mt-auto max-[1800px]:text-sm" data-render-widget="total_reestr-reestr_sum"
+          <b class="text-lg text-[#1c2434] mt-auto max-[1800px]:text-sm" data-render-widget="reestr_sum_future"
             price></b>
+        </div>
+        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col">
+          <p class="text-xs font-medium text-[#64748b]">
+            Задолженность в прошлых периодах
+          </p>
+          <b class="text-lg text-[#1c2434] mt-auto max-[1800px]:text-sm" data-render-widget="reestr_sum_past" price></b>
         </div>
       </div>
       <div class="w-full h-[100px] mt-6">
@@ -139,16 +145,20 @@
     <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4"
       style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
       <div class="text-[#64748b] text-sm font-medium leading-[100%]">
-        Сумма арендной платы <br> с действующих клиентов (за выбранный <span>период</span>)
+        Выручка (за выбранный <span data-render-tippy="dates,end"
+          class="underline underline-offset-4 cursor-pointer hover:no-underline">период</span>)
       </div>
-      <div class="text-[32px] font-bold text-[#1c2434] mt-1">2 000 000 ₽</div>
+      <div class="text-[32px] font-bold text-[#1c2434] mt-1"
+        data-render-widget="revenue_rent-new_clients_revenue_rent+new_clients_revenue_deposit" price>
+      </div>
       <div class="flex justify-between gap-3 mt-7 max-[800px]:mt-2 max-[420px]:gap-1 max-[380px]:flex-col">
         <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1">
           <p class="text-xs font-medium text-[#64748b] max-[420px]:text-[10px] max-[420px]:leading-[100%]">
             Арендная плата за <span class="underline underline-offset-4 cursor-pointer hover:no-underline"
               data-render-tippy="dates,end" price>период</span>
           </p>
-          <b class="mt-auto text-lg text-[#1c2434] max-[1800px]:text-sm" data-render-widget="revenue_rent" price></b>
+          <b class="mt-auto text-lg text-[#1c2434] max-[1800px]:text-sm"
+            data-render-widget="revenue_rent-new_clients_revenue_rent" price></b>
         </div>
         <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1">
           <p class="text-xs font-medium text-[#64748b] max-[420px]:text-[10px] max-[420px]:leading-[100%]">
@@ -168,22 +178,22 @@
         </div>
       </div>
       <div class="flex items-center mt-5 gap-4">
-        <ul class="flex flex-col gap-1 text-xs w-2/4">
+        <ul class="flex flex-col gap-1 text-xs flex-shrink-0">
           <li class="flex gap-1 items-center">
-            <div class="w-[15px] h-[10px] flex-shrink-0 bg-[#00455f]"></div>
-            <p class="text-[#00455f]">Аренда</p>
+            <div class="w-[15px] h-[10px] flex-shrink-0 bg-[#5782A1]"></div>
+            <p class="text-[#5782A1]">Выручка</p>
           </li>
           <li class="flex gap-1 items-center">
-            <div class="w-[15px] h-[10px] flex-shrink-0 bg-[#5F9DB0]"></div>
-            <p class="text-[#69adc2]">Продажи: арендная плата</p>
+            <div class="w-[15px] h-[10px] flex-shrink-0 bg-[#E3AA39]"></div>
+            <p class="text-[#E3AA39]">Осталось собрать</p>
           </li>
           <li class="flex gap-1 items-center">
-            <div class="w-[15px] h-[10px] flex-shrink-0 bg-[#A5CBD5]"></div>
-            <p class="text-[#92c7d6]">Продажи: депозит</p>
+            <div class="w-[15px] h-[10px] flex-shrink-0 bg-[#005C9E]"></div>
+            <p class="text-[#005C9E]">Планируемый итог</p>
           </li>
         </ul>
-        <div class="h-[120px] w-2/4 flex items-center justify-center">
-          <canvas id="chart-payment-structure" style="max-height: 100px;"></canvas>
+        <div class="h-[120px] flex-1 flex items-center justify-center top-0">
+          <canvas id="chart-payment-structure" style="max-height: 100%;"></canvas>
           <div id="tooltip-payment-structure" class="chart-tooltip"></div>
         </div>
       </div>
