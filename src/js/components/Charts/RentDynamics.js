@@ -71,10 +71,10 @@ class RentDynamics extends BaseChart {
     });
   }
 
-  render([_, { finance_planfact }]) {
+  render([currentData, { finance_planfact }]) {
     if (!this.previousMonthsData) return
-    const data = this.previousMonthsData.data.slice(-3)
-    const rangeDates = this.previousMonthsData.previousRanges.slice(-3)
+    const data = [...this.previousMonthsData.data.slice(-3), currentData]
+    const rangeDates = [...this.previousMonthsData.previousRanges.slice(-3), this.previousMonthsData.currentRange]
 
     this.chart.data.datasets[0].data = data.map(obj => obj.total_reestr)
     this.chart.data.labels = rangeDates.map(range => {

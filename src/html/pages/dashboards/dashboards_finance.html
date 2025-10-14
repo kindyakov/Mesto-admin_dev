@@ -112,10 +112,14 @@
           <span class="total-reestr-percent">23%</span>
         </div>
       </div>
-      <div class="text-[32px] font-bold text-[#1c2434] mt-1" data-render-widget="total_reestr" price></div>
-      <p class="font-medium text-xs text-[#64748b] mt-1">Количество активных договоров: <b>183</b></p>
-      <div class="flex justify-between gap-3 mt-2">
-        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1">
+      <div class="text-[32px] font-bold text-[#1c2434] mt-1" data-render-widget="total_reestr" price
+        scroll-to='.dashboards__table;{"show_what":"total_reestr"}'></div>
+      <p class="font-medium text-xs text-[#64748b] mt-1">Количество активных договоров: <b
+          data-render-widget="cnt_active_agrs">183</b>
+      </p>
+      <div class="flex justify-between gap-3 mt-2 max-[420px]:flex-col">
+        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1"
+          scroll-to='.dashboards__table;{"show_what":"reestr"}'>
           <p class="text-xs font-medium text-[#64748b]">
             Сумма арендной платы за выбранный
             <span class="underline underline-offset-4 cursor-pointer hover:no-underline" data-render-tippy="dates,end"
@@ -123,14 +127,16 @@
           </p>
           <b class="text-lg text-[#1c2434] mt-auto max-[1800px]:text-sm" data-render-widget="reestr_sum" price></b>
         </div>
-        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col">
+        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col"
+          scroll-to='.dashboards__table;{"show_what":"reestr_future"}'>
           <p class="text-xs font-medium text-[#64748b]">
             Сумма в будущих периодах
           </p>
           <b class="text-lg text-[#1c2434] mt-auto max-[1800px]:text-sm" data-render-widget="reestr_sum_future"
             price></b>
         </div>
-        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col">
+        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col"
+          scroll-to='.dashboards__table;{"show_what":"reestr_past"}'>
           <p class="text-xs font-medium text-[#64748b]">
             Задолженность в прошлых периодах
           </p>
@@ -142,17 +148,19 @@
         <div id="tooltip-rent-dynamics" class="chart-tooltip"></div>
       </div>
     </div>
-    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4"
+    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 wp-chart"
       style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
       <div class="text-[#64748b] text-sm font-medium leading-[100%]">
         Выручка (за выбранный <span data-render-tippy="dates,end"
           class="underline underline-offset-4 cursor-pointer hover:no-underline">период</span>)
       </div>
       <div class="text-[32px] font-bold text-[#1c2434] mt-1"
-        data-render-widget="revenue_rent-new_clients_revenue_rent+new_clients_revenue_deposit" price>
+        data-render-widget="revenue_rent-new_clients_revenue_rent+new_clients_revenue_deposit" price
+        scroll-to='.dashboards__table;{"show_what":"revenue"}'>
       </div>
       <div class="flex justify-between gap-3 mt-7 max-[800px]:mt-2 max-[420px]:gap-1 max-[380px]:flex-col">
-        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1">
+        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1"
+          scroll-to='.dashboards__table;{"show_what":"revenue_old"}'>
           <p class="text-xs font-medium text-[#64748b] max-[420px]:text-[10px] max-[420px]:leading-[100%]">
             Арендная плата за <span class="underline underline-offset-4 cursor-pointer hover:no-underline"
               data-render-tippy="dates,end" price>период</span>
@@ -160,7 +168,8 @@
           <b class="mt-auto text-lg text-[#1c2434] max-[1800px]:text-sm"
             data-render-widget="revenue_rent-new_clients_revenue_rent" price></b>
         </div>
-        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1">
+        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1"
+          scroll-to='.dashboards__table;{"show_what":"revenue_new"}'>
           <p class="text-xs font-medium text-[#64748b] max-[420px]:text-[10px] max-[420px]:leading-[100%]">
             Продажи за <span class="underline underline-offset-4 cursor-pointer hover:no-underline"
               data-render-tippy="dates,end" price>период</span>
@@ -168,7 +177,8 @@
           <b class="mt-auto text-lg text-[#1c2434] max-[1800px]:text-sm" data-render-widget="new_clients_revenue_rent"
             price></b>
         </div>
-        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1">
+        <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1"
+          scroll-to='.dashboards__table;{"show_what":"revenue_deposit"}'>
           <p class="text-xs font-medium text-[#64748b] max-[420px]:text-[10px] max-[420px]:leading-[100%]">
             Депозит за <span class="underline underline-offset-4 cursor-pointer hover:no-underline"
               data-render-tippy="dates,end">период</span>
@@ -177,7 +187,7 @@
             data-render-widget="new_clients_revenue_deposit" price></b>
         </div>
       </div>
-      <div class="flex items-center mt-5 gap-4">
+      <div class="flex items-center mt-5 gap-4 justify-between max-[420px]:flex-col-reverse">
         <ul class="flex flex-col gap-1 text-xs flex-shrink-0">
           <li class="flex gap-1 items-center">
             <div class="w-[15px] h-[10px] flex-shrink-0 bg-[#5782A1]"></div>
@@ -192,9 +202,13 @@
             <p class="text-[#005C9E]">Планируемый итог</p>
           </li>
         </ul>
-        <div class="h-[120px] flex-1 flex items-center justify-center top-0">
-          <canvas id="chart-payment-structure" style="max-height: 100%;"></canvas>
+        <div class="h-[120px] flex flex-auto items-center justify-center relative w-full max-w-[260px]">
+          <canvas id="chart-payment-structure" class="max-h-full max-w-[130px]"></canvas>
           <div id="tooltip-payment-structure" class="chart-tooltip"></div>
+          <span
+            class="chart-label-left absolute left-0 top-0 -translate-y-1/2 font-semibold text-sm whitespace-nowrap text-[#E3AA39]"></span>
+          <span
+            class="chart-label-right absolute right-0 top-0 -translate-y-1/2 font-semibold text-sm whitespace-nowrap text-[#5782A1]"></span>
         </div>
       </div>
     </div>
@@ -243,15 +257,20 @@
     </div>
     <div style="position: relative; width: 100%; height: 15px;">
       <p class="visualization-difference difference-fact-plan text-error"
-        style="transform: translateX(-50%); position: absolute;"></p>
-      <p class="visualization-difference text-info needs-collected-mont" style="position: absolute; right: 0;"></p>
+        style="transform: translateX(-50%); position: absolute;"
+        scroll-to='.dashboards__table;{"show_what":"debitors"}'>
+      </p>
+      <p class="visualization-difference text-info needs-collected-mont" style="position: absolute; right: 0;"
+        scroll-to='.dashboards__table;{"show_what":"reestr"}'></p>
     </div>
     <div class="visualization__content">
-      <div class="visualization__item visualization-fact" style="color: #0b704e;background: #cff1e6;">
+      <div class="visualization__item visualization-fact" style="color: #0b704e;background: #cff1e6;"
+        scroll-to='.dashboards__table;{"show_what":"reestr_revenue"}'>
       </div>
       <!-- <div class="visualization__item visualization-plan" style="color: #E03D3D; background: rgba(255, 207, 207, 1);">
       </div> -->
-      <div class="visualization__item visualization-remains-deposit" style="color: #efbb34; background: #fcf1d6;">
+      <div class="visualization__item visualization-remains-deposit" style="color: #efbb34; background: #fcf1d6;"
+        scroll-to='.dashboards__table;{"show_what":"rest_in_reestr"}'>
       </div>
     </div>
   </div>
@@ -346,16 +365,18 @@
           <select name="show_what" class="init-custom-select" data-special-select="select-filter-table"
             data-select-min-width="200"
             data-input-html="<svg class='icon icon-arrow'><use xlink:href='#arrow'></use></svg>">
-            <option value="reestr">Средств в реестре</option>
+            <option value="reestr">Сумма арендной платы за выбранный период</option>
+            <option value="total_reestr">Сумма арендной платы всего</option>
+            <option value="reestr_revenue">Сборы по реестру</option>
             <option value="rest_in_reestr">Осталось в реестре</option>
+            <option value="reestr_future">Сумма арендной платы в будущих периодах</option>
+            <option value="reestr_past">Задолженность в прошлых периодах</option>
             <option value="revenue">Выручка</option>
-            <option value="revenue_new">Выручка от новых клиентов</option>
-            <option value="revenue_new_deposit">Сборы по депозитам от новых клиентов</option>
-            <option value="revenue_rent">Сборы по аренде</option>
-            <option value="revenue_new_rent">Сборы по аренде от новых клиентов</option>
+            <option value="revenue_old">Арендная плата за период</option>
+            <option value="revenue_new">Продажи за период</option>
             <option value="revenue_deposit">Сборы по депозитам</option>
-            <option value="deposits">Текущая сумма депозитов</option>
-            <option value="total_reestr">Средств в реестре всего</option>
+            <option value="debitors">Дебиторы</option>
+            <option value="revenue_new_rent">Продажи за период</option>
           </select>
         </form>
         <div class="table__buttuns">

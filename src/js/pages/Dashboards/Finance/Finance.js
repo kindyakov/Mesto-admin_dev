@@ -137,7 +137,9 @@ class Finance extends Dashboards {
 	onHandleScrollTo({ params }) {
 		const [table] = this.tables;
 		if (!params) return;
-		params = JSON.parse({ ...params, warehouse_id: window.app.warehouse.warehouse_id });
+
+		params = JSON.parse(params);
+		params.warehouse_id = window.app.warehouse.warehouse_id
 		table.selects.setValue(params.show_what)
 		table.updateQueryParams(params);
 	}

@@ -31,91 +31,86 @@ class PaymentStructure extends BaseChart {
             display: false
           }
         },
-        plugins: {
-          tooltip: {
-            mode: 'index',
-            intersect: false
+        onHover: (event, activeElements) => {
+          if (this.isUpdating) return; // Предотвращаем рекурсию
+
+          if (activeElements.length > 0) {
+            // Наводим на график - показываем сумму
+            if (!this.originalData) {
+              this.originalData = [...this.chart.data.datasets[0].data];
+            }
+
+            const sum = this.originalData[0] + this.originalData[1];
+
+            this.isUpdating = true;
+            this.chart.data.datasets[0].data = [sum];
+            this.chart.update('none');
+            this.isUpdating = false;
+
+            this.isHovered = true;
+          } else if (this.isHovered) {
+            // Убираем курсор - возвращаем исходные данные
+            if (this.originalData && this.originalData.length === 2) {
+              this.isUpdating = true;
+              this.chart.data.datasets[0].data = [...this.originalData];
+              this.chart.update('none');
+              this.isUpdating = false;
+            }
+            this.isHovered = false;
           }
         },
-        hover: {
-          mode: 'index',
-          intersect: false
-        },
-        onHover: (event, activeElements, chart) => {
-          this.handleHover(event, chart);
+        plugins: {
+          tooltip: {
+            enabled: false,
+            position: 'average',
+            mode: 'nearest',
+            intersect: true,
+            external: context => {
+              const { chart, tooltip } = context
+              const tooltipEl = chart.canvas.parentNode.querySelector('.chart-tooltip');
+
+              if (!tooltipEl) return
+
+              if (tooltip.opacity === 0) {
+                tooltipEl.style.opacity = 0;
+                return;
+              }
+
+              // Вычисляем сумму для отображения в tooltip
+              const sum = this.originalData ? (this.originalData[0] + this.originalData[1]) : 0;
+
+              // Очищаем tooltip
+              tooltipEl.innerHTML = ''
+
+              // Создаем элемент с суммой
+              const el = document.createElement('div');
+              el.innerHTML = `<span class="value">${formattingPrice(sum)}</span>`;
+              tooltipEl.appendChild(el);
+
+              tooltipEl.style.opacity = 1;
+
+              // Позиционируем tooltip всегда справа внизу
+              this.onPosExternal(tooltipEl, chart, tooltip, 0);
+            }
+          }
         }
       }
     }
 
     super(ctx, merge({}, defaultOptions, addOptions))
 
-    const parent = this.chart.canvas.parentElement;
-    parent.classList.add('relative');
-
-    // Создаем лейблы один раз
-    const labelLeft = document.createElement('div');
-    labelLeft.className = 'chart-label-left absolute right-0 top-0 -translate-y-1/2 font-semibold text-sm whitespace-nowrap';
-    labelLeft.style.color = '#5782A1';
-    // parent.appendChild(labelLeft);
-
-    const labelRight = document.createElement('div');
-    labelRight.className = 'chart-label-right absolute left-0 top-0 -translate-y-1/2 font-semibold text-sm whitespace-nowrap';
-    labelRight.style.color = '#E3AA39';
-    // parent.appendChild(labelRight);
-
-    this.labelLeft = labelLeft;
-    this.labelRight = labelRight;
-
-    this.originalData = [];
-    this.originalColors = ['#5782A1', '#E3AA39'];
-    this.hoverColor = '#005C9E';
-    this.isHovered = false;
-
-    this.chart.canvas.addEventListener('mouseleave', () => {
-      if (this.isHovered) {
-        this.hideHoverState();
-      }
-    });
+    this.wpChart = this.chart.canvas.closest('.wp-chart')
+    this.labelLeft = this.wpChart.querySelector('.chart-label-left');
+    this.labelRight = this.wpChart.querySelector('.chart-label-right');
+    this.originalData = null; // Для хранения исходных данных
+    this.isHovered = false; // Флаг состояния hover
+    this.isUpdating = false; // Флаг для предотвращения рекурсии
   }
 
-  handleHover(event, activeElements, chart) {
-    const isOverChart = activeElements.length > 0;
-
-    if (isOverChart && !this.isHovered) {
-      this.showHoverState();
-    } else if (!isOverChart && this.isHovered) {
-      this.hideHoverState();
-    }
-  }
-
-  showHoverState() {
-    this.isHovered = true;
-    const dataset = this.chart.data.datasets[0];
-
-    this.originalData = [...dataset.data];
-    const sum = dataset.data.reduce((acc, val) => acc + (val || 0), 0);
-
-    dataset.data = [sum];
-    dataset.backgroundColor = [this.hoverColor];
-
-    this.chart.update();
-  }
-
-  hideHoverState() {
-    this.isHovered = false;
-    const dataset = this.chart.data.datasets[0];
-
-    dataset.data = [...this.originalData];
-    dataset.backgroundColor = [...this.originalColors];
-
-    this.chart.update();
-  }
-
-  onExternal(tooltipEl, chart, tooltip, dataI) {
-    tooltipEl.querySelectorAll('.value')?.forEach(el => {
-      el.innerText = formattingPrice(parseFloat(el.innerText));
-      el.classList.add('text-[#64748b]', 'font-medium', 'text-[10px]');
-    });
+  onPosExternal(tooltipEl, chart, tooltip, dataI) {
+    // Всегда позиционируем tooltip справа внизу графика
+    tooltipEl.style.left = (chart.canvas.offsetLeft + chart.canvas.clientWidth) - tooltipEl.clientWidth + 'px';
+    tooltipEl.style.top = (chart.canvas.offsetTop + chart.canvas.clientHeight) + 6 + 'px';
   }
 
   render([{ revenue_rent, new_clients_revenue_rent, new_clients_revenue_deposit, reestr_sum }, { finance_planfact }]) {
@@ -124,11 +119,15 @@ class PaymentStructure extends BaseChart {
       reestr_sum - (finance_planfact.at(-1).revenue_reestr_accumulated || 0)
     ]
 
+    // Сбрасываем сохраненные данные при новом рендере
+    this.originalData = null;
+    this.isHovered = false;
+
     this.chart.update();
 
     // Обновляем лейблы
-    this.labelLeft.textContent = formattingPrice(this.chart.data.datasets[0].data[0]);
-    this.labelRight.textContent = formattingPrice(this.chart.data.datasets[0].data[1]);
+    this.labelLeft.textContent = formattingPrice(this.chart.data.datasets[0].data[1]);
+    this.labelRight.textContent = formattingPrice(this.chart.data.datasets[0].data[0]);
   }
 }
 
