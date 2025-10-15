@@ -103,9 +103,8 @@ class Scheme {
 		});
 	}
 
-	render(scheme, data) {
+	render(scheme, { plan_rooms }) {
 		if (!this.wrapScheme) return;
-		const { plan_rooms } = data;
 
 		this.wrapScheme.innerHTML = scheme;
 		this.cells = this.wrapScheme.querySelectorAll('.warehouse__svg-cell');

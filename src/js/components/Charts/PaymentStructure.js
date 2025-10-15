@@ -113,9 +113,9 @@ class PaymentStructure extends BaseChart {
     tooltipEl.style.top = (chart.canvas.offsetTop + chart.canvas.clientHeight) + 6 + 'px';
   }
 
-  render([{ revenue_rent, new_clients_revenue_rent, new_clients_revenue_deposit, reestr_sum }, { finance_planfact }]) {
+  render([{ revenue, reestr_sum }, { finance_planfact }]) {
     this.chart.data.datasets[0].data = [
-      revenue_rent - new_clients_revenue_rent + new_clients_revenue_deposit,
+      revenue,
       reestr_sum - (finance_planfact.at(-1).revenue_reestr_accumulated || 0)
     ]
 

@@ -154,8 +154,7 @@
         Выручка (за выбранный <span data-render-tippy="dates,end"
           class="underline underline-offset-4 cursor-pointer hover:no-underline">период</span>)
       </div>
-      <div class="text-[32px] font-bold text-[#1c2434] mt-1"
-        data-render-widget="revenue_rent-new_clients_revenue_rent+new_clients_revenue_deposit" price
+      <div class="text-[32px] font-bold text-[#1c2434] mt-1" data-render-widget="revenue" price
         scroll-to='.dashboards__table;{"show_what":"revenue"}'>
       </div>
       <div class="flex justify-between gap-3 mt-7 max-[800px]:mt-2 max-[420px]:gap-1 max-[380px]:flex-col">
@@ -169,7 +168,7 @@
             data-render-widget="revenue_rent-new_clients_revenue_rent" price></b>
         </div>
         <div class="border border-solid border-[#e1e8f0] p-2 rounded-lg flex-1 flex flex-col gap-1"
-          scroll-to='.dashboards__table;{"show_what":"revenue_new"}'>
+          scroll-to='.dashboards__table;{"show_what":"revenue_new_rent"}'>
           <p class="text-xs font-medium text-[#64748b] max-[420px]:text-[10px] max-[420px]:leading-[100%]">
             Продажи за <span class="underline underline-offset-4 cursor-pointer hover:no-underline"
               data-render-tippy="dates,end" price>период</span>
@@ -373,7 +372,6 @@
             <option value="reestr_past">Задолженность в прошлых периодах</option>
             <option value="revenue">Выручка</option>
             <option value="revenue_old">Арендная плата за период</option>
-            <option value="revenue_new">Продажи за период</option>
             <option value="revenue_deposit">Сборы по депозитам</option>
             <option value="debitors">Дебиторы</option>
             <option value="revenue_new_rent">Продажи за период</option>

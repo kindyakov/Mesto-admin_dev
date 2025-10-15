@@ -14,6 +14,7 @@ class Warehouse extends Page {
 
     this.warehouseScheme = new Scheme(this.wrapper)
     this.selectRooms = new SelectRooms(this.wrapper)
+    this.currentScheme = null
   }
 
   init() {
@@ -54,6 +55,7 @@ class Warehouse extends Page {
   }
 
   onRender([dataRooms, scheme]) {
+    this.currentScheme = scheme
     if (dataRooms) {
       this.selectRooms.setRooms(dataRooms.plan_rooms)
       this.warehouseScheme.render(scheme, dataRooms)
@@ -70,7 +72,7 @@ class Warehouse extends Page {
           this.warehouseScheme.setNumRooms(data.plan_rooms)
           this.warehouseScheme.filterCell(this.currentRented)
         } else {
-          this.warehouseScheme.render(data)
+          this.warehouseScheme.render(this.currentScheme, data)
         }
       }
     } catch (error) {

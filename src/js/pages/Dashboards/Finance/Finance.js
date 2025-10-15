@@ -213,7 +213,7 @@ class Finance extends Dashboards {
 		const total_reestr_percent = this.wrapper.querySelector('.total-reestr-percent')
 
 		if (total_reestr_percent) {
-			const total_reestr_percent_value = ((dataDashboard.total_reestr || 1) / (previousMonthsData.data.at(-1).total_reestr || 1) * 100).toFixed(0)
+			const total_reestr_percent_value = (((dataDashboard.total_reestr || 1) / (previousMonthsData.data.at(-1).total_reestr || 1) - 1) * 100).toFixed(0)
 
 			total_reestr_percent.textContent = total_reestr_percent_value + '%'
 
