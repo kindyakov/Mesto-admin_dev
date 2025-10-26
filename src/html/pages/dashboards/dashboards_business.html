@@ -1,0 +1,135 @@
+<div class="main__content content-main" data-content="dashboards/business">
+  <form class="main__filter form-filter-dashboards" style="justify-content: stretch;">
+    <label class="main__date-filter">
+      <svg class='icon icon-calendar'>
+        <use xlink:href='#calendar'></use>
+      </svg>
+      <input type="text" class="input-date-filter" name="date" placeholder="Дата">
+    </label>
+  </form>
+
+  <div class="flex flex-col gap-[10px]">
+    <div class="flex justify-between items-center gap-3">
+      <h2 class="font-semibold text-[32px] text-[#1c2434]">Выручка</h2>
+      <form class="main__filter form-filter-sales" style="width: auto;">
+        <label class="main__date-filter">
+          <svg class="icon icon-calendar">
+            <use xlink:href="#calendar"></use>
+          </svg>
+          <input type="text" class="input-date-filter flatpickr-input active" name="start_date,end_date"
+            placeholder="Выбрать период для сравнения" readonly="readonly">
+        </label>
+        <label class="wrapper-checkbox">
+          <input type="checkbox" name="without-large-cells" class="input-checkbox"
+            id="dashboards-business-checkbox-sales">
+          <label class="label-checkbox" for="dashboards-business-checkbox-sales">
+            <svg class="icon">
+              <use xlink:href="#check-3"></use>
+            </svg>
+          </label>
+        </label>
+      </form>
+    </div>
+    <div class="grid grid-cols-3 w-full gap-4 mt-3">
+      <div
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        <div class="font-normal text-sm text-[#64748b]">Выручка всего факт</div>
+        <b class="text-[#fe234d] text-3xl" data-render-widget="revenue_accumulated" price></b>
+        <div class="absolute right-[16px] top-[16px] flex flex-col text-sm font-normal">
+          <span class="text-[#37b456]" data-render-widget="revenue_accumulated-revenue_accumulated_planned"
+            price></span>
+        </div>
+      </div>
+      <div
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        <div class="font-normal text-sm text-[#64748b]">План нарастающим итогом</div>
+        <b class="text-[#746afa] text-3xl" data-render-widget="revenue_accumulated_planned" price></b>
+      </div>
+      <div
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        <div class="font-normal text-sm text-[#64748b]">Выручка сегодня</div>
+        <b class="text-[#fe234d] text-3xl" data-render-widget="revenue" price></b>
+        <div class="absolute right-[16px] top-[16px] flex flex-col text-sm font-normal">
+          <span class="text-[#37b456]" data-render-widget="revenue-revenue_planned" price></span>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4">
+      <canvas id="chart-sales" style="max-height: 560px;"></canvas>
+    </div>
+  </div>
+
+  <div class="dashboards__table _my-accordion" data-accordion-open data-max-height="845">
+    <button class="dashboards__table-toggle btn-toggle-table _my-accordion-control">
+      <span>Платежи</span>
+      <svg class='icon icon-arrow-fill'>
+        <use xlink:href='#arrow-fill'></use>
+      </svg>
+    </button>
+    <div class="flex items-center flex-wrap gap-6">
+      <div class="filter__block_content" style="max-width: 200px; position: relative;">
+        <span style="position: absolute; left: 0; bottom: 100%; font-size: 12px;">Площадь:</span>
+        <div class="filter__wp-input">
+          <span class="pref">от</span>
+          <input type="number" name="start_area" value="0" class="filter__input input-filter" inputmode="decimal"
+            autocomplete="off" step="0.1" min="0" max="1000" data-step="0.1" style="height: 40px; font-size: 14px;">
+        </div>
+        <div class="filter__wp-input">
+          <span class="pref">до</span>
+          <input type="number" name="end_area" value="1000" class="filter__input input-filter" inputmode="decimal"
+            autocomplete="off" step="0.1" min="0" max="1000" data-step="0.1" style="height: 40px; font-size: 14px;">
+        </div>
+      </div>
+      <div class="filter__block_content" style="position: relative; max-width: 200px;">
+        <label class="wrapper-checkbox">
+          <input type="checkbox" name="without-large-cells" class="input-checkbox" id="dashboards-finance-checkbox-1">
+          <label class="label-checkbox" for="dashboards-finance-checkbox-1">
+            <svg class='icon'>
+              <use xlink:href='#check-3'></use>
+            </svg>
+          </label>
+          <p>Без больших ячеек</p>
+        </label>
+      </div>
+    </div>
+    <div class="table _my-accordion-content" style="height: 841px; max-height: none;">
+      <div class="table__top">
+        <form class="table__form form-table-search">
+          <select name="show_what" class="init-custom-select" data-special-select="select-filter-table"
+            data-select-min-width="200"
+            data-input-html="<svg class='icon icon-arrow'><use xlink:href='#arrow'></use></svg>">
+            <option value="reestr">Сумма арендной платы за выбранный период</option>
+            <option value="total_reestr">Сумма арендной платы всего</option>
+            <option value="reestr_revenue">Сборы по реестру</option>
+            <option value="rest_in_reestr">Осталось в реестре</option>
+            <option value="reestr_future">Сумма арендной платы в будущих периодах</option>
+            <option value="reestr_past">Задолженность в прошлых периодах</option>
+            <option value="revenue">Выручка</option>
+            <option value="revenue_old">Арендная плата за период</option>
+            <option value="revenue_deposit">Сборы по депозитам</option>
+            <option value="debitors">Дебиторы</option>
+            <option value="revenue_new_rent">Продажи за период</option>
+          </select>
+        </form>
+        <div class="table__buttuns">
+          <button class="table__button button-table btn-filter-reset">
+            <span>Сбросить фильтры</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="icon">
+              <path
+                d="M22.5,9A7.4522,7.4522,0,0,0,16,12.792V8H14v8h8V14H17.6167A5.4941,5.4941,0,1,1,22.5,22H22v2h.5a7.5,7.5,0,0,0,0-15Z" />
+              <path
+                d="M26,6H4V9.171l7.4142,7.4143L12,17.171V26h4V24h2v2a2,2,0,0,1-2,2H12a2,2,0,0,1-2-2V18L2.5858,10.5853A2,2,0,0,1,2,9.171V6A2,2,0,0,1,4,4H26Z" />
+            </svg>
+          </button>
+          <button class="table__button button-table btn-table-upload-excel" data-count>
+            <span>Выгрузить в Excel</span>
+            <svg class='icon icon-dow'>
+              <use xlink:href='#dow'></use>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="table__content table-payments-business ag-theme-quartz" style="height: 100%;"></div>
+    </div>
+  </div>
+</div>

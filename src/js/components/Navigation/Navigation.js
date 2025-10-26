@@ -161,6 +161,7 @@ class Navigation {
 			this.modulesCache[pageName].render();
 		} else {
 			// Загружаем модуль и сохраняем его в кэш
+
 			import(`../../pages/${path}`)
 				.then(module => {
 					this.loader.disable();
@@ -174,6 +175,7 @@ class Navigation {
 					});
 
 					this.modulesCache[pageName] = page; // Сохраняем модуль в кэш
+
 					page.render();
 				})
 				.catch(error => {

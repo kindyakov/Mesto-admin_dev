@@ -7,19 +7,6 @@ import tippy from '../../configs/tippy.js';
 import { formattingPrice } from '../../utils/formattingPrice.js';
 // import { inputValidator } from "../../settings/validates.js";
 
-function formatePrice(value) {
-	if (!value) return '';
-	const units = ['', 'тыс.', 'млн.', 'млрд.', 'трлн.'];
-	let unitIndex = 0;
-
-	while (value >= 1000 && unitIndex < units.length - 1) {
-		value /= 1000;
-		unitIndex++;
-	}
-
-	return value.toFixed(0) + ' ' + units[unitIndex];
-}
-
 const parser = new Parser();
 
 // Функция для вычисления математических выражений

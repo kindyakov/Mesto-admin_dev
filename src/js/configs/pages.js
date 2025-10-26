@@ -40,6 +40,12 @@ export const pages = {
 			return actionDashboards({ tab, content, user, ...params });
 		}
 	},
+	'dashboards/business': {
+		path: 'Dashboards/Business/Business.js',
+		accessCheck: ({ tab, content, user, ...params }) => {
+			return actionDashboards({ tab, content, user, ...params });
+		}
+	},
 	'dashboards/marketing': {
 		path: 'Dashboards/Marketing/Marketing.js',
 		accessCheck: ({ tab, content, user }) => {
