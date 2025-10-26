@@ -160,6 +160,13 @@ class Dashboards extends Page {
 
 			if (calculatedValue !== null) {
 				widget.innerText = formattingPrice(calculatedValue);
+				if (widget.getAttribute('color') === '') {
+					if (calculatedValue > 0) {
+						widget.style.color = '#37b456'
+					} else {
+						widget.style.color = '#fe0334'
+					}
+				}
 				return;
 			}
 
@@ -176,6 +183,15 @@ class Dashboards extends Page {
 				widget.innerText = formattingPrice(parseFloat(value)) + suffix;
 			} else {
 				widget.innerHTML = value + suffix;
+			}
+
+
+			if (widget.getAttribute('color')) {
+				if (value > 0) {
+					widget.style.color = '#37b456'
+				} else {
+					widget.style.color = 'fe0334'
+				}
 			}
 		});
 	}

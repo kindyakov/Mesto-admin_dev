@@ -32,25 +32,28 @@
     </div>
     <div class="grid grid-cols-3 w-full gap-4 mt-3">
       <div
-        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
+        scroll-to='.dashboards__table'>
         <div class="font-normal text-sm text-[#64748b]">Выручка всего факт</div>
         <b class="text-[#fe234d] text-3xl" data-render-widget="revenue_accumulated" price></b>
         <div class="absolute right-[16px] top-[16px] flex flex-col text-sm font-normal">
-          <span class="text-[#37b456]" data-render-widget="revenue_accumulated-revenue_accumulated_planned"
-            price></span>
+          <span class="text-[#37b456]" data-render-widget="revenue_accumulated-revenue_accumulated_planned" price
+            color></span>
         </div>
       </div>
       <div
-        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
+        scroll-to='.dashboards__table'>
         <div class="font-normal text-sm text-[#64748b]">План нарастающим итогом</div>
         <b class="text-[#746afa] text-3xl" data-render-widget="revenue_accumulated_planned" price></b>
       </div>
       <div
-        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
+        scroll-to='.dashboards__table;{"start_date":"today","end_date":"today"}'>
         <div class="font-normal text-sm text-[#64748b]">Выручка сегодня</div>
         <b class="text-[#fe234d] text-3xl" data-render-widget="revenue" price></b>
         <div class="absolute right-[16px] top-[16px] flex flex-col text-sm font-normal">
-          <span class="text-[#37b456]" data-render-widget="revenue-revenue_planned" price></span>
+          <span class="text-[#37b456]" data-render-widget="revenue-revenue_planned" price color></span>
         </div>
       </div>
     </div>
@@ -84,21 +87,24 @@
     </div>
     <div class="grid grid-cols-3 w-full gap-4 mt-3">
       <div
-        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
+        scroll-to='.dashboards__table'>
         <div class="font-normal text-sm text-[#64748b]">Продажи м² за <span>период</span></div>
         <b class="text-[#f3b23e] text-3xl">
           <span data-render-widget="inflow_area_accumulated"></span> м²
         </b>
       </div>
       <div
-        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
+        scroll-to='.dashboards__table'>
         <div class="font-normal text-sm text-[#64748b]">План: продажа м² за <span>период</span></div>
         <b class="text-[#005c9e] text-3xl">
           <span data-render-widget="inflow_area_accumulated_planned"></span> м²
         </b>
       </div>
       <div
-        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
+        scroll-to='.dashboards__table;{"start_date":"today","end_date":"today"}'>
         <div class="font-normal text-sm text-[#64748b]">Продажи м² сегодня</div>
         <b class="text-[#5682a1] text-3xl">
           <span data-render-widget="inflow_area"></span> м²
@@ -135,17 +141,20 @@
     </div>
     <div class="grid grid-cols-3 w-full gap-4 mt-3">
       <div
-        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
+        scroll-to='.dashboards__table'>
         <div class="font-normal text-sm text-[#64748b]">Общее количество лидов</div>
         <b class="text-[#f3b23e] text-3xl" data-render-widget="leads_accumulated_fact"></b>
       </div>
       <div
-        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
+        scroll-to='.dashboards__table'>
         <div class="font-normal text-sm text-[#64748b]">План количество лидов за <span>период</span></div>
         <b class="text-[#005c9e] text-3xl" data-render-widget="leads_accumulated_planned"></b>
       </div>
       <div
-        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
+        scroll-to='.dashboards__table;{"start_date":"today","end_date":"today"}'>
         <div class="font-normal text-sm text-[#64748b]">Количество лидов сегодня</div>
         <b class="text-[#5682a1] text-3xl" data-render-widget="leads_fact"></b>
       </div>

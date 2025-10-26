@@ -1,6 +1,7 @@
 import { Loader } from '../../modules/myLoader.js';
 import { createCalendar } from '../../settings/createCalendar.js';
 import { getFinancePlan } from '../../settings/request.js';
+import { dateFormatter } from '../../settings/dateFormatter.js';
 /**
  * Базовый класс для графиков с двумя canvas (верхний и нижний)
  * Включает встроенную систему tooltip как в BaseChart
@@ -22,7 +23,10 @@ class BaseDoubleChart {
     this.section = this.wpChart.closest('.business-section')
     this.form = this.section.querySelector('.form-filter')
     this.checkbox = this.section.querySelector('[type="checkbox"]')
-    this.loaderForm = new Loader(this.form)
+    this.loaderForm = new Loader(this.form, {
+      styleLoader: 'width: 25px; height: 25px; border-width: 1.5px;'
+    })
+    this.comparisonData = null;
 
     this.calendars = createCalendar(this.form.querySelector('.input-date'), {
       mode: 'range',
@@ -33,9 +37,12 @@ class BaseDoubleChart {
 
         if (selectedDates.length === 2) {
           const params = {
+            warehouse_id: this.app.warehouse.warehouse_id,
             [nameOne]: dateFormatter(selectedDates[0], 'yyyy-MM-dd'),
             [nameTwo]: dateFormatter(selectedDates[1], 'yyyy-MM-dd')
           }
+          // this.checkbox.checked = false
+          this.updateChartData(params);
         }
       }
     });
@@ -44,12 +51,15 @@ class BaseDoubleChart {
     // Создаем DOM структуру
     this.createCanvasStructure();
 
+    // Обработчик чекбокса для включения/выключения отображения данных сравнения
+    this.checkbox.addEventListener('change', () => {
+      this.toggleComparison(this.checkbox.checked);
+    });
+
     // Подписка на resize
     window.addEventListener('resize', () => this.resizeChart());
     this.form.addEventListener('submit', (e) => e.preventDefault())
   }
-
-
 
   /**
    * Создает DOM структуру: два canvas с контейнерами и tooltip
@@ -176,6 +186,12 @@ class BaseDoubleChart {
       <p>План: <b class="plan" style="color: #746afa;"></b></p>
       <p>Факт: <b class="fact" style="color: #37b456;"></b></p>
     </div>
+    <div class="comparison-data hidden">
+      <hr style="border-color: #e0e0e0; opacity: 0.5;">
+      <p style="font-size: 11px; color: #999; margin-bottom: 4px;">Сравнение:</p>
+      <p>План: <b class="plan-comparison" style="color: #FFA500;"></b></p>
+      <p>Факт: <b class="fact-comparison" style="color: #9333EA;"></b></p>
+    </div>
     <div class="sklad hidden">
     </div>
     `
@@ -250,6 +266,52 @@ class BaseDoubleChart {
     if (this.bottomChart) {
       this.bottomChart.update('resize');
     }
+  }
+
+  /**
+   * Загрузка данных для сравнения за выбранный период
+   * @param {Object} params - Параметры запроса (warehouse_id, start_date, end_date)
+   */
+  async updateChartData(params) {
+    try {
+      this.loaderForm.enable();
+      const data = await getFinancePlan(params);
+      this.comparisonData = data;
+      this.toggleComparison(this.checkbox.checked);
+    } catch (error) {
+      console.error('Error loading comparison data:', error);
+    } finally {
+      this.loaderForm.disable();
+    }
+  }
+
+  /**
+   * Включение/выключение отображения данных сравнения
+   * @param {Boolean} isEnabled - Показывать ли данные сравнения
+   */
+  toggleComparison(isEnabled) {
+    if (isEnabled && this.comparisonData) {
+      this.addComparisonData(this.comparisonData);
+    } else {
+      this.removeComparisonData();
+    }
+  }
+
+  /**
+   * Добавление данных сравнения в графики
+   * ОБЯЗАТЕЛЬНО переопределить в дочернем классе
+   * @param {Object} comparisonData - Данные для сравнения
+   */
+  addComparisonData(comparisonData) {
+    throw new Error('addComparisonData() must be implemented in child class');
+  }
+
+  /**
+   * Удаление данных сравнения из графиков
+   * ОБЯЗАТЕЛЬНО переопределить в дочернем классе
+   */
+  removeComparisonData() {
+    throw new Error('removeComparisonData() must be implemented in child class');
   }
 
   /**

@@ -212,6 +212,39 @@ class ChartSales extends BaseDoubleChart {
     } else {
       elFact.style.color = '#37b456'
     }
+
+    // Обработка данных сравнения
+    const comparisonSection = tooltipEl.querySelector('.comparison-data')
+    if (this.topChart.data.datasets.length > 2) {
+      const planComparison = this.topChart.data.datasets[2].data[dataI]
+      const factComparison = this.topChart.data.datasets[3].data[dataI]
+
+      const elPlanComparison = tooltipEl.querySelector('.plan-comparison')
+      const elFactComparison = tooltipEl.querySelector('.fact-comparison')
+
+      elPlanComparison.textContent = formattingPrice(planComparison)
+      elFactComparison.textContent = formattingPrice(factComparison)
+
+      if (factComparison < planComparison) {
+        elFactComparison.style.color = '#E03D3D'
+      } else {
+        elFactComparison.style.color = '#9333EA'
+      }
+
+      comparisonSection.classList.remove('hidden')
+    } else {
+      comparisonSection.classList.add('hidden')
+    }
+
+    if (this.moreFinances && this.moreFinances.length) {
+      const skladBlock = tooltipEl.querySelector('.sklad')
+      skladBlock.classList.remove('hidden')
+      skladBlock.innerHTML = ''
+      this.moreFinances.forEach(({ warehouse_short_name, finance_planfact }) => {
+        const data = finance_planfact[dataI]
+        skladBlock.insertAdjacentHTML('beforeend', `<p>${warehouse_short_name}: ${formattingPrice(data.revenue_accumulated)}</p>`)
+      })
+    }
   }
 
   // Дополнительная обработка tooltip для нижнего графика
@@ -232,9 +265,44 @@ class ChartSales extends BaseDoubleChart {
     } else {
       elFact.style.color = '#37b456'
     }
+
+    // Обработка данных сравнения
+    const comparisonSection = tooltipEl.querySelector('.comparison-data')
+    if (this.bottomChart.data.datasets.length > 2) {
+      const planComparison = this.bottomChart.data.datasets[2].data[dataI] * (-1)
+      const factComparison = this.bottomChart.data.datasets[3].data[dataI] * (-1)
+
+      const elPlanComparison = tooltipEl.querySelector('.plan-comparison')
+      const elFactComparison = tooltipEl.querySelector('.fact-comparison')
+
+      elPlanComparison.textContent = formattingPrice(planComparison)
+      elFactComparison.textContent = formattingPrice(factComparison)
+
+      if (factComparison < planComparison) {
+        elFactComparison.style.color = '#E03D3D'
+      } else {
+        elFactComparison.style.color = '#9333EA'
+      }
+
+      comparisonSection.classList.remove('hidden')
+    } else {
+      comparisonSection.classList.add('hidden')
+    }
+
+    if (this.moreFinances && this.moreFinances.length) {
+      const skladBlock = tooltipEl.querySelector('.sklad')
+      skladBlock.classList.remove('hidden')
+      skladBlock.innerHTML = ''
+      this.moreFinances.forEach(({ warehouse_short_name, finance_planfact }) => {
+        const data = finance_planfact[dataI]
+        skladBlock.insertAdjacentHTML('beforeend', `<p>${warehouse_short_name}: ${formattingPrice(data.revenue)}</p>`)
+      })
+    }
   }
 
-  render([_, { finance_planfact }], options = {}) {
+  render([_, ...data], options = {}) {
+    const { finance_planfact } = data.length > 1 ? data.find(obj => obj.warehouse_id === 0) : data[0]
+
     this.topChart.data.labels = finance_planfact.map(obj => dateFormatter(obj.data, 'dd.MM'));
     this.topChart.data.datasets[0].data = finance_planfact.map(obj => obj.revenue_accumulated_planned);
     this.topChart.data.datasets[1].data = finance_planfact.map(obj => obj.revenue_accumulated);
@@ -255,6 +323,111 @@ class ChartSales extends BaseDoubleChart {
     // Сохраняем дополнительные данные для tooltip (если переданы)
     if (options.extraData) {
       this.extraData = options.extraData;
+    }
+
+    this.topChart.update();
+    this.bottomChart.update();
+  }
+
+  // Добавление данных сравнения в графики
+  addComparisonData({ finance_planfact }) {
+    if (!finance_planfact || !finance_planfact.length) return;
+
+    // Градиенты для данных сравнения
+    const gradientOrange = this.createLinearGradient(this.topCanvas, 'rgba(255, 165, 0, 0.2)', 'rgba(255, 165, 0, 0.05)', 200);
+    const gradientPurple = this.createLinearGradient(this.topCanvas, 'rgba(147, 51, 234, 0.3)', 'rgba(147, 51, 234, 0.05)', 200);
+
+    // Верхний график - добавляем или обновляем datasets сравнения
+    if (this.topChart.data.datasets.length > 2) {
+      // Обновляем существующие datasets
+      this.topChart.data.datasets[2].data = finance_planfact.map(obj => obj.revenue_accumulated_planned);
+      this.topChart.data.datasets[3].data = finance_planfact.map(obj => obj.revenue_accumulated);
+    } else if (this.topChart.data.datasets.length === 2) {
+      // Создаем новые datasets
+      this.topChart.data.datasets.push(
+        {
+          label: 'План (сравнение)',
+          data: finance_planfact.map(obj => obj.revenue_accumulated_planned),
+          borderColor: '#FFA500',
+          backgroundColor: gradientOrange,
+          color: '#FFA500',
+          borderWidth: 2,
+          fill: false,
+          tension: 0.4,
+          pointRadius: 3,
+          pointBackgroundColor: '#FFA500',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+        },
+        {
+          label: 'Факт (сравнение)',
+          data: finance_planfact.map(obj => obj.revenue_accumulated),
+          borderColor: '#9333EA',
+          backgroundColor: gradientPurple,
+          color: '#9333EA',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 3,
+          pointBackgroundColor: '#9333EA',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+        }
+      );
+    }
+
+    // Нижний график - добавляем или обновляем datasets сравнения
+    const revenueDataComparison = finance_planfact.map(obj => -obj.revenue);
+    const colorsComparison = finance_planfact.map(obj =>
+      obj.revenue >= obj.revenue_planned ? '#9333EA' : '#FFA500'
+    );
+
+    if (this.bottomChart.data.datasets.length > 2) {
+      // Обновляем существующие datasets
+      this.bottomChart.data.datasets[2].data = finance_planfact.map(obj => -obj.revenue_planned);
+      this.bottomChart.data.datasets[3].data = revenueDataComparison;
+      this.bottomChart.data.datasets[3].backgroundColor = colorsComparison;
+    } else if (this.bottomChart.data.datasets.length === 2) {
+      // Создаем новые datasets
+      this.bottomChart.data.datasets.push(
+        {
+          label: 'План (сравнение)',
+          type: 'line',
+          data: finance_planfact.map(obj => -obj.revenue_planned),
+          borderColor: '#FFA500',
+          color: '#FFA500',
+          backgroundColor: 'transparent',
+          borderWidth: 1,
+          fill: false,
+          tension: 0.2,
+          pointRadius: 2,
+          pointBackgroundColor: '#fff',
+          pointBorderColor: '#FFA500',
+          pointBorderWidth: 2,
+        },
+        {
+          label: 'Факт (сравнение)',
+          type: 'bar',
+          data: revenueDataComparison,
+          backgroundColor: colorsComparison,
+          borderRadius: 2,
+          barThickness: 8,
+        }
+      );
+    }
+
+    this.topChart.update();
+    this.bottomChart.update();
+  }
+
+  // Удаление данных сравнения из графиков
+  removeComparisonData() {
+    // Удаляем datasets сравнения если они есть
+    if (this.topChart.data.datasets.length > 2) {
+      this.topChart.data.datasets.splice(2);
+    }
+    if (this.bottomChart.data.datasets.length > 2) {
+      this.bottomChart.data.datasets.splice(2);
     }
 
     this.topChart.update();

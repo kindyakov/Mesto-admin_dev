@@ -54,17 +54,59 @@ class Business extends Dashboards {
   }
 
   async getDashboardData(queryParams = {}) {
+    const currentWarehouseId = this.app.warehouse.warehouse_id;
+
+    if (currentWarehouseId === 0) {
+      const [dashboard, ...plans] = await Promise.all([
+        getDashboardFinance({ warehouse_id: 0, ...this.queryParams, ...queryParams }),
+        ...this.app.warehouses.map(w =>
+          getFinancePlan({ warehouse_id: w.warehouse_id, ...queryParams })
+        )
+      ]);
+
+      // Связываем планы со складами
+      const plansWithWarehouseIds = plans.map((plan, index) => ({
+        warehouse_id: this.app.warehouses[index].warehouse_id,
+        warehouse_short_name: this.app.warehouses[index].warehouse_short_name || '',
+        ...plan // разворачиваем данные плана
+      }));
+
+      // Возвращаем ПЛОСКИЙ массив, как было раньше
+      return [dashboard, ...plansWithWarehouseIds];
+    }
+
     return Promise.all([
-      getDashboardFinance({
-        warehouse_id: this.app.warehouse.warehouse_id,
-        ...this.queryParams,
-        ...queryParams
-      }),
-      getFinancePlan({ warehouse_id: this.app.warehouse.warehouse_id, ...queryParams }),
+      getDashboardFinance({ warehouse_id: currentWarehouseId, ...this.queryParams, ...queryParams }),
+      getFinancePlan({ warehouse_id: currentWarehouseId, ...queryParams })
     ]);
   }
 
-  onRender([dataDashboard, { finance_planfact = [] }], dataEntities) {
+  onHandleScrollTo({ params }) {
+    const [table] = this.tables;
+    if (!params) return;
+    const today = new Date().toISOString().split('T')[0];
+
+    params = JSON.parse(params);
+    params.warehouse_id = window.app.warehouse.warehouse_id
+
+    if (params.show_what) {
+      table.selects.setValue(params.show_what)
+    }
+
+    if (params.start_date === 'today') {
+      params.start_date = today
+    }
+
+    if (params.end_date === 'today') {
+      params.end_date = today
+    }
+
+    table.updateQueryParams(params);
+  }
+
+  onRender([dataDashboard, ...data], dataEntities) {
+    const { finance_planfact } = data.length > 1 ? data.find(obj => obj.warehouse_id === 0) : data[0]
+
     if (finance_planfact) {
       const today = new Date().toISOString().split('T')[0];
       const startDate = new Date(this.queryParams.start_date);
@@ -84,6 +126,12 @@ class Business extends Dashboards {
       this.actionsTables((table, i) => {
         table.data = dataEntities.agreements;
         table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities);
+      });
+    }
+
+    if (data.length > 1) {
+      this.actionsCharts(chart => {
+        chart.moreFinances = data.filter(obj => obj.warehouse_id !== 0)
       });
     }
   }
