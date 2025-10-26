@@ -1,6 +1,8 @@
 import Dashboards from '../Dashboards.js';
 import TableUpcomingPayments from '../../../components/Tables/TableUpcomingPayments/TableUpcomingPayments.js';
 import ChartSales from '../../../components/Charts/ChartSales.js';
+import ChartSalesArea from '../../../components/Charts/ChartSalesArea.js';
+import ChartLeads from '../../../components/Charts/ChartLeads.js';
 import {
   getDashboardFinance,
   getFinancePlan,
@@ -28,6 +30,8 @@ class Business extends Dashboards {
       ],
       charts: [
         { id: 'chart-sales', ChartComponent: ChartSales },
+        { id: 'chart-sales-area', ChartComponent: ChartSalesArea },
+        { id: 'chart-leads', ChartComponent: ChartLeads },
       ],
       page: 'dashboards/business'
     });

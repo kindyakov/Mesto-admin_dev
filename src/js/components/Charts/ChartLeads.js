@@ -1,3 +1,4 @@
+// 
 import Chart from 'chart.js/auto';
 import BaseDoubleChart from './BaseDoubleChart.js';
 import { dateFormatter } from "../../settings/dateFormatter.js";
@@ -18,18 +19,18 @@ function formatePriceType(value) {
   return value.toFixed(0) + ' ' + units[unitIndex];
 }
 
-class ChartSales extends BaseDoubleChart {
+class ChartLeads extends BaseDoubleChart {
   constructor(ctx, addOptions = {}) {
     super(ctx, {
-      topCanvasId: 'chart-sales-top',
-      bottomCanvasId: 'chart-sales-bottom',
+      topCanvasId: 'chart-leads-top',
+      bottomCanvasId: 'chart-leads-bottom',
       topCanvasStyle: 'min-height: 300px;',
       bottomCanvasStyle: 'min-height: 200px;',
       ...addOptions
     });
 
     this._loader = new Loader(this.wpChart, {
-      id: 'loader-chart-sales',
+      id: 'loader-chart-leads',
     });
 
     // Инициализация графиков
@@ -204,8 +205,8 @@ class ChartSales extends BaseDoubleChart {
     const elFact = tooltipEl.querySelector('.fact')
 
     elDate.textContent = date
-    elPlan.textContent = formattingPrice(plan)
-    elFact.textContent = formattingPrice(fact)
+    elPlan.textContent = plan
+    elFact.textContent = fact
 
     if (fact < plan) {
       elFact.style.color = '#E03D3D'
@@ -225,8 +226,8 @@ class ChartSales extends BaseDoubleChart {
     const elFact = tooltipEl.querySelector('.fact')
 
     elDate.textContent = date
-    elPlan.textContent = formattingPrice(plan)
-    elFact.textContent = formattingPrice(fact)
+    elPlan.textContent = plan
+    elFact.textContent = fact
     if (fact < plan) {
       elFact.style.color = '#E03D3D'
     } else {
@@ -236,17 +237,17 @@ class ChartSales extends BaseDoubleChart {
 
   render([_, { finance_planfact }], options = {}) {
     this.topChart.data.labels = finance_planfact.map(obj => dateFormatter(obj.data, 'dd.MM'));
-    this.topChart.data.datasets[0].data = finance_planfact.map(obj => obj.revenue_accumulated_planned);
-    this.topChart.data.datasets[1].data = finance_planfact.map(obj => obj.revenue_accumulated);
+    this.topChart.data.datasets[0].data = finance_planfact.map(obj => obj.leads_accumulated_planned);
+    this.topChart.data.datasets[1].data = finance_planfact.map(obj => obj.leads_accumulated_fact);
 
     this.bottomChart.data.labels = finance_planfact.map(obj => dateFormatter(obj.data, 'dd.MM'));
     // Инвертируем значения в отрицательные для отображения вниз от базовой линии
-    this.bottomChart.data.datasets[0].data = finance_planfact.map(obj => -obj.revenue_planned);
+    this.bottomChart.data.datasets[0].data = finance_planfact.map(obj => -obj.leads_planned);
 
     // Данные для столбцов с динамическим цветом
-    const revenueData = finance_planfact.map(obj => -obj.revenue);
+    const revenueData = finance_planfact.map(obj => -obj.leads_fact);
     const colors = finance_planfact.map(obj =>
-      obj.revenue >= obj.revenue_planned ? '#19D06D' : '#E03D3D'
+      obj.leads_fact >= obj.leads_planned ? '#19D06D' : '#E03D3D'
     );
 
     this.bottomChart.data.datasets[1].data = revenueData;
@@ -262,4 +263,4 @@ class ChartSales extends BaseDoubleChart {
   }
 }
 
-export default ChartSales;
+export default ChartLeads;

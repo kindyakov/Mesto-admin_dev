@@ -8,15 +8,15 @@
     </label>
   </form>
 
-  <div class="flex flex-col gap-[10px]">
+  <div class="flex flex-col gap-[10px] business-section">
     <div class="flex justify-between items-center gap-3">
       <h2 class="font-semibold text-[32px] text-[#1c2434]">Выручка</h2>
-      <form class="main__filter form-filter-sales" style="width: auto;">
+      <form class="main__filter form-filter" style="width: auto;">
         <label class="main__date-filter">
           <svg class="icon icon-calendar">
             <use xlink:href="#calendar"></use>
           </svg>
-          <input type="text" class="input-date-filter flatpickr-input active" name="start_date,end_date"
+          <input type="text" class="input-date flatpickr-input active" name="start_date,end_date"
             placeholder="Выбрать период для сравнения" readonly="readonly">
         </label>
         <label class="wrapper-checkbox">
@@ -54,8 +54,105 @@
         </div>
       </div>
     </div>
-    <div class="mt-4">
-      <canvas id="chart-sales" style="max-height: 560px;"></canvas>
+
+    <div class="mt-4 rounded-2xl bg-white shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] py-4 px-3">
+      <canvas id="chart-sales"></canvas>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-[10px] business-section">
+    <div class="flex justify-between items-center gap-3">
+      <h2 class="font-semibold text-[32px] text-[#1c2434]">Продажа м²</h2>
+      <form class="main__filter form-filter" style="width: auto;">
+        <label class="main__date-filter">
+          <svg class="icon icon-calendar">
+            <use xlink:href="#calendar"></use>
+          </svg>
+          <input type="text" class="input-date flatpickr-input active" name="start_date,end_date"
+            placeholder="Выбрать период для сравнения" readonly="readonly">
+        </label>
+        <label class="wrapper-checkbox">
+          <input type="checkbox" name="without-large-cells" class="input-checkbox"
+            id="dashboards-business-checkbox-sales-area">
+          <label class="label-checkbox" for="dashboards-business-checkbox-sales-area">
+            <svg class="icon">
+              <use xlink:href="#check-3"></use>
+            </svg>
+          </label>
+        </label>
+      </form>
+    </div>
+    <div class="grid grid-cols-3 w-full gap-4 mt-3">
+      <div
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        <div class="font-normal text-sm text-[#64748b]">Продажи м² за <span>период</span></div>
+        <b class="text-[#f3b23e] text-3xl">
+          <span data-render-widget="inflow_area_accumulated"></span> м²
+        </b>
+      </div>
+      <div
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        <div class="font-normal text-sm text-[#64748b]">План: продажа м² за <span>период</span></div>
+        <b class="text-[#005c9e] text-3xl">
+          <span data-render-widget="inflow_area_accumulated_planned"></span> м²
+        </b>
+      </div>
+      <div
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        <div class="font-normal text-sm text-[#64748b]">Продажи м² сегодня</div>
+        <b class="text-[#5682a1] text-3xl">
+          <span data-render-widget="inflow_area"></span> м²
+        </b>
+      </div>
+    </div>
+
+    <div class="mt-4 rounded-2xl bg-white shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] py-4 px-3">
+      <canvas id="chart-sales-area"></canvas>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-[10px] business-section">
+    <div class="flex justify-between items-center gap-3">
+      <h2 class="font-semibold text-[32px] text-[#1c2434]">Маркетинг</h2>
+      <form class="main__filter form-filter" style="width: auto;">
+        <label class="main__date-filter">
+          <svg class="icon icon-calendar">
+            <use xlink:href="#calendar"></use>
+          </svg>
+          <input type="text" class="input-date flatpickr-input active" name="start_date,end_date"
+            placeholder="Выбрать период для сравнения" readonly="readonly">
+        </label>
+        <label class="wrapper-checkbox">
+          <input type="checkbox" name="without-large-cells" class="input-checkbox"
+            id="dashboards-business-checkbox-leads">
+          <label class="label-checkbox" for="dashboards-business-checkbox-leads">
+            <svg class="icon">
+              <use xlink:href="#check-3"></use>
+            </svg>
+          </label>
+        </label>
+      </form>
+    </div>
+    <div class="grid grid-cols-3 w-full gap-4 mt-3">
+      <div
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        <div class="font-normal text-sm text-[#64748b]">Общее количество лидов</div>
+        <b class="text-[#f3b23e] text-3xl" data-render-widget="leads_accumulated_fact"></b>
+      </div>
+      <div
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        <div class="font-normal text-sm text-[#64748b]">План количество лидов за <span>период</span></div>
+        <b class="text-[#005c9e] text-3xl" data-render-widget="leads_accumulated_planned"></b>
+      </div>
+      <div
+        class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]">
+        <div class="font-normal text-sm text-[#64748b]">Количество лидов сегодня</div>
+        <b class="text-[#5682a1] text-3xl" data-render-widget="leads_fact"></b>
+      </div>
+    </div>
+
+    <div class="mt-4 rounded-2xl bg-white shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] py-4 px-3">
+      <canvas id="chart-leads"></canvas>
     </div>
   </div>
 
@@ -66,7 +163,7 @@
         <use xlink:href='#arrow-fill'></use>
       </svg>
     </button>
-    <div class="flex items-center flex-wrap gap-6">
+    <!-- <div class="flex items-center flex-wrap gap-6">
       <div class="filter__block_content" style="max-width: 200px; position: relative;">
         <span style="position: absolute; left: 0; bottom: 100%; font-size: 12px;">Площадь:</span>
         <div class="filter__wp-input">
@@ -91,23 +188,14 @@
           <p>Без больших ячеек</p>
         </label>
       </div>
-    </div>
+    </div> -->
     <div class="table _my-accordion-content" style="height: 841px; max-height: none;">
       <div class="table__top">
         <form class="table__form form-table-search">
           <select name="show_what" class="init-custom-select" data-special-select="select-filter-table"
-            data-select-min-width="200"
+            data-select-min-width="180"
             data-input-html="<svg class='icon icon-arrow'><use xlink:href='#arrow'></use></svg>">
-            <option value="reestr">Сумма арендной платы за выбранный период</option>
-            <option value="total_reestr">Сумма арендной платы всего</option>
-            <option value="reestr_revenue">Сборы по реестру</option>
-            <option value="rest_in_reestr">Осталось в реестре</option>
-            <option value="reestr_future">Сумма арендной платы в будущих периодах</option>
-            <option value="reestr_past">Задолженность в прошлых периодах</option>
             <option value="revenue">Выручка</option>
-            <option value="revenue_old">Арендная плата за период</option>
-            <option value="revenue_deposit">Сборы по депозитам</option>
-            <option value="debitors">Дебиторы</option>
             <option value="revenue_new_rent">Продажи за период</option>
           </select>
         </form>
