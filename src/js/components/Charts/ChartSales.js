@@ -226,9 +226,9 @@ class ChartSales extends BaseDoubleChart {
       elFactComparison.textContent = formattingPrice(factComparison)
 
       if (factComparison < planComparison) {
-        elFactComparison.style.color = '#E03D3D'
-      } else {
         elFactComparison.style.color = '#9333EA'
+      } else {
+        elFactComparison.style.color = '#2a90fe'
       }
 
       comparisonSection.classList.remove('hidden')
@@ -279,9 +279,9 @@ class ChartSales extends BaseDoubleChart {
       elFactComparison.textContent = formattingPrice(factComparison)
 
       if (factComparison < planComparison) {
-        elFactComparison.style.color = '#E03D3D'
-      } else {
         elFactComparison.style.color = '#9333EA'
+      } else {
+        elFactComparison.style.color = '#2a90fe'
       }
 
       comparisonSection.classList.remove('hidden')
@@ -359,6 +359,7 @@ class ChartSales extends BaseDoubleChart {
           pointBackgroundColor: '#FFA500',
           pointBorderColor: '#fff',
           pointBorderWidth: 2,
+          hidden: true
         },
         {
           label: 'Факт (сравнение)',
@@ -380,7 +381,7 @@ class ChartSales extends BaseDoubleChart {
     // Нижний график - добавляем или обновляем datasets сравнения
     const revenueDataComparison = finance_planfact.map(obj => -obj.revenue);
     const colorsComparison = finance_planfact.map(obj =>
-      obj.revenue >= obj.revenue_planned ? '#9333EA' : '#FFA500'
+      obj.revenue >= obj.revenue_planned ? '#2a90fe' : '#9333EA'
     );
 
     if (this.bottomChart.data.datasets.length > 2) {
@@ -405,6 +406,7 @@ class ChartSales extends BaseDoubleChart {
           pointBackgroundColor: '#fff',
           pointBorderColor: '#FFA500',
           pointBorderWidth: 2,
+          hidden: true
         },
         {
           label: 'Факт (сравнение)',

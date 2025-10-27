@@ -226,9 +226,9 @@ class ChartSalesArea extends BaseDoubleChart {
       elFactComparison.textContent = factComparison + ' м²'
 
       if (factComparison < planComparison) {
-        elFactComparison.style.color = '#E03D3D'
-      } else {
         elFactComparison.style.color = '#9333EA'
+      } else {
+        elFactComparison.style.color = '#2a90fe'
       }
 
       comparisonSection.classList.remove('hidden')
@@ -279,9 +279,9 @@ class ChartSalesArea extends BaseDoubleChart {
       elFactComparison.textContent = factComparison + ' м²'
 
       if (factComparison < planComparison) {
-        elFactComparison.style.color = '#E03D3D'
-      } else {
         elFactComparison.style.color = '#9333EA'
+      } else {
+        elFactComparison.style.color = '#2a90fe'
       }
 
       comparisonSection.classList.remove('hidden')
@@ -359,6 +359,7 @@ class ChartSalesArea extends BaseDoubleChart {
           pointBackgroundColor: '#FFA500',
           pointBorderColor: '#fff',
           pointBorderWidth: 2,
+          hidden: true
         },
         {
           label: 'Факт (сравнение)',
@@ -380,7 +381,7 @@ class ChartSalesArea extends BaseDoubleChart {
     // Нижний график - добавляем или обновляем datasets сравнения
     const areaDataComparison = finance_planfact.map(obj => -obj.inflow_area);
     const colorsComparison = finance_planfact.map(obj =>
-      obj.inflow_area >= obj.inflow_area_planned ? '#9333EA' : '#FFA500'
+      obj.inflow_area >= obj.inflow_area_planned ? '#2a90fe' : '#9333EA'
     );
 
     if (this.bottomChart.data.datasets.length > 2) {
@@ -405,6 +406,7 @@ class ChartSalesArea extends BaseDoubleChart {
           pointBackgroundColor: '#fff',
           pointBorderColor: '#FFA500',
           pointBorderWidth: 2,
+          hidden: true
         },
         {
           label: 'Факт (сравнение)',
