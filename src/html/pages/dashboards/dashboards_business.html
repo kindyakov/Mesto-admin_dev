@@ -33,7 +33,7 @@
     <div class="grid grid-cols-3 w-full gap-4 mt-3">
       <div
         class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
-        scroll-to='.dashboards__table'>
+        scroll-to='.dashboards__table;{"start_date":"","end_date":""}'>
         <div class="font-normal text-sm text-[#64748b]">Выручка всего факт</div>
         <b class="text-[#fe234d] text-3xl" data-render-widget="revenue_accumulated" price></b>
         <div class="absolute right-[16px] top-[16px] flex flex-col text-sm font-normal">
@@ -43,7 +43,7 @@
       </div>
       <div
         class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
-        scroll-to='.dashboards__table'>
+        scroll-to='.dashboards__table;{"start_date":"","end_date":""}'>
         <div class="font-normal text-sm text-[#64748b]">План нарастающим итогом</div>
         <b class="text-[#746afa] text-3xl" data-render-widget="revenue_accumulated_planned" price></b>
       </div>
@@ -88,7 +88,7 @@
     <div class="grid grid-cols-3 w-full gap-4 mt-3">
       <div
         class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
-        scroll-to='.dashboards__table'>
+        scroll-to='.dashboards__table;{"start_date":"","end_date":"","show_what":"revenue_new"}'>
         <div class="font-normal text-sm text-[#64748b]">Продажи м² за <span>период</span></div>
         <b class="text-[#f3b23e] text-3xl">
           <span data-render-widget="inflow_area_accumulated"></span> м²
@@ -96,7 +96,7 @@
       </div>
       <div
         class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
-        scroll-to='.dashboards__table'>
+        scroll-to='.dashboards__table;{"start_date":"","end_date":"","show_what":"revenue_new"}'>
         <div class="font-normal text-sm text-[#64748b]">План: продажа м² за <span>период</span></div>
         <b class="text-[#005c9e] text-3xl">
           <span data-render-widget="inflow_area_accumulated_planned"></span> м²
@@ -104,7 +104,7 @@
       </div>
       <div
         class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
-        scroll-to='.dashboards__table;{"start_date":"today","end_date":"today"}'>
+        scroll-to='.dashboards__table;{"start_date":"today","end_date":"today","show_what":"revenue_new"}'>
         <div class="font-normal text-sm text-[#64748b]">Продажи м² сегодня</div>
         <b class="text-[#5682a1] text-3xl">
           <span data-render-widget="inflow_area"></span> м²
@@ -142,13 +142,13 @@
     <div class="grid grid-cols-3 w-full gap-4 mt-3">
       <div
         class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
-        scroll-to='.dashboards__table'>
+        scroll-to='.dashboards__table;{"start_date":"","end_date":""}'>
         <div class="font-normal text-sm text-[#64748b]">Общее количество лидов</div>
         <b class="text-[#f3b23e] text-3xl" data-render-widget="leads_accumulated_fact"></b>
       </div>
       <div
         class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px]"
-        scroll-to='.dashboards__table'>
+        scroll-to='.dashboards__table;{"start_date":"","end_date":""}'>
         <div class="font-normal text-sm text-[#64748b]">План количество лидов за <span>период</span></div>
         <b class="text-[#005c9e] text-3xl" data-render-widget="leads_accumulated_planned"></b>
       </div>
@@ -172,32 +172,6 @@
         <use xlink:href='#arrow-fill'></use>
       </svg>
     </button>
-    <!-- <div class="flex items-center flex-wrap gap-6">
-      <div class="filter__block_content" style="max-width: 200px; position: relative;">
-        <span style="position: absolute; left: 0; bottom: 100%; font-size: 12px;">Площадь:</span>
-        <div class="filter__wp-input">
-          <span class="pref">от</span>
-          <input type="number" name="start_area" value="0" class="filter__input input-filter" inputmode="decimal"
-            autocomplete="off" step="0.1" min="0" max="1000" data-step="0.1" style="height: 40px; font-size: 14px;">
-        </div>
-        <div class="filter__wp-input">
-          <span class="pref">до</span>
-          <input type="number" name="end_area" value="1000" class="filter__input input-filter" inputmode="decimal"
-            autocomplete="off" step="0.1" min="0" max="1000" data-step="0.1" style="height: 40px; font-size: 14px;">
-        </div>
-      </div>
-      <div class="filter__block_content" style="position: relative; max-width: 200px;">
-        <label class="wrapper-checkbox">
-          <input type="checkbox" name="without-large-cells" class="input-checkbox" id="dashboards-finance-checkbox-1">
-          <label class="label-checkbox" for="dashboards-finance-checkbox-1">
-            <svg class='icon'>
-              <use xlink:href='#check-3'></use>
-            </svg>
-          </label>
-          <p>Без больших ячеек</p>
-        </label>
-      </div>
-    </div> -->
     <div class="table _my-accordion-content" style="height: 841px; max-height: none;">
       <div class="table__top">
         <form class="table__form form-table-search">
@@ -205,7 +179,7 @@
             data-select-min-width="180"
             data-input-html="<svg class='icon icon-arrow'><use xlink:href='#arrow'></use></svg>">
             <option value="revenue">Выручка</option>
-            <option value="revenue_new_rent">Продажи за период</option>
+            <option value="revenue_new">Продажи за период</option>
           </select>
         </form>
         <div class="table__buttuns">

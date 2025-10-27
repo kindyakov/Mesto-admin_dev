@@ -101,7 +101,15 @@ class Business extends Dashboards {
       params.end_date = today
     }
 
-    table.updateQueryParams(params);
+    if (params.start_date === '') {
+      params.start_date = this.queryParams.start_date
+    }
+
+    if (params.end_date === '') {
+      params.end_date = this.queryParams.end_date
+    }
+
+    table.updateQueryParams(params, false);
   }
 
   onRender([dataDashboard, ...data], dataEntities) {

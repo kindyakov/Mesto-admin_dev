@@ -302,6 +302,7 @@ class ChartSales extends BaseDoubleChart {
 
   render([_, ...data], options = {}) {
     const { finance_planfact } = data.length > 1 ? data.find(obj => obj.warehouse_id === 0) : data[0]
+    if (!finance_planfact.length) return
 
     this.topChart.data.labels = finance_planfact.map(obj => dateFormatter(obj.data, 'dd.MM'));
     this.topChart.data.datasets[0].data = finance_planfact.map(obj => obj.revenue_accumulated_planned);

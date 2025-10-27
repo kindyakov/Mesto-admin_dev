@@ -311,7 +311,7 @@ class TableUpcomingPayments extends Table {
 	onChangeSelect({ select, value }) {
 		const key = [select.getAttribute('data-name')];
 		const params = { [key]: !isNaN(+value) ? +value : value };
-		if (key == 'show_what') {
+		if (key == 'show_what' && isUpdate) {
 			this.updateQueryParams(params);
 		} else {
 			this.changeQueryParams(params);
@@ -429,6 +429,9 @@ class TableUpcomingPayments extends Table {
 		try {
 			this.loader.enable();
 			this.queryParams = mergeQueryParams(this.queryParams, params);
+			if (!params.show_what) {
+				delete this.queryParams.show_what
+			}
 			const data = await this.getData(this.queryParams);
 			if (!data) return;
 			this.data = data.agreements;

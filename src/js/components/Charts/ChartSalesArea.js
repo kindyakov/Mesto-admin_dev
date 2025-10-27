@@ -258,8 +258,8 @@ class ChartSalesArea extends BaseDoubleChart {
     const elFact = tooltipEl.querySelector('.fact')
 
     elDate.textContent = date
-    elPlan.textContent = plan + ' м²'
-    elFact.textContent = fact + ' м²'
+    elPlan.textContent = plan.toFixed(1) + ' м²'
+    elFact.textContent = fact.toFixed(1) + ' м²'
     if (fact < plan) {
       elFact.style.color = '#E03D3D'
     } else {
@@ -300,7 +300,10 @@ class ChartSalesArea extends BaseDoubleChart {
     }
   }
 
-  render([_, { finance_planfact }], options = {}) {
+  render([_, ...data], options = {}) {
+    const { finance_planfact } = data.length > 1 ? data.find(obj => obj.warehouse_id === 0) : data[0]
+    if (!finance_planfact.length) return
+
     this.topChart.data.labels = finance_planfact.map(obj => dateFormatter(obj.data, 'dd.MM'));
     this.topChart.data.datasets[0].data = finance_planfact.map(obj => obj.inflow_area_accumulated_planned);
     this.topChart.data.datasets[1].data = finance_planfact.map(obj => obj.inflow_area_accumulated);
