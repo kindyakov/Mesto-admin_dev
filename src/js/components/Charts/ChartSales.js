@@ -278,11 +278,12 @@ class ChartSales extends BaseDoubleChart {
       elPlanComparison.textContent = formattingPrice(planComparison)
       elFactComparison.textContent = formattingPrice(factComparison)
 
-      if (factComparison < planComparison) {
-        elFactComparison.style.color = '#9333EA'
-      } else {
-        elFactComparison.style.color = '#2a90fe'
-      }
+      // if (factComparison < planComparison) {
+      //   elFactComparison.style.color = '#9333EA'
+      // } else {
+      //   elFactComparison.style.color = '#2a90fe'
+      // }
+      elFactComparison.style.color = '#A9A9A9'
 
       comparisonSection.classList.remove('hidden')
     } else {
@@ -388,7 +389,7 @@ class ChartSales extends BaseDoubleChart {
       // Обновляем существующие datasets
       this.bottomChart.data.datasets[2].data = finance_planfact.map(obj => -obj.revenue_planned);
       this.bottomChart.data.datasets[3].data = revenueDataComparison;
-      this.bottomChart.data.datasets[3].backgroundColor = colorsComparison;
+      this.bottomChart.data.datasets[3].backgroundColor = '#A9A9A9'; // colorsComparison;
     } else if (this.bottomChart.data.datasets.length === 2) {
       // Создаем новые datasets
       this.bottomChart.data.datasets.push(
@@ -412,7 +413,7 @@ class ChartSales extends BaseDoubleChart {
           label: 'Факт (сравнение)',
           type: 'bar',
           data: revenueDataComparison,
-          backgroundColor: colorsComparison,
+          backgroundColor: '#A9A9A9', //  colorsComparison,
           borderRadius: 2,
           barThickness: 8,
         }
