@@ -34,7 +34,7 @@
     <div class="grid grid-cols-3 w-full gap-4 mt-3 max-[900px]:gap-2 max-[760px]:grid-cols-2 max-[560px]:grid-cols-1">
       <div
         class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px] max-[900px]:min-h-[80px] max-[480px]:gap-2"
-        scroll-to='.dashboards__table;{"start_date":"","end_date":""}'>
+        scroll-to='.dashboards__table;{"start_date":"","end_date":"","show_what":"revenue"}'>
         <div class="font-normal text-sm text-[#64748b]">Выручка всего факт</div>
         <b class="text-[#fe234d] text-3xl max-[900px]:text-xl" data-render-widget="revenue_accumulated" price></b>
         <div class="absolute right-[16px] top-[16px] flex flex-col text-sm font-normal">
@@ -44,14 +44,14 @@
       </div>
       <div
         class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px] max-[900px]:min-h-[80px] max-[480px]:gap-2"
-        scroll-to='.dashboards__table;{"start_date":"","end_date":""}'>
+        scroll-to='.dashboards__table;{"start_date":"","end_date":"","show_what":"revenue"}'>
         <div class="font-normal text-sm text-[#64748b]">План нарастающим итогом</div>
         <b class="text-[#746afa] text-3xl max-[900px]:text-xl" data-render-widget="revenue_accumulated_planned"
           price></b>
       </div>
       <div
         class="border border-[#e1e8f0] flex flex-col justify-between gap-3 rounded-2xl p-4 shadow-[0_4px_4px_0_rgba(0,_0,_0,_0.25)] bg-white relative min-h-[102px] max-[900px]:min-h-[80px] max-[480px]:gap-2"
-        scroll-to='.dashboards__table;{"start_date":"today","end_date":"today"}'>
+        scroll-to='.dashboards__table;{"start_date":"today","end_date":"today","show_what":"revenue"}'>
         <div class="font-normal text-sm text-[#64748b]">Выручка сегодня</div>
         <b class="text-[#fe234d] text-3xl max-[900px]:text-xl" data-render-widget="revenue" price></b>
         <div class="absolute right-[16px] top-[16px] flex flex-col text-sm font-normal">
@@ -97,7 +97,7 @@
           <span data-render-widget="inflow_area_accumulated"></span> м²
         </b>
         <div class="absolute right-[16px] top-[16px] flex flex-col text-sm font-normal">
-          <span data-render-widget="inflow_area_accumulated-inflow_area_accumulated_planned" color></span>
+          <span data-render-widget="inflow_area_accumulated-inflow_area_accumulated_planned" color area></span>
         </div>
       </div>
       <div
