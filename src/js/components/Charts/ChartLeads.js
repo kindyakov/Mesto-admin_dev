@@ -226,11 +226,12 @@ class ChartLeads extends BaseDoubleChart {
       elPlanComparison.textContent = planComparison
       elFactComparison.textContent = factComparison
 
-      if (factComparison < planComparison) {
-        elFactComparison.style.color = '#9333EA'
-      } else {
-        elFactComparison.style.color = '#2a90fe'
-      }
+      // if (factComparison < planComparison) {
+      //   elFactComparison.style.color = '#9333EA'
+      // } else {
+      //   elFactComparison.style.color = '#2a90fe'
+      // }
+      elFactComparison.style.color = '#A9A9A9'
 
       comparisonSection.classList.remove('hidden')
     } else {
@@ -366,14 +367,14 @@ class ChartLeads extends BaseDoubleChart {
         {
           label: 'Факт (сравнение)',
           data: finance_planfact.map(obj => obj.leads_accumulated_fact),
-          borderColor: '#9333EA',
-          backgroundColor: gradientPurple,
-          color: '#9333EA',
+          borderColor: '#A9A9A9',
+          // backgroundColor: gradientPurple,
+          color: '#A9A9A9',
           borderWidth: 2,
-          fill: true,
+          // fill: true,
           tension: 0.4,
           pointRadius: 3,
-          pointBackgroundColor: '#9333EA',
+          pointBackgroundColor: '#A9A9A9',
           pointBorderColor: '#fff',
           pointBorderWidth: 2,
         }

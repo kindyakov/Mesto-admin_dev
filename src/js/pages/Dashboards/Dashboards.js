@@ -155,11 +155,24 @@ class Dashboards extends Page {
 
 			const hasPrice = widget.hasAttribute('price');
 			const hasPrice2 = widget.hasAttribute('price2');
+			const hasArea = widget.hasAttribute('area')
 
 			const calculatedValue = calculateExpression(params, data);
 
+			function formatOutput(value) {
+				let str = Number.isInteger(value) ? value : value.toFixed(2)
+
+				if (hasPrice) {
+					str = formattingPrice(str)
+				} else if (hasArea) {
+					str = str + ' м²'
+				}
+
+				return str
+			}
+
 			if (calculatedValue !== null) {
-				widget.innerText = formattingPrice(calculatedValue);
+				widget.innerText = formatOutput(calculatedValue)
 				if (widget.getAttribute('color') === '') {
 					if (calculatedValue > 0) {
 						widget.style.color = '#37b456'
