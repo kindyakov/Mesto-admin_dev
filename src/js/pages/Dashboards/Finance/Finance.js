@@ -196,6 +196,9 @@ class Finance extends Dashboards {
 			this.actionsTables((table, i) => {
 				table.data = dataEntities.agreements;
 				table.onRendering(Array.isArray(dataEntities) ? dataEntities[i] : dataEntities);
+				table.queryParams = {
+					...table.queryParams, end_date: this.queryParams.end_date, start_date: this.queryParams.start_date
+				}
 			});
 		}
 

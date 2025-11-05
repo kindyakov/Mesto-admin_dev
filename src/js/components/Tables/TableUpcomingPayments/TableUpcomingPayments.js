@@ -311,7 +311,7 @@ class TableUpcomingPayments extends Table {
 	onChangeSelect({ select, value }) {
 		const key = [select.getAttribute('data-name')];
 		const params = { [key]: !isNaN(+value) ? +value : value };
-		if (key == 'show_what' && isUpdate) {
+		if (key == 'show_what') {
 			this.updateQueryParams(params);
 		} else {
 			this.changeQueryParams(params);
@@ -452,7 +452,12 @@ class TableUpcomingPayments extends Table {
 	async download(data, isAll) {
 		try {
 			this.loader.enable();
-			let reqData = { warehouse_id: this.app.warehouse.warehouse_id, show_what: this.queryParams.show_what };
+			let reqData = {
+				warehouse_id: this.app.warehouse.warehouse_id,
+				show_what: this.queryParams.show_what,
+				end_date: this.queryParams.end_date,
+				start_date: this.queryParams.start_date
+			};
 
 			if (isAll) {
 				reqData.all_payments = 1;
