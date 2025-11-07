@@ -121,12 +121,28 @@ class Dashboards extends Page {
 				const [name, type] = el.getAttribute('data-render-tippy').split(',');
 				const { start_date, end_date } = this.queryParams;
 
-				const newContent = `<span class="tippy-info-span tippy-info-date">
+				const hasCustom = el.hasAttribute('custom')
+				let newContent = ''
+
+				if (hasCustom) {
+					newContent = `
+					<div class="border border-solid border-[#005c9e] rounded p-1.5" style="background: rgba(0, 92, 158, 0.15);">
+						<div class="text-xs text-[#005c9e] leading-[100%]">
+							С учетом переплат <br> за 4 дня след. месяца
+						</div>
+						<div class="text-lg text-[#1c2434] font-bold">${formattingPrice(data[name] || 0)}</div>
+					</div>
+					`
+				} else {
+					newContent = `<span class="tippy-info-span tippy-info-date">
         ${type == 'start'
-						? `${dateFormatter(new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-1`))} - ${dateFormatter(end_date)}`
-						: `${dateFormatter(start_date)} - ${dateFormatter(end_date)}`
-					}
+							? `${dateFormatter(new Date(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-1`))} - ${dateFormatter(end_date)}`
+							: `${dateFormatter(start_date)} - ${dateFormatter(end_date)}`
+						}
         </span>`;
+				}
+
+
 
 				if (el._tippy) {
 					el._tippy.setContent(newContent);

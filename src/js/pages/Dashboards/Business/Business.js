@@ -125,7 +125,7 @@ class Business extends Dashboards {
         data = finance_planfact.find(item => item.data === today)
       }
 
-      this.renderWidgets(data);
+      this.renderWidgets({ ...dataDashboard, ...data });
     }
 
     if (this.tables.length && dataEntities) {
