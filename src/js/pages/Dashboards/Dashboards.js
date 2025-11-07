@@ -155,30 +155,74 @@ class Dashboards extends Page {
 
 			const hasPrice = widget.hasAttribute('price');
 			const hasPrice2 = widget.hasAttribute('price2');
-			const hasArea = widget.hasAttribute('area')
+			const hasArea = widget.hasAttribute('area');
+			const condition = widget.getAttribute('data-condition');
 
 			const calculatedValue = calculateExpression(params, data);
 
 			function formatOutput(value) {
-				let str = Number.isInteger(value) ? value : value.toFixed(2)
-
+				let str = Number.isInteger(value) ? value : value.toFixed(2);
 				if (hasPrice) {
-					str = formattingPrice(str)
+					str = formattingPrice(str);
 				} else if (hasArea) {
-					str = str + ' м²'
+					str = str + ' м²';
 				}
+				return str;
+			}
 
-				return str
+			function checkCondition(condition, data) {
+				if (!condition) return null;
+
+				// Парсим условие: key1>=key2, key1>key2, key1<=key2, key1<key2, key1==key2
+				const match = condition.match(/^(.+?)(>=|<=|>|<|==?)(.+)$/);
+				if (!match) return null;
+
+				const leftKey = match[1].trim();
+				const operator = match[2];
+				const rightKey = match[3].trim();
+
+				const leftValue = parseFloat(data[leftKey]);
+				const rightValue = parseFloat(data[rightKey]);
+
+				if (isNaN(leftValue) || isNaN(rightValue)) return null;
+
+				// Всегда сначала проверяем на равенство
+				if (leftValue === rightValue) return 'equal';
+
+				// Затем проверяем условие
+				switch (operator) {
+					case '>':
+						return leftValue > rightValue ? 'success' : 'fail';
+					case '<':
+						return leftValue < rightValue ? 'success' : 'fail';
+					case '>=':
+						return leftValue >= rightValue ? 'success' : 'fail';
+					case '<=':
+						return leftValue <= rightValue ? 'success' : 'fail';
+					case '=':
+					case '==':
+						return 'fail'; // уже проверили на равенство выше
+					default:
+						return null;
+				}
+			}
+
+			function applyColor(widget, condition, data) {
+				const result = checkCondition(condition, data);
+				if (result === 'equal') {
+					widget.style.color = '#ffc107'; // желтый
+				} else if (result === 'success') {
+					widget.style.color = '#37b456'; // зеленый
+				} else if (result === 'fail') {
+					widget.style.color = '#fe0334'; // красный
+				}
 			}
 
 			if (calculatedValue !== null) {
-				widget.innerText = formatOutput(calculatedValue)
-				if (widget.getAttribute('color') === '') {
-					if (calculatedValue > 0) {
-						widget.style.color = '#37b456'
-					} else {
-						widget.style.color = '#fe0334'
-					}
+				widget.innerText = formatOutput(calculatedValue);
+
+				if (condition) {
+					applyColor(widget, condition, data);
 				}
 				return;
 			}
@@ -198,13 +242,8 @@ class Dashboards extends Page {
 				widget.innerHTML = value + suffix;
 			}
 
-
-			if (widget.getAttribute('color')) {
-				if (value > 0) {
-					widget.style.color = '#37b456'
-				} else {
-					widget.style.color = 'fe0334'
-				}
+			if (condition) {
+				applyColor(widget, condition, data);
 			}
 		});
 	}

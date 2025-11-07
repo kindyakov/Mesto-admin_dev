@@ -8,9 +8,7 @@ import {
   getFinancePlan,
   postFuturePayments
 } from '../../../settings/request.js';
-import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { mergeQueryParams } from '../../../utils/buildQueryParams.js';
-import { getPreviousMonthsRanges } from '../../../utils/getPreviousMonthsRanges.js';
 
 class Business extends Dashboards {
   constructor({ loader }) {

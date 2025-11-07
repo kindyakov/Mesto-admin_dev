@@ -232,6 +232,45 @@
         <canvas id="chart-dynamics-avg-rate" style="max-height: 100px;"></canvas>
       </div>
     </div>
+    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col"
+      style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
+      <div class="flex items-center justify-between gap-2">
+        <p class="text-[#64748b] text-sm font-medium leading-[100%]">
+          Сдано м² факт/арендопригодная
+        </p>
+        <b class="text-[32px] font-bold text-[#1c2434] flex-shrink-0">
+          <span data-render-widget="area_rented"></span>
+          /
+          <span data-render-widget="area_total"></span>
+          м²
+        </b>
+      </div>
+      <div class="flex items-center justify-between gap-2 mt-3 mb-2">
+        <p class="text-[#64748b] text-sm font-medium leading-[100%]">
+          Сдано м²
+          сегодня/за <span data-render-tippy="dates,end"
+            class="underline underline-offset-4 cursor-pointer hover:no-underline">период</span>
+        </p>
+        <b class="text-[32px] font-bold text-[#1c2434] flex-shrink-0">
+          <span data-render-widget="inflow_area" data-condition="inflow_area>inflow_area_planned"></span>
+          /
+          <span data-render-widget="inflow_area_accumulated"
+            data-condition="inflow_area_accumulated>inflow_area_accumulated_planned"></span>
+          м²
+        </b>
+      </div>
+      <div class="flex items-center justify-between gap-2">
+        <p class="text-[#64748b] text-sm font-medium leading-[100%]">
+          Сдача м² факт/план нарастающим итогом
+        </p>
+        <b class="text-[32px] font-bold text-[#1c2434] flex-shrink-0">
+          <span data-render-widget="inflow_area_accumulated"></span>
+          /
+          <span data-render-widget="inflow_area_accumulated_planned"></span>
+          м²
+        </b>
+      </div>
+    </div>
   </div>
 
   <div class="visualization">
