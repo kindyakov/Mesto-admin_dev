@@ -424,6 +424,9 @@ class ChartLeads extends BaseDoubleChart {
 
     this.topChart.update();
     this.bottomChart.update();
+
+    // Обновляем виджеты с данными текущего дня
+    this.updateWidgets(finance_planfact);
   }
 
   // Удаление данных сравнения из графиков
@@ -438,6 +441,9 @@ class ChartLeads extends BaseDoubleChart {
 
     this.topChart.update();
     this.bottomChart.update();
+
+    // Восстанавливаем исходное состояние виджетов
+    this.restoreWidgets();
   }
 }
 

@@ -192,24 +192,20 @@ class Finance extends Dashboards {
 	onRender([dataDashboard, { finance_planfact = [] }, previousMonthsData], dataEntities) {
 		let todayFinancePlanFact = {}
 
-		if (finance_planfact) {
-			const today = new Date();
-			const localDate = today.toLocaleDateString('en-CA');
+		if (finance_planfact.length) {
+			const today = new Date().toISOString().split('T')[0];
+			const startDate = new Date(this.queryParams.start_date);
+			const endDate = new Date(this.queryParams.end_date);
+			const currentDate = new Date(today);
 
-			todayFinancePlanFact = finance_planfact.find(item => item.data === localDate);
+			todayFinancePlanFact = finance_planfact[finance_planfact.at(-1)]
 
-			if (!todayFinancePlanFact) {
-				window.app.notify.show({
-					msg: `Нет данных за сегодняшнюю дату: ${localDate}`,
-					msg_type: 'warning'
-				})
-			} else {
-				console.log(todayFinancePlanFact);
+			if (currentDate >= startDate && currentDate <= endDate) {
+				todayFinancePlanFact = finance_planfact.find(item => item.data === today)
 			}
 		}
 
-
-		this.renderWidgets({ ...dataDashboard, ...todayFinancePlanFact });
+		this.renderWidgets({ ...todayFinancePlanFact, ...dataDashboard });
 
 		if (this.tables.length && dataEntities) {
 			this.actionsTables((table, i) => {

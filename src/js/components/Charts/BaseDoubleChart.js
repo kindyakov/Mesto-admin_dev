@@ -2,6 +2,7 @@ import { Loader } from '../../modules/myLoader.js';
 import { createCalendar } from '../../settings/createCalendar.js';
 import { getFinancePlan } from '../../settings/request.js';
 import { dateFormatter } from '../../settings/dateFormatter.js';
+import { renderWidgets } from '../../utils/renderWidgets.js';
 /**
  * Базовый класс для графиков с двумя canvas (верхний и нижний)
  * Включает встроенную систему tooltip как в BaseChart
@@ -27,6 +28,8 @@ class BaseDoubleChart {
       styleLoader: 'width: 25px; height: 25px; border-width: 1.5px;'
     })
     this.comparisonData = null;
+    this.queryParams = {};
+    this.savedWidgetsState = null; // Сохраненное состояние виджетов для восстановления
 
     this.calendars = createCalendar(this.form.querySelector('.input-date'), {
       mode: 'range',
@@ -41,12 +44,24 @@ class BaseDoubleChart {
             [nameOne]: dateFormatter(selectedDates[0], 'yyyy-MM-dd'),
             [nameTwo]: dateFormatter(selectedDates[1], 'yyyy-MM-dd')
           }
+          // Сохраняем queryParams для использования в updateWidgets
+          this.queryParams = {
+            start_date: params[nameOne],
+            end_date: params[nameTwo]
+          };
           // this.checkbox.checked = false
           this.updateChartData(params);
         }
       }
     });
 
+    // Инициализируем queryParams с начальными датами
+    if (this.calendars && this.calendars.selectedDates && this.calendars.selectedDates.length === 2) {
+      this.queryParams = {
+        start_date: dateFormatter(this.calendars.selectedDates[0], 'yyyy-MM-dd'),
+        end_date: dateFormatter(this.calendars.selectedDates[1], 'yyyy-MM-dd')
+      };
+    }
 
     // Создаем DOM структуру
     this.createCanvasStructure();
@@ -312,6 +327,89 @@ class BaseDoubleChart {
    */
   removeComparisonData() {
     throw new Error('removeComparisonData() must be implemented in child class');
+  }
+
+  /**
+   * Определяет данные за текущий день из массива finance_planfact
+   * Логика из Business.js (строки 117-126)
+   * @param {Array} finance_planfact - Массив данных по дням
+   * @returns {Object} - Данные за текущий день или последний день в диапазоне
+   */
+  getCurrentDayData(finance_planfact) {
+    if (!finance_planfact || !finance_planfact.length) {
+      return null;
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    const startDate = new Date(this.queryParams.start_date);
+    const endDate = new Date(this.queryParams.end_date);
+    const currentDate = new Date(today);
+
+    // По умолчанию берём последний элемент массива
+    let data = finance_planfact.at(-1);
+
+    // Если сегодня входит в диапазон дат, ищем данные за сегодня
+    if (currentDate >= startDate && currentDate <= endDate) {
+      const todayData = finance_planfact.find(item => item.data === today);
+      if (todayData) {
+        data = todayData;
+      }
+    }
+
+    return data;
+  }
+
+  /**
+   * Обновляет значения виджетов с атрибутом data-render-widget
+   * @param {Array} finance_planfact - Массив данных finance_planfact
+   */
+  updateWidgets(finance_planfact) {
+    if (!finance_planfact || !finance_planfact.length) {
+      return;
+    }
+
+    // Получаем данные за текущий день
+    const currentDayData = this.getCurrentDayData(finance_planfact);
+
+    if (!currentDayData) {
+      return;
+    }
+
+    // Находим все виджеты в секции
+    const widgets = this.section.querySelectorAll('[data-render-widget]');
+
+    if (!widgets.length) {
+      return;
+    }
+
+    // Сохраняем исходное состояние виджетов (только первый раз)
+    if (this.savedWidgetsState === null) {
+      this.savedWidgetsState = Array.from(widgets).map(widget => ({
+        element: widget,
+        textContent: widget.textContent,
+        innerHTML: widget.innerHTML,
+        color: widget.style.color
+      }));
+    }
+
+    // Вызываем утилиту рендеринга виджетов
+    renderWidgets(currentDayData, widgets, this.queryParams, this.app.defaultDate);
+  }
+
+  /**
+   * Восстанавливает исходное состояние виджетов
+   * Вызывается при отключении графика сравнения
+   */
+  restoreWidgets() {
+    if (!this.savedWidgetsState) {
+      return;
+    }
+
+    // Восстанавливаем сохраненные значения виджетов
+    this.savedWidgetsState.forEach(saved => {
+      saved.element.textContent = saved.textContent;
+      saved.element.style.color = saved.color;
+    });
   }
 
   /**
