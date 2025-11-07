@@ -112,6 +112,7 @@ class Business extends Dashboards {
 
   onRender([dataDashboard, ...data], dataEntities) {
     const { finance_planfact } = data.length > 1 ? data.find(obj => obj.warehouse_id === 0) : data[0]
+    console.log(data)
 
     let todayFinancePlanFact = {}
     if (finance_planfact) {
@@ -120,12 +121,13 @@ class Business extends Dashboards {
       const endDate = new Date(this.queryParams.end_date);
       const currentDate = new Date(today);
 
-      todayFinancePlanFact = finance_planfact[finance_planfact.at(-1)]
+      todayFinancePlanFact = finance_planfact.at(-1)
 
       if (currentDate >= startDate && currentDate <= endDate) {
         todayFinancePlanFact = finance_planfact.find(item => item.data === today)
       }
     }
+
 
     this.renderWidgets({ ...dataDashboard, ...todayFinancePlanFact });
 

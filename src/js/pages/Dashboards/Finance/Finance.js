@@ -198,12 +198,15 @@ class Finance extends Dashboards {
 			const endDate = new Date(this.queryParams.end_date);
 			const currentDate = new Date(today);
 
-			todayFinancePlanFact = finance_planfact[finance_planfact.at(-1)]
+			console.log(finance_planfact.at(-1))
+
+			todayFinancePlanFact = finance_planfact.at(-1)
 
 			if (currentDate >= startDate && currentDate <= endDate) {
 				todayFinancePlanFact = finance_planfact.find(item => item.data === today)
 			}
 		}
+
 
 		this.renderWidgets({ ...todayFinancePlanFact, ...dataDashboard });
 
