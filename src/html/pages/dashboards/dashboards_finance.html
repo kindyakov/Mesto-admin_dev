@@ -232,7 +232,7 @@
         <canvas id="chart-dynamics-avg-rate" style="max-height: 100px;"></canvas>
       </div>
     </div>
-    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col"
+    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col wp-chart"
       style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
       <div class="flex items-center justify-between gap-2">
         <p class="text-[#64748b] text-sm font-medium leading-[100%]">
@@ -261,14 +261,26 @@
       </div>
       <div class="flex items-center justify-between gap-2">
         <p class="text-[#64748b] text-sm font-medium leading-[100%]">
-          Сдача м² факт/план нарастающим итогом
+          Сдача м² план нарастающим итогом / всего
         </p>
         <b class="text-[32px] font-bold text-[#1c2434] flex-shrink-0">
-          <span data-render-widget="inflow_area_accumulated"></span>
-          /
           <span data-render-widget="inflow_area_accumulated_planned"></span>
+          /
+          <span data-render-widget="inflow_area_accumulated_planned_last"></span>
           м²
         </b>
+      </div>
+      <div class="mt-auto pt-3 w-full flex items-end flex-col gap-3">
+        <label class="main__date-filter mr-auto">
+          <div class="wpLoader _custom-loader" style="background-color: rgba(0, 0, 0, 0.4); position: absolute;"><span
+              class="loader" style="width: 25px; height: 25px; border-width: 1.5px;"></span></div>
+          <svg class="icon icon-calendar" style="left: 5px;">
+            <use xlink:href="#calendar"></use>
+          </svg>
+          <input type="text" class="input-date flatpickr-input" name="start_date,end_date"
+            placeholder="Выбрать период для сравнения" readonly="readonly" style="padding: 5px 10px 5px 25px;">
+        </label>
+        <canvas id="chart-inflow-area" style="max-height: 100px;"></canvas>
       </div>
     </div>
   </div>

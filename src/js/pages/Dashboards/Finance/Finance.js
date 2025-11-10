@@ -4,6 +4,7 @@ import RentDynamics from '../../../components/Charts/RentDynamics.js';
 import PaymentStructure from '../../../components/Charts/PaymentStructure.js';
 import DynamicsAvgRate from '../../../components/Charts/DynamicsAvgRate.js';
 import ChartRevenue from '../../../components/Charts/ChartRevenue/ChartRevenue.js';
+import ChartInflowArea from '../../../components/Charts/ChartInflowArea.js';
 import {
 	getDashboardFinance,
 	getFinancePlan,
@@ -33,7 +34,8 @@ class Finance extends Dashboards {
 				{ id: 'chart-rent-dynamics', ChartComponent: RentDynamics },
 				{ id: 'chart-payment-structure', ChartComponent: PaymentStructure },
 				{ id: 'chart-dynamics-avg-rate', ChartComponent: DynamicsAvgRate },
-				{ id: 'chart-revenue', ChartComponent: ChartRevenue }
+				{ id: 'chart-revenue', ChartComponent: ChartRevenue },
+				{ id: 'chart-inflow-area', ChartComponent: ChartInflowArea }
 			],
 			page: 'dashboards/finance'
 		});
@@ -191,6 +193,7 @@ class Finance extends Dashboards {
 
 	onRender([dataDashboard, { finance_planfact = [] }, previousMonthsData], dataEntities) {
 		let todayFinancePlanFact = {}
+		let lastFinancePlanFact = {}
 
 		if (finance_planfact.length) {
 			const today = new Date().toISOString().split('T')[0];
@@ -198,9 +201,11 @@ class Finance extends Dashboards {
 			const endDate = new Date(this.queryParams.end_date);
 			const currentDate = new Date(today);
 
-			console.log(finance_planfact.at(-1))
+			// Последний день периода
+			lastFinancePlanFact = finance_planfact.at(-1)
 
-			todayFinancePlanFact = finance_planfact.at(-1)
+			// Сегодня или последний день периода, если сегодня не в периоде
+			todayFinancePlanFact = lastFinancePlanFact
 
 			if (currentDate >= startDate && currentDate <= endDate) {
 				todayFinancePlanFact = finance_planfact.find(item => item.data === today)
@@ -208,7 +213,11 @@ class Finance extends Dashboards {
 		}
 
 
-		this.renderWidgets({ ...todayFinancePlanFact, ...dataDashboard });
+		this.renderWidgets({
+			...todayFinancePlanFact,
+			...dataDashboard,
+			inflow_area_accumulated_planned_last: lastFinancePlanFact?.inflow_area_accumulated_planned
+		});
 
 		if (this.tables.length && dataEntities) {
 			this.actionsTables((table, i) => {
