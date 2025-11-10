@@ -14,10 +14,7 @@ class ChartInflowArea extends BaseChart {
     const defaultOptions = {
       type: 'bar',
       data: {
-        // labels: ['10', '11', '12', '01', '02', '03', '04', '05', '06', '07', '08', '09'],
         datasets: [{
-          // data: [3500, 3600, 3650, 3725, 3700, 3730, 3750, 3750, 3790, 3800, 3800, 3850],
-          backgroundColor: '#5782a1',
           borderRadius: 4,
           barPercentage: 0.8,
           categoryPercentage: 0.9,
@@ -130,6 +127,7 @@ class ChartInflowArea extends BaseChart {
   async updateChartData(params) {
     try {
       this._loader.enable();
+      console.log(params)
 
       const { start_date, end_date, warehouse_id } = params;
 
@@ -158,6 +156,14 @@ class ChartInflowArea extends BaseChart {
         const start = new Date(start_date);
         const end = new Date(end_date);
 
+        // Функция для форматирования даты без учёта часового пояса
+        const formatLocalDate = (date) => {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+        };
+
         // Вычисляем количество месяцев в диапазоне
         const monthsDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
 
@@ -167,16 +173,17 @@ class ChartInflowArea extends BaseChart {
           const monthStart = new Date(start.getFullYear(), start.getMonth() + i, 1);
           const monthEnd = new Date(start.getFullYear(), start.getMonth() + i + 1, 0);
 
-          // Для первого месяца используем start_date
-          const rangeStart = i === 0 ? start_date : monthStart.toISOString().split('T')[0];
-          // Для последнего месяца используем end_date
-          const rangeEnd = i === monthsDiff - 1 ? end_date : monthEnd.toISOString().split('T')[0];
+          // Для каждого месяца используем полный месяц (с 1-го по последний день)
+          const rangeStart = formatLocalDate(monthStart);
+          const rangeEnd = formatLocalDate(monthEnd);
 
           ranges.push({
             start_date: rangeStart,
             end_date: rangeEnd
           });
         }
+
+        console.log(ranges.map(a => a))
 
         // Выполняем запросы для всех месяцев параллельно
         const requests = ranges.map(range =>
