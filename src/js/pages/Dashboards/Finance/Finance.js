@@ -216,6 +216,7 @@ class Finance extends Dashboards {
 		this.renderWidgets({
 			...todayFinancePlanFact,
 			...dataDashboard,
+			inflow_area: todayFinancePlanFact.inflow_area,
 			inflow_area_accumulated_planned_last: lastFinancePlanFact?.inflow_area_accumulated_planned
 		});
 
