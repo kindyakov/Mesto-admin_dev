@@ -7,10 +7,17 @@ import {
   getDashboardFinance,
   getFinancePlan,
 } from '../../settings/request.js';
-import { getPreviousMonthsRanges } from '../../utils/getPreviousMonthsRanges.js';
 
 class ChartInflowArea extends BaseChart {
   constructor(ctx, addOptions = {}) {
+    // Создаем и добавляем элемент тултипа ДО создания графика
+    const wpChart = ctx.closest('.wp-chart');
+    const tooltipEl = document.createElement('div');
+    tooltipEl.className = 'chart-tooltip';
+    tooltipEl.style.opacity = '0';
+    tooltipEl.style.position = 'absolute';
+    tooltipEl.style.pointerEvents = 'none';
+
     const defaultOptions = {
       type: 'bar',
       data: {
@@ -48,6 +55,27 @@ class ChartInflowArea extends BaseChart {
             }
           }
         },
+        plugins: {
+          tooltip: {
+            enabled: false,
+            position: 'average',
+            external: (context) => {
+              const { chart, tooltip } = context;
+
+              if (!tooltipEl) return;
+
+              if (tooltip.opacity === 0) {
+                tooltipEl.style.opacity = 0;
+                return;
+              }
+
+              const dataI = tooltip.dataPoints[0].dataIndex;
+              tooltipEl.style.opacity = 1;
+              this.onPosExternal(tooltipEl, chart, tooltip, dataI);
+              this.onExternal(tooltipEl, chart, tooltip, dataI);
+            }
+          }
+        }
       },
       plugins: [{
         id: 'barLabels',
@@ -70,7 +98,14 @@ class ChartInflowArea extends BaseChart {
 
     super(ctx, merge({}, defaultOptions, addOptions))
 
-    this.wpChart = this.chart.canvas.closest('.wp-chart')
+    this.onExternal = this.onExternal.bind(this)
+    this.wpChart = wpChart;
+    this.tooltipEl = tooltipEl;
+
+    // Устанавливаем HTML содержимое и добавляем в DOM
+    this.tooltipEl.innerHTML = this.createTooltipHTML();
+    this.wpChart.appendChild(this.tooltipEl);
+    this.datasets = []
 
     this._loader = new Loader(this.wpChart, {
       id: 'loader-chart-inflow-area',
@@ -113,6 +148,8 @@ class ChartInflowArea extends BaseChart {
     });
     this.chart.data.datasets[0].data = data.map(obj => obj.inflow_area || 0)
 
+    this.datasets = data
+
     this.chart.update();
   }
 
@@ -127,7 +164,6 @@ class ChartInflowArea extends BaseChart {
   async updateChartData(params) {
     try {
       this._loader.enable();
-      console.log(params)
 
       const { start_date, end_date, warehouse_id } = params;
 
@@ -150,6 +186,45 @@ class ChartInflowArea extends BaseChart {
           });
           this.chart.data.datasets[0].data = data.map(item => item.inflow_area || 0);
           this.chart.update();
+
+          // Получаем данные по всем складам для тултипа
+          // Вычисляем первый и последний день месяца
+          const date = new Date(start_date);
+          const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+          const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+          // Функция для форматирования даты
+          const formatLocalDate = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+          };
+
+          const monthStart = formatLocalDate(firstDay);
+          const monthEnd = formatLocalDate(lastDay);
+
+          // Фильтруем склады (исключаем warehouse_id === 0)
+          const warehouses = window.app.warehouses.filter(w => w.warehouse_id !== 0);
+
+          // Создаем параллельные запросы для каждого склада
+          const warehouseRequests = warehouses.map(warehouse =>
+            getFinancePlan({
+              warehouse_id: warehouse.warehouse_id,
+              start_date,
+              end_date
+            })
+          );
+
+          // Выполняем все запросы параллельно
+          const warehouseResults = await Promise.all(warehouseRequests);
+
+          // Сохраняем результаты в this.datasets для тултипа
+          this.datasets = warehouseResults.map((result, index) => ({
+            ...result,
+            warehouse_id: warehouses[index].warehouse_id,
+            warehouse_short_name: warehouses[index].warehouse_short_name
+          }));
         }
       } else {
         // Если больше одного месяца - используем getDashboardFinance для каждого месяца
@@ -183,8 +258,6 @@ class ChartInflowArea extends BaseChart {
           });
         }
 
-        console.log(ranges.map(a => a))
-
         // Выполняем запросы для всех месяцев параллельно
         const requests = ranges.map(range =>
           getDashboardFinance({
@@ -195,6 +268,7 @@ class ChartInflowArea extends BaseChart {
         );
 
         const results = await Promise.all(requests);
+        this.datasets = results
 
         // Обновляем график
         this.chart.data.labels = ranges.map(range => {
@@ -212,6 +286,47 @@ class ChartInflowArea extends BaseChart {
       });
     } finally {
       this._loader.disable();
+    }
+  }
+
+  // Метод создания HTML структуры тултипа
+  createTooltipHTML() {
+    return `
+      <div class="sklad flex flex-col gap-1 items-start text-left">
+      </div>
+    `;
+  }
+
+  // Метод обновления содержимого тултипа
+  onExternal(tooltipEl, chart, tooltip, dataI) {
+    if (this.datasets && this.datasets.length) {
+      const skladBlock = tooltipEl.querySelector('.sklad');
+      skladBlock.innerHTML = '';
+
+      // Проверяем структуру данных
+      const firstItem = this.datasets[0];
+
+      // Если есть finance_planfact в первом элементе - это данные для одного месяца
+      if (firstItem.finance_planfact) {
+        // Случай: один месяц - показываем все склады
+        this.datasets.forEach(warehouse => {
+          const data = warehouse.finance_planfact[dataI]
+          skladBlock.insertAdjacentHTML('beforeend',
+            `<p class="w-full">${warehouse.warehouse_short_name}: ${data.inflow_area}м²</p>`
+          );
+        });
+      } else if (this.datasets[dataI] && this.datasets[dataI].inflow_area_by_warehouse) {
+        // Случай: несколько месяцев - показываем склады для конкретного месяца
+        const data = this.datasets[dataI];
+        data.inflow_area_by_warehouse.forEach(({ inflow_area, warehouse_id }) => {
+          const warehouse = window.app.warehouses.find(w => w.warehouse_id === warehouse_id);
+          if (warehouse) {
+            skladBlock.insertAdjacentHTML('beforeend',
+              `<p class="w-full">${warehouse.warehouse_short_name}: ${inflow_area}м²</p>`
+            );
+          }
+        });
+      }
     }
   }
 }

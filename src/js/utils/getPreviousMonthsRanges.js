@@ -3,18 +3,20 @@ export const getPreviousMonthsRanges = (startDate, endDate, monthsCount = 9) => 
   const ranges = [];
   const start = new Date(startDate);
 
-  for (let i = 1; i <= monthsCount; i++) {
-    // Вычисляем дату для предыдущего месяца
-    const prevMonthEnd = new Date(start);
-    prevMonthEnd.setMonth(start.getMonth() - i);
-    prevMonthEnd.setDate(1); // Устанавливаем первый день месяца
+  const fmt = d =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
-    // Последний день предыдущего месяца
-    const lastDay = new Date(prevMonthEnd.getFullYear(), prevMonthEnd.getMonth() + 1, 0);
+  for (let i = 1; i <= monthsCount; i++) {
+    const firstOfPrev = new Date(start);
+    firstOfPrev.setMonth(start.getMonth() - i);
+    firstOfPrev.setDate(1);
+
+    // последний день предыдущего месяца (локально)
+    const lastDay = new Date(firstOfPrev.getFullYear(), firstOfPrev.getMonth() + 1, 0);
 
     ranges.push({
-      start_date: prevMonthEnd.toISOString().split('T')[0],
-      end_date: lastDay.toISOString().split('T')[0]
+      start_date: fmt(firstOfPrev),
+      end_date: fmt(lastDay)
     });
   }
 
