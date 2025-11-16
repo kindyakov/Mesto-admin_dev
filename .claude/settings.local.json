@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(temp_file.txt)"
-    ],
-    "deny": [],
-    "ask": []
-  }
-}
