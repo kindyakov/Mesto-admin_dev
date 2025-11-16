@@ -114,7 +114,7 @@ class ChartInflowArea extends BaseChart {
     this.calendars = createCalendar(this.wpChart.querySelector('.input-date'), {
       mode: 'range',
       dateFormat: 'd. M, Y',
-      defaultDate: this.app.defaultDate,
+      defaultDate: [new Date(2024, 4, 1), new Date()],
       onChange: (selectedDates, dateStr, instance) => {
         const [nameOne, nameTwo] = instance.element.name.split(',')
 
@@ -135,6 +135,8 @@ class ChartInflowArea extends BaseChart {
         }
       }
     });
+
+    this.initialRender = true
   }
 
   render() {
@@ -150,7 +152,26 @@ class ChartInflowArea extends BaseChart {
 
     this.datasets = data
 
-    this.chart.update();
+    if (this.initialRender) {
+      // Форматируем даты для сохранения в queryParams
+      this.queryParams = {
+        start_date: "2024-05-01",
+        end_date: dateFormatter(new Date(), "yyyy-MM-dd")
+      };
+
+      // Автоматически загружаем данные с датами по умолчанию при первой загрузке
+      if (this.app.warehouse && this.app.warehouse.warehouse_id) {
+        const defaultParams = {
+          warehouse_id: this.app.warehouse.warehouse_id,
+          start_date: this.queryParams.start_date,
+          end_date: this.queryParams.end_date
+        };
+        this.updateChartData(defaultParams);
+        this.initialRender = false
+      }
+    } else {
+      this.chart.update();
+    }
   }
 
   // Проверка, находятся ли даты в одном месяце

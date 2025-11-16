@@ -1,0 +1,141 @@
+import BaseChart from "./BaseChart.js";
+import merge from 'lodash.merge';
+import { dateFormatter } from "../../settings/dateFormatter.js";
+import { Loader } from "../../modules/myLoader.js";
+import { createCalendar } from '../../settings/createCalendar.js';
+import {
+  getDashboardFinance,
+  getFinancePlan,
+} from '../../settings/request.js';
+
+class ChartInflowArea extends BaseChart {
+  constructor(ctx, addOptions = {}) {
+    // Создаем и добавляем элемент тултипа ДО создания графика
+    const wpChart = ctx.closest('.wp-chart');
+    const tooltipEl = document.createElement('div');
+    tooltipEl.className = 'chart-tooltip';
+    tooltipEl.style.opacity = '0';
+    tooltipEl.style.position = 'absolute';
+    tooltipEl.style.pointerEvents = 'none';
+
+    const defaultOptions = {
+      type: 'bar',
+      data: {
+        datasets: [{
+          borderRadius: 4,
+          barPercentage: 0.8,
+          categoryPercentage: 0.9,
+        }]
+      },
+      options: {
+        layout: {
+          padding: {
+            top: 25
+          }
+        },
+        scales: {
+          y: {
+            grid: {
+              display: false
+            },
+            ticks: {
+              font: {
+                size: 10
+              }
+            },
+          },
+          x: {
+            grid: {
+              display: false
+            },
+            ticks: {
+              font: {
+                size: 10
+              }
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            enabled: false,
+            position: 'average',
+            external: (context) => {
+              const { chart, tooltip } = context;
+
+              if (!tooltipEl) return;
+
+              if (tooltip.opacity === 0) {
+                tooltipEl.style.opacity = 0;
+                return;
+              }
+
+              const dataI = tooltip.dataPoints[0].dataIndex;
+              tooltipEl.style.opacity = 1;
+              this.onPosExternal(tooltipEl, chart, tooltip, dataI);
+              this.onExternal(tooltipEl, chart, tooltip, dataI);
+            }
+          }
+        }
+      },
+      plugins: [{
+        id: 'barLabels',
+        afterDatasetsDraw: (chart) => {
+          const ctx = chart.ctx;
+          chart.data.datasets.forEach((dataset, i) => {
+            const meta = chart.getDatasetMeta(i);
+            meta.data.forEach((bar, index) => {
+              const data = dataset.data[index];
+              ctx.fillStyle = '#333';
+              ctx.font = '400 10px Manrope';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              ctx.fillText(data, bar.x, bar.y - 5);
+            });
+          });
+        }
+      }]
+    }
+
+    super(ctx, merge({}, defaultOptions, addOptions))
+
+    this.onExternal = this.onExternal.bind(this)
+    this.wpChart = wpChart;
+    this.tooltipEl = tooltipEl;
+
+    // Устанавливаем HTML содержимое и добавляем в DOM
+    this.tooltipEl.innerHTML = this.createTooltipHTML();
+    this.wpChart.appendChild(this.tooltipEl);
+    this.datasets = []
+
+    this._loader = new Loader(this.wpChart, {
+      id: 'loader-chart-inflow-area',
+    });
+
+    this.calendars = createCalendar(this.wpChart.querySelector('.input-date'), {
+      mode: 'range',
+      dateFormat: 'd. M, Y',
+      defaultDate: this.app.defaultDate,
+      onChange: (selectedDates, dateStr, instance) => {
+        const [nameOne, nameTwo] = instance.element.name.split(',')
+
+        if (selectedDates.length === 2) {
+          const params = {
+            warehouse_id: this.app.warehouse.warehouse_id,
+            [nameOne]: dateFormatter(selectedDates[0], 'yyyy-MM-dd'),
+            [nameTwo]: dateFormatter(selectedDates[1], 'yyyy-MM-dd')
+          }
+
+          // Сохраняем queryParams для использования в updateWidgets
+          this.queryParams = {
+            start_date: params[nameOne],
+            end_date: params[nameTwo]
+          };
+
+          this.updateChartData(params);
+        }
+      }
+    });
+  }
+
+  render() {
+
