@@ -386,35 +386,26 @@ class ChartRevenueDynamics extends BaseChart {
 
   // Update selection chart with aggregated data from selected periods
   updateSelectionChart() {
-    console.log('updateSelectionChart - selectedBars:', Array.from(this.selectedBars));
-
     if (!this.selectionChart) {
       this.findSelectionChart();
     }
 
     if (!this.selectionChart || this.selectedBars.size === 0) {
       if (this.selectionChart) {
-        console.log('updateSelectionChart - clearing chart');
         this.selectionChart.clearData();
-      } else {
-        console.log('updateSelectionChart - no selectionChart available');
       }
       return;
     }
 
     const aggregatedData = this.aggregateSelectedData();
-    console.log('updateSelectionChart - aggregatedData length:', aggregatedData.length);
 
     if (aggregatedData.length === 0) {
-      console.log('updateSelectionChart - no data, clearing chart');
       this.selectionChart.clearData();
       return;
     }
 
     // Check if the selectionChart has the renderForSelection method
     if (typeof this.selectionChart.renderForSelection !== 'function') {
-      console.log('updateSelectionChart - selectionChart does not have renderForSelection method');
-      console.log('updateSelectionChart - selectionChart type:', this.selectionChart.constructor.name);
       return;
     }
 
@@ -422,38 +413,28 @@ class ChartRevenueDynamics extends BaseChart {
       new Map(aggregatedData.map(w => [w.warehouse_id, w]))
     );
 
-    console.log('Данные для круговой диаграммы:', colorMapping.data);
-    console.log('Вызываем renderForSelection');
-
     this.selectionChart.renderForSelection(
       colorMapping.labels,
       colorMapping.data,
       colorMapping.colors
     );
-
-    console.log('updateSelectionChart - completed');
   }
 
   // Поиск ссылки на ChartRevenueSelection
   findSelectionChart() {
-    console.log('findSelectionChart - ищем ChartRevenueSelection');
-
     // Если ссылка уже установлена Finance.js, используем её
     if (this.selectionChart) {
-      console.log('findSelectionChart - уже существует');
       return;
     }
 
     // Способ 1: Ищем через page.charts (работает и в разработке, и в продакшене)
     const page = this.page || this.app?.page;
     if (page && page.charts) {
-      console.log('findSelectionChart - способ 1: page.charts найдено:', page.charts.length);
       // Ищем по ID канваса вместо имени класса (работает после минификации)
       const chart = page.charts.find(c =>
         c.canvas && c.canvas.id === 'chart-revenue-selection'
       );
       if (chart) {
-        console.log('findSelectionChart - найдено через page.charts');
         this.selectionChart = chart;
         return;
       }
@@ -462,12 +443,9 @@ class ChartRevenueDynamics extends BaseChart {
     // Способ 2: Ищем через элемент канваса
     const selectionChartCanvas = document.querySelector('#chart-revenue-selection');
     if (selectionChartCanvas) {
-      console.log('findSelectionChart - найден элемент канваса');
-
       try {
         // Проверяем, хранится ли наш экземпляр на элементе канваса
         if (selectionChartCanvas.chart && selectionChartCanvas.chart.canvas === selectionChartCanvas) {
-          console.log('findSelectionChart - найдено через canvas.chart');
           this.selectionChart = selectionChartCanvas.chart;
           return;
         }
@@ -493,31 +471,22 @@ class ChartRevenueDynamics extends BaseChart {
         );
 
         if (revenueSelectionChart) {
-          console.log('findSelectionChart - найден экземпляр ChartRevenueSelection');
           this.selectionChart = revenueSelectionChart;
           return;
-        } else {
-          console.log('findSelectionChart - ChartRevenueSelection не найден в глобальном поиске');
         }
 
       } catch (error) {
-        console.log('findSelectionChart - ошибка при поиске экземпляров:', error);
+        // Ошибка при поиске экземпляров
       }
     }
-
-    console.log('findSelectionChart - ChartRevenueSelection не найден, ждем Finance.js');
   }
 
   // Aggregate warehouse data from selected periods
   aggregateSelectedData() {
-    console.log('aggregateSelectedData - datasets length:', this.datasets.length);
-    console.log('aggregateSelectedData - single month mode:', !!this.datasets[0]?.finance_planfact);
-
     const warehouseMap = new Map();
 
     // Check if we're in single month mode
     if (this.datasets[0]?.finance_planfact) {
-      console.log('aggregateSelectedData - single month mode');
       this.selectedBars.forEach(dayIndex => {
         this.datasets.forEach(warehouseData => {
           const dayData = warehouseData.finance_planfact[dayIndex];
@@ -537,7 +506,6 @@ class ChartRevenueDynamics extends BaseChart {
         });
       });
     } else {
-      console.log('aggregateSelectedData - multi month mode');
       this.selectedBars.forEach(barIndex => {
         if (this.datasets[barIndex]?.revenues_by_warehouse) {
           const monthlyData = this.datasets[barIndex];
@@ -556,9 +524,7 @@ class ChartRevenueDynamics extends BaseChart {
       });
     }
 
-    const result = Array.from(warehouseMap.values());
-    console.log('aggregateSelectedData - final result length:', result.length);
-    return result;
+    return Array.from(warehouseMap.values());
   }
 
   // Update selection chart with data for the last day (single month mode)
@@ -576,8 +542,6 @@ class ChartRevenueDynamics extends BaseChart {
 
     // Check if the selectionChart has the renderForSelection method
     if (typeof this.selectionChart.renderForSelection !== 'function') {
-      console.log('updateSelectionChartForLastDay - selectionChart does not have renderForSelection method');
-      console.log('updateSelectionChartForLastDay - selectionChart type:', this.selectionChart.constructor.name);
       return;
     }
 
@@ -631,8 +595,6 @@ class ChartRevenueDynamics extends BaseChart {
 
     // Check if the selectionChart has the renderForSelection method
     if (typeof this.selectionChart.renderForSelection !== 'function') {
-      console.log('updateSelectionChartForLastMonth - selectionChart does not have renderForSelection method');
-      console.log('updateSelectionChartForLastMonth - selectionChart type:', this.selectionChart.constructor.name);
       return;
     }
 

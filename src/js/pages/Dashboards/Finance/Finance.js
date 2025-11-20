@@ -237,7 +237,8 @@ class Finance extends Dashboards {
 		// Передаем данные в диаграммы
 		if (this.charts.length) {
 			// Find charts by canvas ID instead of constructor name (works after minification)
-			const revenueDynamicsChart = this.charts.find(({ chart }) => chart?.canvas && chart.canvas?.id === 'chart-revenue-dynamics');
+			const revenueDynamicsChart = this.charts.find(({ chart }) =>
+				chart?.canvas && chart.canvas?.id === 'chart-revenue-dynamics');
 			const revenueSelectionChart = this.charts.find(({ chart }) =>
 				chart?.canvas && chart.canvas?.id === 'chart-revenue-selection'
 			);
