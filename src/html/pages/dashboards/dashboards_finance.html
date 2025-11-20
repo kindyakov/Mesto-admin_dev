@@ -173,45 +173,47 @@
         <canvas id="chart-inflow-area" style="max-height: 100px;"></canvas>
       </div>
     </div>
-    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col wp-chart"
-      style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
-      <div class="flex items-center justify-between gap-2">
-        <p class="text-[#64748b] text-sm font-medium leading-[100%]">
-          Средняя ставка за всё время
-        </p>
-        <b class="text-7 font-bold text-[#1c2434] flex-shrink-0" data-render-widget="avg_price_per_room,/м²"
-          price2>₽/м</b>
-      </div>
-      <div class="flex items-center justify-between gap-2 mt-3 mb-2">
-        <p class="text-[#64748b] text-sm font-medium leading-[100%]">
-          Средняя ставка за выбранный <span data-render-tippy="dates,end"
-            class="underline underline-offset-4 cursor-pointer hover:no-underline">период</span>
-        </p>
-        <b class="text-7 font-bold text-[#1c2434] flex-shrink-0" data-render-widget="current_avg_price_per_room,/м²"
-          price2>2 000 000 ₽</b>
-      </div>
-      <div class="mt-auto w-full h-[100px] flex items-end">
-        <canvas id="chart-dynamics-avg-rate" style="max-height: 100px;"></canvas>
-      </div>
-    </div>
-    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col wp-chart"
-      style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
-      <div class="flex justify-between gap-4 items-end">
-        <label class="main__date-filter">
-          <div class="wpLoader _custom-loader" style="background-color: rgba(0, 0, 0, 0.4); position: absolute;"><span
-              class="loader" style="width: 25px; height: 25px; border-width: 1.5px;"></span></div>
-          <svg class="icon icon-calendar" style="left: 5px;">
-            <use xlink:href="#calendar"></use>
-          </svg>
-          <input type="text" class="input-date flatpickr-input" name="start_date,end_date"
-            placeholder="Выбрать период для сравнения" readonly="readonly" style="padding: 5px 10px 5px 25px;">
-        </label>
-        <div class="">
-          <canvas id="chart-revenue-selection" style="max-height: 120px;"></canvas>
+    <div class="flex flex-col gap-2">
+      <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col wp-chart"
+        style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
+        <div class="flex items-center justify-between gap-2">
+          <p class="text-[#64748b] text-sm font-medium leading-[100%]">
+            Средняя ставка за всё время
+          </p>
+          <b class="text-7 font-bold text-[#1c2434] flex-shrink-0" data-render-widget="avg_price_per_room,/м²"
+            price2>₽/м</b>
+        </div>
+        <div class="flex items-center justify-between gap-2 mt-3 mb-2">
+          <p class="text-[#64748b] text-sm font-medium leading-[100%]">
+            Средняя ставка за выбранный <span data-render-tippy="dates,end"
+              class="underline underline-offset-4 cursor-pointer hover:no-underline">период</span>
+          </p>
+          <b class="text-7 font-bold text-[#1c2434] flex-shrink-0" data-render-widget="current_avg_price_per_room,/м²"
+            price2>2 000 000 ₽</b>
+        </div>
+        <div class="mt-auto w-full h-[100px] flex items-end">
+          <canvas id="chart-dynamics-avg-rate" style="max-height: 100px;"></canvas>
         </div>
       </div>
-      <div class="mt-auto w-full h-[100px] flex items-end">
-        <canvas id="chart-revenue-dynamics" style="max-height: 100px;"></canvas>
+      <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 pt-1 flex flex-col wp-chart"
+        style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
+        <div class="flex justify-between gap-4 items-end">
+          <label class="main__date-filter">
+            <div class="wpLoader _custom-loader" style="background-color: rgba(0, 0, 0, 0.4); position: absolute;"><span
+                class="loader" style="width: 25px; height: 25px; border-width: 1.5px;"></span></div>
+            <svg class="icon icon-calendar" style="left: 5px;">
+              <use xlink:href="#calendar"></use>
+            </svg>
+            <input type="text" class="input-date flatpickr-input" name="start_date,end_date"
+              placeholder="Выбрать период для сравнения" readonly="readonly" style="padding: 5px 10px 5px 25px;">
+          </label>
+          <div class="">
+            <canvas id="chart-revenue-selection" style="max-height: 120px;"></canvas>
+          </div>
+        </div>
+        <div class="mt-auto w-full h-[100px] flex items-end">
+          <canvas id="chart-revenue-dynamics" style="max-height: 100px;"></canvas>
+        </div>
       </div>
     </div>
   </div>
