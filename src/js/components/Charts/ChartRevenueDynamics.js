@@ -8,6 +8,7 @@ import {
   getFinancePlan,
 } from '../../settings/request.js';
 import { formattingPrice } from "../../utils/formattingPrice.js";
+import ColorManager from "../../utils/ColorManager.js";
 
 class ChartRevenueDynamics extends BaseChart {
   constructor(ctx, addOptions = {}) {
@@ -77,6 +78,12 @@ class ChartRevenueDynamics extends BaseChart {
               this.onExternal(tooltipEl, chart, tooltip, dataI);
             }
           }
+        },
+        onClick: (event, elements) => {
+          if (elements.length > 0) {
+            const dataIndex = elements[0].index;
+            this.handleBarClick(dataIndex);
+          }
         }
       },
       // plugins: [{
@@ -109,6 +116,10 @@ class ChartRevenueDynamics extends BaseChart {
     this.wpChart.appendChild(this.tooltipEl);
     this.datasets = []
 
+    // State for selected bars
+    this.selectedBars = new Set(); // Store indices of selected bars
+    this.selectionChart = null; // Reference to ChartRevenueSelection
+
     this._loader = new Loader(this.wpChart, {
       id: 'loader-chart-inflow-area',
     });
@@ -121,6 +132,15 @@ class ChartRevenueDynamics extends BaseChart {
         const [nameOne, nameTwo] = instance.element.name.split(',')
 
         if (selectedDates.length === 2) {
+          // Очищаем выбранные колонки при изменении календаря
+          this.selectedBars.clear();
+          this.updateBarHighlighting(); // Сбрасываем цвета
+
+          // Очищаем круговую диаграмму
+          if (this.selectionChart) {
+            this.selectionChart.clearData();
+          }
+
           const params = {
             warehouse_id: this.app.warehouse.warehouse_id,
             [nameOne]: dateFormatter(selectedDates[0], 'yyyy-MM-dd'),
@@ -311,6 +331,136 @@ class ChartRevenueDynamics extends BaseChart {
     } finally {
       this._loader.disable();
     }
+  }
+
+  // Handle click on bar chart
+  handleBarClick(dataIndex) {
+    // Toggle selection for the clicked bar
+    if (this.selectedBars.has(dataIndex)) {
+      this.selectedBars.delete(dataIndex);
+    } else {
+      this.selectedBars.add(dataIndex);
+    }
+
+    // Update visual highlighting
+    this.updateBarHighlighting();
+
+    // Update selection chart with aggregated data
+    this.updateSelectionChart();
+  }
+
+  // Update visual highlighting of selected bars
+  updateBarHighlighting() {
+    if (!this.chart || !this.chart.data.datasets[0]) return;
+
+    const dataset = this.chart.data.datasets[0];
+    const colors = this.chart.data.labels.map((_, index) => {
+      // Always use green for selected bars, default color for unselected
+      if (this.selectedBars.has(index)) {
+        return '#19D06D'; // Always green for selected bars
+      }
+      return ColorManager.COLORS.DEFAULT_BAR; // Default color for unselected
+    });
+
+    // Update background colors with green highlighting for selected bars
+    dataset.backgroundColor = colors;
+    this.chart.update('none'); // Update without animation for immediate feedback
+  }
+
+  // Update selection chart with aggregated data from selected periods
+  updateSelectionChart() {
+    if (!this.selectionChart) {
+      // Try to find the selection chart from the page context
+      this.findSelectionChart();
+    }
+
+    if (!this.selectionChart || this.selectedBars.size === 0) {
+      // Clear selection chart if no bars are selected
+      if (this.selectionChart) {
+        this.selectionChart.clearData();
+      }
+      return;
+    }
+
+    // Aggregate warehouse data from selected periods
+    const aggregatedData = this.aggregateSelectedData();
+
+    // Create color mapping for the aggregated data
+    const colorMapping = ColorManager.createWarehouseColorMapping(
+      new Map(aggregatedData.map(w => [w.warehouse_id, w]))
+    );
+
+    // Вывод массива данных для круговой диаграммы
+    console.log('Данные для круговой диаграммы:', colorMapping.data);
+
+    // Update selection chart with data and colors
+    this.selectionChart.renderForSelection(
+      colorMapping.labels,
+      colorMapping.data,
+      colorMapping.colors
+    );
+  }
+
+  // Find reference to ChartRevenueSelection
+  findSelectionChart() {
+    // Try to access through window.app or page context
+    const page = this.app?.page || window.app?.page;
+    if (page && page.charts) {
+      this.selectionChart = page.charts.find(chart =>
+        chart.constructor.name === 'ChartRevenueSelection'
+      );
+    }
+  }
+
+  // Aggregate warehouse data from selected periods
+  aggregateSelectedData() {
+    const warehouseMap = new Map();
+
+    // Check if we're in single month mode
+    if (this.datasets[0]?.finance_planfact) {
+      // Single month mode: this.datasets contains all warehouses, selectedBars contains day indices
+      this.selectedBars.forEach(dayIndex => {
+        // For each warehouse, get the revenue for the specific day
+        this.datasets.forEach(warehouseData => {
+          // Get revenue for the specific day from this warehouse
+          const dayData = warehouseData.finance_planfact[dayIndex];
+          const dayRevenue = dayData?.revenue || 0;
+
+          if (dayRevenue > 0) {
+            if (!warehouseMap.has(warehouseData.warehouse_id)) {
+              warehouseMap.set(warehouseData.warehouse_id, {
+                warehouse_id: warehouseData.warehouse_id,
+                warehouse_short_name: warehouseData.warehouse_short_name,
+                revenue: 0
+              });
+            }
+
+            // Add the revenue for this warehouse on this specific day
+            warehouseMap.get(warehouseData.warehouse_id).revenue += dayRevenue;
+          }
+        });
+      });
+    } else {
+      // Multi-month mode: existing logic
+      this.selectedBars.forEach(barIndex => {
+        if (this.datasets[barIndex]?.revenues_by_warehouse) {
+          const monthlyData = this.datasets[barIndex];
+          monthlyData.revenues_by_warehouse.forEach(warehouse => {
+            if (!warehouseMap.has(warehouse.warehouse_id)) {
+              const warehouseInfo = window.app.warehouses.find(w => w.warehouse_id === warehouse.warehouse_id);
+              warehouseMap.set(warehouse.warehouse_id, {
+                warehouse_id: warehouse.warehouse_id,
+                warehouse_short_name: warehouseInfo?.warehouse_short_name || `WH${warehouse.warehouse_id}`,
+                revenue: 0
+              });
+            }
+            warehouseMap.get(warehouse.warehouse_id).revenue += warehouse.revenue;
+          });
+        }
+      });
+    }
+
+    return Array.from(warehouseMap.values());
   }
 
   // Метод создания HTML структуры тултипа

@@ -6,6 +6,7 @@ import DynamicsAvgRate from '../../../components/Charts/DynamicsAvgRate.js';
 import ChartRevenue from '../../../components/Charts/ChartRevenue/ChartRevenue.js';
 import ChartInflowArea from '../../../components/Charts/ChartInflowArea.js';
 import ChartRevenueDynamics from '../../../components/Charts/ChartRevenueDynamics.js';
+import ChartRevenueSelection from '../../../components/Charts/ChartRevenueSelection.js';
 import {
 	getDashboardFinance,
 	getFinancePlan,
@@ -38,6 +39,7 @@ class Finance extends Dashboards {
 				{ id: 'chart-revenue', ChartComponent: ChartRevenue },
 				{ id: 'chart-inflow-area', ChartComponent: ChartInflowArea },
 				{ id: 'chart-revenue-dynamics', ChartComponent: ChartRevenueDynamics },
+				{ id: 'chart-revenue-selection', ChartComponent: ChartRevenueSelection },
 			],
 			page: 'dashboards/finance'
 		});
@@ -234,11 +236,23 @@ class Finance extends Dashboards {
 
 		// Передаем данные в диаграммы
 		if (this.charts.length) {
+			const revenueDynamicsChart = this.charts.find(chart => chart.constructor.name === 'ChartRevenueDynamics');
+			const revenueSelectionChart = this.charts.find(chart => chart.constructor.name === 'ChartRevenueSelection');
+
 			this.actionsCharts((chart) => {
 				// Передаем полные данные, каждая диаграмма сама возьмет нужное количество
 				chart.previousMonthsData = previousMonthsData;
 				chart.render([dataDashboard, { finance_planfact }]);
 			});
+
+			// Establish cross-chart communication
+			if (revenueDynamicsChart && revenueSelectionChart) {
+				// Set reference from dynamics chart to selection chart
+				revenueDynamicsChart.selectionChart = revenueSelectionChart;
+
+				// Store page reference for cross-chart communication
+				revenueDynamicsChart.page = this;
+			}
 		}
 
 		this.visualization({ dataDashboard, finance_planfact, dataEntities });
