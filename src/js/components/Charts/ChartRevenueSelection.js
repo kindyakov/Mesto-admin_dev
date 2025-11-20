@@ -157,16 +157,17 @@ class ChartRevenueSelection extends BaseChart {
 
   // Original render method for backward compatibility
   render([{ revenue, reestr_sum, rest_in_reestr }, { finance_planfact }]) {
-    // // Show data without text labels - only visual segments
-    // if (revenue) {
-    //   this.chart.data.labels = []; // Empty labels - no text
-    //   this.chart.data.datasets[0].data = [revenue];
-    //   this.chart.data.datasets[0].backgroundColor = [ColorManager.getWarehouseColor(window.app.warehouse?.warehouse_id || 1)];
-    //   this.chart.data.datasets[0].color = [ColorManager.getWarehouseColor(window.app.warehouse?.warehouse_id || 1)];
-    // } else {
-    //   this.clearData();
-    // }
-    // this.chart.update();
+    // ChartRevenueDynamics now handles automatic updates via its updateChartData method
+    // Keep simple fallback behavior
+    if (revenue) {
+      this.chart.data.labels = ['Собрано'];
+      this.chart.data.datasets[0].data = [revenue];
+      this.chart.data.datasets[0].backgroundColor = [ColorManager.getWarehouseColor(window.app.warehouse?.warehouse_id || 1)];
+      this.chart.data.datasets[0].color = [ColorManager.getWarehouseColor(window.app.warehouse?.warehouse_id || 1)];
+    } else {
+      this.clearData();
+    }
+    this.chart.update();
   }
 
   // New method to render warehouse-specific data from bar selections

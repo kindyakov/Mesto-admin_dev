@@ -268,6 +268,14 @@ class ChartRevenueDynamics extends BaseChart {
             warehouse_id: warehouses[index].warehouse_id,
             warehouse_short_name: warehouses[index].warehouse_short_name
           }));
+
+          // Автоматически выбираем и подсвечиваем последний столбец
+        const lastDayIndex = this.datasets[0].finance_planfact.length - 1;
+        this.selectedBars.add(lastDayIndex);
+        this.updateBarHighlighting();
+
+        // Автоматически обновляем круговую диаграмму данными за последний день
+        this.updateSelectionChartForLastDay();
         }
       } else {
         // Если больше одного месяца - используем getDashboardFinance для каждого месяца
@@ -321,6 +329,14 @@ class ChartRevenueDynamics extends BaseChart {
         });
         this.chart.data.datasets[0].data = results.map(result => result.revenue || 0);
         this.chart.update();
+
+        // Автоматически выбираем и подсвечиваем последний столбец (месяц)
+        const lastMonthIndex = this.datasets.length - 1;
+        this.selectedBars.add(lastMonthIndex);
+        this.updateBarHighlighting();
+
+        // Автоматически обновляем круговую диаграмму данными за последний месяц
+        this.updateSelectionChartForLastMonth();
       }
     } catch (error) {
       console.error('Error обновления chart data:', error);
@@ -461,6 +477,99 @@ class ChartRevenueDynamics extends BaseChart {
     }
 
     return Array.from(warehouseMap.values());
+  }
+
+  // Update selection chart with data for the last day (single month mode)
+  updateSelectionChartForLastDay() {
+    if (!this.selectionChart) {
+      this.findSelectionChart();
+    }
+
+    if (!this.selectionChart || !this.datasets || this.datasets.length === 0) {
+      if (this.selectionChart) {
+        this.selectionChart.clearData();
+      }
+      return;
+    }
+
+    const warehouseMap = new Map();
+    const lastDayIndex = this.datasets[0].finance_planfact.length - 1;
+
+    // Aggregate data from all warehouses for the last day
+    this.datasets.forEach(warehouseData => {
+      const dayData = warehouseData.finance_planfact[lastDayIndex];
+      const dayRevenue = dayData?.revenue || 0;
+
+      if (dayRevenue > 0) {
+        if (!warehouseMap.has(warehouseData.warehouse_id)) {
+          warehouseMap.set(warehouseData.warehouse_id, {
+            warehouse_id: warehouseData.warehouse_id,
+            warehouse_short_name: warehouseData.warehouse_short_name,
+            revenue: 0
+          });
+        }
+        warehouseMap.get(warehouseData.warehouse_id).revenue += dayRevenue;
+      }
+    });
+
+    const aggregatedData = Array.from(warehouseMap.values());
+    if (aggregatedData.length > 0) {
+      const colorMapping = ColorManager.createWarehouseColorMapping(
+        new Map(aggregatedData.map(w => [w.warehouse_id, w]))
+      );
+      this.selectionChart.renderForSelection(
+        colorMapping.labels,
+        colorMapping.data,
+        colorMapping.colors
+      );
+    } else {
+      this.selectionChart.clearData();
+    }
+  }
+
+  // Update selection chart with data for the last month (multi-month mode)
+  updateSelectionChartForLastMonth() {
+    if (!this.selectionChart) {
+      this.findSelectionChart();
+    }
+
+    if (!this.selectionChart || !this.datasets || this.datasets.length === 0) {
+      if (this.selectionChart) {
+        this.selectionChart.clearData();
+      }
+      return;
+    }
+
+    // Take data from the last month
+    const lastMonthData = this.datasets[this.datasets.length - 1];
+
+    if (lastMonthData && lastMonthData.revenues_by_warehouse) {
+      const warehouseMap = new Map();
+
+      lastMonthData.revenues_by_warehouse.forEach(warehouse => {
+        if (!warehouseMap.has(warehouse.warehouse_id)) {
+          const warehouseInfo = window.app.warehouses.find(w => w.warehouse_id === warehouse.warehouse_id);
+          warehouseMap.set(warehouse.warehouse_id, {
+            warehouse_id: warehouse.warehouse_id,
+            warehouse_short_name: warehouseInfo?.warehouse_short_name || `WH${warehouse.warehouse_id}`,
+            revenue: 0
+          });
+        }
+        warehouseMap.get(warehouse.warehouse_id).revenue += warehouse.revenue;
+      });
+
+      const aggregatedData = Array.from(warehouseMap.values());
+      const colorMapping = ColorManager.createWarehouseColorMapping(
+        new Map(aggregatedData.map(w => [w.warehouse_id, w]))
+      );
+      this.selectionChart.renderForSelection(
+        colorMapping.labels,
+        colorMapping.data,
+        colorMapping.colors
+      );
+    } else {
+      this.selectionChart.clearData();
+    }
   }
 
   // Метод создания HTML структуры тултипа
