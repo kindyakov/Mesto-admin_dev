@@ -20,30 +20,16 @@ class ChartRevenueSelection extends BaseChart {
         datasets: [{
           data: [1],
           backgroundColor: [
-            '#5782A1',
             '#E3AA39',
             '#19D06D',
             '#E03D3D',
-            '#EFBB34',
-            '#9B59B6',
-            '#3498DB',
-            '#E67E22',
-            '#1ABC9C',
-            '#34495E',
           ],
           color: [
-            '#5782A1',
             '#E3AA39',
             '#19D06D',
             '#E03D3D',
-            '#EFBB34',
-            '#9B59B6',
-            '#3498DB',
-            '#E67E22',
-            '#1ABC9C',
-            '#34495E',
           ],
-          borderWidth: 2,
+          borderWidth: 0,
           borderColor: '#ffffff',
           cutout: '30%',
           hoverOffset: 4
@@ -160,7 +146,6 @@ class ChartRevenueSelection extends BaseChart {
     // ChartRevenueDynamics now handles automatic updates via its updateChartData method
     // Keep simple fallback behavior
     if (revenue) {
-      this.chart.data.labels = ['Собрано'];
       this.chart.data.datasets[0].data = [revenue];
       this.chart.data.datasets[0].backgroundColor = [ColorManager.getWarehouseColor(window.app.warehouse?.warehouse_id || 1)];
       this.chart.data.datasets[0].color = [ColorManager.getWarehouseColor(window.app.warehouse?.warehouse_id || 1)];

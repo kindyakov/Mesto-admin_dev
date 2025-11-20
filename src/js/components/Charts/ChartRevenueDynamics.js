@@ -9,6 +9,7 @@ import {
 } from '../../settings/request.js';
 import { formattingPrice } from "../../utils/formattingPrice.js";
 import ColorManager from "../../utils/ColorManager.js";
+import { Chart } from 'chart.js';
 
 class ChartRevenueDynamics extends BaseChart {
   constructor(ctx, addOptions = {}) {
@@ -270,12 +271,12 @@ class ChartRevenueDynamics extends BaseChart {
           }));
 
           // Автоматически выбираем и подсвечиваем последний столбец
-        const lastDayIndex = this.datasets[0].finance_planfact.length - 1;
-        this.selectedBars.add(lastDayIndex);
-        this.updateBarHighlighting();
+          const lastDayIndex = this.datasets[0].finance_planfact.length - 1;
+          this.selectedBars.add(lastDayIndex);
+          this.updateBarHighlighting();
 
-        // Автоматически обновляем круговую диаграмму данными за последний день
-        this.updateSelectionChartForLastDay();
+          // Автоматически обновляем круговую диаграмму данными за последний день
+          this.updateSelectionChartForLastDay();
         }
       } else {
         // Если больше одного месяца - используем getDashboardFinance для каждого месяца
@@ -385,60 +386,140 @@ class ChartRevenueDynamics extends BaseChart {
 
   // Update selection chart with aggregated data from selected periods
   updateSelectionChart() {
+    console.log('updateSelectionChart - selectedBars:', Array.from(this.selectedBars));
+
     if (!this.selectionChart) {
-      // Try to find the selection chart from the page context
       this.findSelectionChart();
     }
 
     if (!this.selectionChart || this.selectedBars.size === 0) {
-      // Clear selection chart if no bars are selected
       if (this.selectionChart) {
+        console.log('updateSelectionChart - clearing chart');
         this.selectionChart.clearData();
+      } else {
+        console.log('updateSelectionChart - no selectionChart available');
       }
       return;
     }
 
-    // Aggregate warehouse data from selected periods
     const aggregatedData = this.aggregateSelectedData();
+    console.log('updateSelectionChart - aggregatedData length:', aggregatedData.length);
 
-    // Create color mapping for the aggregated data
+    if (aggregatedData.length === 0) {
+      console.log('updateSelectionChart - no data, clearing chart');
+      this.selectionChart.clearData();
+      return;
+    }
+
+    // Check if the selectionChart has the renderForSelection method
+    if (typeof this.selectionChart.renderForSelection !== 'function') {
+      console.log('updateSelectionChart - selectionChart does not have renderForSelection method');
+      console.log('updateSelectionChart - selectionChart type:', this.selectionChart.constructor.name);
+      return;
+    }
+
     const colorMapping = ColorManager.createWarehouseColorMapping(
       new Map(aggregatedData.map(w => [w.warehouse_id, w]))
     );
 
-    // Вывод массива данных для круговой диаграммы
     console.log('Данные для круговой диаграммы:', colorMapping.data);
+    console.log('Вызываем renderForSelection');
 
-    // Update selection chart with data and colors
     this.selectionChart.renderForSelection(
       colorMapping.labels,
       colorMapping.data,
       colorMapping.colors
     );
+
+    console.log('updateSelectionChart - completed');
   }
 
-  // Find reference to ChartRevenueSelection
+  // Поиск ссылки на ChartRevenueSelection
   findSelectionChart() {
-    // Try to access through window.app or page context
-    const page = this.app?.page || window.app?.page;
-    if (page && page.charts) {
-      this.selectionChart = page.charts.find(chart =>
-        chart.constructor.name === 'ChartRevenueSelection'
-      );
+    console.log('findSelectionChart - ищем ChartRevenueSelection');
+
+    // Если ссылка уже установлена Finance.js, используем её
+    if (this.selectionChart) {
+      console.log('findSelectionChart - уже существует');
+      return;
     }
+
+    // Способ 1: Ищем через page.charts (работает и в разработке, и в продакшене)
+    const page = this.page || this.app?.page;
+    if (page && page.charts) {
+      console.log('findSelectionChart - способ 1: page.charts найдено:', page.charts.length);
+      // Ищем по ID канваса вместо имени класса (работает после минификации)
+      const chart = page.charts.find(c =>
+        c.canvas && c.canvas.id === 'chart-revenue-selection'
+      );
+      if (chart) {
+        console.log('findSelectionChart - найдено через page.charts');
+        this.selectionChart = chart;
+        return;
+      }
+    }
+
+    // Способ 2: Ищем через элемент канваса
+    const selectionChartCanvas = document.querySelector('#chart-revenue-selection');
+    if (selectionChartCanvas) {
+      console.log('findSelectionChart - найден элемент канваса');
+
+      try {
+        // Проверяем, хранится ли наш экземпляр на элементе канваса
+        if (selectionChartCanvas.chart && selectionChartCanvas.chart.canvas === selectionChartCanvas) {
+          console.log('findSelectionChart - найдено через canvas.chart');
+          this.selectionChart = selectionChartCanvas.chart;
+          return;
+        }
+
+        // Ищем глобально все экземпляры графиков с нужным ID канваса
+        const allCharts = [];
+
+        // Проверяем возможные места хранения в window.app
+        if (window.app) {
+          // Проверяем, есть ли в app страницы с графиками
+          if (window.app.pages) {
+            Object.values(window.app.pages).forEach(pageObj => {
+              if (pageObj.charts) allCharts.push(...pageObj.charts);
+            });
+          }
+
+          // Проверяем, есть ли в app графики напрямую
+          if (window.app.charts) allCharts.push(...window.app.charts);
+        }
+
+        const revenueSelectionChart = allCharts.find(chart =>
+          chart.canvas && chart.canvas.id === 'chart-revenue-selection'
+        );
+
+        if (revenueSelectionChart) {
+          console.log('findSelectionChart - найден экземпляр ChartRevenueSelection');
+          this.selectionChart = revenueSelectionChart;
+          return;
+        } else {
+          console.log('findSelectionChart - ChartRevenueSelection не найден в глобальном поиске');
+        }
+
+      } catch (error) {
+        console.log('findSelectionChart - ошибка при поиске экземпляров:', error);
+      }
+    }
+
+    console.log('findSelectionChart - ChartRevenueSelection не найден, ждем Finance.js');
   }
 
   // Aggregate warehouse data from selected periods
   aggregateSelectedData() {
+    console.log('aggregateSelectedData - datasets length:', this.datasets.length);
+    console.log('aggregateSelectedData - single month mode:', !!this.datasets[0]?.finance_planfact);
+
     const warehouseMap = new Map();
 
     // Check if we're in single month mode
     if (this.datasets[0]?.finance_planfact) {
-      // Single month mode: this.datasets contains all warehouses, selectedBars contains day indices
+      console.log('aggregateSelectedData - single month mode');
       this.selectedBars.forEach(dayIndex => {
-        // For each warehouse, get the revenue for the specific day
         this.datasets.forEach(warehouseData => {
-          // Get revenue for the specific day from this warehouse
           const dayData = warehouseData.finance_planfact[dayIndex];
           const dayRevenue = dayData?.revenue || 0;
 
@@ -451,13 +532,12 @@ class ChartRevenueDynamics extends BaseChart {
               });
             }
 
-            // Add the revenue for this warehouse on this specific day
             warehouseMap.get(warehouseData.warehouse_id).revenue += dayRevenue;
           }
         });
       });
     } else {
-      // Multi-month mode: existing logic
+      console.log('aggregateSelectedData - multi month mode');
       this.selectedBars.forEach(barIndex => {
         if (this.datasets[barIndex]?.revenues_by_warehouse) {
           const monthlyData = this.datasets[barIndex];
@@ -476,7 +556,9 @@ class ChartRevenueDynamics extends BaseChart {
       });
     }
 
-    return Array.from(warehouseMap.values());
+    const result = Array.from(warehouseMap.values());
+    console.log('aggregateSelectedData - final result length:', result.length);
+    return result;
   }
 
   // Update selection chart with data for the last day (single month mode)
@@ -489,6 +571,13 @@ class ChartRevenueDynamics extends BaseChart {
       if (this.selectionChart) {
         this.selectionChart.clearData();
       }
+      return;
+    }
+
+    // Check if the selectionChart has the renderForSelection method
+    if (typeof this.selectionChart.renderForSelection !== 'function') {
+      console.log('updateSelectionChartForLastDay - selectionChart does not have renderForSelection method');
+      console.log('updateSelectionChartForLastDay - selectionChart type:', this.selectionChart.constructor.name);
       return;
     }
 
@@ -537,6 +626,13 @@ class ChartRevenueDynamics extends BaseChart {
       if (this.selectionChart) {
         this.selectionChart.clearData();
       }
+      return;
+    }
+
+    // Check if the selectionChart has the renderForSelection method
+    if (typeof this.selectionChart.renderForSelection !== 'function') {
+      console.log('updateSelectionChartForLastMonth - selectionChart does not have renderForSelection method');
+      console.log('updateSelectionChartForLastMonth - selectionChart type:', this.selectionChart.constructor.name);
       return;
     }
 
