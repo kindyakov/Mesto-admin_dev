@@ -195,9 +195,12 @@
           <canvas id="chart-dynamics-avg-rate" style="max-height: 100px;"></canvas>
         </div>
       </div>
-      <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 pt-1 flex flex-col wp-chart"
+      <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 pt-2 flex flex-col wp-chart"
         style="box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);">
-        <div class="flex justify-between gap-4 items-end">
+        <div class="flex flex-row-reverse justify-between gap-2 items-end flex-wrap">
+          <div class="">
+            <canvas id="chart-revenue-selection" style="max-height: 120px;"></canvas>
+          </div>
           <label class="main__date-filter">
             <div class="wpLoader _custom-loader" style="background-color: rgba(0, 0, 0, 0.4); position: absolute;"><span
                 class="loader" style="width: 25px; height: 25px; border-width: 1.5px;"></span></div>
@@ -207,9 +210,6 @@
             <input type="text" class="input-date flatpickr-input" name="start_date,end_date"
               placeholder="Выбрать период для сравнения" readonly="readonly" style="padding: 5px 10px 5px 25px;">
           </label>
-          <div class="">
-            <canvas id="chart-revenue-selection" style="max-height: 120px;"></canvas>
-          </div>
         </div>
         <div class="mt-auto w-full h-[100px] flex items-end">
           <canvas id="chart-revenue-dynamics" style="max-height: 100px;"></canvas>
