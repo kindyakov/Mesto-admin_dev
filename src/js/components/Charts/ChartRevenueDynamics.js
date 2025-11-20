@@ -7,8 +7,9 @@ import {
   getDashboardFinance,
   getFinancePlan,
 } from '../../settings/request.js';
+import { formattingPrice } from "../../utils/formattingPrice.js";
 
-class ChartInflowArea extends BaseChart {
+class ChartRevenueDynamics extends BaseChart {
   constructor(ctx, addOptions = {}) {
     // Создаем и добавляем элемент тултипа ДО создания графика
     const wpChart = ctx.closest('.wp-chart');
@@ -78,23 +79,23 @@ class ChartInflowArea extends BaseChart {
           }
         }
       },
-      plugins: [{
-        id: 'barLabels',
-        afterDatasetsDraw: (chart) => {
-          const ctx = chart.ctx;
-          chart.data.datasets.forEach((dataset, i) => {
-            const meta = chart.getDatasetMeta(i);
-            meta.data.forEach((bar, index) => {
-              const data = dataset.data[index];
-              ctx.fillStyle = '#333';
-              ctx.font = '400 8px Manrope';
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'bottom';
-              ctx.fillText(data, bar.x, bar.y - 5);
-            });
-          });
-        }
-      }]
+      // plugins: [{
+      //   id: 'barLabels',
+      //   afterDatasetsDraw: (chart) => {
+      //     const ctx = chart.ctx;
+      //     chart.data.datasets.forEach((dataset, i) => {
+      //       const meta = chart.getDatasetMeta(i);
+      //       meta.data.forEach((bar, index) => {
+      //         const data = dataset.data[index];
+      //         ctx.fillStyle = '#333';
+      //         ctx.font = '400 8px Manrope';
+      //         ctx.textAlign = 'center';
+      //         ctx.textBaseline = 'bottom';
+      //         ctx.fillText(data, bar.x, bar.y - 5);
+      //       });
+      //     });
+      //   }
+      // }]
     }
 
     super(ctx, merge({}, defaultOptions, addOptions))
@@ -145,11 +146,11 @@ class ChartInflowArea extends BaseChart {
     const data = this.previousMonthsData.data.slice(-9)
     const rangeDates = this.previousMonthsData.previousRanges.slice(-9)
 
-    this.chart.data.labels = rangeDates.map(range => {
-      const date = new Date(range.start_date);
-      return dateFormatter(date, 'LLLL');
-    });
-    this.chart.data.datasets[0].data = data.map(obj => obj.inflow_area || 0)
+    // this.chart.data.labels = rangeDates.map(range => {
+    //   const date = new Date(range.start_date);
+    //   return dateFormatter(date, 'LLLL');
+    // });
+    // this.chart.data.datasets[0].data = data.map(obj => obj.revenue || 0)
 
     this.datasets = data
 
@@ -206,7 +207,7 @@ class ChartInflowArea extends BaseChart {
             const date = new Date(item.data);
             return dateFormatter(date, 'dd');
           });
-          this.chart.data.datasets[0].data = data.map(item => item.inflow_area || 0);
+          this.chart.data.datasets[0].data = data.map(item => item.revenue || 0);
           this.chart.update();
 
           // Получаем данные по всем складам для тултипа
@@ -291,13 +292,14 @@ class ChartInflowArea extends BaseChart {
 
         const results = await Promise.all(requests);
         this.datasets = results
+        this.labels = ranges
 
         // Обновляем график
         this.chart.data.labels = ranges.map(range => {
           const date = new Date(range.start_date);
           return dateFormatter(date, 'LLLL');
         });
-        this.chart.data.datasets[0].data = results.map(result => result.inflow_area || 0);
+        this.chart.data.datasets[0].data = results.map(result => result.revenue || 0);
         this.chart.update();
       }
     } catch (error) {
@@ -314,7 +316,7 @@ class ChartInflowArea extends BaseChart {
   // Метод создания HTML структуры тултипа
   createTooltipHTML() {
     return `
-      <div class="sklad flex flex-col gap-1 items-start text-left">
+      <div class="sklad flex flex-col gap-0.5 items-start text-left text-xs">
       </div>
     `;
   }
@@ -330,21 +332,35 @@ class ChartInflowArea extends BaseChart {
 
       // Если есть finance_planfact в первом элементе - это данные для одного месяца
       if (firstItem.finance_planfact) {
+        const revenueSum = this.datasets.map(warehouse => warehouse.finance_planfact[dataI].revenue).reduce((acc, cur) => acc + cur, 0);
+        const { data: date } = firstItem.finance_planfact[dataI];
+
+        skladBlock.insertAdjacentHTML('beforeend',
+          `<p class="w-full">${date ? dateFormatter(new Date(date), 'dd MMMM yyyy') : ''}</p>
+          <p class="w-full" style="margin-bottom: 10px;">Сумма: ${formattingPrice(revenueSum)}</p>`
+        );
         // Случай: один месяц - показываем все склады
         this.datasets.forEach(warehouse => {
           const data = warehouse.finance_planfact[dataI]
           skladBlock.insertAdjacentHTML('beforeend',
-            `<p class="w-full">${warehouse.warehouse_short_name}: ${data.inflow_area}м²</p>`
+            `<p class="w-full" style="color: ${warehouse.warehouse_id === window.app.warehouse.warehouse_id ? '#007bff' : ''};">${warehouse.warehouse_short_name}: ${formattingPrice(data.revenue)}</p>`
           );
         });
-      } else if (this.datasets[dataI] && this.datasets[dataI].inflow_area_by_warehouse) {
+      } else if (this.datasets[dataI] && this.datasets[dataI].revenues_by_warehouse) {
         // Случай: несколько месяцев - показываем склады для конкретного месяца
         const data = this.datasets[dataI];
-        data.inflow_area_by_warehouse.forEach(({ inflow_area, warehouse_id }) => {
+        const label = this.labels[dataI];
+        const revenueSum = data.revenues_by_warehouse.reduce((acc, cur) => acc + cur.revenue, 0);
+
+        skladBlock.insertAdjacentHTML('beforeend',
+          `<p class="w-full">${label ? dateFormatter(new Date(label.start_date), 'LLLL yyyy') : ''}</p>
+          <p class="w-full" style="margin-bottom: 10px;">Сумма: ${formattingPrice(revenueSum)}</p>`
+        );
+        data.revenues_by_warehouse.forEach(({ revenue, warehouse_id }) => {
           const warehouse = window.app.warehouses.find(w => w.warehouse_id === warehouse_id);
           if (warehouse) {
             skladBlock.insertAdjacentHTML('beforeend',
-              `<p class="w-full">${warehouse.warehouse_short_name}: ${inflow_area}м²</p>`
+              `<p class="w-full" style="color: ${warehouse_id === window.app.warehouse.warehouse_id ? '#007bff' : ''};">${warehouse.warehouse_short_name}: ${formattingPrice(revenue)}</p>`
             );
           }
         });
@@ -353,4 +369,4 @@ class ChartInflowArea extends BaseChart {
   }
 }
 
-export default ChartInflowArea
+export default ChartRevenueDynamics

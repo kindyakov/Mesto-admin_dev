@@ -5,6 +5,7 @@ import PaymentStructure from '../../../components/Charts/PaymentStructure.js';
 import DynamicsAvgRate from '../../../components/Charts/DynamicsAvgRate.js';
 import ChartRevenue from '../../../components/Charts/ChartRevenue/ChartRevenue.js';
 import ChartInflowArea from '../../../components/Charts/ChartInflowArea.js';
+import ChartRevenueDynamics from '../../../components/Charts/ChartRevenueDynamics.js';
 import {
 	getDashboardFinance,
 	getFinancePlan,
@@ -35,7 +36,8 @@ class Finance extends Dashboards {
 				{ id: 'chart-payment-structure', ChartComponent: PaymentStructure },
 				{ id: 'chart-dynamics-avg-rate', ChartComponent: DynamicsAvgRate },
 				{ id: 'chart-revenue', ChartComponent: ChartRevenue },
-				{ id: 'chart-inflow-area', ChartComponent: ChartInflowArea }
+				{ id: 'chart-inflow-area', ChartComponent: ChartInflowArea },
+				{ id: 'chart-revenue-dynamics', ChartComponent: ChartRevenueDynamics },
 			],
 			page: 'dashboards/finance'
 		});
