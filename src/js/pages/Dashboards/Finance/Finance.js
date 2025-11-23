@@ -100,13 +100,23 @@ class Finance extends Dashboards {
 	}
 
 	async getDashboardData(queryParams = {}) {
+		const app = this.app
+		async function getFinanceByWarehouses() {
+			const response = await Promise.all(app.warehouses.map(warehouse => getFinancePlan({ warehouse_id: warehouse.warehouse_id, ...queryParams })));
+
+			return response.map((item, i) => ({
+				...item,
+				warehouse: app.warehouses[i]
+			}))
+		}
+
 		return Promise.all([
 			getDashboardFinance({
 				warehouse_id: this.app.warehouse.warehouse_id,
 				...this.queryParams,
 				...queryParams
 			}),
-			getFinancePlan({ warehouse_id: this.app.warehouse.warehouse_id, ...queryParams }),
+			getFinanceByWarehouses(),
 			this.getPreviousMonthsData(9)
 		]);
 	}
@@ -195,7 +205,10 @@ class Finance extends Dashboards {
 		}
 	}
 
-	onRender([dataDashboard, { finance_planfact = [] }, previousMonthsData], dataEntities) {
+	onRender([dataDashboard, financeByWarehouses, previousMonthsData], dataEntities) {
+		const { finance_planfact } = financeByWarehouses.filter(
+			obj => obj.warehouse.warehouse_id == this.app.warehouse.warehouse_id
+		)[0] || {};
 		let todayFinancePlanFact = {}
 		let lastFinancePlanFact = {}
 
@@ -215,7 +228,6 @@ class Finance extends Dashboards {
 				todayFinancePlanFact = finance_planfact.find(item => item.data === today)
 			}
 		}
-
 
 		this.renderWidgets({
 			...todayFinancePlanFact,
@@ -246,6 +258,7 @@ class Finance extends Dashboards {
 			this.actionsCharts((chart) => {
 				// Передаем полные данные, каждая диаграмма сама возьмет нужное количество
 				chart.previousMonthsData = previousMonthsData;
+				chart.financeByWarehouses = financeByWarehouses;
 				chart.render([dataDashboard, { finance_planfact }]);
 			});
 

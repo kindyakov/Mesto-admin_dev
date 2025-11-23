@@ -87,23 +87,6 @@ class ChartRevenueDynamics extends BaseChart {
           }
         }
       },
-      // plugins: [{
-      //   id: 'barLabels',
-      //   afterDatasetsDraw: (chart) => {
-      //     const ctx = chart.ctx;
-      //     chart.data.datasets.forEach((dataset, i) => {
-      //       const meta = chart.getDatasetMeta(i);
-      //       meta.data.forEach((bar, index) => {
-      //         const data = dataset.data[index];
-      //         ctx.fillStyle = '#333';
-      //         ctx.font = '400 8px Manrope';
-      //         ctx.textAlign = 'center';
-      //         ctx.textBaseline = 'bottom';
-      //         ctx.fillText(data, bar.x, bar.y - 5);
-      //       });
-      //     });
-      //   }
-      // }]
     }
 
     super(ctx, merge({}, defaultOptions, addOptions))
