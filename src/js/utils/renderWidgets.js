@@ -116,6 +116,8 @@ export function renderWidgets(data, widgetElements, queryParams = {}, defaultDat
 		const hasPrice2 = widget.hasAttribute('price2');
 		const hasArea = widget.hasAttribute('area');
 		const condition = widget.getAttribute('data-condition');
+		// Проверяем, нужно ли устанавливать ширину
+		const widthAttr = widget.hasAttribute('data-width');
 
 		const calculatedValue = calculateExpression(params, data);
 
@@ -180,6 +182,10 @@ export function renderWidgets(data, widgetElements, queryParams = {}, defaultDat
 		if (calculatedValue !== null) {
 			widget.innerText = formatOutput(calculatedValue);
 
+			if (widthAttr) {
+				widget.style.setProperty('--width', `${calculatedValue}%`);
+			}
+
 			if (condition) {
 				applyColor(widget, condition, data);
 			}
@@ -199,6 +205,11 @@ export function renderWidgets(data, widgetElements, queryParams = {}, defaultDat
 			widget.innerText = formattingPrice(parseFloat(value)) + suffix;
 		} else {
 			widget.innerHTML = value + suffix;
+		}
+
+		if (widthAttr) {
+			widget.style.setProperty('--width', `${value}%`);
+			widget.innerHTML = ''
 		}
 
 		if (condition) {

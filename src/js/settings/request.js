@@ -171,6 +171,10 @@ export const getScheme = async (warehouse, floor) => {
 };
 // ============================================================================>
 
+export const getMotivationInfo = getCreate('/_get_motivation_info_');
+
+// ============================================================================>
+
 export const downloadPayments = downloadCreate('/download_payments', { nameFile: `Платежи от` });
 
 export const downloadAgreement = downloadCreate('/download_reestr', { nameFile: `Договора от` });

@@ -1,0 +1,108 @@
+<div class="main__content content-main" data-content="dashboards/effectiveness">
+  <form class="main__filter form-filter-dashboards" style="justify-content: stretch;">
+    <label class="main__date-filter">
+      <svg class='icon icon-calendar'>
+        <use xlink:href='#calendar'></use>
+      </svg>
+      <input type="text" class="input-date-month" name="date" placeholder="Дата">
+    </label>
+  </form>
+  <div class="grid grid-cols-3 gap-4 max-[1530px]:gap-2 max-[1530px]:grid-cols-2 max-[800px]:grid-cols-1">
+    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col items-start gap-2">
+      <div class="text-[#64748b] text-sm font-medium leading-[100%]">Сбор денежных средств</div>
+      <b class="text-2xl font-bold text-[#1c2434]" data-render-widget="revenue_accumulated" price></b>
+      <div class="flex items-center justify-between gap-2 w-full">
+        <div class="text-[#64748b] text-xs font-medium leading-[100%]">План: <b
+            data-render-widget="revenue_accumulated_planned" price></b></div>
+        <div class="text-xs font-medium text-[#085274]" data-render-widget="revenue_accumulated_percent,%"
+          data-condition="revenue_accumulated>=revenue_accumulated_planned"></div>
+      </div>
+      <div class="w-full h-2 bg-[#e1e8f0] rounded-full overflow-hidden">
+        <div class="h-full bg-[#085274] w-[var(--width)]" data-render-widget="revenue_accumulated_percent" data-width>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5 rounded-full bg-[#eff2f7] py-1 px-2">
+        <span class="w-2 h-2 rounded-full bg-[#085274]"></span>
+        <div class="text-sm font-medium text-[#085274]">Выполнение плана: <span
+            data-render-widget="revenue_accumulated_percent,%"></span></div>
+      </div>
+    </div>
+    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col items-start gap-2">
+      <div class="text-[#64748b] text-sm font-medium leading-[100%]">Сдача площади, кв.м.</div>
+      <b class="text-2xl font-bold text-[#1c2434]" data-render-widget="inflow_area_accumulated, м²"></b>
+      <div class="flex items-center justify-between gap-2 w-full">
+        <div class="text-[#64748b] text-xs font-medium leading-[100%]">План: <b
+            data-render-widget="inflow_area_accumulated_planned, м²"></b></div>
+        <div class="text-xs font-medium text-[#085274]" data-render-widget="inflow_area_accumulated_percent,%"
+          data-condition="inflow_area_accumulated>=inflow_area_accumulated_planned"></div>
+      </div>
+      <div class="w-full h-2 bg-[#e1e8f0] rounded-full overflow-hidden">
+        <div class="h-full bg-[#085274] w-[var(--width)]" data-render-widget="inflow_area_accumulated_percent"
+          data-width>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5 rounded-full bg-[#eff2f7] py-1 px-2">
+        <span class="w-2 h-2 rounded-full bg-[#085274]"></span>
+        <div class="text-sm font-medium text-[#085274]">Выполнение плана: <span
+            data-render-widget="inflow_area_accumulated_percent,%"></span></div>
+      </div>
+    </div>
+    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col items-start gap-2">
+      <div class="text-[#64748b] text-sm font-medium leading-[100%]">Коэффициент эффективности</div>
+      <b class="text-2xl font-bold text-[#1c2434]" data-render-widget="efficiency_coefficient,%"></b>
+      <div class="text-sm font-medium text-[#64748b]">Интеграция показателя выполнения планов по деньгам и площади</div>
+    </div>
+    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col items-start gap-2">
+      <div class="text-[#64748b] text-sm font-medium leading-[100%]">Новые продажи</div>
+      <div class="flex items-center gap-1.5">
+        <b class="text-2xl font-bold text-[#1c2434]" data-render-widget="new_clients_revenue_rent" price></b>
+        <button
+          class="w-6 h-6 border border-solid border-[#ECEDEF] shrink-0 flex justify-center items-center transition-all duration-300 hover:bg-[#f5f6f7]"
+          data-edit-btn="">
+          <img src="./img/svg/tabler_edit.svg">
+        </button>
+      </div>
+    </div>
+    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col items-start gap-2">
+      <div class="text-[#64748b] text-sm font-medium leading-[100%]">Сбор с действующих арендаторов</div>
+      <div class="flex items-center gap-1.5">
+        <b class="text-2xl font-bold text-[#1c2434]" data-render-widget="reestr_revenue" price></b>
+        <button
+          class="w-6 h-6 border border-solid border-[#ECEDEF] shrink-0 flex justify-center items-center transition-all duration-300 hover:bg-[#f5f6f7]"
+          data-edit-btn="">
+          <img src="./img/svg/tabler_edit.svg">
+        </button>
+      </div>
+      <div class="flex items-center justify-between gap-2 w-full">
+        <div class="text-[#64748b] text-xs font-medium leading-[100%]">План: <b data-render-widget="reestr_sum"
+            price></b></div>
+        <div class="text-xs font-medium text-[#085274]" data-render-widget="reestr_revenue_percent,%"
+          data-condition="reestr_revenue>=reestr_sum"></div>
+      </div>
+      <div class="w-full h-2 bg-[#e1e8f0] rounded-full overflow-hidden">
+        <div class="h-full bg-[#085274] w-[var(--width)]" data-render-widget="reestr_revenue_percent" data-width>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5 rounded-full bg-[#eff2f7] py-1 px-2">
+        <span class="w-2 h-2 rounded-full bg-[#085274]"></span>
+        <div class="text-sm font-medium text-[#085274]">Выполнение плана: <span
+            data-render-widget="reestr_revenue_percent,%"></span></div>
+      </div>
+    </div>
+    <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col items-start gap-2">
+      <div class="text-[#64748b] text-sm font-medium leading-[100%]">Итого менеджеру</div>
+      <b class="text-2xl font-bold text-[#1c2434]" data-render-widget="total_manager_revenue" price></b>
+    </div>
+  </div>
+
+  <div class="dashboards__table _my-accordion" data-accordion-open data-max-height="845">
+    <button class="dashboards__table-toggle btn-toggle-table _my-accordion-control hidden">
+    </button>
+    <div class="table _my-accordion-content" style="height: 500px; max-height: none;">
+      <div class="table__top">
+        <h3 class="table__title">Условия мотивации менеджеров</h3>
+      </div>
+      <div class="table__content table-motivation-managers ag-theme-quartz" style="height: 100%;"></div>
+    </div>
+  </div>
+</div>

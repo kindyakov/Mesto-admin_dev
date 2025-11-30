@@ -3,8 +3,38 @@
 	border: 1px solid #e1e8f0;
 	box-shadow: none;
 	width: 350px;
+
 	&.open {
 		z-index: 15;
+	}
+}
+
+.flatpickr-monthSelect-months {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 5px;
+}
+
+.flatpickr-monthSelect-month {
+	text-align: center;
+	height: 40px;
+	cursor: pointer;
+	border-radius: 8px;
+	background-color: #eff2f7;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: color 0.2s, background-color 0.2s;
+	font-weight: 500;
+	font-size: 12px;
+
+	&:hover {
+		background-color: #e6efff;
+	}
+
+	&.selected {
+		background-color: #3c50e0;
+		color: #fff;
 	}
 }
 
@@ -17,12 +47,14 @@
 	justify-content: space-between;
 	gap: 15px;
 	border: 1px solid #e1e8f0;
+
 	.flatpickr-month {
 		flex: 1 1 auto;
 		width: 100%;
 		height: auto;
 		display: block;
 		overflow: visible;
+
 		.flatpickr-current-month {
 			position: relative;
 			height: auto;
@@ -33,6 +65,7 @@
 			align-items: center;
 			justify-content: space-between;
 			gap: 5px;
+
 			select {
 				padding: 0;
 				font-weight: 700;
@@ -41,6 +74,7 @@
 				color: #333843;
 			}
 		}
+
 		.numInput.cur-year {
 			font-weight: 700;
 			font-size: 14px;
@@ -48,8 +82,10 @@
 			letter-spacing: 0.01em;
 			color: #333843;
 		}
+
 		.mySelect {
 			min-width: 130px;
+
 			&._select {
 				.mySelect__input {
 					border: 1px solid #e1e8f0;
@@ -92,6 +128,7 @@
 
 	&:hover {
 		background-color: #e6efff;
+
 		svg {
 			fill: #5c59e8 !important;
 		}
@@ -108,12 +145,14 @@
 
 .flatpickr-weekdays {
 	height: auto;
+
 	.flatpickr-weekday {
 		font-weight: 500;
 		font-size: 14px;
 		letter-spacing: 0.01em;
 		color: #858d9d;
 	}
+
 	.flatpickr-weekdaycontainer {
 		display: grid;
 		grid-template-columns: repeat(7, 1fr);
@@ -168,6 +207,7 @@
 	&.today {
 		border-radius: 4px !important;
 		border-color: #d5dff1;
+
 		&:hover {
 			border-color: #c9d9f5;
 			background-color: #eff2f7;
@@ -205,6 +245,7 @@
 		z-index: 1;
 		color: #fff;
 		border: none !important;
+
 		&:hover {
 			background: #3c50e0;
 			color: #fff;

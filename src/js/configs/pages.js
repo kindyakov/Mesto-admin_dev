@@ -46,6 +46,12 @@ export const pages = {
 			return actionDashboards({ tab, content, user, ...params });
 		}
 	},
+	'dashboards/effectiveness': {
+		path: 'Dashboards/Effectiveness/Effectiveness.js',
+		accessCheck: ({ tab, content, user, ...params }) => {
+			return actionDashboards({ tab, content, user, ...params });
+		}
+	},
 	'dashboards/marketing': {
 		path: 'Dashboards/Marketing/Marketing.js',
 		accessCheck: ({ tab, content, user }) => {

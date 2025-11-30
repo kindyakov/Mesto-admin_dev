@@ -18,20 +18,28 @@ class Dashboards extends Page {
 				uniqueName: 'select-filter-main',
 				parentEl: this.wrapper
 			});
-			this.calendars = createCalendar(`[data-content="${options.page}"] .input-date-filter`, {
-				mode: 'range',
-				dateFormat: 'd. M, Y',
-				defaultDate: this.app.defaultDate,
-				onChange: (selectedDates, dateStr, instance) => {
-					if (selectedDates.length === 2) {
-						this.app.defaultDate = selectedDates;
-						this.changeQueryParams({
-							start_date: dateFormatter(selectedDates[0], 'yyyy-MM-dd'),
-							end_date: dateFormatter(selectedDates[1], 'yyyy-MM-dd')
-						});
+			const inputDateFilter = this.wrapper.querySelector(`[data-content="${options.page}"] .input-date-filter`);
+			if (inputDateFilter) {
+				this.calendars = createCalendar(`[data-content="${options.page}"] .input-date-filter`, {
+					mode: 'range',
+					dateFormat: 'd. M, Y',
+					defaultDate: this.app.defaultDate,
+					onChange: (selectedDates, dateStr, instance) => {
+						if (selectedDates.length === 2) {
+							this.app.defaultDate = selectedDates;
+							this.changeQueryParams({
+								start_date: dateFormatter(selectedDates[0], 'yyyy-MM-dd'),
+								end_date: dateFormatter(selectedDates[1], 'yyyy-MM-dd')
+							});
+						}
 					}
-				}
-			});
+				});
+
+				this.queryParams = {
+					start_date: dateFormatter(this.calendars.selectedDates[0], 'yyyy-MM-dd'),
+					end_date: dateFormatter(this.calendars.selectedDates[1], 'yyyy-MM-dd')
+				};
+			}
 
 			this.inputsFilter = this.wrapper.querySelectorAll('.input-filter');
 
@@ -45,11 +53,6 @@ class Dashboards extends Page {
 						}, 600);
 					});
 				});
-
-			this.queryParams = {
-				start_date: dateFormatter(this.calendars.selectedDates[0], 'yyyy-MM-dd'),
-				end_date: dateFormatter(this.calendars.selectedDates[1], 'yyyy-MM-dd')
-			};
 		}
 
 		if (this.selectFilter) {
@@ -112,7 +115,7 @@ class Dashboards extends Page {
 			}
 
 			if (this.calendars && this.app.defaultDate) {
-				this.calendars.setDate(this.app.defaultDate);
+				this.calendars?.setDate(this.app.defaultDate);
 			}
 
 			this.onRender(dataDashboard, dataEntities);
