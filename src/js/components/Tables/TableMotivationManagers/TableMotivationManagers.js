@@ -149,12 +149,16 @@ class TableMotivationManagers extends Table {
             return wrapper;
           }
         }
-      ]
+      ],
+      getRowClass: (params) => {
+        return this.getRowClassForHighlighting(params);
+      }
     };
 
     const defaultParams = {
       isPagination: false,
-      onChangeTypeUser: () => { }
+      onChangeTypeUser: () => { },
+      newClientsRevenueRent: null
     };
 
     const mergedOptions = Object.assign({}, defaultOptions, options);
@@ -165,10 +169,35 @@ class TableMotivationManagers extends Table {
     this.originalData = new Map();
     this.isEditMode = false;
 
+    // Сохраняем new_clients_revenue_rent для подсветки строк
+    this.newClientsRevenueRent = mergedParams.newClientsRevenueRent;
+
     // Инициализация кнопок после готовности таблицы
     this.onReadyFunctions.push(() => {
       this.initButtons();
     });
+  }
+
+  getRowClassForHighlighting(params) {
+    if (!this.newClientsRevenueRent || !params.data) return '';
+
+    const { gradation_start, gradation_end } = params.data;
+    const start = parseFloat(gradation_start);
+    const end = parseFloat(gradation_end);
+    const revenue = parseFloat(this.newClientsRevenueRent);
+
+    // Проверка валидности данных
+    if (isNaN(start) || isNaN(end) || isNaN(revenue)) return '';
+
+    // Подсвечиваем строку, если revenue попадает в диапазон
+    return (revenue >= start && revenue <= end) ? 'ag-row-highlighted' : '';
+  }
+
+  updateHighlighting(newClientsRevenueRent) {
+    this.newClientsRevenueRent = newClientsRevenueRent;
+    if (this.gridApi) {
+      this.gridApi.redrawRows();
+    }
   }
 
   initButtons() {
@@ -400,12 +429,16 @@ class TableMotivationManagers extends Table {
   }
 
   async editMotivationManager(data) {
-    console.log('editMotivationManager data:', data);
     try {
-      // this.loader.enable();
-      // const response = await api.post('/_set_motivation_info_', data);
-      // if (response.status !== 200) return;
-      // this.app.notify.show(response.data);
+      this.loader.enable();
+
+      const response = await api.post('/_set_motivation_info_', {
+        motivation_info: data,
+        month: this.queryParams.month,
+        oklad: this.queryParams.oklad
+      });
+      if (response.status !== 200) return;
+      this.app.notify.show(response.data);
     } catch (error) {
       console.error(error);
     } finally {

@@ -25,7 +25,8 @@ class Effectiveness extends Dashboards {
             paginationPageSize: 1000
           },
           params: {
-            getData: getMotivationInfo
+            getData: getMotivationInfo,
+            newClientsRevenueRent: null
           }
         }
       ],
@@ -71,7 +72,8 @@ class Effectiveness extends Dashboards {
 
         this.queryParams = {
           start_date: dateFormatter(startDate, 'yyyy-MM-dd'),
-          end_date: dateFormatter(endDate, 'yyyy-MM-dd')
+          end_date: dateFormatter(endDate, 'yyyy-MM-dd'),
+          month: dateFormatter(this.calendar.selectedDates[0], 'yyyy-MM')
         };
       }
     }
@@ -161,9 +163,27 @@ class Effectiveness extends Dashboards {
     });
 
 
+    // Передаем new_clients_revenue_rent в таблицу мотивации менеджеров
+    if (dataDashboard && dataDashboard.new_clients_revenue_rent && this.tables.length > 0) {
+      const motivationTable = this.tables.find(table => table.constructor.name === 'TableMotivationManagers');
+      if (motivationTable) {
+        // Обновляем значение подсветки
+        motivationTable.newClientsRevenueRent = dataDashboard.new_clients_revenue_rent;
+        // Если таблица уже проинициализирована, обновляем отображение
+        if (motivationTable.gridApi) {
+          motivationTable.updateHighlighting(dataDashboard.new_clients_revenue_rent);
+        }
+      }
+    }
+
     if (dataEntities) {
       this.actionsTables((table, i) => {
         table.onRendering(dataEntities);
+        table.queryParams = {
+          ...table.queryParams,
+          month: this.queryParams.month,
+          oklad: dataEntities.oklad,
+        }
       });
     }
 
@@ -229,6 +249,14 @@ class Effectiveness extends Dashboards {
     };
 
     this.renderWidgets(updatedData);
+
+    // Обновляем подсветку в таблице мотивации, если изменилось new_clients_revenue_rent
+    if (this.editedValues.new_clients_revenue_rent !== undefined && this.tables.length > 0) {
+      const motivationTable = this.tables.find(table => table.constructor.name === 'TableMotivationManagers');
+      if (motivationTable && motivationTable.updateHighlighting) {
+        motivationTable.updateHighlighting(this.editedValues.new_clients_revenue_rent);
+      }
+    }
   }
 }
 
