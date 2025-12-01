@@ -136,14 +136,14 @@ class Effectiveness extends Dashboards {
     }
 
     if (dataDashboard) {
-      if (dataDashboard.reestr_revenue && dataDashboard.reestr_sum) {
-        dataDashboard.reestr_revenue_percent = ((dataDashboard.reestr_revenue / dataDashboard.reestr_sum) * 100).toFixed(0);
+      if (dataDashboard.reestr_revenue && dataDashboard.reestr_sum_was) {
+        dataDashboard.reestr_revenue_percent = ((dataDashboard.reestr_revenue / dataDashboard.reestr_sum_was) * 100).toFixed(0);
       } else {
         dataDashboard.reestr_revenue_percent = 0;
       }
 
-      if (dataEntities) {
-        dataDashboard.total_manager_revenue = +(dataEntities.oklad * (1 + 0) * dataDashboard.reestr_revenue / dataDashboard.reestr_sum).toFixed(0);
+      if (dataEntities && dataDashboard.reestr_revenue && dataDashboard.reestr_sum_was) {
+        dataDashboard.total_manager_revenue = +(dataEntities.oklad * (1 + 0) * dataDashboard.reestr_revenue / dataDashboard.reestr_sum_was).toFixed(0);
       } else {
         dataDashboard.total_manager_revenue = 0;
       }

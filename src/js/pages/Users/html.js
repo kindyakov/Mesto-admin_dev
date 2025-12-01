@@ -86,6 +86,10 @@ export function accessesPopupHtml(data) {
         <input type="checkbox" name="can_change_return_amount" ${data.can_change_return_amount ? 'checked' : ''}>
         <p>Можно менять сумму к возврату при выезде</p>
       </label>
+      <label>
+        <input type="checkbox" name="can_see_effectiveness" ${data.can_see_effectiveness ? 'checked' : ''}>
+        <p>Может смотреть Дашборд Эффективность</p>
+      </label>
     </div>
   </div>`
 }

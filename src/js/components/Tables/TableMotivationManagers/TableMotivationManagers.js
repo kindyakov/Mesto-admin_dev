@@ -2,9 +2,7 @@ import Table from '../Table.js';
 
 import { api } from '../../../settings/api.js';
 
-import { actions } from '../utils/actions.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
-import { observeCell } from '../utils/observeCell.js';
 import { createElement } from '../../../settings/createElement.js';
 import { dateFormatter } from '../../../settings/dateFormatter.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
@@ -96,7 +94,7 @@ class TableMotivationManagers extends Table {
           cellRenderer: params => {
             const el = cellRendererInput(params, {
               funcFormate: value => value ? value + '%' : '',
-              inputmode: 'numeric'
+              inputmode: 'decimal',
             });
             return el;
           }
@@ -175,6 +173,7 @@ class TableMotivationManagers extends Table {
     // Инициализация кнопок после готовности таблицы
     this.onReadyFunctions.push(() => {
       this.initButtons();
+      this.applyInputmaskToBonusPercent();
     });
   }
 
@@ -198,6 +197,46 @@ class TableMotivationManagers extends Table {
     if (this.gridApi) {
       this.gridApi.redrawRows();
     }
+  }
+
+  applyInputmaskToBonusPercent() {
+    // Применяем обработку для столбца bonus_percent без Inputmask
+    setTimeout(() => {
+      const bonusInputs = this.wpTable.querySelectorAll('input[name="bonus_percent"]');
+      bonusInputs.forEach(input => {
+        // Удаляем старую маску, если она была
+        if (input.inputmask) {
+          input.inputmask.remove();
+        }
+
+        // Добавляем обработчики для ограничения ввода
+        input.addEventListener('input', (e) => {
+          let value = e.target.value;
+
+          // Удаляем все символы кроме цифр и одной запятой
+          value = value.replace(/[^0-9,]/g, '');
+
+          // Оставляем только одну запятую
+          const parts = value.split(',');
+          if (parts.length > 2) {
+            value = parts[0] + ',' + parts.slice(1).join('');
+          }
+
+          // Ограничиваем одним знаком после запятой
+          if (parts[1] && parts[1].length > 1) {
+            value = parts[0] + ',' + parts[1].substring(0, 1);
+          }
+
+          e.target.value = value;
+        });
+
+        // Заменяем точку на запятую при потере фокуса
+        input.addEventListener('blur', (e) => {
+          let value = e.target.value.replace('.', ',');
+          e.target.value = value;
+        });
+      });
+    }, 100);
   }
 
   initButtons() {
@@ -248,6 +287,44 @@ class TableMotivationManagers extends Table {
     inputs.length && inputs.forEach(input => {
       this.changeReadonly(input, false);
     });
+
+    // Применяем обработку к полю bonus_percent в новой строке
+    setTimeout(() => {
+      const bonusInput = element.querySelector('input[name="bonus_percent"]');
+      if (bonusInput) {
+        // Удаляем старую маску, если она была
+        if (bonusInput.inputmask) {
+          bonusInput.inputmask.remove();
+        }
+
+        // Добавляем обработчики для ограничения ввода
+        bonusInput.addEventListener('input', (e) => {
+          let value = e.target.value;
+
+          // Удаляем все символы кроме цифр и одной запятой
+          value = value.replace(/[^0-9,]/g, '');
+
+          // Оставляем только одну запятую
+          const parts = value.split(',');
+          if (parts.length > 2) {
+            value = parts[0] + ',' + parts.slice(1).join('');
+          }
+
+          // Ограничиваем одним знаком после запятой
+          if (parts[1] && parts[1].length > 1) {
+            value = parts[0] + ',' + parts[1].substring(0, 1);
+          }
+
+          e.target.value = value;
+        });
+
+        // Заменяем точку на запятую при потере фокуса
+        bonusInput.addEventListener('blur', (e) => {
+          let value = e.target.value.replace('.', ',');
+          e.target.value = value;
+        });
+      }
+    }, 50);
   }
 
   enableEditMode() {

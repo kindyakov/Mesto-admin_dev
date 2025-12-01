@@ -49,7 +49,14 @@ export const pages = {
 	'dashboards/effectiveness': {
 		path: 'Dashboards/Effectiveness/Effectiveness.js',
 		accessCheck: ({ tab, content, user, ...params }) => {
-			return actionDashboards({ tab, content, user, ...params });
+			let access = actionDashboards({ tab, content, user, ...params });
+
+			if (!user.manager.can_see_effectiveness) {
+				tab?.classList.add('_none');
+				access = false;
+			}
+
+			return access;
 		}
 	},
 	'dashboards/marketing': {

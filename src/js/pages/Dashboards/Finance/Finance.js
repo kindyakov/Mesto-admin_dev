@@ -174,7 +174,7 @@ class Finance extends Dashboards {
 
 		const factV = data.revenue_reestr_accumulated || 0;
 		const planV = data.reest_plan_accumulated;
-		const needsCollectedMontV = dataDashboard.reestr_sum || 0;
+		const needsCollectedMontV = dataDashboard.reestr_sum_was || 0;
 		const remainsDepositV = needsCollectedMontV - factV;
 		const sum = factV + remainsDepositV;
 

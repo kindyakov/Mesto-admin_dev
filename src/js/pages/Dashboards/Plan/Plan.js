@@ -181,7 +181,8 @@ class Plan extends Dashboards {
 
   initEditPlanUtils() {
     if (this.editPlanUtils) {
-      this.editPlanUtils = null;
+      this.editPlanUtils.date = this.queryParams.end_date;
+      return
     }
 
     this.editPlanUtils = new EditPlanUtils(this.wrapper, this.queryParams.end_date);

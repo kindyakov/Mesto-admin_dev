@@ -150,7 +150,6 @@ class EditPlanUtils {
   async setFinancePlan(data) {
     try {
       this.loader.enable();
-      console.log(data)
 
       const response = await api.post('/_set_finance_plan_', data);
       if (response.status !== 200) {
