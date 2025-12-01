@@ -23,7 +23,7 @@
 		color: #373f47;
 		gap: 10px;
 		text-align: left;
-		
+
 		.icon {
 			fill: #717d8a;
 			width: 10px;
@@ -35,6 +35,62 @@
 		&._active {
 			.icon {
 				transform: rotate(180deg);
+			}
+		}
+	}
+}
+
+// Стили для редактируемых инпутов в таблице мотивации менеджеров
+.table-motivation-managers {
+
+	// Отключаем hover эффект для строк
+	.ag-row {
+		&::before {
+			background-color: transparent !important;
+		}
+	}
+
+	.ag-cell {
+		&:has(.wp-input-cell) {
+			padding: 0;
+
+			.wp-input-cell {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				align-items: center;
+
+				.input-cell {
+					width: 100%;
+					height: 100%;
+					padding-left: 15px;
+					padding-right: 15px;
+					border: none;
+					background-color: transparent;
+					transition: all 0.2s;
+
+					&.not-edit {
+						background-color: transparent;
+					}
+
+					&:not(.not-edit) {
+						background-color: #eff4fb;
+					}
+
+					&:focus {
+						outline: none;
+						background-color: #eff4fb;
+					}
+
+					&._err {
+						background-color: #fee2e2;
+					}
+
+					@media (max-width: $md2) {
+						padding-left: 10px;
+						padding-right: 10px;
+					}
+				}
 			}
 		}
 	}

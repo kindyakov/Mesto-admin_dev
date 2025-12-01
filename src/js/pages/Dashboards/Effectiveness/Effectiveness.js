@@ -150,7 +150,7 @@ class Effectiveness extends Dashboards {
       ...lastFinancePlanFact,
     });
 
-    console.log('Оклад', dataEntities.oklad);
+    this.oklad = dataEntities.oklad || 0;
 
     if (dataEntities) {
       this.actionsTables((table, i) => {
@@ -193,6 +193,10 @@ class Effectiveness extends Dashboards {
       } else {
         this.editedValues.reestr_revenue_percent = 0;
       }
+
+      if (this.editedValues.reestr_revenue_percent) {
+        this.editedValues.total_manager_revenue = (this.oklad + 1) * this.editedValues.reestr_revenue_percent / 100
+      }
     }
 
     // Обновляем виджеты с отредактированными значениями
@@ -214,8 +218,7 @@ class Effectiveness extends Dashboards {
       ...lastFinancePlanFact,
       ...this.editedValues
     };
-
-
+    console.log(updatedData);
 
     this.renderWidgets(updatedData);
   }

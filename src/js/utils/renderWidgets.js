@@ -194,7 +194,7 @@ export function renderWidgets(data, widgetElements, queryParams = {}, defaultDat
 
 		// Обычное значение с опциональным суффиксом: "key" или "key,suffix"
 		const [key, suffix = ''] = params.split(',');
-		const value = data[key];
+		const value = data?.[key] || 0;
 
 		if (value === null || value === undefined) return;
 

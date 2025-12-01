@@ -91,7 +91,8 @@
     </div>
     <div class="border border-solid border-[#e1e8f0] rounded-2xl bg-white p-4 flex flex-col items-start gap-2">
       <div class="text-[#64748b] text-sm font-medium leading-[100%]">Итого менеджеру</div>
-      <b class="text-2xl font-bold text-[#1c2434]" data-render-widget="total_manager_revenue" price>0</b>
+      <b class="text-2xl font-bold text-[#1c2434]" data-render-widget="total_manager_revenue"></b>
+
     </div>
   </div>
 
@@ -99,9 +100,14 @@
     <button class="dashboards__table-toggle btn-toggle-table _my-accordion-control hidden">
     </button>
     <div class="table _my-accordion-content" style="height: 500px; max-height: none;">
-      <div class="table__top">
+      <div class="table__top flex items-center justify-between gap-3 flex-wrap" style="align-items: center;">
         <h3 class="table__title">Условия мотивации менеджеров</h3>
-        <button class="button button-primary">Добавить строку</button>
+        <button class="button-table btn-add-stroke">
+          <span>Добавить строку</span>
+          <svg class="icon icon-plus">
+            <use xlink:href="#plus"></use>
+          </svg>
+        </button>
       </div>
       <div class="table__content table-motivation-managers ag-theme-quartz" style="height: 100%;"></div>
     </div>
