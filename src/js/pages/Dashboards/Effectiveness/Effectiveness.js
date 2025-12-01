@@ -131,13 +131,23 @@ class Effectiveness extends Dashboards {
       } else {
         lastFinancePlanFact.efficiency_coefficient = 0;
       }
+    }
 
+    if (dataDashboard) {
       if (dataDashboard.reestr_revenue && dataDashboard.reestr_sum) {
         dataDashboard.reestr_revenue_percent = ((dataDashboard.reestr_revenue / dataDashboard.reestr_sum) * 100).toFixed(0);
       } else {
         dataDashboard.reestr_revenue_percent = 0;
       }
+
+      if (dataEntities) {
+        dataDashboard.total_manager_revenue = +(dataEntities.oklad * (1 + 0) * dataDashboard.reestr_revenue / dataDashboard.reestr_sum).toFixed(0);
+      } else {
+        dataDashboard.total_manager_revenue = 0;
+      }
     }
+
+    this.oklad = dataEntities.oklad || 0;
 
     // Сохраняем данные для последующего использования в updateWidgets
     this.lastRenderData = {
@@ -150,7 +160,6 @@ class Effectiveness extends Dashboards {
       ...lastFinancePlanFact,
     });
 
-    this.oklad = dataEntities.oklad || 0;
 
     if (dataEntities) {
       this.actionsTables((table, i) => {
@@ -218,7 +227,6 @@ class Effectiveness extends Dashboards {
       ...lastFinancePlanFact,
       ...this.editedValues
     };
-    console.log(updatedData);
 
     this.renderWidgets(updatedData);
   }

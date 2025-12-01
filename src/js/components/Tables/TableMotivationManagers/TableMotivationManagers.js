@@ -42,7 +42,6 @@ class TableMotivationManagers extends Table {
               });
             }
 
-            this.addHandleDbClickCell(params);
             return el;
           }
         },
@@ -57,7 +56,6 @@ class TableMotivationManagers extends Table {
               funcFormate: formattingPrice,
               inputmode: 'numeric'
             });
-            this.addHandleDbClickCell(params);
             return el;
           }
         },
@@ -72,7 +70,6 @@ class TableMotivationManagers extends Table {
               funcFormate: formattingPrice,
               inputmode: 'numeric'
             });
-            this.addHandleDbClickCell(params);
             return el;
           }
         },
@@ -87,7 +84,6 @@ class TableMotivationManagers extends Table {
               funcFormate: formattingPrice,
               inputmode: 'numeric'
             });
-            this.addHandleDbClickCell(params);
             return el;
           }
         },
@@ -102,7 +98,6 @@ class TableMotivationManagers extends Table {
               funcFormate: value => value ? value + '%' : '',
               inputmode: 'numeric'
             });
-            this.addHandleDbClickCell(params);
             return el;
           }
         },
@@ -165,6 +160,36 @@ class TableMotivationManagers extends Table {
     const mergedOptions = Object.assign({}, defaultOptions, options);
     const mergedParams = Object.assign({}, defaultParams, params);
     super(selector, mergedOptions, mergedParams);
+
+    // Инициализация для хранения исходных данных
+    this.originalData = new Map();
+    this.isEditMode = false;
+
+    // Инициализация кнопок после готовности таблицы
+    this.onReadyFunctions.push(() => {
+      this.initButtons();
+    });
+  }
+
+  initButtons() {
+    const tableTop = this.wpTable.closest('.table')?.querySelector('.table__top');
+    if (!tableTop) return;
+
+    this.btnEdit = tableTop.querySelector('.table-motivation-btn-edit');
+    this.btnSave = tableTop.querySelector('.table-motivation-btn-save');
+    this.btnCancel = tableTop.querySelector('.table-motivation-btn-cancel');
+
+    this.btnEdit?.addEventListener('click', () => this.handleClickBtnEdit());
+    this.btnSave?.addEventListener('click', () => this.handleClickBtnSaveAll());
+    this.btnCancel?.addEventListener('click', () => this.handleClickBtnCancel());
+
+    this.updateButtonsState();
+  }
+
+  updateButtonsState() {
+    this.btnEdit?.classList.toggle('hidden', this.isEditMode);
+    this.btnSave?.classList.toggle('hidden', !this.isEditMode);
+    this.btnCancel?.classList.toggle('hidden', !this.isEditMode);
   }
 
   onRendering({ motivation_info = [], }) {
@@ -196,18 +221,120 @@ class TableMotivationManagers extends Table {
     });
   }
 
-  addHandleDbClickCell({ eGridCell }) {
-    eGridCell.addEventListener('dblclick', e => {
-      const row = eGridCell.closest('.ag-row');
-      const wp = eGridCell.querySelector('.wp-input-cell');
+  enableEditMode() {
+    if (this.isEditMode) return;
+    const rowsWithElements = this.getAllRowsWithElements();
+    this.originalData.clear();
 
-      if (wp && wp.classList.contains('not-edit')) {
-        const input = wp.querySelector('input') || wp.querySelector('select');
-        if (input) {
-          this.changeReadonly(input, false);
+    rowsWithElements.forEach(({ data, element }) => {
+      // Сохраняем исходные данные
+      const rowId = element.getAttribute('row-id');
+      if (rowId) {
+        this.originalData.set(rowId, { ...data });
+      }
+
+      // Делаем все инпуты редактируемыми
+      const inputs = element.querySelectorAll('select, input');
+      inputs.length && inputs.forEach(input => {
+        this.changeReadonly(input, false);
+      });
+    });
+
+    this.isEditMode = true;
+    this.updateButtonsState();
+  }
+
+  disableEditMode() {
+    const rowsWithElements = this.getAllRowsWithElements();
+
+    rowsWithElements.forEach(({ element }) => {
+      const inputs = element.querySelectorAll('select, input');
+      inputs.length && inputs.forEach(input => {
+        this.changeReadonly(input, true);
+      });
+    });
+
+    this.isEditMode = false;
+    this.updateButtonsState();
+  }
+
+  handleClickBtnEdit() {
+    this.enableEditMode();
+  }
+
+  async handleClickBtnSaveAll() {
+    const rowsWithElements = this.getAllRowsWithElements();
+    const allData = [];
+    let isValid = true;
+
+    rowsWithElements.forEach(({ data, element }) => {
+      const inputs = element.querySelectorAll('input');
+      const rowData = { ...data };
+
+      inputs.forEach(input => {
+        const fieldName = input.name;
+        let value = input.value;
+
+        // Обработка специальных полей
+        if (fieldName === 'month' && input.dataset.value) {
+          value = input.dataset.value;
+        } else if (fieldName === 'oklad' || fieldName === 'gradation_start' || fieldName === 'gradation_end') {
+          value = value ? parseFloat(value.replace(/\s/g, '').replace(',', '.')) : '';
+        } else if (fieldName === 'bonus_percent') {
+          value = value ? parseFloat(value.replace('%', '').replace(/\s/g, '').replace(',', '.')) : '';
         }
+
+        rowData[fieldName] = value;
+
+        // Валидация обязательных полей
+        if (!value && (fieldName === 'month' || fieldName === 'oklad' || fieldName === 'gradation_start' || fieldName === 'gradation_end' || fieldName === 'bonus_percent')) {
+          input.classList.add('_err');
+          isValid = false;
+        } else {
+          input.classList.remove('_err');
+        }
+      });
+
+      // Удаляем служебные поля перед отправкой
+      delete rowData.isNew;
+      delete rowData.actions;
+      allData.push(rowData);
+    });
+
+    if (!isValid) {
+      this.app.notify.show({ msg: 'Заполните все обязательные поля', msg_type: 'warning' });
+      return;
+    }
+
+    // Отправляем данные на сервер
+    try {
+      await this.editMotivationManager(allData);
+      this.disableEditMode();
+      this.originalData.clear();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  handleClickBtnCancel() {
+    if (this.originalData.size === 0) {
+      this.disableEditMode();
+      return;
+    }
+
+    // Восстанавливаем исходные данные
+    this.originalData.forEach((originalData, rowId) => {
+      const rowNode = this.gridApi.getRowNode(rowId);
+      if (rowNode) {
+        rowNode.setData(originalData);
       }
     });
+
+    // Обновляем отображение
+    this.gridApi.refreshCells({ force: true });
+
+    this.disableEditMode();
+    this.originalData.clear();
   }
 
   handleClickBtnSave(params) {
@@ -273,11 +400,12 @@ class TableMotivationManagers extends Table {
   }
 
   async editMotivationManager(data) {
+    console.log('editMotivationManager data:', data);
     try {
-      this.loader.enable();
-      const response = await api.post('/_set_motivation_info_', data);
-      if (response.status !== 200) return;
-      this.app.notify.show(response.data);
+      // this.loader.enable();
+      // const response = await api.post('/_set_motivation_info_', data);
+      // if (response.status !== 200) return;
+      // this.app.notify.show(response.data);
     } catch (error) {
       console.error(error);
     } finally {
