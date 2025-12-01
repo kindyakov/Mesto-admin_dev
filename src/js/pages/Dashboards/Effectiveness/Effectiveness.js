@@ -10,6 +10,8 @@ import {
 } from '../../../settings/request.js';
 
 import TableMotivationManagers from '../../../components/Tables/TableMotivationManagers/TableMotivationManagers.js';
+import EditEffectivenessUtils from './EditEffectivenessUtils.js';
+import { formattingPrice } from '../../../utils/formattingPrice.js';
 
 class Effectiveness extends Dashboards {
   constructor({ loader }) {
@@ -29,6 +31,12 @@ class Effectiveness extends Dashboards {
       ],
       page: 'dashboards/effectiveness'
     });
+
+    this.editEffectivenessUtils = null;
+    // Объект для хранения отредактированных значений
+    this.editedValues = {};
+    // Сохраняем последние данные для пересчета процентов
+    this.lastRenderData = null;
 
     const inputElement = this.wrapper.querySelector(`[data-content="dashboards/effectiveness"] .input-date-month`);
 
@@ -56,22 +64,6 @@ class Effectiveness extends Dashboards {
             });
           }
         },
-        // onReady: (selectedDates, dateStr, instance) => {
-        //   // Исправляем дублирование при инициализации
-        //   // Плагин monthSelect может создавать дублирование, исправляем это
-        //   setTimeout(() => {
-        //     const inputValue = instance.input.value;
-        //     // Если значение дублируется (содержит запятую), берем только первую часть
-        //     if (inputValue && inputValue.includes(',')) {
-        //       const cleanValue = inputValue.split(',')[0].trim();
-        //       instance.input.value = cleanValue;
-        //       // Если есть altInput, тоже обновляем его
-        //       if (instance.altInput) {
-        //         instance.altInput.value = cleanValue;
-        //       }
-        //     }
-        //   }, 0);
-        // }
       });
 
       if (this.calendar && this.calendar.selectedDates.length > 0) {
@@ -114,7 +106,7 @@ class Effectiveness extends Dashboards {
         ...this.queryParams,
         ...queryParams
       }),
-      getFinancePlan({ warehouse_id: warehouse.warehouse_id, ...queryParams })
+      getFinancePlan({ warehouse_id: this.app.warehouse.warehouse_id, ...this.queryParams, ...queryParams })
     ]);
   }
 
@@ -140,20 +132,25 @@ class Effectiveness extends Dashboards {
         lastFinancePlanFact.efficiency_coefficient = 0;
       }
 
-      if (lastFinancePlanFact.reestr_revenue && lastFinancePlanFact.reestr_sum) {
-        lastFinancePlanFact.reestr_revenue_percent = ((lastFinancePlanFact.reestr_revenue / lastFinancePlanFact.reestr_sum) * 100).toFixed(0);
+      if (dataDashboard.reestr_revenue && dataDashboard.reestr_sum) {
+        dataDashboard.reestr_revenue_percent = ((dataDashboard.reestr_revenue / dataDashboard.reestr_sum) * 100).toFixed(0);
       } else {
-        lastFinancePlanFact.reestr_revenue_percent = 0;
+        dataDashboard.reestr_revenue_percent = 0;
       }
     }
 
+    // Сохраняем данные для последующего использования в updateWidgets
+    this.lastRenderData = {
+      dataDashboard,
+      lastFinancePlanFact
+    };
+
     this.renderWidgets({
       ...dataDashboard,
-      ...lastFinancePlanFact
+      ...lastFinancePlanFact,
     });
 
     console.log('Оклад', dataEntities.oklad);
-
 
     if (dataEntities) {
       this.actionsTables((table, i) => {
@@ -161,6 +158,66 @@ class Effectiveness extends Dashboards {
       });
     }
 
+    this.initEditEffectivenessUtils();
+  }
+
+  initEditEffectivenessUtils() {
+    if (this.editEffectivenessUtils) {
+      this.editEffectivenessUtils = null;
+    }
+
+    this.editEffectivenessUtils = new EditEffectivenessUtils(
+      this.wrapper,
+      this.editedValues,
+      () => {
+        // Callback для обновления виджетов после сохранения
+        this.updateWidgets();
+      }
+    );
+  }
+
+  updateWidgets() {
+    if (!this.lastRenderData) {
+      return;
+    }
+
+    const { dataDashboard, lastFinancePlanFact } = this.lastRenderData;
+
+    // Если обновляется reestr_revenue, пересчитываем reestr_revenue_percent
+    if (this.editedValues.reestr_revenue) {
+      const reestr_revenue = this.editedValues.reestr_revenue;
+      const reestr_sum = dataDashboard.reestr_sum;
+
+      if (reestr_revenue && reestr_sum) {
+        this.editedValues.reestr_revenue_percent = +((reestr_revenue / reestr_sum) * 100).toFixed(0);
+      } else {
+        this.editedValues.reestr_revenue_percent = 0;
+      }
+    }
+
+    // Обновляем виджеты с отредактированными значениями
+    Object.keys(this.editedValues).forEach(key => {
+      const widget = this.wrapper.querySelector(`[data-render-widget="${key}"]`);
+      if (widget) {
+        const value = this.editedValues[key];
+        if (widget.hasAttribute('price')) {
+          widget.textContent = formattingPrice(value);
+        } else {
+          widget.textContent = value;
+        }
+      }
+    });
+
+    // Перерисовываем все виджеты с учетом отредактированных значений
+    const updatedData = {
+      ...dataDashboard,
+      ...lastFinancePlanFact,
+      ...this.editedValues
+    };
+
+
+
+    this.renderWidgets(updatedData);
   }
 }
 
