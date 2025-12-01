@@ -97,6 +97,33 @@ class Effectiveness extends Dashboards {
     return { startDate, endDate };
   }
 
+  /**
+   * Рассчитывает доход менеджера
+   * @param {number} oklad - Оклад менеджера
+   * @param {number} reestrRevenue - Выручка
+   * @param {number} reestrSumWas - Базовая сумма для расчета
+   * @returns {number} Рассчитанный доход менеджера
+   */
+  calculateManagerRevenue(oklad, reestrRevenue, reestrSumWas, new_clients_revenue_rent = 0) {
+    let bonus = 0;
+
+    if (this.motivationInfo && this.motivationInfo.length > 0) {
+      const motivation = this.motivationInfo.find(item =>
+        new_clients_revenue_rent >= item.gradation_start &&
+        new_clients_revenue_rent <= item.gradation_end
+      );
+
+      if (motivation) {
+        bonus = motivation.bonus_percent / 100;
+      }
+    }
+
+    if (reestrRevenue && reestrSumWas && oklad) {
+      return +((oklad + bonus * new_clients_revenue_rent) * reestrRevenue / reestrSumWas).toFixed(0);
+    }
+    return 0;
+  }
+
   async getData(queryParams = {}) {
     return getMotivationInfo({ month: this.queryParams.month })
   }
@@ -114,6 +141,8 @@ class Effectiveness extends Dashboards {
 
   onRender([dataDashboard, { finance_planfact }], dataEntities) {
     let lastFinancePlanFact = finance_planfact.at(-1) || {};
+    this.oklad = dataEntities.oklad || 0;
+    this.motivationInfo = dataEntities?.motivation_info || [];
 
     if (lastFinancePlanFact) {
       if (lastFinancePlanFact.revenue_accumulated && lastFinancePlanFact.revenue_accumulated_planned) {
@@ -142,14 +171,13 @@ class Effectiveness extends Dashboards {
         dataDashboard.reestr_revenue_percent = 0;
       }
 
-      if (dataEntities && dataDashboard.reestr_revenue && dataDashboard.reestr_sum_was) {
-        dataDashboard.total_manager_revenue = +(dataEntities.oklad * (1 + 0) * dataDashboard.reestr_revenue / dataDashboard.reestr_sum_was).toFixed(0);
-      } else {
-        dataDashboard.total_manager_revenue = 0;
-      }
+      dataDashboard.total_manager_revenue = this.calculateManagerRevenue(
+        dataEntities?.oklad,
+        dataDashboard.reestr_revenue,
+        dataDashboard.reestr_sum_was,
+        dataDashboard.new_clients_revenue_rent
+      );
     }
-
-    this.oklad = dataEntities.oklad || 0;
 
     // Сохраняем данные для последующего использования в updateWidgets
     this.lastRenderData = {
@@ -211,21 +239,24 @@ class Effectiveness extends Dashboards {
     }
 
     const { dataDashboard, lastFinancePlanFact } = this.lastRenderData;
-
+    const reestr_revenue = this.editedValues.reestr_revenue || dataDashboard.reestr_revenue || 0;
+    const new_clients_revenue_rent = this.editedValues.new_clients_revenue_rent || dataDashboard.new_clients_revenue_rent || 0;
     // Если обновляется reestr_revenue, пересчитываем reestr_revenue_percent
-    if (this.editedValues.reestr_revenue) {
-      const reestr_revenue = this.editedValues.reestr_revenue;
-      const reestr_sum = dataDashboard.reestr_sum;
+    if (reestr_revenue) {
+      const reestr_sum_was = dataDashboard.reestr_sum_was;
 
-      if (reestr_revenue && reestr_sum) {
-        this.editedValues.reestr_revenue_percent = +((reestr_revenue / reestr_sum) * 100).toFixed(0);
+      if (reestr_revenue && reestr_sum_was) {
+        dataDashboard.reestr_revenue_percent = +((reestr_revenue / reestr_sum_was) * 100).toFixed(0);
       } else {
-        this.editedValues.reestr_revenue_percent = 0;
+        dataDashboard.reestr_revenue_percent = 0;
       }
 
-      if (this.editedValues.reestr_revenue_percent) {
-        this.editedValues.total_manager_revenue = (this.oklad + 1) * this.editedValues.reestr_revenue_percent / 100
-      }
+      dataDashboard.total_manager_revenue = this.calculateManagerRevenue(
+        this.oklad,
+        reestr_revenue,
+        dataDashboard.reestr_sum_was,
+        new_clients_revenue_rent
+      );
     }
 
     // Обновляем виджеты с отредактированными значениями
@@ -251,10 +282,10 @@ class Effectiveness extends Dashboards {
     this.renderWidgets(updatedData);
 
     // Обновляем подсветку в таблице мотивации, если изменилось new_clients_revenue_rent
-    if (this.editedValues.new_clients_revenue_rent !== undefined && this.tables.length > 0) {
-      const motivationTable = this.tables.find(table => table.constructor.name === 'TableMotivationManagers');
+    if (new_clients_revenue_rent && this.tables.length > 0) {
+      const motivationTable = this.tables[0];
       if (motivationTable && motivationTable.updateHighlighting) {
-        motivationTable.updateHighlighting(this.editedValues.new_clients_revenue_rent);
+        motivationTable.updateHighlighting(new_clients_revenue_rent);
       }
     }
   }
