@@ -246,7 +246,7 @@ class Table {
 	// Срабатывает при change у checkbox
 	onRowSelected(currentData) {
 		this.selectedRows = this.gridApi.getSelectedRows();
-		this.btnTableUploadExcel.setAttribute(
+		this.btnTableUploadExcel?.setAttribute(
 			'data-count',
 			this.selectedRows.length ? `(${this.selectedRows.length})` : ''
 		);

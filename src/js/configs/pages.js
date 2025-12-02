@@ -122,6 +122,14 @@ export const pages = {
 			return access;
 		}
 	},
+	budgeting: {
+		path: 'Budgeting/Budgeting.js',
+		accessCheck: ({ tab, content, user }) => {
+			let access = true;
+
+			return access;
+		}
+	},
 	users: {
 		path: 'Users/Users.js',
 		accessCheck: ({ tab, content, user }) => {

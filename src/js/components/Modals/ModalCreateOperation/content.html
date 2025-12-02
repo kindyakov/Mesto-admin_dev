@@ -1,0 +1,60 @@
+<div class='modal__body'>
+  <div class="modal__header">
+    <div class="modal__header_auto">
+      <h3 class="modal__title">Добавление платежа</h3>
+    </div>
+  </div>
+  <div class="modal__block">
+    <div class="modal__block_item">
+      <form class="modal__form form-add-operation">
+        <div class="modal__form_item">
+          <span>Дата платежа</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="operation_date" autocomplete="off">
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Категория расхода</span>
+          <div class="modal__form_wp-input wp-input">
+            <select name="category" class="init-custom-select" data-special-select="select-modal-create-operation">
+              <option value="">Выберите категорию</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Склад</span>
+          <div class="modal__form_wp-input wp-input">
+            <select name="warehouse_id" class="init-custom-select" data-special-select="select-modal-create-operation">
+              <option value="">Выберите склад</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Подкатегоря расхода</span>
+          <div class="modal__form_wp-input wp-input">
+            <select name="subcategory" class="init-custom-select" data-special-select="select-modal-create-operation">
+              <option value="">Выберите подкатегорию</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal__form_item">
+          <span>Сумма расхода</span>
+          <div class="modal__form_wp-input wp-input">
+            <input type="text" class="modal__form_input input not-edit" name="amount" autocomplete="off"
+              inputmode="tel">
+          </div>
+        </div>
+        <div class="modal__form_item grid-column-2">
+          <span>Комментарий</span>
+          <div class="modal__form_wp-input wp-input">
+            <textarea name="comment" placeholder="Комментарий" class="textarea"></textarea>
+          </div>
+        </div>
+        <button type="submit" style="display: none;"></button>
+      </form>
+    </div>
+  </div>
+  <div class="modal__footer">
+    <button class="button btn-create-operation"><span>Добавить платеж</span></button>
+  </div>
+</div>
