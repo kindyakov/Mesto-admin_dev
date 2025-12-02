@@ -139,6 +139,24 @@ class Effectiveness extends Dashboards {
     ]);
   }
 
+  /**
+   * Обновляет подсветку в таблице мотивации менеджеров
+   * @param {number} newClientsRevenueRent - Значение новых клиентов для подсветки
+   */
+  updateMotivationTableHighlighting(newClientsRevenueRent) {
+    if (newClientsRevenueRent && this.tables.length > 0) {
+      const motivationTable = this.tables[0];
+      if (motivationTable) {
+        // Обновляем значение подсветки
+        motivationTable.newClientsRevenueRent = newClientsRevenueRent;
+        // Если таблица уже проинициализирована, обновляем отображение
+        if (motivationTable.gridApi) {
+          motivationTable.updateHighlighting(newClientsRevenueRent);
+        }
+      }
+    }
+  }
+
   onRender([dataDashboard, { finance_planfact }], dataEntities) {
     let lastFinancePlanFact = finance_planfact.at(-1) || {};
     this.oklad = dataEntities.oklad || 0;
@@ -192,17 +210,7 @@ class Effectiveness extends Dashboards {
 
 
     // Передаем new_clients_revenue_rent в таблицу мотивации менеджеров
-    if (dataDashboard && dataDashboard.new_clients_revenue_rent && this.tables.length > 0) {
-      const motivationTable = this.tables.find(table => table.constructor.name === 'TableMotivationManagers');
-      if (motivationTable) {
-        // Обновляем значение подсветки
-        motivationTable.newClientsRevenueRent = dataDashboard.new_clients_revenue_rent;
-        // Если таблица уже проинициализирована, обновляем отображение
-        if (motivationTable.gridApi) {
-          motivationTable.updateHighlighting(dataDashboard.new_clients_revenue_rent);
-        }
-      }
-    }
+    this.updateMotivationTableHighlighting(dataDashboard?.new_clients_revenue_rent);
 
     if (dataEntities) {
       this.actionsTables((table, i) => {
@@ -282,12 +290,7 @@ class Effectiveness extends Dashboards {
     this.renderWidgets(updatedData);
 
     // Обновляем подсветку в таблице мотивации, если изменилось new_clients_revenue_rent
-    if (new_clients_revenue_rent && this.tables.length > 0) {
-      const motivationTable = this.tables[0];
-      if (motivationTable && motivationTable.updateHighlighting) {
-        motivationTable.updateHighlighting(new_clients_revenue_rent);
-      }
-    }
+    this.updateMotivationTableHighlighting(new_clients_revenue_rent);
   }
 }
 
