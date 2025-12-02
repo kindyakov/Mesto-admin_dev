@@ -90,6 +90,12 @@ export class Select {
 			this.options.maxHeightList = select.getAttribute('data-select-max-height-list') || this.options.maxHeightList;
 			const prefix = select.getAttribute('data-prefix') || '';
 
+			// Удаляем существующий кастомный селект если он есть
+			const existingCustomSelect = select.nextElementSibling;
+			if (existingCustomSelect && existingCustomSelect.classList.contains('mySelect')) {
+				existingCustomSelect.remove();
+			}
+
 			const customSelect = this.customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder, isDisabled, inputHtml, prefix });
 			const b479 = window.matchMedia(`(min-width: 479px)`);
 
@@ -293,6 +299,12 @@ export class exSelect extends Select {
 				const selectMinWidth = select.getAttribute('data-select-min-width') || this.options.selectMinWidth;
 				const selectMaxWidth = select.getAttribute('data-select-max-width') || this.options.selectMaxWidth;
 				const prefix = select.getAttribute('data-prefix') || '';
+
+				// Удаляем существующий кастомный селект если он есть
+				const existingCustomSelect = select.nextElementSibling;
+				if (existingCustomSelect && existingCustomSelect.classList.contains('mySelect')) {
+					existingCustomSelect.remove();
+				}
 
 				const customSelect = this.customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder, isDisabled, inputHtml, prefix });
 				const b479 = window.matchMedia(`(min-width: 479px)`);

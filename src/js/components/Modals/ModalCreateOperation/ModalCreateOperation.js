@@ -17,6 +17,8 @@ class ModalCreateOperation extends BaseModal {
 
     this.categories = []
     this.subcategories = []
+    this.editMode = false
+    this.editData = null
 
     this.init()
   }
@@ -32,6 +34,9 @@ class ModalCreateOperation extends BaseModal {
     this.subcategorySelect = this.modalBody.querySelector('[name="subcategory"]')
     this.warehouseSelect = this.modalBody.querySelector('[name="warehouse_id"]')
     this.amountInput = this.modalBody.querySelector('[name="amount"]')
+    this.commentInput = this.modalBody.querySelector('[name="comment"]')
+    this.operationDateInput = this.modalBody.querySelector('[name="operation_date"]')
+    this.modalTitle = this.modalBody.querySelector('.modal__title')
 
     this.validator = validate(this.form, { container: this.modalBody })
 
@@ -45,12 +50,74 @@ class ModalCreateOperation extends BaseModal {
 
   async onOpen(params) {
     if (!params) return
+
+    this.editMode = false
+    this.editData = null
+    this.updateUI()
+
     await this.fetchCategories()
     this.populateWarehouses()
     this.populateCategories()
+    this.populateSubcategories()
     this.setupCategoryChangeHandler()
     this.setDefaultWarehouse()
+
     this.selects.init()
+  }
+
+  async openForEdit(data) {
+    this.editMode = true
+    this.editData = data
+
+    await this.fetchCategories()
+    this.populateWarehouses()
+    this.populateCategories()
+    this.populateSubcategories()
+    this.setupCategoryChangeHandler()
+
+    this.updateUI()
+    this.fillFormWithData(data)
+
+    this.selects.init()
+  }
+
+  updateUI() {
+    if (this.editMode) {
+      this.modalTitle.textContent = 'Редактирование операции'
+      this.btnCreateOperation.querySelector('span').textContent = 'Сохранить изменения'
+    } else {
+      this.modalTitle.textContent = 'Добавление платежа'
+      this.btnCreateOperation.querySelector('span').textContent = 'Добавить платеж'
+    }
+  }
+
+  fillFormWithData(data) {
+    if (!data) return
+
+    // Заполняем поля формы
+    if (this.operationDateInput && data.operation_date) {
+      this.operationDateInput.value = dateFormatter(data.operation_date)
+    }
+
+    if (this.categorySelect && data.category) {
+      this.categorySelect.value = data.category
+    }
+
+    if (this.subcategorySelect && data.subcategory) {
+      this.subcategorySelect.value = data.subcategory
+    }
+
+    if (this.warehouseSelect && data.warehouse_id) {
+      this.warehouseSelect.value = data.warehouse_id
+    }
+
+    if (this.amountInput && data.amount) {
+      this.amountInput.value = data.amount
+    }
+
+    if (this.commentInput && data.comment) {
+      this.commentInput.value = data.comment
+    }
   }
 
   onClose() {
@@ -60,6 +127,8 @@ class ModalCreateOperation extends BaseModal {
     }
     this.categories = []
     this.subcategories = []
+    this.editMode = false
+    this.editData = null
   }
 
   async fetchCategories() {
@@ -80,11 +149,18 @@ class ModalCreateOperation extends BaseModal {
   populateWarehouses() {
     if (!this.warehouseSelect || !window.app.warehouses) return
 
-    const optionsHtml = window.app.warehouses
+    let warehouses = window.app.warehouses;
+
+    // В режиме редактирования фильтруем склады с warehouse_id === 0
+    if (this.editMode) {
+      warehouses = warehouses.filter(warehouse => warehouse.warehouse_id !== 0);
+    }
+
+    const optionsHtml = warehouses
       .map(warehouse => `<option value="${warehouse.warehouse_id}">${warehouse.warehouse_name}</option>`)
       .join('')
 
-    this.warehouseSelect.innerHTML = '<option value="">Выберите склад</option>' + optionsHtml
+    this.warehouseSelect.innerHTML = optionsHtml
   }
 
   populateCategories() {
@@ -100,7 +176,7 @@ class ModalCreateOperation extends BaseModal {
   populateSubcategories() {
     if (!this.subcategorySelect) return
 
-    const optionsHtml = this.subcategorySelect
+    const optionsHtml = this.subcategories
       .filter(subcategory => subcategory)
       .map(subcategory => `<option value="${subcategory}">${subcategory}</option>`)
       .join('')
@@ -147,6 +223,7 @@ class ModalCreateOperation extends BaseModal {
         formData.set('amount', amount.replace(/[^0-9]/g, ''))
       }
 
+      formData.delete('flatpickr-month')
       // Convert FormData to object
       Array.from(formData).forEach(arr => data[arr[0]] = arr[1])
 
@@ -155,23 +232,58 @@ class ModalCreateOperation extends BaseModal {
         data.warehouse_id = window.app.warehouse.warehouse_id
       }
 
-      this.createOperation(data)
-        .then(({ msg_type = '' }) => {
-          if (msg_type == 'success') {
-            this.close()
-            // Refresh parent table if exists
+      // Convert warehouse_id and amount to numbers
+      if (data.warehouse_id) {
+        data.warehouse_id = Number(data.warehouse_id)
+      }
+      if (data.amount) {
+        data.amount = Number(data.amount)
+      }
+
+      // Add operation_id for edit mode
+      if (this.editMode && this.editData?.operation_id) {
+        data.operation_id = this.editData.operation_id
+      }
+
+      const action = this.editMode ? this.editOperation(data) : this.createOperation(data)
+
+      action
+        .then((response) => {
+          if (response?.msg_type == 'success') {
+            console.log('Response operationData:', response.operationData);
+
+            // Обновляем таблицу
             const operationsTable = window.app.modalMap?.['modal-operations']
-            if (operationsTable && operationsTable.refresh) {
-              operationsTable.refresh()
+            if (operationsTable && response.operationData) {
+              if (this.editMode) {
+                // При редактировании обновляем строку и закрываем окно
+                if (operationsTable.updateOperation) {
+                  operationsTable.updateOperation(response.operationData)
+                } else if (operationsTable.refresh) {
+                  operationsTable.refresh()
+                }
+                this.close()
+              } else {
+                // При создании добавляем новую строку в начало
+                console.log('Adding operation to table:', response.operationData);
+                if (operationsTable.addOperation) {
+                  operationsTable.addOperation(response.operationData)
+                } else if (operationsTable.refresh) {
+                  operationsTable.refresh()
+                }
+                // Очищаем только amount и comment
+                if (this.amountInput) {
+                  this.amountInput.value = ''
+                }
+                if (this.commentInput) {
+                  this.commentInput.value = ''
+                }
+              }
             }
           }
         })
         .finally(() => {
           this.validator?.refresh()
-          this.form.reset()
-          this.setDefaultWarehouse()
-          this.populateCategories()
-          this.populateSubcategories()
         })
     })
   }
@@ -182,13 +294,47 @@ class ModalCreateOperation extends BaseModal {
       const response = await api.post(`/_add_operation_`, data)
       if (response.status !== 200) return
       outputInfo(response.data)
-      return response.data
+
+
+      const operationData = {
+        ...data,
+        operation_id: Date.now() // Временный ID
+      }
+
+      return {
+        ...response.data,
+        operationData: operationData
+      }
     } catch (error) {
       console.error(error)
       window.app.notify.show({
         msg: 'Ошибка создания операции',
         msg_type: 'error'
       })
+      return { msg_type: 'error' }
+    } finally {
+      this.loader.disable()
+    }
+  }
+
+  async editOperation(data) {
+    try {
+      this.loader.enable()
+      const response = await api.post(`/_edit_operation_`, data)
+      if (response.status !== 200) return
+      outputInfo(response.data)
+
+      return {
+        ...response.data,
+        operationData: data
+      }
+    } catch (error) {
+      console.error(error)
+      window.app.notify.show({
+        msg: 'Ошибка редактирования операции',
+        msg_type: 'error'
+      })
+      return { msg_type: 'error' }
     } finally {
       this.loader.disable()
     }

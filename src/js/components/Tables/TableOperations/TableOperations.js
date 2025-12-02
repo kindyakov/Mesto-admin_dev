@@ -1,19 +1,13 @@
 import Table from '../Table.js';
-import { actions } from '../utils/actions.js';
 import { dateFormatter } from '../../../settings/dateFormatter.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
+import { actions } from '../utils/actions.js';
+import { createElement } from '../../../settings/createElement.js';
 
 class TableOperations extends Table {
   constructor(selector, options, params) {
     const defaultOptions = {
       columnDefs: [
-        {
-          headerCheckboxSelection: true,
-          checkboxSelection: true,
-          width: 50,
-          resizable: false,
-          sortable: false
-        },
         {
           headerName: 'Дата',
           field: 'operation_date',
@@ -67,7 +61,8 @@ class TableOperations extends Table {
           field: 'actions',
           width: 90,
           resizable: false,
-          sortable: false
+          sortable: false,
+          cellRenderer: params => this.actionCellRenderer(params),
         }
       ]
     };
@@ -80,12 +75,150 @@ class TableOperations extends Table {
     const mergedParams = Object.assign({}, defaultParams, params);
 
     super(selector, mergedOptions, mergedParams);
+
+    this.actionCellRenderer = this.actionCellRenderer.bind(this);
+  }
+
+  actionCellRenderer(params) {
+    const row = params.eGridCell.closest('.ag-row');
+    const button = createElement('button', {
+      classes: ['button-table-actions'],
+      content: `<span></span><span></span><span></span>`
+    });
+
+    const tippyInstance = actions(button, {
+      buttonsIs: [true, true],
+      attrModal: 'modal-create-operation',
+      attributes: [['operation-id', params.data.operation_id]],
+      placement: 'bottom-right',
+      data: params.data,
+      buttons: [
+        () => {
+          const btn = document.createElement('button')
+          btn.classList.add('tippy-button', 'table-tippy-client__button', 'btn-edit-operation')
+          btn.innerHTML = `
+            <svg class='icon icon-edit'>
+              <use xlink:href='#edit'></use>
+            </svg>
+            <span>Редактировать</span>`
+
+          btn.addEventListener('click', () => {
+            const modalCreateOperation = window.app.modalMap['modal-create-operation'];
+            if (modalCreateOperation) {
+              modalCreateOperation.open({});
+              setTimeout(() => {
+                modalCreateOperation.openForEdit(params.data);
+              }, 100);
+            }
+            tippyInstance.hide();
+          });
+
+          return btn;
+        },
+        () => {
+          const btn = document.createElement('button')
+          btn.classList.add('tippy-button', 'table-tippy-client__button', 'btn-delete-operation')
+          btn.innerHTML = `
+            <svg class='icon icon-trash' style="fill: none;">
+              <use xlink:href='#trash'></use>
+            </svg>
+            <span>Удалить</span>`
+
+          btn.addEventListener('click', () => {
+            this.deleteOperation(params.data.operation_id);
+            tippyInstance.hide();
+          });
+
+          return btn;
+        }
+      ],
+      onEnableEdit: () => { }
+    });
+
+    return button;
+  }
+
+  async deleteOperation(operationId) {
+    if (!confirm('Вы уверены, что хотите удалить эту операцию?')) return;
+
+    try {
+      const { api } = await import('../../../settings/api.js');
+      const { outputInfo } = await import('../../../utils/outputinfo.js');
+
+      const response = await api.post('/_delete_operation_', {
+        operation_id: operationId
+      });
+
+      if (response.status === 200) {
+        window.app.notify.show(response.data);
+
+        // Находим и удаляем строку из таблицы
+        const rowNode = this.gridApi.getRowNode(operationId);
+        if (rowNode) {
+          this.gridApi.applyTransaction({ remove: [rowNode.data] });
+        } else {
+          // Если не нашли по ID, ищем по operation_id
+          const rowData = [];
+          this.gridApi.forEachNode(node => {
+            if (node.data.operation_id === operationId) {
+              rowData.push(node.data);
+            }
+          });
+          if (rowData.length > 0) {
+            this.gridApi.applyTransaction({ remove: rowData });
+          }
+        }
+
+        // Обновляем счетчик общего количества
+        if (this.cntAll) {
+          this.cntAll -= 1;
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting operation:', error);
+      window.app.notify.show({
+        msg: 'Ошибка удаления операции',
+        msg_type: 'error'
+      });
+    }
   }
 
   onRendering({ operations = [], cnt_pages, page, cnt_all = 0 }) {
     this.cntAll = cnt_all;
     this.pagination.setPage(page, cnt_pages, cnt_all);
     this.gridApi.setGridOption('rowData', operations);
+  }
+
+  addOperation(operationData) {
+    console.log('TableOperations.addOperation called with:', operationData);
+
+    // Добавляем новую строку в начало таблицы
+    const result = this.gridApi.applyTransaction({ add: [operationData], addIndex: 0 });
+    console.log('applyTransaction result:', result);
+
+    // Обновляем счетчик
+    if (this.cntAll !== undefined) {
+      this.cntAll += 1;
+    }
+  }
+
+  updateOperation(operationData) {
+    console.log('TableOperations.updateOperation called with:', operationData);
+
+    // Обновляем существующую строку
+    const rowData = [];
+    this.gridApi.forEachNode(node => {
+      if (node.data.operation_id === operationData.operation_id) {
+        rowData.push(node);
+      }
+    });
+
+    if (rowData.length > 0) {
+      const result = this.gridApi.applyTransaction({ update: [operationData] });
+      console.log('applyTransaction result:', result);
+    } else {
+      console.log('Row not found for operation_id:', operationData.operation_id);
+    }
   }
 }
 

@@ -4,6 +4,13 @@
   <div class="table" style="height: 850px;">
     <div class="table__top">
       <form class="table__form form-table-search">
+        <label class="main__date-filter">
+          <svg class="icon icon-calendar">
+            <use xlink:href="#calendar"></use>
+          </svg>
+          <input type="text" class="input-date-filter flatpickr-input" name="filter_start_date,filter_end_date"
+            placeholder="Дата" readonly="readonly">
+        </label>
         <div class="wp-input wp-input-search">
           <input type="text" name="search_str" placeholder="Поиск" class="input input-table-search" autocomplete="off"
             inputmode="search">

@@ -22,6 +22,16 @@ class Budgeting extends Page {
     });
   }
 
+  init(page) {
+    super.init(page);
+
+    // Регистрируем таблицу в modalMap для доступа из модального окна
+    if (this.tables[0]) {
+      console.log('Registering table in modalMap:', this.tables[0]);
+      window.app.modalMap['modal-operations'] = this.tables[0];
+    }
+  }
+
   async getData(queryParams = {}) {
     return getOperations({ show_cnt: this.tables[0].gridOptions.paginationPageSize, ...queryParams })
   }
