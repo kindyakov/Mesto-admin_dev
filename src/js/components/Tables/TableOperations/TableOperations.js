@@ -7,6 +7,7 @@ import { createElement } from '../../../settings/createElement.js';
 class TableOperations extends Table {
   constructor(selector, options, params) {
     const defaultOptions = {
+      getRowId: (params) => params.data.operation_id,
       columnDefs: [
         {
           headerName: 'Дата',
@@ -206,18 +207,12 @@ class TableOperations extends Table {
     console.log('TableOperations.updateOperation called with:', operationData);
 
     // Обновляем существующую строку
-    const rowData = [];
-    this.gridApi.forEachNode(node => {
-      if (node.data.operation_id === operationData.operation_id) {
-        rowData.push(node);
-      }
-    });
+    // Благодаря getRowId, AG Grid автоматически найдет строку по operation_id
+    const result = this.gridApi.applyTransaction({ update: [operationData] });
+    console.log('applyTransaction result:', result);
 
-    if (rowData.length > 0) {
-      const result = this.gridApi.applyTransaction({ update: [operationData] });
-      console.log('applyTransaction result:', result);
-    } else {
-      console.log('Row not found for operation_id:', operationData.operation_id);
+    if (!result || !result.update || result.update.length === 0) {
+      console.log('Row not found or not updated for operation_id:', operationData.operation_id);
     }
   }
 }

@@ -240,9 +240,9 @@ class ModalCreateOperation extends BaseModal {
         data.amount = Number(data.amount)
       }
 
-      // Add operation_id for edit mode
+      // Add operation_id for edit mode (as number)
       if (this.editMode && this.editData?.operation_id) {
-        data.operation_id = this.editData.operation_id
+        data.operation_id = Number(this.editData.operation_id)
       }
 
       const action = this.editMode ? this.editOperation(data) : this.createOperation(data)
@@ -257,6 +257,7 @@ class ModalCreateOperation extends BaseModal {
             if (operationsTable && response.operationData) {
               if (this.editMode) {
                 // При редактировании обновляем строку и закрываем окно
+                console.log('Updating operation in table. operation_id:', response.operationData.operation_id, 'data:', response.operationData);
                 if (operationsTable.updateOperation) {
                   operationsTable.updateOperation(response.operationData)
                 } else if (operationsTable.refresh) {

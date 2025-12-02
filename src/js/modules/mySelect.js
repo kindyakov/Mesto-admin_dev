@@ -81,7 +81,7 @@ export class Select {
 			const selectName = select.getAttribute('name');
 
 			const selectCustom = select.getAttribute('data-special-select') || this.options.selectCustom;
-			const activeIndex = select.getAttribute('data-active-index') || this.options.activeIndex;
+			let activeIndex = select.getAttribute('data-active-index') || this.options.activeIndex;
 			const placeholder = select.getAttribute('data-placeholder') || this.options.placeholder;
 			const isDisabled = select.getAttribute('data-disabled') != null ? true : this.options.isDisabled;
 			const inputHtml = select.getAttribute('data-input-html') || this.options.inputHtml;
@@ -90,13 +90,25 @@ export class Select {
 			this.options.maxHeightList = select.getAttribute('data-select-max-height-list') || this.options.maxHeightList;
 			const prefix = select.getAttribute('data-prefix') || '';
 
+			// Если в нативном select уже установлено значение, находим его индекс
+			let usePlaceholder = placeholder;
+			if (select.value) {
+				const selectedIndex = Array.from(options).findIndex(opt => opt.value === select.value);
+				if (selectedIndex !== -1) {
+					activeIndex = selectedIndex;
+					// Если значение установлено, не показываем placeholder
+					usePlaceholder = '';
+					console.log(`mySelect: Found value "${select.value}" at index ${activeIndex} for select "${selectName}"`);
+				}
+			}
+
 			// Удаляем существующий кастомный селект если он есть
 			const existingCustomSelect = select.nextElementSibling;
 			if (existingCustomSelect && existingCustomSelect.classList.contains('mySelect')) {
 				existingCustomSelect.remove();
 			}
 
-			const customSelect = this.customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder, isDisabled, inputHtml, prefix });
+			const customSelect = this.customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder: usePlaceholder, isDisabled, inputHtml, prefix });
 			const b479 = window.matchMedia(`(min-width: 479px)`);
 
 			const selectInput = customSelect.querySelector(this.options.selectInput);
@@ -292,7 +304,7 @@ export class exSelect extends Select {
 				const selectName = select.getAttribute('name');
 
 				const selectCustom = select.getAttribute('data-special-select') || this.options.selectCustom;
-				const activeIndex = select.getAttribute('data-active-index') || this.options.activeIndex;
+				let activeIndex = select.getAttribute('data-active-index') || this.options.activeIndex;
 				const placeholder = select.getAttribute('data-placeholder') || this.options.placeholder;
 				const isDisabled = select.getAttribute('data-disabled') != null ? true : this.options.isDisabled;
 				const inputHtml = select.getAttribute('data-input-html') || this.options.inputHtml;
@@ -300,13 +312,24 @@ export class exSelect extends Select {
 				const selectMaxWidth = select.getAttribute('data-select-max-width') || this.options.selectMaxWidth;
 				const prefix = select.getAttribute('data-prefix') || '';
 
+				// Если в нативном select уже установлено значение, находим его индекс
+				let usePlaceholder = placeholder;
+				if (select.value) {
+					const selectedIndex = Array.from(options).findIndex(opt => opt.value === select.value);
+					if (selectedIndex !== -1) {
+						activeIndex = selectedIndex;
+						// Если значение установлено, не показываем placeholder
+						usePlaceholder = '';
+					}
+				}
+
 				// Удаляем существующий кастомный селект если он есть
 				const existingCustomSelect = select.nextElementSibling;
 				if (existingCustomSelect && existingCustomSelect.classList.contains('mySelect')) {
 					existingCustomSelect.remove();
 				}
 
-				const customSelect = this.customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder, isDisabled, inputHtml, prefix });
+				const customSelect = this.customSelectHtml({ selectName, selectCustom, options, activeIndex, placeholder: usePlaceholder, isDisabled, inputHtml, prefix });
 				const b479 = window.matchMedia(`(min-width: 479px)`);
 
 				if (b479.matches && selectMinWidth) {
