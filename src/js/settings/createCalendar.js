@@ -26,7 +26,7 @@ export const createCalendar = (input, options = {}) => {
   const defaultOptions = {
     locale: Russian,
     disableMobile: true,
-    defaultDate: input.value || '',
+    defaultDate: input.value || options.defaultDate || new Date(),
     onReady: (selectedDates, dateStr, instance) => {
       if (!instance.calendarContainer) return
 

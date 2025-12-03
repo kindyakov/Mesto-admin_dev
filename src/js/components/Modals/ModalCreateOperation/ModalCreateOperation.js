@@ -19,6 +19,7 @@ class ModalCreateOperation extends BaseModal {
     this.subcategories = []
     this.editMode = false
     this.editData = null
+    this.handlersInitialized = false
 
     this.init()
   }
@@ -42,6 +43,7 @@ class ModalCreateOperation extends BaseModal {
     this.validator = validate(this.form, { container: this.modalBody })
 
     this.events()
+    this.setupCategoryChangeHandler()
     this.setupSubcategoryInputHandler()
   }
 
@@ -61,7 +63,6 @@ class ModalCreateOperation extends BaseModal {
     this.populateWarehouses()
     this.populateCategories()
     this.populateSubcategories()
-    this.setupCategoryChangeHandler()
     this.setDefaultWarehouse()
 
     this.selects.init()
@@ -75,7 +76,6 @@ class ModalCreateOperation extends BaseModal {
     this.populateWarehouses()
     this.populateCategories()
     this.populateSubcategories()
-    this.setupCategoryChangeHandler()
 
     this.updateUI()
     this.fillFormWithData(data)
@@ -198,17 +198,18 @@ class ModalCreateOperation extends BaseModal {
   }
 
   setupCategoryChangeHandler() {
-    if (!this.categorySelect) return
+    if (!this.categorySelect || this.handlersInitialized) return
 
-    this.categorySelect.addEventListener('change', (e) => {
+    this.categoryChangeHandler = (e) => {
       const selectedCategoryId = e.target.value
       this.populateSubcategories(selectedCategoryId)
-      this.selects?.init()
       if (this.subcategoryInput) {
         this.subcategoryInput.value = ''
       }
       this.clearSubcategorySelect()
-    })
+    }
+
+    this.categorySelect.addEventListener('change', this.categoryChangeHandler)
   }
 
   handleCategoryChange(e) {
@@ -217,12 +218,17 @@ class ModalCreateOperation extends BaseModal {
   }
 
   setupSubcategoryInputHandler() {
-    if (!this.subcategorySelect || !this.subcategoryInput) return
+    if (!this.subcategorySelect || !this.subcategoryInput || this.handlersInitialized) return
 
-    this.subcategorySelect.addEventListener('change', this.handleSubcategorySelectChange.bind(this))
-    this.subcategoryInput.addEventListener('input', () => {
+    this.handlersInitialized = true
+
+    this.subcategorySelectChangeHandler = this.handleSubcategorySelectChange.bind(this)
+    this.subcategoryInputHandler = () => {
       this.clearSubcategorySelect()
-    })
+    }
+
+    this.subcategorySelect.addEventListener('change', this.subcategorySelectChangeHandler)
+    this.subcategoryInput.addEventListener('input', this.subcategoryInputHandler)
   }
 
   handleSubcategorySelectChange(e) {
@@ -287,14 +293,11 @@ class ModalCreateOperation extends BaseModal {
         formData.set('subcategory', this.subcategorySelect.value)
       }
 
-      formData.delete('flatpickr-month')
+      // Удаляем вспомогательное поле subcategory_select
+      formData.delete('subcategory_select')
+
       // Convert FormData to object
       Array.from(formData).forEach(arr => data[arr[0]] = arr[1])
-
-      // Add warehouse context
-      if (!data.warehouse_id && window.app.warehouse) {
-        data.warehouse_id = window.app.warehouse.warehouse_id
-      }
 
       // Convert warehouse_id and amount to numbers
       if (data.warehouse_id) {

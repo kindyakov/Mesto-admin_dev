@@ -1,4 +1,4 @@
-import { createCalendar } from "../../../settings/createCalendar.js";
+import datePicker from "../../../configs/datepicker.js";
 import { createValidator } from "../../../settings/createValidator.js";
 
 const getMinDate = () => {
@@ -29,10 +29,12 @@ export function validate(form, options) {
 
   const operationDate = form.querySelector('input[name="operation_date"]')
 
-  const calendar = createCalendar(operationDate, {
-    dateFormat: 'd.m.Y',
+  const calendar = datePicker(operationDate, {
+    dateFormat: 'dd.MM.yyyy',
     maxDate: new Date(),
-    appendTo: operationDate.parentElement
+    position: 'bottom left',
+    autoClose: true,
+    container: operationDate.parentElement
   })
 
   const inputAmount = form.querySelector('[name="amount"]')
