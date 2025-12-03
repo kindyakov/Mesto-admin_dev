@@ -144,7 +144,6 @@ class TableOperations extends Table {
 
     try {
       const { api } = await import('../../../settings/api.js');
-      const { outputInfo } = await import('../../../utils/outputinfo.js');
 
       const response = await api.post('/_delete_operation_', {
         operation_id: operationId
@@ -152,28 +151,7 @@ class TableOperations extends Table {
 
       if (response.status === 200) {
         window.app.notify.show(response.data);
-
-        // Находим и удаляем строку из таблицы
-        const rowNode = this.gridApi.getRowNode(operationId);
-        if (rowNode) {
-          this.gridApi.applyTransaction({ remove: [rowNode.data] });
-        } else {
-          // Если не нашли по ID, ищем по operation_id
-          const rowData = [];
-          this.gridApi.forEachNode(node => {
-            if (node.data.operation_id === operationId) {
-              rowData.push(node.data);
-            }
-          });
-          if (rowData.length > 0) {
-            this.gridApi.applyTransaction({ remove: rowData });
-          }
-        }
-
-        // Обновляем счетчик общего количества
-        if (this.cntAll) {
-          this.cntAll -= 1;
-        }
+        await this.refresh();
       }
     } catch (error) {
       console.error('Error deleting operation:', error);
@@ -190,31 +168,6 @@ class TableOperations extends Table {
     this.gridApi.setGridOption('rowData', operations);
   }
 
-  addOperation(operationData) {
-    console.log('TableOperations.addOperation called with:', operationData);
-
-    // Добавляем новую строку в начало таблицы
-    const result = this.gridApi.applyTransaction({ add: [operationData], addIndex: 0 });
-    console.log('applyTransaction result:', result);
-
-    // Обновляем счетчик
-    if (this.cntAll !== undefined) {
-      this.cntAll += 1;
-    }
-  }
-
-  updateOperation(operationData) {
-    console.log('TableOperations.updateOperation called with:', operationData);
-
-    // Обновляем существующую строку
-    // Благодаря getRowId, AG Grid автоматически найдет строку по operation_id
-    const result = this.gridApi.applyTransaction({ update: [operationData] });
-    console.log('applyTransaction result:', result);
-
-    if (!result || !result.update || result.update.length === 0) {
-      console.log('Row not found or not updated for operation_id:', operationData.operation_id);
-    }
-  }
 }
 
 export default TableOperations;

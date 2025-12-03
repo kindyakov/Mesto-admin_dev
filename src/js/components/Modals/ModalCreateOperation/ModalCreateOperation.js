@@ -9,7 +9,7 @@ import { getCategories } from "../../../settings/request.js";
 
 
 class ModalCreateOperation extends BaseModal {
-  constructor(steps, options = {}) {
+  constructor(options = {}) {
     super(content, {
       cssClass: ['modal-create-operation'],
       ...options
@@ -250,35 +250,17 @@ class ModalCreateOperation extends BaseModal {
       action
         .then((response) => {
           if (response?.msg_type == 'success') {
-            console.log('Response operationData:', response.operationData);
-
-            // Обновляем таблицу
             const operationsTable = window.app.modalMap?.['modal-operations']
-            if (operationsTable && response.operationData) {
-              if (this.editMode) {
-                // При редактировании обновляем строку и закрываем окно
-                console.log('Updating operation in table. operation_id:', response.operationData.operation_id, 'data:', response.operationData);
-                if (operationsTable.updateOperation) {
-                  operationsTable.updateOperation(response.operationData)
-                } else if (operationsTable.refresh) {
-                  operationsTable.refresh()
-                }
-                this.close()
-              } else {
-                // При создании добавляем новую строку в начало
-                console.log('Adding operation to table:', response.operationData);
-                if (operationsTable.addOperation) {
-                  operationsTable.addOperation(response.operationData)
-                } else if (operationsTable.refresh) {
-                  operationsTable.refresh()
-                }
-                // Очищаем только amount и comment
-                if (this.amountInput) {
-                  this.amountInput.value = ''
-                }
-                if (this.commentInput) {
-                  this.commentInput.value = ''
-                }
+            operationsTable?.refresh()
+
+            if (this.editMode) {
+              this.close()
+            } else {
+              if (this.amountInput) {
+                this.amountInput.value = ''
+              }
+              if (this.commentInput) {
+                this.commentInput.value = ''
               }
             }
           }
@@ -297,15 +279,7 @@ class ModalCreateOperation extends BaseModal {
       outputInfo(response.data)
 
 
-      const operationData = {
-        ...data,
-        operation_id: Date.now() // Временный ID
-      }
-
-      return {
-        ...response.data,
-        operationData: operationData
-      }
+      return response.data
     } catch (error) {
       console.error(error)
       window.app.notify.show({
@@ -325,10 +299,7 @@ class ModalCreateOperation extends BaseModal {
       if (response.status !== 200) return
       outputInfo(response.data)
 
-      return {
-        ...response.data,
-        operationData: data
-      }
+      return response.data
     } catch (error) {
       console.error(error)
       window.app.notify.show({

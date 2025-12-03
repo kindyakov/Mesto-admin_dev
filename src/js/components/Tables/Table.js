@@ -391,6 +391,10 @@ class Table {
 		this.tableRendering(this.queryParams);
 	}
 
+	refresh(queryParams = this.queryParams) {
+		return this.tableRendering(queryParams);
+	}
+
 	getAllRows() {
 		let rowData = [];
 		const rowCount = this.gridApi.getDisplayedRowCount();
