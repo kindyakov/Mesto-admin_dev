@@ -31,7 +31,8 @@ class ModalCreateOperation extends BaseModal {
     this.form = this.modalBody.querySelector('.form-add-operation')
     this.btnCreateOperation = this.modalBody.querySelector('.btn-create-operation')
     this.categorySelect = this.modalBody.querySelector('[name="category"]')
-    this.subcategorySelect = this.modalBody.querySelector('[name="subcategory"]')
+    this.subcategorySelect = this.modalBody.querySelector('[name="subcategory_select"]')
+    this.subcategoryInput = this.modalBody.querySelector('[name="subcategory"]')
     this.warehouseSelect = this.modalBody.querySelector('[name="warehouse_id"]')
     this.amountInput = this.modalBody.querySelector('[name="amount"]')
     this.commentInput = this.modalBody.querySelector('[name="comment"]')
@@ -41,6 +42,7 @@ class ModalCreateOperation extends BaseModal {
     this.validator = validate(this.form, { container: this.modalBody })
 
     this.events()
+    this.setupSubcategoryInputHandler()
   }
 
   events() {
@@ -103,8 +105,12 @@ class ModalCreateOperation extends BaseModal {
       this.categorySelect.value = data.category
     }
 
+    if (this.subcategoryInput && data.subcategory) {
+      this.subcategoryInput.value = data.subcategory
+    }
+
     if (this.subcategorySelect && data.subcategory) {
-      this.subcategorySelect.value = data.subcategory
+      this.setSubcategorySelectValue(data.subcategory)
     }
 
     if (this.warehouseSelect && data.warehouse_id) {
@@ -176,12 +182,19 @@ class ModalCreateOperation extends BaseModal {
   populateSubcategories() {
     if (!this.subcategorySelect) return
 
-    const optionsHtml = this.subcategories
+    const options = this.subcategories
       .filter(subcategory => subcategory)
       .map(subcategory => `<option value="${subcategory}">${subcategory}</option>`)
-      .join('')
 
-    this.subcategorySelect.innerHTML = optionsHtml
+    this.subcategorySelect.innerHTML = ['<option value="">Выберите подкатегорию</option>', ...options].join('')
+
+    const currentValue = this.subcategoryInput?.value?.trim()
+
+    if (currentValue && this.setSubcategorySelectValue(currentValue)) {
+      return
+    }
+
+    this.subcategorySelect.value = ''
   }
 
   setupCategoryChangeHandler() {
@@ -190,12 +203,56 @@ class ModalCreateOperation extends BaseModal {
     this.categorySelect.addEventListener('change', (e) => {
       const selectedCategoryId = e.target.value
       this.populateSubcategories(selectedCategoryId)
+      this.selects?.init()
+      if (this.subcategoryInput) {
+        this.subcategoryInput.value = ''
+      }
+      this.clearSubcategorySelect()
     })
   }
 
   handleCategoryChange(e) {
     const selectedCategoryId = e.target.value
     this.populateSubcategories(selectedCategoryId)
+  }
+
+  setupSubcategoryInputHandler() {
+    if (!this.subcategorySelect || !this.subcategoryInput) return
+
+    this.subcategorySelect.addEventListener('change', this.handleSubcategorySelectChange.bind(this))
+    this.subcategoryInput.addEventListener('input', () => {
+      this.clearSubcategorySelect()
+    })
+  }
+
+  handleSubcategorySelectChange(e) {
+    const value = e.target.value
+    if (!value) return
+    this.subcategoryInput.value = value
+  }
+
+  clearSubcategorySelect() {
+    if (!this.subcategorySelect) return
+    this.subcategorySelect.value = ''
+    this.resetCustomSubcategoryValue()
+  }
+
+  resetCustomSubcategoryValue(value = '') {
+    if (!this.selects || typeof this.selects.setValue !== 'function') return
+    if (!this.selects.selectsCustom || !this.selects.selectsCustom.length) return
+    this.selects.setValue(value, 'subcategory_select')
+  }
+
+  setSubcategorySelectValue(value) {
+    if (!this.subcategorySelect || !value) return false
+    const hasOption = Array.from(this.subcategorySelect.options).some(option => option.value === value)
+
+    if (hasOption) {
+      this.subcategorySelect.value = value
+      return true
+    }
+
+    return false
   }
 
   setDefaultWarehouse() {
@@ -221,6 +278,13 @@ class ModalCreateOperation extends BaseModal {
       const amount = formData.get('amount')
       if (amount) {
         formData.set('amount', amount.replace(/[^0-9]/g, ''))
+      }
+
+      const subcategoryValue = formData.get('subcategory')?.trim()
+      if (subcategoryValue) {
+        formData.set('subcategory', subcategoryValue)
+      } else if (this.subcategorySelect?.value) {
+        formData.set('subcategory', this.subcategorySelect.value)
       }
 
       formData.delete('flatpickr-month')
@@ -262,6 +326,10 @@ class ModalCreateOperation extends BaseModal {
               if (this.commentInput) {
                 this.commentInput.value = ''
               }
+              if (this.subcategoryInput) {
+                this.subcategoryInput.value = ''
+              }
+              this.clearSubcategorySelect()
             }
           }
         })

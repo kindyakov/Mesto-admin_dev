@@ -261,6 +261,8 @@ export class Select {
 		if (defaultSelect) {
 			defaultSelect.value = optionValue;
 			this.selectValue = optionValue;
+			const changeEvent = new Event('change', { bubbles: true });
+			defaultSelect.dispatchEvent(changeEvent);
 		}
 	}
 
