@@ -31,9 +31,12 @@ class ModalCreateOperation extends BaseModal {
 
     this.form = this.modalBody.querySelector('.form-add-operation')
     this.btnCreateOperation = this.modalBody.querySelector('.btn-create-operation')
-    this.categorySelect = this.modalBody.querySelector('[name="category"]')
+    this.categorySelect = this.modalBody.querySelector('[name="category_select"]')
+    this.categoryInput = this.modalBody.querySelector('[name="category_input"]')
+    this.categoryInputWrapper = this.modalBody.querySelector('[data-field="category-input"]')
     this.subcategorySelect = this.modalBody.querySelector('[name="subcategory_select"]')
-    this.subcategoryInput = this.modalBody.querySelector('[name="subcategory"]')
+    this.subcategoryInput = this.modalBody.querySelector('[name="subcategory_input"]')
+    this.subcategoryInputWrapper = this.modalBody.querySelector('[data-field="subcategory-input"]')
     this.warehouseSelect = this.modalBody.querySelector('[name="warehouse_id"]')
     this.amountInput = this.modalBody.querySelector('[name="amount"]')
     this.commentInput = this.modalBody.querySelector('[name="comment"]')
@@ -43,8 +46,8 @@ class ModalCreateOperation extends BaseModal {
     this.validator = validate(this.form, { container: this.modalBody })
 
     this.events()
-    this.setupCategoryChangeHandler()
-    this.setupSubcategoryInputHandler()
+    this.setupCategoryHandler()
+    this.setupSubcategoryHandler()
   }
 
   events() {
@@ -93,7 +96,7 @@ class ModalCreateOperation extends BaseModal {
     }
   }
 
-  fillFormWithData(data) {
+  async fillFormWithData(data) {
     if (!data) return
 
     // Заполняем поля формы
@@ -102,15 +105,33 @@ class ModalCreateOperation extends BaseModal {
     }
 
     if (this.categorySelect && data.category) {
-      this.categorySelect.value = data.category
-    }
-
-    if (this.subcategoryInput && data.subcategory) {
-      this.subcategoryInput.value = data.subcategory
+      // Проверяем есть ли категория в списке
+      const hasCategory = this.categories.includes(data.category)
+      if (hasCategory) {
+        this.categorySelect.value = data.category
+        // Загружаем подкатегории для этой категории
+        await this.loadSubcategories(data.category)
+      } else {
+        // Если категории нет в списке, показываем поле ввода
+        this.categorySelect.value = 'new_category'
+        if (this.categoryInputWrapper) this.categoryInputWrapper.style.display = 'block'
+        if (this.categoryInput) this.categoryInput.value = data.category
+      }
     }
 
     if (this.subcategorySelect && data.subcategory) {
-      this.setSubcategorySelectValue(data.subcategory)
+      // Проверяем есть ли подкатегория в списке
+      setTimeout(() => {
+        const hasSubcategory = Array.from(this.subcategorySelect.options).some(opt => opt.value === data.subcategory)
+        if (hasSubcategory) {
+          this.subcategorySelect.value = data.subcategory
+        } else {
+          // Если подкатегории нет в списке, показываем поле ввода
+          this.subcategorySelect.value = 'new_subcategory'
+          if (this.subcategoryInputWrapper) this.subcategoryInputWrapper.style.display = 'block'
+          if (this.subcategoryInput) this.subcategoryInput.value = data.subcategory
+        }
+      }, 100)
     }
 
     if (this.warehouseSelect && data.warehouse_id) {
@@ -135,6 +156,10 @@ class ModalCreateOperation extends BaseModal {
     this.subcategories = []
     this.editMode = false
     this.editData = null
+
+    // Скрываем поля ввода при закрытии
+    if (this.categoryInputWrapper) this.categoryInputWrapper.style.display = 'none'
+    if (this.subcategoryInputWrapper) this.subcategoryInputWrapper.style.display = 'none'
   }
 
   async fetchCategories() {
@@ -172,93 +197,100 @@ class ModalCreateOperation extends BaseModal {
   populateCategories() {
     if (!this.categorySelect) return
 
-    const optionsHtml = this.categories
+    const options = this.categories
       .map(category => `<option value="${category}">${category}</option>`)
-      .join('')
 
-    this.categorySelect.innerHTML = optionsHtml
+    this.categorySelect.innerHTML = [
+      '<option value="">Выберите категорию</option>',
+      ...options,
+      '<option value="new_category">+ Новая категория</option>'
+    ].join('')
   }
 
   populateSubcategories() {
     if (!this.subcategorySelect) return
 
-    const options = this.subcategories
-      .filter(subcategory => subcategory)
-      .map(subcategory => `<option value="${subcategory}">${subcategory}</option>`)
-
-    this.subcategorySelect.innerHTML = ['<option value="">Выберите подкатегорию</option>', ...options].join('')
-
-    const currentValue = this.subcategoryInput?.value?.trim()
-
-    if (currentValue && this.setSubcategorySelectValue(currentValue)) {
-      return
-    }
-
-    this.subcategorySelect.value = ''
+    this.subcategorySelect.innerHTML = '<option value="">Выберите подкатегорию</option><option value="new_subcategory">+ Новая подкатегория</option>'
   }
 
-  setupCategoryChangeHandler() {
+  setupCategoryHandler() {
     if (!this.categorySelect || this.handlersInitialized) return
 
-    this.categoryChangeHandler = (e) => {
-      const selectedCategoryId = e.target.value
-      this.populateSubcategories(selectedCategoryId)
-      if (this.subcategoryInput) {
-        this.subcategoryInput.value = ''
+    this.categorySelect.addEventListener('change', async (e) => {
+      const value = e.target.value
+
+      if (value === 'new_category') {
+        // Показываем поле ввода новой категории
+        if (this.categoryInputWrapper) this.categoryInputWrapper.style.display = 'block'
+        this.categoryInput?.focus()
+        // Очищаем подкатегории
+        this.subcategorySelect.innerHTML = '<option value="">Выберите подкатегорию</option><option value="new_subcategory">+ Новая подкатегория</option>'
+        this.selects.init()
+      } else {
+        // Скрываем поле ввода
+        if (this.categoryInputWrapper) this.categoryInputWrapper.style.display = 'none'
+        if (this.categoryInput) this.categoryInput.value = ''
+
+        // Загружаем подкатегории для выбранной категории
+        if (value) {
+          await this.loadSubcategories(value)
+        } else {
+          this.subcategorySelect.innerHTML = '<option value="">Выберите подкатегорию</option><option value="new_subcategory">+ Новая подкатегория</option>'
+          this.selects.init()
+        }
       }
-      this.clearSubcategorySelect()
-    }
 
-    this.categorySelect.addEventListener('change', this.categoryChangeHandler)
+      // Скрываем поле ввода подкатегории и очищаем
+      if (this.subcategoryInputWrapper) this.subcategoryInputWrapper.style.display = 'none'
+      if (this.subcategoryInput) this.subcategoryInput.value = ''
+      this.subcategorySelect.value = ''
+    })
   }
 
-  handleCategoryChange(e) {
-    const selectedCategoryId = e.target.value
-    this.populateSubcategories(selectedCategoryId)
-  }
-
-  setupSubcategoryInputHandler() {
-    if (!this.subcategorySelect || !this.subcategoryInput || this.handlersInitialized) return
+  setupSubcategoryHandler() {
+    if (!this.subcategorySelect || this.handlersInitialized) return
 
     this.handlersInitialized = true
 
-    this.subcategorySelectChangeHandler = this.handleSubcategorySelectChange.bind(this)
-    this.subcategoryInputHandler = () => {
-      this.clearSubcategorySelect()
+    this.subcategorySelect.addEventListener('change', (e) => {
+      const value = e.target.value
+
+      if (value === 'new_subcategory') {
+        // Показываем поле ввода новой подкатегории
+        if (this.subcategoryInputWrapper) this.subcategoryInputWrapper.style.display = 'block'
+        this.subcategoryInput?.focus()
+      } else {
+        // Скрываем поле ввода
+        if (this.subcategoryInputWrapper) this.subcategoryInputWrapper.style.display = 'none'
+        if (this.subcategoryInput) this.subcategoryInput.value = ''
+      }
+    })
+  }
+
+  async loadSubcategories(category) {
+    try {
+      const response = await api.get('/_get_subcategories_', { params: { category } })
+
+      if (response.status === 200 && response.data.subcategories) {
+        const subcategories = response.data.subcategories
+
+        const options = subcategories
+          .filter(sub => sub)
+          .map(sub => `<option value="${sub}">${sub}</option>`)
+
+        this.subcategorySelect.innerHTML = [
+          '<option value="">Выберите подкатегорию</option>',
+          ...options,
+          '<option value="new_subcategory">+ Новая подкатегория</option>'
+        ].join('')
+
+        this.selects.init()
+      }
+    } catch (error) {
+      console.error('Error loading subcategories:', error)
+      this.subcategorySelect.innerHTML = '<option value="">Выберите подкатегорию</option><option value="new_subcategory">+ Новая подкатегория</option>'
+      this.selects.init()
     }
-
-    this.subcategorySelect.addEventListener('change', this.subcategorySelectChangeHandler)
-    this.subcategoryInput.addEventListener('input', this.subcategoryInputHandler)
-  }
-
-  handleSubcategorySelectChange(e) {
-    const value = e.target.value
-    if (!value) return
-    this.subcategoryInput.value = value
-  }
-
-  clearSubcategorySelect() {
-    if (!this.subcategorySelect) return
-    this.subcategorySelect.value = ''
-    this.resetCustomSubcategoryValue()
-  }
-
-  resetCustomSubcategoryValue(value = '') {
-    if (!this.selects || typeof this.selects.setValue !== 'function') return
-    if (!this.selects.selectsCustom || !this.selects.selectsCustom.length) return
-    this.selects.setValue(value, 'subcategory_select')
-  }
-
-  setSubcategorySelectValue(value) {
-    if (!this.subcategorySelect || !value) return false
-    const hasOption = Array.from(this.subcategorySelect.options).some(option => option.value === value)
-
-    if (hasOption) {
-      this.subcategorySelect.value = value
-      return true
-    }
-
-    return false
   }
 
   setDefaultWarehouse() {
@@ -286,15 +318,30 @@ class ModalCreateOperation extends BaseModal {
         formData.set('amount', amount.replace(/[^0-9]/g, ''))
       }
 
-      const subcategoryValue = formData.get('subcategory')?.trim()
-      if (subcategoryValue) {
-        formData.set('subcategory', subcategoryValue)
-      } else if (this.subcategorySelect?.value) {
-        formData.set('subcategory', this.subcategorySelect.value)
+      // Обработка категории
+      const categorySelect = formData.get('category_select')
+      const categoryInput = formData.get('category_input')?.trim()
+      if (categorySelect === 'new_category' && categoryInput) {
+        formData.set('category', categoryInput)
+      } else if (categorySelect) {
+        formData.set('category', categorySelect)
       }
+      formData.delete('category_select')
+      formData.delete('category_input')
 
-      // Удаляем вспомогательное поле subcategory_select
+      // Обработка подкатегории (необязательная для новых категорий)
+      const subcategorySelect = formData.get('subcategory_select')
+      const subcategoryInput = formData.get('subcategory_input')?.trim()
+      if (subcategorySelect === 'new_subcategory' && subcategoryInput) {
+        formData.set('subcategory', subcategoryInput)
+      } else if (subcategorySelect && subcategorySelect !== 'new_subcategory') {
+        formData.set('subcategory', subcategorySelect)
+      } else {
+        // Для новых категорий subcategory может отсутствовать
+        formData.set('subcategory', '')
+      }
       formData.delete('subcategory_select')
+      formData.delete('subcategory_input')
 
       // Convert FormData to object
       Array.from(formData).forEach(arr => data[arr[0]] = arr[1])
@@ -323,16 +370,25 @@ class ModalCreateOperation extends BaseModal {
             if (this.editMode) {
               this.close()
             } else {
+              // Очищаем только amount и comment после создания
               if (this.amountInput) {
                 this.amountInput.value = ''
               }
               if (this.commentInput) {
                 this.commentInput.value = ''
               }
+
+              // Очищаем поля ввода категории и подкатегории если они видимы
+              if (this.categoryInput) {
+                this.categoryInput.value = ''
+              }
               if (this.subcategoryInput) {
                 this.subcategoryInput.value = ''
               }
-              this.clearSubcategorySelect()
+
+              // Скрываем поля ввода
+              if (this.categoryInputWrapper) this.categoryInputWrapper.style.display = 'none'
+              if (this.subcategoryInputWrapper) this.subcategoryInputWrapper.style.display = 'none'
             }
           }
         })

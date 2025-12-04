@@ -51,25 +51,43 @@ export function validate(form, options) {
 
   validator.calendars = [calendar]
 
+  const categorySelect = form.querySelector('[name="category_select"]')
+  const categoryInput = form.querySelector('[name="category_input"]')
+  const subcategorySelect = form.querySelector('[name="subcategory_select"]')
+  const subcategoryInput = form.querySelector('[name="subcategory_input"]')
+
   validator.addField(form.querySelector('[name="operation_date"]'), [
     {
       rule: 'required',
       errorMessage: 'Введите дату операции',
     },
-  ]).addField(form.querySelector('[name="category"]'), [
+  ]).addField(categorySelect, [
     {
-      rule: 'required',
-      errorMessage: 'Выберите категорию',
+      validator: () => {
+        const selectValue = categorySelect.value
+        const inputValue = categoryInput?.value?.trim()
+        return selectValue === 'new_category' ? !!inputValue : !!selectValue
+      },
+      errorMessage: 'Выберите или введите категорию',
     },
   ]).addField(form.querySelector('[name="warehouse_id"]'), [
     {
       rule: 'required',
       errorMessage: 'Выберите склад',
     },
-  ]).addField(form.querySelector('[name="subcategory"]'), [
+  ]).addField(subcategorySelect, [
     {
-      rule: 'required',
-      errorMessage: 'Выберите подкатегорию',
+      validator: () => {
+        // Если выбрана новая категория, подкатегория необязательна
+        if (categorySelect.value === 'new_category') {
+          return true
+        }
+        
+        const selectValue = subcategorySelect.value
+        const inputValue = subcategoryInput?.value?.trim()
+        return selectValue === 'new_subcategory' ? !!inputValue : !!selectValue
+      },
+      errorMessage: 'Выберите или введите подкатегорию',
     },
   ]).addField(form.querySelector('[name="amount"]'), [
     {

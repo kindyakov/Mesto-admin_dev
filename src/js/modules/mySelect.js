@@ -99,7 +99,6 @@ export class Select {
 					activeIndex = selectedIndex;
 					// Если значение установлено, не показываем placeholder
 					usePlaceholder = '';
-					console.log(`mySelect: Found value "${select.value}" at index ${activeIndex} for select "${selectName}"`);
 				}
 			}
 

@@ -16,9 +16,14 @@
         <div class="modal__form_item">
           <span>Категория расхода</span>
           <div class="modal__form_wp-input wp-input">
-            <select name="category" class="init-custom-select" data-special-select="select-modal-create-operation">
+            <select name="category_select" class="init-custom-select"
+              data-special-select="select-modal-create-operation" data-select-max-height-list="300">
               <option value="">Выберите категорию</option>
             </select>
+          </div>
+          <div class="modal__form_wp-input wp-input" data-field="category-input" style="display: none;">
+            <input type="text" class="modal__form_input input" name="category_input" autocomplete="off"
+              placeholder="Введите новую категорию">
           </div>
         </div>
         <div class="modal__form_item">
@@ -32,15 +37,17 @@
         <div class="modal__form_item">
           <span>Подкатегоря расхода</span>
           <div class="modal__form_wp-input wp-input">
-            <input type="text" class="modal__form_input input" name="subcategory" autocomplete="off"
-              placeholder="Введите или выберите подкатегорию">
-          </div>
-          <div class="modal__form_wp-input wp-input">
-            <select name="subcategory_select" class="init-custom-select" data-special-select="select-modal-create-operation">
+            <select name="subcategory_select" class="init-custom-select"
+              data-special-select="select-modal-create-operation" data-select-max-height-list="300">
               <option value="">Выберите подкатегорию</option>
             </select>
           </div>
+          <div class="modal__form_wp-input wp-input" data-field="subcategory-input" style="display: none;">
+            <input type="text" class="modal__form_input input" name="subcategory_input" autocomplete="off"
+              placeholder="Введите новую подкатегорию">
+          </div>
         </div>
+        <div></div>
         <div class="modal__form_item">
           <span>Сумма расхода</span>
           <div class="modal__form_wp-input wp-input">

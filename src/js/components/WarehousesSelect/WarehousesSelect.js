@@ -50,8 +50,8 @@ class WarehousesSelect {
 	}
 
 	initSelectCustom(activeIndex) {
-		this.selectCustom.options.activeIndex = activeIndex;
 		this.selectCustom.init();
+		this.selectCustom.setValue(this.warehouses[activeIndex].warehouse_id);
 	}
 
 	setupWarehouseSelection(warehouses) {
