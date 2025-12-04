@@ -57,6 +57,7 @@ export const createCalendar = (input, options = {}) => {
         activeIndex: instance.currentMonth,
         maxHeightList: 279,
         selectMinWidth: 130,
+        dispatchChangeEvent: false,
         onChange: (e, select, optionValue) => {
           if (options.minDate) {
             const minDate = options.minDate

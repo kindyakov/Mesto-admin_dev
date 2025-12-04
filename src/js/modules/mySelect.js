@@ -27,6 +27,7 @@ export class Select {
 			placeholder: '',
 			isDev: false,
 			isDisabled: false,
+			dispatchChangeEvent: true,
 			inputHtml: `<svg class='icon icon-arrow'><use xlink:href='#arrow'></use></svg>`,
 			selectMinWidth: null,
 			selectMaxWidth: null,
@@ -261,8 +262,12 @@ export class Select {
 		if (defaultSelect) {
 			defaultSelect.value = optionValue;
 			this.selectValue = optionValue;
-			const changeEvent = new Event('change', { bubbles: true });
-			defaultSelect.dispatchEvent(changeEvent);
+
+			// Диспатчим change событие только если это разрешено в опциях
+			if (this.options.dispatchChangeEvent) {
+				const changeEvent = new Event('change', { bubbles: true });
+				defaultSelect.dispatchEvent(changeEvent);
+			}
 		}
 	}
 
