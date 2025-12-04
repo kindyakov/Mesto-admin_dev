@@ -81,7 +81,7 @@ class ModalCreateOperation extends BaseModal {
     this.populateSubcategories()
 
     this.updateUI()
-    this.fillFormWithData(data)
+    await this.fillFormWithData(data)
 
     this.selects.init()
   }
@@ -104,6 +104,10 @@ class ModalCreateOperation extends BaseModal {
       this.operationDateInput.value = dateFormatter(data.operation_date)
     }
 
+    if (this.warehouseSelect && data.warehouse_id) {
+      this.warehouseSelect.value = data.warehouse_id
+    }
+
     if (this.categorySelect && data.category) {
       // Проверяем есть ли категория в списке
       const hasCategory = this.categories.includes(data.category)
@@ -119,23 +123,20 @@ class ModalCreateOperation extends BaseModal {
       }
     }
 
-    if (this.subcategorySelect && data.subcategory) {
-      // Проверяем есть ли подкатегория в списке
-      setTimeout(() => {
-        const hasSubcategory = Array.from(this.subcategorySelect.options).some(opt => opt.value === data.subcategory)
-        if (hasSubcategory) {
-          this.subcategorySelect.value = data.subcategory
-        } else {
-          // Если подкатегории нет в списке, показываем поле ввода
-          this.subcategorySelect.value = 'new_subcategory'
-          if (this.subcategoryInputWrapper) this.subcategoryInputWrapper.style.display = 'block'
-          if (this.subcategoryInput) this.subcategoryInput.value = data.subcategory
-        }
-      }, 100)
-    }
+    if (data.subcategory) {
+      // Ждем немного, чтобы подкатегории загрузились
+      await new Promise(resolve => setTimeout(resolve, 150))
 
-    if (this.warehouseSelect && data.warehouse_id) {
-      this.warehouseSelect.value = data.warehouse_id
+      // Проверяем есть ли подкатегория в списке
+      const hasSubcategory = Array.from(this.subcategorySelect.options).some(opt => opt.value === data.subcategory)
+      if (hasSubcategory) {
+        this.subcategorySelect.value = data.subcategory
+      } else {
+        // Если подкатегории нет в списке, показываем поле ввода
+        this.subcategorySelect.value = 'new_subcategory'
+        if (this.subcategoryInputWrapper) this.subcategoryInputWrapper.style.display = 'block'
+        if (this.subcategoryInput) this.subcategoryInput.value = data.subcategory
+      }
     }
 
     if (this.amountInput && data.amount) {
