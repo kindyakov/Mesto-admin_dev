@@ -40,16 +40,25 @@ export class CheckboxManager {
 		this.checkboxes[0].checked = flag;
 	}
 
-	htmlColList({ currentData, name, dataWithoutCurrentFilter }) {
-
-		function html({ name, val, i, isAll = false, isChecked = true }) {
-			let text = val
+	htmlColList({ currentData, name, dataWithoutCurrentFilter, labelFormatter }) {
+		const formatLabel = val => {
+			if (typeof labelFormatter === 'function') {
+				return labelFormatter(val);
+			}
 
 			if (val == 'f') {
-				text = 'физ.лицо'
-			} else if (val == 'u') {
-				text = 'юр.лицо'
+				return 'физ.лицо';
 			}
+
+			if (val == 'u') {
+				return 'юр.лицо';
+			}
+
+			return val;
+		};
+
+		function html({ name, val, i, isAll = false, isChecked = true }) {
+			const text = formatLabel(val);
 
 			return `
       <li ${i == 0 ? 'style="position: sticky;top: 0;background: #F8F8F8;z-index: 1;"' : ''}>
