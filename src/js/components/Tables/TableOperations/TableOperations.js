@@ -14,7 +14,7 @@ class TableOperations extends Table {
           headerName: 'Дата',
           field: 'operation_date',
           minWidth: 90,
-          flex: 0.3,
+          flex: 0.2,
           valueFormatter: params => dateFormatter(params.value)
         },
         {
@@ -37,7 +37,7 @@ class TableOperations extends Table {
           headerName: 'Категория',
           field: 'category',
           minWidth: 100,
-          flex: 0.5,
+          flex: 0.3,
         },
         {
           headerName: 'Подкатегория',
@@ -46,9 +46,9 @@ class TableOperations extends Table {
           flex: 0.3,
         },
         {
-          headerName: 'Сумма платежа (₽)',
+          headerName: 'Сумма платежа',
           field: 'amount',
-          minWidth: 100,
+          minWidth: 175,
           flex: 0.3,
           valueFormatter: params => formattingPrice(params.value)
         },
@@ -66,11 +66,19 @@ class TableOperations extends Table {
           sortable: false,
           cellRenderer: params => this.actionCellRenderer(params),
         }
-      ]
+      ],
+      defaultColDef: {
+        filter: 'agTextColumnFilter',
+        floatingFilter: true, // Добавляет панельку под заголовком
+        closeOnApply: true,
+        sortable: false
+        // filter: 'agSetColumnFilter'
+      },
+      pagination: false
     };
 
     const defaultParams = {
-      selectTypeUser: true,
+      isPagination: false
     };
 
     const mergedOptions = Object.assign({}, defaultOptions, options);
@@ -165,7 +173,7 @@ class TableOperations extends Table {
 
   onRendering({ operations = [], cnt_pages, page, cnt_all = 0 }) {
     this.cntAll = cnt_all;
-    this.pagination.setPage(page, cnt_pages, cnt_all);
+    // this.pagination.setPage(page, cnt_pages, cnt_all);
     this.gridApi.setGridOption('rowData', operations);
     renderTextHeader({
       tableElement: this.table,

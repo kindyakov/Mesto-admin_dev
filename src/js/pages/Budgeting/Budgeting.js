@@ -11,7 +11,7 @@ class Budgeting extends Page {
           tableSelector: '.table-operations',
           TableComponent: TableOperations,
           options: {
-            paginationPageSize: 15
+            paginationPageSize: 1000
           },
           params: {
             getData: getOperations
