@@ -248,6 +248,18 @@ export const pages = {
 			return true;
 		}
 	},
+	'administrations/effectiveness': {
+		path: 'Dashboards/Effectiveness/Effectiveness.js',
+		accessCheck: ({ tab, content, user, }) => {
+			return true;
+		}
+	},
+	'registry/effectiveness': {
+		path: 'Dashboards/Effectiveness/Effectiveness.js',
+		accessCheck: ({ tab, content, user }) => {
+			return true;
+		}
+	},
 	messages: {
 		path: 'Messages/Messages.js',
 		accessCheck: ({ tab, content, user }) => {

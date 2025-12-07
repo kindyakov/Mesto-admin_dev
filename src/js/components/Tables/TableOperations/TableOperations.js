@@ -2,6 +2,7 @@ import Table from '../Table.js';
 import { dateFormatter } from '../../../settings/dateFormatter.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { actions } from '../utils/actions.js';
+import { renderTextHeader } from '../utils/renderTextHeader.js';
 import { createElement } from '../../../settings/createElement.js';
 
 class TableOperations extends Table {
@@ -166,6 +167,20 @@ class TableOperations extends Table {
     this.cntAll = cnt_all;
     this.pagination.setPage(page, cnt_pages, cnt_all);
     this.gridApi.setGridOption('rowData', operations);
+    renderTextHeader({
+      tableElement: this.table,
+      data: this.calcSummary(operations),
+      columnMap: {
+        4: ({ sum_amount }) => formattingPrice(sum_amount)
+      }
+    });
+  }
+
+  calcSummary(operations) {
+    return {
+      cnt: operations.length,
+      sum_amount: operations.reduce((acc, item) => acc + (item.amount || 0), 0)
+    };
   }
 
 }

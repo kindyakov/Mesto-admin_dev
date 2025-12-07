@@ -16,6 +16,7 @@ import { sort } from '../../../utils/sort.js';
 
 import { downloadFuturePayments } from '../../../settings/request.js';
 import { createElement } from '../../../settings/createElement.js';
+import { renderTextHeader } from '../utils/renderTextHeader.js';
 
 import tippy from '../../../configs/tippy.js';
 
@@ -318,49 +319,22 @@ class TableUpcomingPayments extends Table {
 		}
 	}
 
-	renderTextHeader(data) {
-		const headersTable = this.table.querySelectorAll('.ag-header-cell');
-
-		const func = (th, callback) => {
-			const label = th.querySelector('.ag-header-cell-label');
-
-			if (label?.querySelector('.text-info')) {
-				label.querySelector('.text-info').innerText = callback(data);
-				return;
-			}
-
-			const spanText = th.querySelector('.ag-header-cell-text');
-			let hName = spanText.innerText;
-			spanText.remove();
-
-			const header = createElement('div', {
-				classes: ['ag-header-cell-text', 'custom-header'],
-				content: `${hName} <span class="text-info" style="font-size:12px;">${callback()}</span>`
-			});
-
-			label.prepend(header);
-		};
-
-		const obj = {
-			2: th => func(th, () => formattingPrice(data.sum_amount)),
-			3: th => func(th, () => data.cnt),
-			5: th => func(th, () => data.sum_area.toFixed(1) + ' м²'),
-			6: th => func(th, () => formattingPrice(data.avg_price)),
-			8: th => func(th, () => formattingPrice(data.sum_deposit))
-		};
-
-		headersTable.length &&
-			headersTable.forEach((th, i) => {
-				obj[i]?.(th);
-			});
-	}
-
 	onRendering({ agreements = [], cnt_pages, page, cnt_all = 0 }) {
 		this.cntAll = cnt_all;
 		this.customFilter.data = agreements;
 		this.gridApi.setGridOption('paginationPageSizeSelector', [5, 10, 15, 20, agreements.length]);
 		this.gridApi.setGridOption('rowData', agreements);
-		this.renderTextHeader(this.calcSum(agreements));
+		renderTextHeader({
+			tableElement: this.table,
+			data: this.calcSum(agreements),
+			columnMap: {
+				2: ({ sum_amount }) => formattingPrice(sum_amount),
+				3: ({ cnt }) => cnt,
+				5: ({ sum_area }) => (sum_area ? `${sum_area.toFixed(1)} м²` : ''),
+				6: ({ avg_price }) => (avg_price ? formattingPrice(avg_price) : ''),
+				8: ({ sum_deposit }) => formattingPrice(sum_deposit)
+			}
+		});
 	}
 
 	filterAndSortData(data, params) {

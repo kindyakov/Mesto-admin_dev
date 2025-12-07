@@ -171,7 +171,8 @@ class Navigation {
 						warehouse: this.warehouse,
 						notify: this.notify,
 						user: this.user,
-						navigation: this
+						navigation: this,
+						pageName
 					});
 
 					this.modulesCache[pageName] = page; // Сохраняем модуль в кэш

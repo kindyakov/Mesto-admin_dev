@@ -14,7 +14,7 @@ import EditEffectivenessUtils from './EditEffectivenessUtils.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 
 class Effectiveness extends Dashboards {
-  constructor({ loader }) {
+  constructor({ loader, pageName }) {
     super({
       loader,
       tables: [
@@ -30,7 +30,7 @@ class Effectiveness extends Dashboards {
           }
         }
       ],
-      page: 'dashboards/effectiveness'
+      page: pageName
     });
 
     this.editEffectivenessUtils = null;
@@ -39,7 +39,7 @@ class Effectiveness extends Dashboards {
     // Сохраняем последние данные для пересчета процентов
     this.lastRenderData = null;
 
-    const inputElement = this.wrapper.querySelector(`[data-content="dashboards/effectiveness"] .input-date-month`);
+    const inputElement = this.wrapper.querySelector(`.content-effectiveness .input-date-month`);
 
     if (inputElement) {
       const currentDate = new Date();
@@ -76,6 +76,24 @@ class Effectiveness extends Dashboards {
           month: dateFormatter(this.calendar.selectedDates[0], 'yyyy-MM')
         };
       }
+    }
+
+    const contentName = this.wrapper.getAttribute('data-content');
+    const contentManagement = this.wrapper.querySelector('.content-effectiveness-management');
+    const contentManagers = this.wrapper.querySelector('.content-effectiveness-managers');
+
+    if (contentName === 'dashboards/effectiveness') {
+      contentManagement.classList.remove('_none');
+      contentManagers.classList.remove('_none');
+      this.table.wpTable.classList.remove('_none');
+    } else if (contentName === 'administrations/effectiveness') {
+      contentManagement.classList.remove('_none');
+      contentManagers.classList.add('_none');
+      this.table.wpTable.classList.add('_none');
+    } else if (contentName === 'registry/effectiveness') {
+      contentManagement.classList.add('_none');
+      contentManagers.classList.remove('_none');
+      this.table.wpTable.classList.add('_none');
     }
   }
 
