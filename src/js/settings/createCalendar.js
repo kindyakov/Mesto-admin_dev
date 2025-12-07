@@ -67,8 +67,12 @@ export const createCalendar = (input, options = {}) => {
             }
           }
           instance.changeMonth(parseInt(optionValue), false)
+        },
+        onInit: ([select], mySelect) => {
+          mySelect.setValue(instance.currentMonth);
         }
       });
+
     },
     onMonthChange: (selectedDates, dateStr, instance) => handleClickMonthNav(customSelect, instance),
     onChange: (selectedDates, dateStr, instance) => {

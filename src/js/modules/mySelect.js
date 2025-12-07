@@ -133,7 +133,7 @@ export class Select {
 		});
 
 		this.events();
-		this.onInit(this.selectsCustom);
+		this.onInit(this.selectsCustom, this);
 	}
 
 	events() {
