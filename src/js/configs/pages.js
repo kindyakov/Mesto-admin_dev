@@ -28,6 +28,12 @@ function actionDashboards(params) {
 }
 
 export const pages = {
+	'dashboards/budget': {
+		path: 'Dashboards/Budget/Budget.js',
+		accessCheck: ({ tab, content, user }) => {
+			return actionDashboards({ tab, content, user });
+		}
+	},
 	'dashboards/clients': {
 		path: 'Dashboards/Clients/Clients.js',
 		accessCheck: ({ tab, content, user }) => {

@@ -32,9 +32,17 @@
 		background-color: #e6efff;
 	}
 
-	&.selected {
+	&.inRange {
+		background-color: #bdc5ff;
+		color: #fff;
+	}
+
+	&.selected,
+	&.startRange,
+	&.endRange {
 		background-color: #3c50e0;
 		color: #fff;
+		z-index: 1;
 	}
 }
 
