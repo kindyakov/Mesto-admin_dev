@@ -85,11 +85,16 @@ export class CheckboxManager {
     </ul>`;
 	}
 
-	render({ filterWrapper, currentData, data, fullCurrentData, column, dataWithoutCurrentFilter, ...params }) {
+	render({ filterWrapper, currentData, data, fullCurrentData, column, dataWithoutCurrentFilter, labelFormatter, ...params }) {
 		this.customFilter?.remove();
 		this.customFilter = createElement('div', {
 			classes: ['custom-filter'],
-			content: this.htmlColList({ currentData, dataWithoutCurrentFilter, name: 'filter-' + column.colDef.field })
+			content: this.htmlColList({
+				currentData,
+				dataWithoutCurrentFilter,
+				name: 'filter-' + column.colDef.field,
+				labelFormatter
+			})
 		});
 
 		this.checkboxes = Array.from(this.customFilter.querySelectorAll('input[type="checkbox"]'));

@@ -1,6 +1,62 @@
+<script>
+	// Временный сборщик ошибок до загрузки бандла (без console.log, чтобы не ронять адаптер)
+	window.__earlyErrors = [];
+	window.addEventListener('error', e => {
+		window.__earlyErrors.push(`[onerror] ${e.message} ${e.filename}:${e.lineno}:${e.colno}`);
+	});
+	window.addEventListener('unhandledrejection', e => {
+		const r = e && e.reason;
+		const msg = r && r.message ? r.message : String(r);
+		window.__earlyErrors.push(`[unhandled] ${msg}`);
+	});
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 <script src="@@pathPrefixassets/libs/nouislider/nouislider.min.js"></script>
 <script src="@@pathPrefixassets/libs/tingle/tingle.min.js"></script>
 <script src="@@pathPrefixassets/libs/fancybox/fancybox.min.js"></script>
 <script src="@@pathPrefixassets/libs/airdatepicker/air-datepicker.min.js"></script>
 <script src="@@pathPrefixjs/app.min.js"></script>
+<script>
+	// Safari iOS: запасная подгрузка, если основной бандл не выполнился
+	(function ensureAppLoaded() {
+		const RETRY_ATTR = 'data-app-retried';
+		const original = document.querySelector('script[src*="app.min.js"]');
+
+		const retry = () => {
+			// если приложение уже инициализировалось — ничего не делаем
+			if (window.app) return;
+
+			// не устраиваем бесконечный цикл: один повтор достаточно
+			if (original?.getAttribute(RETRY_ATTR)) return;
+
+			const s = document.createElement('script');
+			const fallbackUrl = (() => {
+				try {
+					const base = original?.src || '/js/app.min.js';
+					const url = new URL(base, window.location.origin);
+					url.searchParams.set('retry', Date.now());
+					return url.href;
+				} catch (_) {
+					return '/js/app.min.js';
+				}
+			})();
+
+			s.src = fallbackUrl;
+			s.setAttribute(RETRY_ATTR, '1');
+			s.onload = () => console.info('app.min.js retry loaded');
+			s.onerror = () => console.error('app.min.js retry failed');
+			document.head.appendChild(s);
+		};
+
+		// даём странице загрузиться и пробуем один раз
+		window.addEventListener('load', () => setTimeout(retry, 500));
+	})();
+</script>
+<script>
+	// Покажем собранные ошибки без логов в консоль
+	window.addEventListener('load', () => {
+		if (window.__earlyErrors?.length) {
+			alert(window.__earlyErrors.join('\n'));
+		}
+	});
+</script>
