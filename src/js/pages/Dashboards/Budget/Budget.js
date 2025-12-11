@@ -6,7 +6,6 @@ import { dateFormatter } from '../../../settings/dateFormatter.js';
 import TableBudget from '../../../components/Tables/TableBudget/TableBudget.js';
 import { getBudgetPlan } from '../../../settings/request.js';
 
-
 class Budget extends Dashboards {
   constructor({ loader, pageName }) {
     super({
@@ -16,7 +15,7 @@ class Budget extends Dashboards {
           tableSelector: '.table-budget',
           TableComponent: TableBudget,
           options: {
-            paginationPageSize: 15
+            paginationPageSize: 1000
           },
           params: {
             getData: getBudgetPlan
@@ -45,9 +44,9 @@ class Budget extends Dashboards {
         disableMobile: true,
         mode: 'range',
         plugins: [new monthSelectPlugin({
-          shorthand: false,
+          // shorthand: false,
           dateFormat: "F Y", // Формат отображения: Январь 2025
-          theme: "light"
+          // theme: "light"
         })],
         defaultDate,
         onChange: (selectedDates, dateStr, instance) => {
@@ -111,7 +110,15 @@ class Budget extends Dashboards {
 
 
   onRender(data) {
-
+    this.actionsTables((table, i) => {
+      table.queryParams = {
+        ...table.queryParams, end_date: this.queryParams.end_date, start_date: this.queryParams.start_date
+      }
+      table.onChangeQueryParams = () => ({
+        end_date: this.queryParams.end_date,
+        start_date: this.queryParams.start_date
+      })
+    });
   }
 }
 

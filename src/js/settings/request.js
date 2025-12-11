@@ -151,6 +151,8 @@ export const getOperations = getCreate('/_get_operations_');
 export const getCategories = getCreate('/_get_categories_');
 
 export const getBudgetPlan = getCreate('/_get_budget_plan_');
+export const setBudgetPlan = postCreate('/_set_budget_plan_');
+export const setFinancePlan = postCreate('/_set_finance_plan_');
 // ============================================================================>
 
 export const postFuturePayments = postCreate('/_get_future_payments_');

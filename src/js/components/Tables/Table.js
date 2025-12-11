@@ -386,8 +386,13 @@ class Table {
 		}
 	}
 
+	onChangeQueryParams(queryParams = {}) {
+		return queryParams;
+	}
+
 	changeQueryParams(params) {
 		this.queryParams = mergeQueryParams(this.queryParams, params);
+		this.queryParams = mergeQueryParams(this.queryParams, this.onChangeQueryParams(this.queryParams));
 		this.tableRendering(this.queryParams);
 	}
 

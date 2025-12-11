@@ -112,7 +112,6 @@ class Business extends Dashboards {
 
   onRender([dataDashboard, ...data], dataEntities) {
     const { finance_planfact } = data.length > 1 ? data.find(obj => obj.warehouse_id === 0) : data[0]
-    console.log(data)
 
     let todayFinancePlanFact = {}
     if (finance_planfact) {

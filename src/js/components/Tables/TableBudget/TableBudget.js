@@ -2,6 +2,8 @@ import Table from '../Table.js';
 import CategoryHeader from './CategoryHeader.js';
 import { dateFormatter } from '../../../settings/dateFormatter.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
+import { cellRendererInput } from '../utils/cellRenderer.js';
+import { setBudgetPlan, setFinancePlan } from '../../../settings/request.js';
 
 const isTotalRow = params => params?.data?.warehouseName === 'ИТОГО';
 const totalCellClass = params => (isTotalRow(params) ? 'budget-total-cell' : undefined);
@@ -13,7 +15,6 @@ const createBaseColumns = () => ([
     minWidth: 125,
     flex: 0.3,
     headerClass: 'budget-header-main',
-    resizable: false,
     cellClass: totalCellClass,
     valueFormatter: params => (params.value ? dateFormatter(params.value, 'MMMM yyyy') : '')
   },
@@ -32,7 +33,6 @@ const createBaseColumns = () => ([
     minWidth: 200,
     flex: 0.4,
     headerClass: 'budget-header-default',
-    resizable: false,
     cellClass: totalCellClass
   },
   {
@@ -88,8 +88,16 @@ class TableBudget extends Table {
     this.latestData = null;
     this.showFact = true;
     this.showPlan = false;
+    this.isEditMode = false;
+    this.originalData = new Map();
+    this.planFieldMeta = new Map();
     this.handleToggleCategory = this.handleToggleCategory.bind(this);
     this.refreshGrid = this.refreshGrid.bind(this);
+
+    this.onReadyFunctions.push(() => {
+      this.initButtons();
+      this.updateButtonsState();
+    });
   }
 
   getWarehouseName(warehouseId) {
@@ -152,6 +160,31 @@ class TableBudget extends Table {
     };
   }
 
+  createEditableRenderer(factField, planField) {
+    const viewRenderer = this.createValueRenderer(factField, planField);
+
+    return params => {
+      const planValue = params?.data?.[planField];
+      const canEdit = this.showPlan && this.isEditMode && this.canEditRow(params?.data);
+
+      if (canEdit) {
+        const renderParams = {
+          ...params,
+          value: planValue,
+          colDef: { ...params.colDef, field: planField }
+        };
+
+        return cellRendererInput(renderParams, {
+          funcFormate: formattingPrice,
+          inputmode: 'numeric',
+          name: planField
+        });
+      }
+
+      return viewRenderer(params);
+    };
+  }
+
   buildCategoryColumns(categories = [], subcategoriesMap = {}) {
     const columns = [];
 
@@ -162,12 +195,14 @@ class TableBudget extends Table {
       const field = normalizeCategoryKey(category);
       const planField = `${field}__plan`;
 
+      this.planFieldMeta.set(planField, { category, subcategory: null });
+
       columns.push({
         headerName: category,
         field,
         minWidth,
         flex: 0.4,
-        resizable: false, // categories.length - 1 !== i
+        // resizable: false, // categories.length - 1 !== i
         headerComponent: CategoryHeader,
         headerComponentParams: {
           category,
@@ -175,7 +210,7 @@ class TableBudget extends Table {
           onToggle: this.handleToggleCategory
         },
         headerClass: 'budget-header-default',
-        cellRenderer: this.createValueRenderer(field, planField)
+        cellRenderer: this.createEditableRenderer(field, planField)
       });
 
       if (expanded && subcategoriesMap[category]?.length) {
@@ -185,14 +220,16 @@ class TableBudget extends Table {
           const subField = getSubcategoryField(category, subcategory);
           const subPlanField = `${subField}__plan`;
 
+          this.planFieldMeta.set(subPlanField, { category, subcategory });
+
           columns.push({
             headerName: subcategory || 'Без названия',
             field: subField,
-            resizable: false, // subcategoriesMap[category].length - 1 !== i
+            // resizable: false, // subcategoriesMap[category].length - 1 !== i
             minWidth,
             flex: 0.35,
             headerClass: 'budget-header-sub',
-            cellRenderer: this.createValueRenderer(subField, subPlanField)
+            cellRenderer: this.createEditableRenderer(subField, subPlanField)
           });
         });
       }
@@ -356,6 +393,7 @@ class TableBudget extends Table {
 
   refreshGrid(data = this.latestData) {
     if (!this.gridApi || !data) return;
+    this.planFieldMeta.clear();
 
     const {
       planfact_revenue = [],
@@ -375,7 +413,9 @@ class TableBudget extends Table {
       ...this.buildCategoryColumns(categories, subcategoriesMap)
     ];
 
-    const revenueRenderer = this.createValueRenderer('revenue', 'revenuePlan');
+    this.planFieldMeta.set('revenuePlan', { category: 'revenue', subcategory: null });
+
+    const revenueRenderer = this.createEditableRenderer('revenue', 'revenuePlan');
     const revenueColumn = columnDefs.find(col => col.field === 'revenue');
     if (revenueColumn) {
       revenueColumn.cellRenderer = revenueRenderer;
@@ -411,7 +451,186 @@ class TableBudget extends Table {
   setDisplayMode({ showFact = this.showFact, showPlan = this.showPlan } = {}) {
     this.showFact = showFact;
     this.showPlan = showPlan;
+    if (!this.showPlan && this.isEditMode) {
+      this.handleClickBtnCancel();
+    }
+    this.updateButtonsState();
     this.refreshGrid();
+  }
+
+  initButtons() {
+    const tableTop = this.wpTable?.querySelector('.table__top');
+    if (!tableTop) return;
+
+    this.btnEdit = tableTop.querySelector('.btn-edit-budget');
+    this.btnSave = tableTop.querySelector('.btn-save-budget');
+    this.btnCancel = tableTop.querySelector('.btn-cancel-budget');
+
+    this.btnEdit?.addEventListener('click', () => this.handleClickBtnEdit());
+    this.btnSave?.addEventListener('click', () => this.handleClickBtnSave());
+    this.btnCancel?.addEventListener('click', () => this.handleClickBtnCancel());
+  }
+
+  updateButtonsState() {
+    const hideEdit = !this.showPlan || this.isEditMode;
+    this.btnEdit?.classList.toggle('_none', hideEdit);
+    this.btnSave?.classList.toggle('_none', !this.isEditMode);
+    this.btnCancel?.classList.toggle('_none', !this.isEditMode);
+  }
+
+  canEditRow(data) {
+    return data && data.warehouseId !== 0;
+  }
+
+  enableEditMode() {
+    if (this.isEditMode || !this.showPlan) return;
+
+    this.isEditMode = true;
+    this.updateButtonsState();
+    this.gridApi.refreshCells({ force: true });
+    this.originalData.clear();
+
+    const rowsWithElements = this.getAllRowsWithElements();
+
+    rowsWithElements.forEach(({ data, element }) => {
+      if (!this.canEditRow(data)) return;
+
+      const rowId = element?.getAttribute('row-id');
+      if (rowId) {
+        this.originalData.set(rowId, { ...data });
+      }
+
+      const inputs = element?.querySelectorAll('input[name$="__plan"], input[name="revenuePlan"]');
+      inputs?.forEach(input => this.changeReadonly(input, false));
+    });
+
+    this.updateButtonsState();
+  }
+
+  disableEditMode() {
+    const rowsWithElements = this.getAllRowsWithElements();
+
+    rowsWithElements.forEach(({ element }) => {
+      const inputs = element?.querySelectorAll('input[name$="__plan"], input[name="revenuePlan"]');
+      inputs?.forEach(input => this.changeReadonly(input, true));
+    });
+
+    this.isEditMode = false;
+    this.updateButtonsState();
+    this.gridApi.refreshCells({ force: true });
+  }
+
+  handleClickBtnEdit() {
+    if (!this.showPlan) return;
+    this.enableEditMode();
+  }
+
+  restoreOriginalData() {
+    this.originalData.forEach((data, rowId) => {
+      const rowNode = this.gridApi.getRowNode(rowId);
+      if (rowNode) {
+        rowNode.setData({ ...data });
+      }
+    });
+    this.gridApi.refreshCells({ force: true });
+  }
+
+  parseNumericValue(value) {
+    if (value === undefined || value === null) return 0;
+    if (typeof value === 'number') return value;
+    const cleaned = String(value).replace(/\s/g, '').replace(',', '.');
+    const parsed = parseFloat(cleaned);
+    return isNaN(parsed) ? 0 : parsed;
+  }
+
+  collectChanges() {
+    const budgetPlans = [];
+    const financePlans = [];
+
+    const rowsWithElements = this.getAllRowsWithElements();
+
+    rowsWithElements.forEach(({ data, element }) => {
+      if (!this.canEditRow(data) || !element) return;
+      const rowId = element.getAttribute('row-id');
+      const original = this.originalData.get(rowId) || {};
+
+      const inputs = element.querySelectorAll('input[name$="__plan"], input[name="revenuePlan"]');
+
+      inputs.forEach(input => {
+        const fieldName = input.name;
+        const meta = this.planFieldMeta.get(fieldName);
+        const newValue = this.parseNumericValue(input.value);
+        const previousValue = this.parseNumericValue(original[fieldName]);
+
+        if (newValue === previousValue) return;
+
+        if (fieldName === 'revenuePlan') {
+          financePlans.push({
+            revenue_planned: newValue,
+            data: data.month,
+            month_or_day: 'month',
+            warehouse_id: data.warehouseId
+          });
+        } else if (meta) {
+          budgetPlans.push({
+            month: data.month,
+            warehouse_id: data.warehouseId,
+            category: meta.category,
+            subcategory: meta.subcategory,
+            value: newValue
+          });
+        }
+      });
+    });
+
+    return { budgetPlans, financePlans };
+  }
+
+  async handleClickBtnSave() {
+    if (!this.isEditMode) return;
+
+    const { budgetPlans, financePlans } = this.collectChanges();
+
+    if (!budgetPlans.length && !financePlans.length) {
+      this.disableEditMode();
+      this.originalData.clear();
+      return;
+    }
+
+    try {
+      this.loader.enable();
+
+      if (budgetPlans.length) {
+        await setBudgetPlan({ budget_plans: budgetPlans });
+      }
+
+      if (financePlans.length) {
+        for (const payload of financePlans) {
+          // Отправляем каждое изменение выручки отдельным запросом
+          await setFinancePlan(payload);
+        }
+      }
+
+      this.app.notify?.show?.({ msg: 'План сохранён', msg_type: 'success' });
+
+      this.disableEditMode();
+      this.originalData.clear();
+      await this.refresh(this.queryParams);
+    } catch (error) {
+      console.error('Ошибка сохранения плана', error);
+      this.app.notify?.show?.({ msg: 'Ошибка сохранения', msg_type: 'error' });
+    } finally {
+      this.loader.disable();
+    }
+  }
+
+  handleClickBtnCancel() {
+    if (!this.isEditMode) return;
+    if (this.originalData.size) {
+      this.restoreOriginalData();
+    }
+    this.disableEditMode();
+    this.originalData.clear();
   }
 }
 
