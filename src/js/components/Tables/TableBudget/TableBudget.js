@@ -25,7 +25,7 @@ const createBaseColumns = () => ([
     valueFormatter: params => params.value || params.value === 0 ? formattingPrice(params.value) : '0'
   },
   {
-    headerName: 'Выручка план',
+    headerName: 'Выручка от аренды',
     field: 'revenuePlan',
     minWidth: 150,
     flex: 0.4,
@@ -83,7 +83,7 @@ class TableBudget extends Table {
   }
 
   getWarehouseName(warehouseId) {
-    if (warehouseId === 0) return 'Все склады';
+    if (warehouseId === 0) return 'Итого';
     const warehouses = this.app?.warehouses || window?.app?.warehouses || [];
     const found = warehouses.find(item => item?.warehouse_id === warehouseId || item?.id === warehouseId);
 
@@ -373,13 +373,22 @@ class TableBudget extends Table {
       plan_by_subcategory
     });
 
+    const totalsRows = rows.filter(row => row.warehouseId === 0);
+    const regularRows = rows.filter(row => row.warehouseId !== 0);
+
     this.gridApi.setGridOption('columnDefs', columnDefs);
-    this.gridApi.setGridOption('rowData', rows);
+    if (totalsRows.length) {
+      this.gridApi.setGridOption('pinnedTopRowData', totalsRows);
+    } else {
+      this.gridApi.setGridOption('pinnedTopRowData', []);
+    }
+    this.gridApi.setGridOption('rowData', regularRows);
   }
 
   onRendering(data) {
     if (!data) return;
     this.latestData = data;
+    console.log(data);
     this.refreshGrid(data);
   }
 
