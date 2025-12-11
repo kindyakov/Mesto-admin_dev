@@ -3,6 +3,9 @@ import CategoryHeader from './CategoryHeader.js';
 import { dateFormatter } from '../../../settings/dateFormatter.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 
+const isTotalRow = params => params?.data?.warehouseName === 'ИТОГО';
+const totalCellClass = params => (isTotalRow(params) ? 'budget-total-cell' : undefined);
+
 const createBaseColumns = () => ([
   {
     headerName: 'Дата',
@@ -11,7 +14,8 @@ const createBaseColumns = () => ([
     flex: 0.3,
     headerClass: 'budget-header-main',
     resizable: false,
-    valueFormatter: params => params.value ? dateFormatter(params.value, 'MMMM yyyy') : ''
+    cellClass: totalCellClass,
+    valueFormatter: params => (params.value ? dateFormatter(params.value, 'MMMM yyyy') : '')
   },
   {
     headerName: 'Склад',
@@ -19,25 +23,17 @@ const createBaseColumns = () => ([
     minWidth: 80,
     flex: 0.2,
     resizable: false,
-    headerClass: 'budget-header-main'
-  },
-  {
-    headerName: 'Выручка',
-    field: 'revenue',
-    minWidth: 120,
-    flex: 0.4,
-    headerClass: 'budget-header-default',
-    resizable: false,
-    valueFormatter: params => params.value || params.value === 0 ? formattingPrice(params.value) : '0'
+    headerClass: 'budget-header-main',
+    cellClass: totalCellClass
   },
   {
     headerName: 'Выручка от аренды',
-    field: 'revenuePlan',
-    minWidth: 150,
+    field: 'revenue',
+    minWidth: 200,
     flex: 0.4,
     headerClass: 'budget-header-default',
     resizable: false,
-    valueFormatter: params => params.value || params.value === 0 ? formattingPrice(params.value) : '0'
+    cellClass: totalCellClass
   },
   {
     headerName: 'Расходы',
@@ -46,6 +42,7 @@ const createBaseColumns = () => ([
     flex: 0.4,
     headerClass: 'budget-header-default',
     resizable: false,
+    cellClass: totalCellClass,
     valueFormatter: params => params.value || params.value === 0 ? formattingPrice(params.value) : '0'
   },
   {
@@ -55,6 +52,7 @@ const createBaseColumns = () => ([
     flex: 0.4,
     headerClass: 'budget-header-default',
     resizable: false,
+    cellClass: totalCellClass,
     valueFormatter: params => params.value || params.value === 0 ? formattingPrice(params.value) : '0'
   }
 ]);
@@ -159,8 +157,8 @@ class TableBudget extends Table {
 
     categories.forEach((category, i) => {
       const expanded = this.expandedCategories.has(category);
-      const width = category.length * 9.5 + 50;
-      const minWidth = width < 100 ? 100 : width;
+      const width = (category.length * 9.5 + 50);
+      const minWidth = width < 160 ? 160 : width;
       const field = normalizeCategoryKey(category);
       const planField = `${field}__plan`;
 
@@ -377,6 +375,13 @@ class TableBudget extends Table {
       ...this.buildCategoryColumns(categories, subcategoriesMap)
     ];
 
+    const revenueRenderer = this.createValueRenderer('revenue', 'revenuePlan');
+    const revenueColumn = columnDefs.find(col => col.field === 'revenue');
+    if (revenueColumn) {
+      revenueColumn.cellRenderer = revenueRenderer;
+      delete revenueColumn.valueFormatter;
+    }
+
     const rows = this.buildRows({
       planfact_revenue,
       expenses,
@@ -391,18 +396,15 @@ class TableBudget extends Table {
     const regularRows = rows.filter(row => row.warehouseId !== 0);
 
     this.gridApi.setGridOption('columnDefs', columnDefs);
-    if (totalsRows.length) {
-      this.gridApi.setGridOption('pinnedTopRowData', totalsRows);
-    } else {
-      this.gridApi.setGridOption('pinnedTopRowData', []);
-    }
-    this.gridApi.setGridOption('rowData', regularRows);
+    // this.gridApi.setGridOption('pinnedTopRowData', totalsRows);
+    // this.gridApi.setGridOption('rowData', regularRows);
+    this.gridApi.setGridOption('pinnedTopRowData', []);
+    this.gridApi.setGridOption('rowData', [...totalsRows, ...regularRows]);
   }
 
   onRendering(data) {
     if (!data) return;
     this.latestData = data;
-    console.log(data);
     this.refreshGrid(data);
   }
 
