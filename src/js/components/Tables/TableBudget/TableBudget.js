@@ -7,21 +7,27 @@ const createBaseColumns = () => ([
   {
     headerName: 'Дата',
     field: 'month',
-    minWidth: 120,
-    flex: 0.4,
+    minWidth: 125,
+    flex: 0.3,
+    headerClass: 'budget-header-main',
+    resizable: false,
     valueFormatter: params => params.value ? dateFormatter(params.value, 'MMMM yyyy') : ''
   },
   {
     headerName: 'Склад',
     field: 'warehouseName',
-    minWidth: 105,
-    flex: 0.2
+    minWidth: 80,
+    flex: 0.2,
+    resizable: false,
+    headerClass: 'budget-header-main'
   },
   {
     headerName: 'Выручка',
     field: 'revenue',
-    minWidth: 140,
+    minWidth: 120,
     flex: 0.4,
+    headerClass: 'budget-header-default',
+    resizable: false,
     valueFormatter: params => params.value || params.value === 0 ? formattingPrice(params.value) : '0'
   },
   {
@@ -29,6 +35,8 @@ const createBaseColumns = () => ([
     field: 'revenuePlan',
     minWidth: 150,
     flex: 0.4,
+    headerClass: 'budget-header-default',
+    resizable: false,
     valueFormatter: params => params.value || params.value === 0 ? formattingPrice(params.value) : '0'
   },
   {
@@ -36,6 +44,8 @@ const createBaseColumns = () => ([
     field: 'expenses',
     minWidth: 120,
     flex: 0.4,
+    headerClass: 'budget-header-default',
+    resizable: false,
     valueFormatter: params => params.value || params.value === 0 ? formattingPrice(params.value) : '0'
   },
   {
@@ -43,6 +53,8 @@ const createBaseColumns = () => ([
     field: 'profit',
     minWidth: 120,
     flex: 0.4,
+    headerClass: 'budget-header-default',
+    resizable: false,
     valueFormatter: params => params.value || params.value === 0 ? formattingPrice(params.value) : '0'
   }
 ]);
@@ -63,7 +75,7 @@ class TableBudget extends Table {
   constructor(selector, options, params) {
     const defaultOptions = {
       columnDefs: createBaseColumns(),
-      pagination: false
+      pagination: false,
     };
 
     const defaultParams = {
@@ -83,7 +95,7 @@ class TableBudget extends Table {
   }
 
   getWarehouseName(warehouseId) {
-    if (warehouseId === 0) return 'Итого';
+    if (warehouseId === 0) return 'ИТОГО';
     const warehouses = this.app?.warehouses || window?.app?.warehouses || [];
     const found = warehouses.find(item => item?.warehouse_id === warehouseId || item?.id === warehouseId);
 
@@ -157,13 +169,14 @@ class TableBudget extends Table {
         field,
         minWidth,
         flex: 0.4,
-        resizable: categories.length - 1 !== i,
+        resizable: false, // categories.length - 1 !== i
         headerComponent: CategoryHeader,
         headerComponentParams: {
           category,
           expanded,
           onToggle: this.handleToggleCategory
         },
+        headerClass: 'budget-header-default',
         cellRenderer: this.createValueRenderer(field, planField)
       });
 
@@ -177,9 +190,10 @@ class TableBudget extends Table {
           columns.push({
             headerName: subcategory || 'Без названия',
             field: subField,
-            resizable: subcategoriesMap[category].length - 1 !== i,
+            resizable: false, // subcategoriesMap[category].length - 1 !== i
             minWidth,
             flex: 0.35,
+            headerClass: 'budget-header-sub',
             cellRenderer: this.createValueRenderer(subField, subPlanField)
           });
         });

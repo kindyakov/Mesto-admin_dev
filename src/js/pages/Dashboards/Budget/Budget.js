@@ -19,19 +19,9 @@ class Budget extends Dashboards {
             paginationPageSize: 15
           },
           params: {
-            // getData: postFuturePayments
+            getData: getBudgetPlan
           }
         }
-        // {
-        //   tableSelector: '.table-payments-business',
-        //   TableComponent: TableUpcomingPayments,
-        //   options: {
-        //     paginationPageSize: 1000
-        //   },
-        //   params: {
-        //     getData: postFuturePayments
-        //   }
-        // }
       ],
       page: pageName
     });
