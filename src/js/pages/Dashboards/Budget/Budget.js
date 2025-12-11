@@ -36,6 +36,13 @@ class Budget extends Dashboards {
       page: pageName
     });
 
+    this.btnPlan = this.wrapper.querySelector('.btn-budget-plan');
+    this.btnFact = this.wrapper.querySelector('.btn-budget-fact');
+    this.showPlan = false;
+    this.showFact = true;
+
+    this.initToggleButtons();
+
     const inputElement = this.wrapper.querySelector(`.input-date-month`);
 
     if (inputElement) {
@@ -74,6 +81,38 @@ class Budget extends Dashboards {
         };
       }
     }
+  }
+
+  initToggleButtons() {
+    if (!this.btnPlan || !this.btnFact || !this.tables?.length) return;
+
+    const table = this.tables[0];
+    const updateButtons = () => {
+      this.btnPlan.classList.toggle('active', this.showPlan);
+      this.btnFact.classList.toggle('active', this.showFact);
+    };
+
+    const applyMode = () => table.setDisplayMode({ showPlan: this.showPlan, showFact: this.showFact });
+
+    this.btnPlan.addEventListener('click', () => {
+      this.showPlan = !this.showPlan;
+      if (!this.showPlan && !this.showFact) this.showFact = true;
+      updateButtons();
+      applyMode();
+    });
+
+    this.btnFact.addEventListener('click', () => {
+      this.showFact = !this.showFact;
+      if (!this.showPlan && !this.showFact) this.showPlan = true;
+      updateButtons();
+      applyMode();
+    });
+
+    // начальное состояние: только Факт
+    this.showPlan = false;
+    this.showFact = true;
+    updateButtons();
+    applyMode();
   }
 
   async getData(queryParams = {}) {

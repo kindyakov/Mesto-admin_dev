@@ -816,6 +816,28 @@
 	border: 1px solid #eee;
 }
 
+.table-button-header-category {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 6px;
+	background: #32b8c6;
+	color: #fff;
+	font-weight: 400;
+	transition: 0.2s;
+	flex-shrink: 0;
+
+	&:hover {
+		background: rgb(90, 199, 221);
+	}
+
+	&:active {
+		transform: scale(0.90);
+	}
+}
+
 // Row highlighting for motivation managers table
 .ag-theme-quartz {
 	.ag-row-highlighted {

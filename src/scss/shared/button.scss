@@ -30,10 +30,12 @@
 	&._confirmed {
 		background-color: $green-light;
 		color: $green;
+
 		span {
 			&:nth-child(1) {
 				display: none;
 			}
+
 			&:nth-child(2) {
 				display: inline-block;
 			}
@@ -48,6 +50,7 @@
 		background-color: transparent;
 		color: #1c2434;
 		border: 1px solid #eaecee;
+
 		&:hover {
 			opacity: 1;
 			border-color: $blue;
@@ -57,10 +60,12 @@
 	&.shipped {
 		background-color: $green-light;
 		color: $green;
-		> span {
+
+		>span {
 			&:nth-child(1) {
 				display: none;
 			}
+
 			&:nth-child(2) {
 				display: inline-block;
 			}
@@ -69,9 +74,11 @@
 
 	&.btn-hide-lock-room {
 		background-color: #fff;
+
 		&._active {
 			background-color: $red-light;
 			color: $red;
+
 			&:hover {
 				border-color: $red;
 			}
@@ -104,6 +111,7 @@
 
 	.icon {
 		fill: #a8b0b9;
+
 		&.icon-plus {
 			width: 10px;
 			height: 10px;
@@ -149,6 +157,7 @@
 		&._is-filter {
 			background-color: #dcecfa;
 			border-color: #2196f3;
+
 			.icon {
 				fill: #2196f3;
 			}
@@ -158,6 +167,7 @@
 	@media (max-width: $md4) {
 		padding: 5px;
 	}
+
 	@media (max-width: $md6) {
 		font-size: 13px;
 	}
@@ -184,6 +194,7 @@
 	}
 
 	&.btn-edit-data {
+
 		.span-edit,
 		.icon-edit {
 			display: inline-block;
@@ -249,7 +260,22 @@
 	padding: 4px 10px;
 	height: 30px;
 	white-space: nowrap;
+
 	&.transparent {
 		background-color: #eff4fb;
+	}
+}
+
+.btn-budget-plan,
+.btn-budget-fact {
+	flex-shrink: 0;
+
+	&.active {
+		background-color: #2c47d6;
+		color: #fff;
+
+		&:hover {
+			opacity: 0.9;
+		}
 	}
 }
