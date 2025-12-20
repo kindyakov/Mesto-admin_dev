@@ -897,3 +897,21 @@
 		font-weight: 700 !important;
 	}
 }
+
+.table-cells,
+.table-prices-cells {
+	.ag-row {
+		&::before {
+			display: none !important;
+		}
+
+		.input-cell {
+			background-color: #eff4fb;
+			padding-inline: 10px;
+		}
+	}
+
+	.ag-cell:has(.input-cell) {
+		padding: 0 !important;
+	}
+}
