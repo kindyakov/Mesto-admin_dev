@@ -154,6 +154,10 @@ export const getCells = getCreate('/_get_rooms_');
 
 export const getPromoCodes = getCreate('/_get_promocodes_')
 
+export const editPromoCodes = postCreate('/_edit_promocodes_');
+
+export const addPromoCode = postCreate('/_add_promocode_');
+
 export const editRooms = postCreate('/_edit_rooms_');
 
 export const getBudgetPlan = getCreate('/_get_budget_plan_');

@@ -11,7 +11,7 @@ class PromoCodes extends Page {
           tableSelector: '.table-promo-codes',
           TableComponent: TablePromoCodes,
           options: {
-            paginationPageSize: 1000
+            paginationPageSize: 15
           },
           params: {
             getData: getPromoCodes

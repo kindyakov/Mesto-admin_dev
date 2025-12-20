@@ -157,7 +157,7 @@ class TableOperations extends Table {
     this.customFilter = new CustomFilter();
     this.customFilter.onChange = queryParams => {
       this.queryParams = queryParams;
-      this.tableRendering(queryParams);
+      this.tableRender(queryParams);
     };
 
     this.queryParams = this.queryParams || {};
@@ -248,7 +248,7 @@ class TableOperations extends Table {
     }
   }
 
-  tableRendering(queryParams = {}) {
+  tableRender(queryParams = {}) {
     const data = this.filterAndSortData(this.dataSource, queryParams);
     this.cntAll = data.length;
     this.gridApi.setGridOption('rowData', data);
@@ -266,7 +266,7 @@ class TableOperations extends Table {
     this.dataSource = operations;
     this.customFilter.data = operations;
     // this.pagination.setPage(page, cnt_pages, cnt_all);
-    this.tableRendering(this.queryParams);
+    this.tableRender(this.queryParams);
   }
 
   filterAndSortData(data = [], params = {}) {
