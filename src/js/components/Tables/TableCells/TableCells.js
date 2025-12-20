@@ -2,8 +2,11 @@ import Table from '../Table.js';
 import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
 import { editRooms } from '../../../settings/request.js';
+import { applyTableFilterMixin } from '../mixins/TableFilterMixin.js';
 
-class TableCells extends Table {
+const TableWithFilters = applyTableFilterMixin(Table);
+
+class TableCells extends TableWithFilters {
   constructor(selector, options, params) {
     const defaultOptions = {
       columnDefs: [
@@ -117,6 +120,8 @@ class TableCells extends Table {
 
     this.isEditMode = false;
     this.originalData = new Map();
+
+    // Инициализация фильтрации полностью происходит в миксине TableFilterMixin
 
     this.onReadyFunctions.push(() => {
       this.initButtons();
@@ -329,9 +334,13 @@ class TableCells extends Table {
     try {
       this.loader.enable();
 
-      await editRooms({ rooms });
+      const { msg, msg_type } = await editRooms({ rooms });
 
-      this.app.notify?.show?.({ msg: 'Изменения сохранены', msg_type: 'success' });
+      if (msg && msg_type) {
+        this.app.notify?.show?.({ msg, msg_type });
+      } else {
+        this.app.notify?.show?.({ msg: 'Ошибка сохранения', msg_type: 'error' });
+      }
 
       this.disableEditMode();
       this.originalData.clear();
@@ -355,10 +364,12 @@ class TableCells extends Table {
 
   onRendering({ rooms = [], cnt_pages, page, cnt_all = 0 }) {
     this.cntAll = cnt_all;
+    this.dataSource = rooms;
+    this.customFilter.data = rooms;
     if (this.pagination) {
       this.pagination.setPage(page, cnt_pages, cnt_all);
     }
-    this.gridApi.setGridOption('rowData', rooms);
+    this.tableRendering(this.queryParams);
   }
 }
 

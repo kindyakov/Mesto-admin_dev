@@ -899,7 +899,8 @@
 }
 
 .table-cells,
-.table-prices-cells {
+.table-prices-cells,
+.table-promo-codes {
 	.ag-row {
 		&::before {
 			display: none !important;

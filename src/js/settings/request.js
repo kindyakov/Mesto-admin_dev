@@ -152,6 +152,8 @@ export const getCategories = getCreate('/_get_categories_');
 
 export const getCells = getCreate('/_get_rooms_');
 
+export const getPromoCodes = getCreate('/_get_promocodes_')
+
 export const editRooms = postCreate('/_edit_rooms_');
 
 export const getBudgetPlan = getCreate('/_get_budget_plan_');

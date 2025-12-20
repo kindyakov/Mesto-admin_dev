@@ -144,6 +144,14 @@ export const pages = {
 			return access;
 		}
 	},
+	'promo-codes': {
+		path: 'PromoCodes/PromoCodes.js',
+		accessCheck: ({ tab, content, user }) => {
+			let access = true;
+
+			return access;
+		}
+	},
 	users: {
 		path: 'Users/Users.js',
 		accessCheck: ({ tab, content, user }) => {
