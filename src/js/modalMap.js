@@ -21,6 +21,7 @@ import modalPhotoRoom from './components/Modals/ModalPhotoRoom/ModalPhotoRoom.js
 import modalSelectNextPayment from './components/Modals/ModalSelectNextPayment/ModalSelectNextPayment.js';
 import modalCreateAgreement from './components/Modals/ModalCreateAgreement/ModalCreateAgreement.js';
 import modalCreateOperation from './components/Modals/ModalCreateOperation/ModalCreateOperation.js';
+import modalAddPromoCode from './components/Modals/ModalAddPromoCode/ModalAddPromoCode.js';
 
 import modalConfirmOpenRoom from './components/Modals/Confirmation/ModalConfirmOpenRoom/ModalConfirmOpenRoom.js';
 import modalConfirmCancelGuestAccess from './components/Modals/Confirmation/ModalConfirmCancelGuestAccess/ModalConfirmCancelGuestAccess.js';
@@ -57,6 +58,7 @@ export const modalMap = {
 	[getClassModal(modalSelectNextPayment)]: modalSelectNextPayment,
 	[getClassModal(modalCreateAgreement)]: modalCreateAgreement,
 	[getClassModal(modalCreateOperation)]: modalCreateOperation,
+	[getClassModal(modalAddPromoCode)]: modalAddPromoCode,
 	// Окна с подтверждением
 	[getClassModal(modalConfirmOpenRoom)]: modalConfirmOpenRoom,
 	[getClassModal(modalConfirmCancelGuestAccess)]: modalConfirmCancelGuestAccess,
