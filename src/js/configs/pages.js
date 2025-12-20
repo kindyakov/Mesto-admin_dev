@@ -136,6 +136,14 @@ export const pages = {
 			return access;
 		}
 	},
+	cells: {
+		path: 'Cells/Cells.js',
+		accessCheck: ({ tab, content, user }) => {
+			let access = true;
+
+			return access;
+		}
+	},
 	users: {
 		path: 'Users/Users.js',
 		accessCheck: ({ tab, content, user }) => {
