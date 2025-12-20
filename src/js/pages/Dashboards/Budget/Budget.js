@@ -35,21 +35,51 @@ class Budget extends Dashboards {
     const inputElement = this.wrapper.querySelector(`.input-date-month`);
 
     if (inputElement) {
+      const clearRangeClasses = (container) => {
+        if (!container) return;
+        container
+          .querySelectorAll('.flatpickr-monthSelect-month')
+          .forEach((month) => month.classList.remove('startRange', 'inRange', 'endRange'));
+      };
+
+      const applyRangeClasses = (container, dates) => {
+        if (!container || dates.length !== 2) return;
+
+        const [startDate, endDate] = dates;
+        const startTime = startDate.getTime();
+        const endTime = endDate.getTime();
+
+        container
+          .querySelectorAll('.flatpickr-monthSelect-month')
+          .forEach((month) => {
+            const monthDate = month.dateObj;
+            if (!monthDate) return;
+
+            const time = monthDate.getTime();
+
+            if (time === startTime) month.classList.add('startRange');
+            if (time === endTime) month.classList.add('endRange');
+            if (time > startTime && time < endTime) month.classList.add('inRange');
+          });
+      };
+
       const currentDate = new Date();
       currentDate.setDate(1);
-      const defaultDate = [currentDate, currentDate];
 
       this.calendar = flatpickr(inputElement, {
         locale: Russian,
         disableMobile: true,
         mode: 'range',
         plugins: [new monthSelectPlugin({
-          // shorthand: false,
+          shorthand: false,
           dateFormat: "F Y", // Формат отображения: Январь 2025
-          // theme: "light"
+          theme: "light"
         })],
-        defaultDate,
+        defaultDate: currentDate,
         onChange: (selectedDates, dateStr, instance) => {
+          clearRangeClasses(instance?.rContainer);
+          applyRangeClasses(instance?.rContainer, selectedDates);
+
           if (selectedDates.length === 2) {
             const [startDate, endDate] = selectedDates
 
@@ -58,6 +88,10 @@ class Budget extends Dashboards {
               end_date: dateFormatter(endDate, 'yyyy-MM'),
             });
           }
+        },
+        onReady: (selectedDates, dateStr, instance) => {
+          clearRangeClasses(instance?.rContainer);
+          applyRangeClasses(instance?.rContainer, selectedDates);
         },
       });
 
