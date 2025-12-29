@@ -1,6 +1,7 @@
 import Table from '../Table.js';
 import { createElement } from '../../../settings/createElement.js'
 import { actions } from '../utils/actions.js';
+import { api } from '../../../settings/api.js';
 
 class TableLocks extends Table {
   constructor(selector, options, params) {
@@ -36,6 +37,13 @@ class TableLocks extends Table {
     this.actionCellRenderer = this.actionCellRenderer.bind(this);
   }
 
+  onInit() {
+    const modalCreateLock = this.app.modalMap['modal-create-lock'];
+    if (modalCreateLock) {
+      modalCreateLock.onSave = () => this.revalidate();
+    }
+  }
+
   actionCellRenderer(params) {
     const button = createElement('button', {
       classes: ['button-table-actions'],
@@ -61,10 +69,7 @@ class TableLocks extends Table {
           btn.addEventListener('click', () => {
             const modalCreateLock = window.app.modalMap['modal-create-lock'];
             if (modalCreateLock) {
-              modalCreateLock.open({});
-              setTimeout(() => {
-                modalCreateLock.openForEdit(params.data);
-              }, 100);
+              modalCreateLock.openForEdit(params.data);
             }
             tippyInstance.hide();
           });
@@ -101,18 +106,18 @@ class TableLocks extends Table {
       this.loader.enable();
       const response = await api.post('/_delete_lock_', { lock_id });
       if (response.status !== 200) return;
-      this.app.notify.show(response.data);
+      window.app.notify.show(response.data);
+      this.revalidate();
     } catch (error) {
       console.error(error);
     } finally {
-      this.loader.enable();
+      this.loader.disable();
     }
   }
 
   onRendering({ locks = [], cnt_pages, page, cnt_all = 0 }) {
     this.cntAll = locks.length
     // this.pagination.setPage(page, cnt_pages, cnt_all)
-    console.log(locks);
 
     this.gridApi?.setGridOption('rowData', locks)
   }

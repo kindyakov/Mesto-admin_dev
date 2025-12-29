@@ -400,6 +400,10 @@ class Table {
 		return this.tableRendering(queryParams);
 	}
 
+	revalidate() {
+		this.refresh();
+	}
+
 	getAllRows() {
 		let rowData = [];
 		const rowCount = this.gridApi.getDisplayedRowCount();

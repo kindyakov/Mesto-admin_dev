@@ -1,6 +1,5 @@
 import Page from "../Page.js"
 import TableLocks from "../../components/Tables/TableLocks/TableLocks.js";
-import { createElement } from "../../settings/createElement.js";
 import { getLocks } from "../../settings/request.js";
 
 class Locks extends Page {
