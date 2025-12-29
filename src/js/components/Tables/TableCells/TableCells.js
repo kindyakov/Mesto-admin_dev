@@ -3,6 +3,7 @@ import { formattingPrice } from '../../../utils/formattingPrice.js';
 import { cellRendererInput } from '../utils/cellRenderer.js';
 import { editRooms } from '../../../settings/request.js';
 import { applyTableFilterMixin } from '../mixins/TableFilterMixin.js';
+import { createElement } from '../../../settings/createElement.js';
 
 const TableWithFilters = applyTableFilterMixin(Table);
 
@@ -14,8 +15,27 @@ class TableCells extends TableWithFilters {
           headerName: 'Ячейка',
           field: 'room_name',
           minWidth: 100,
-          flex: 0.4,
+          flex: 0.3,
           filter: 'agTextColumnFilter'
+        },
+        {
+          headerName: 'Номер замка',
+          field: 'lock_num',
+          minWidth: 120,
+          flex: 0.3,
+          filter: 'agTextColumnFilter',
+          cellRenderer: params => {
+            const button = createElement('button', {
+              classes: ['button-table-actions'],
+              content: `<svg class="icon icon-edit" style="display: block; width: 16px; height: 16px;"><use xlink:href="#edit"></use></svg><div>${params.value ? `№${params.value}` : 'Выбрать'}</div>`,
+            });
+
+            button.addEventListener('click', () => {
+              const modal = window.app.modalMap['modal-edit-lock'];
+              if (modal) modal.open(params.data);
+            });
+            return button;
+          }
         },
         {
           headerName: 'Длина',
@@ -126,6 +146,11 @@ class TableCells extends TableWithFilters {
     this.onReadyFunctions.push(() => {
       this.initButtons();
       this.updateButtonsState();
+
+      const modalEditLock = window.app.modalMap['modal-edit-lock'];
+      if (modalEditLock) {
+        modalEditLock.onSave = () => this.revalidate();
+      }
     });
   }
 
@@ -360,6 +385,18 @@ class TableCells extends TableWithFilters {
     }
     this.disableEditMode();
     this.originalData.clear();
+  }
+
+  async refresh(queryParams = this.queryParams) {
+    try {
+      this.loader.enable();
+      const data = await this.getData(queryParams);
+      this.onRendering(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.loader.disable();
+    }
   }
 
   onRendering({ rooms = [], cnt_pages, page, cnt_all = 0 }) {

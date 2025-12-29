@@ -23,7 +23,8 @@ class Cells extends Page {
             paginationPageSize: 1000
           },
           params: {
-            getData: getCells
+            getData: params =>
+              getCells({ warehouse_id: window.app.warehouse.warehouse_id, ...params })
           }
         }
       ],
