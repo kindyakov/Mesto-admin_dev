@@ -1,5 +1,5 @@
 import Page from '../Page.js';
-import TableLocks from '../../components/Tables/TableLocks/TableLocks.js';
+import TableLockCharge from '../../components/Tables/TableLockCharge/TableLockCharge.js';
 import Pagination from '../../components/Pagination/Pagination.js';
 import { mergeQueryParams } from '../../utils/buildQueryParams.js';
 // import FilterLocks from "../../components/Filters/FilterLocks/FilterLocks.js";
@@ -18,8 +18,8 @@ class ChargingLocks extends Page {
 			loader,
 			tables: [
 				{
-					tableSelector: '.table-locks',
-					TableComponent: TableLocks,
+					tableSelector: '.table-locks-charge',
+					TableComponent: TableLockCharge,
 					options: {
 						paginationPageSize: 15
 					},

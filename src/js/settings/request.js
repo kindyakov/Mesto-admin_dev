@@ -118,6 +118,8 @@ export const getNonApprovedClients = getCreate('/_get_nonapproved_clients_');
 
 export const getLocksPower = getCreate('/_get_locks_power_/');
 
+export const getLocks = getCreate('/_get_locks_')
+
 export const getManagersList = getCreate('/_get_managers_list_');
 
 export const getFinancePlan = getCreate('/_get_finance_plan_');

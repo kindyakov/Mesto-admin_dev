@@ -5,6 +5,7 @@ import { actions } from '../utils/actions.js';
 import { renderTextHeader } from '../utils/renderTextHeader.js';
 import { createElement } from '../../../settings/createElement.js';
 import CustomFilter from '../utils/CustomFilter/CustomFilter.js';
+import { createCalendar } from '../../../settings/createCalendar.js';
 
 class TableOperations extends Table {
   constructor(selector, options, params) {
@@ -164,6 +165,20 @@ class TableOperations extends Table {
     this.dataSource = [];
 
     this.actionCellRenderer = this.actionCellRenderer.bind(this);
+
+    // Переопределяем календарь с defaultDate = предыдущий месяц
+    const calendarInput = this.wpTable.querySelector('.input-date-filter');
+    if (calendarInput) {
+      const now = new Date();
+      const firstDayPrevMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const lastDayPrevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+
+      this.calendar = createCalendar(calendarInput, {
+        mode: 'range',
+        dateFormat: 'd. M, Y',
+        defaultDate: [firstDayPrevMonth, lastDayPrevMonth]
+      });
+    }
   }
 
   actionCellRenderer(params) {

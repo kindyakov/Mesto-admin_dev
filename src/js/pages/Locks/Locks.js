@@ -1,25 +1,34 @@
 import Page from "../Page.js"
+import TableLocks from "../../components/Tables/TableLocks/TableLocks.js";
 import { createElement } from "../../settings/createElement.js";
+import { getLocks } from "../../settings/request.js";
 
 class Locks extends Page {
   constructor({ loader }) {
     super({
       loader,
+      tables: [
+        {
+          tableSelector: '.table-locks',
+          TableComponent: TableLocks,
+          options: {
+            paginationPageSize: 1000
+          },
+          params: {
+            getData: getLocks
+          }
+        }
+      ],
       page: 'locks'
     });
+  }
 
-    this.iframe = createElement('iframe', {
-      attributes: [
-        ['style', 'position: absolute;left: 0;top: 0;right: 0;width: 100%;height: 100%;'],
-        ['src', 'https://docs.google.com/spreadsheets/d/1Wykx-XxlijwCMglfmCFMKHnd31e0S6LCas62ubQphoE/edit?usp=sharing?widget=true&amp;headers=false']
-      ]
-    })
+  async getData(queryParams = {}) {
+    return getLocks()
+  }
 
-    this.wrapper.appendChild(this.iframe)
-    setTimeout(() => this.loader.enable())
-    this.iframe.onload = () => {
-      this.loader.disable()
-    };
+  onRender(data) {
+
   }
 }
 
